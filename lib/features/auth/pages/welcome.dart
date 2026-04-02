@@ -172,7 +172,7 @@ class _WelcomeState extends State<Welcome> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Register(), // <-- KE REGISTER
+                      builder: (context) => RegisterPage(), // <-- KE REGISTER
                     ),
                   );
                 },

@@ -1,25 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/features/auth/pages/login.dart';
+import 'package:konveksi_bareng/features/home/pages/home.dart';
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+class VerificationPage extends StatefulWidget {
+  const VerificationPage({super.key});
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<VerificationPage> createState() => _VerificationPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
-  final TextEditingController _nameC = TextEditingController();
-  final TextEditingController _phoneC = TextEditingController();
-  final TextEditingController _emailC = TextEditingController();
+class _VerificationPageState extends State<VerificationPage> {
+  final TextEditingController _otp1C = TextEditingController();
+  final TextEditingController _otp2C = TextEditingController();
+  final TextEditingController _otp3C = TextEditingController();
+  final TextEditingController _otp4C = TextEditingController();
 
-  bool _loading = false;
+  final FocusNode _otp1F = FocusNode();
+  final FocusNode _otp2F = FocusNode();
+  final FocusNode _otp3F = FocusNode();
+  final FocusNode _otp4F = FocusNode();
 
   @override
   void dispose() {
-    _nameC.dispose();
-    _phoneC.dispose();
-    _emailC.dispose();
+    _otp1C.dispose();
+    _otp2C.dispose();
+    _otp3C.dispose();
+    _otp4C.dispose();
+
+    _otp1F.dispose();
+    _otp2F.dispose();
+    _otp3F.dispose();
+    _otp4F.dispose();
     super.dispose();
   }
 
@@ -36,63 +46,54 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  bool _isEmail(String value) {
-    return RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(value.trim());
+  void _onOtpChanged({
+    required String value,
+    required FocusNode currentFocus,
+    FocusNode? nextFocus,
+    FocusNode? previousFocus,
+  }) {
+    if (value.isNotEmpty) {
+      currentFocus.unfocus();
+      if (nextFocus != null) {
+        FocusScope.of(context).requestFocus(nextFocus);
+      }
+    } else {
+      if (previousFocus != null) {
+        FocusScope.of(context).requestFocus(previousFocus);
+      }
+    }
   }
 
-  bool _isPhone(String value) {
-    final clean = value.replaceAll(RegExp(r'[^0-9]'), '');
-    return clean.length >= 9;
+  void _resendCode() {
+    _toast('Kode verifikasi berhasil dikirim ulang.');
   }
 
-  Future<void> _submit() async {
-    final name = _nameC.text.trim();
-    final phone = _phoneC.text.trim();
-    final email = _emailC.text.trim();
+  Future<void> _verify() async {
+    final code = _otp1C.text + _otp2C.text + _otp3C.text + _otp4C.text;
 
-    if (name.isEmpty) {
-      _toast('Nama lengkap wajib diisi.');
+    if (code.length < 4) {
+      _toast('Masukkan kode verifikasi 4 digit.');
       return;
     }
 
-    if (phone.isEmpty) {
-      _toast('Nomor telepon wajib diisi.');
-      return;
-    }
+    // Simulate verification delay
+    setState(() {});
+    await Future.delayed(const Duration(milliseconds: 400));
 
-    if (!_isPhone(phone)) {
-      _toast('Nomor telepon tidak valid.');
-      return;
-    }
-
-    if (email.isEmpty) {
-      _toast('Alamat email wajib diisi.');
-      return;
-    }
-
-    if (!_isEmail(email)) {
-      _toast('Format email tidak valid.');
-      return;
-    }
-
-    setState(() => _loading = true);
-
-    await Future.delayed(const Duration(milliseconds: 700));
+    _toast('Verifikasi berhasil.');
 
     if (!mounted) return;
 
-    _toast('Pendaftaran berhasil.');
-
-    if (mounted) {
-      setState(() => _loading = false);
-    }
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => const HomeScreen()),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context);
     final size = media.size;
-    final bottomInset = media.viewInsets.bottom;
 
     final cardWidth = size.width < 380 ? size.width * 0.85 : 340.0;
 
@@ -139,11 +140,11 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 Center(
                   child: SingleChildScrollView(
-                    padding: EdgeInsets.only(
+                    padding: const EdgeInsets.only(
                       left: 16,
                       right: 16,
                       top: 70,
-                      bottom: 20 + bottomInset,
+                      bottom: 20,
                     ),
                     child: Container(
                       width: cardWidth,
@@ -166,9 +167,9 @@ class _RegisterPageState extends State<RegisterPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const _LogoHeader(),
-                          const SizedBox(height: 18),
+                          const SizedBox(height: 20),
                           const Text(
-                            'Buat Akun',
+                            'Kode Verifikasi',
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               color: Color(0xFF6B257F),
@@ -177,113 +178,113 @@ class _RegisterPageState extends State<RegisterPage> {
                               height: 1.2,
                             ),
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 8),
                           const Text(
-                            'Bergabung bersama kami hari ini',
+                            'Email yang berisi kode verifikasi baru saja\n'
+                            'dikirim ke alamat@gmail.com',
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               color: Color(0xFF7B4E88),
-                              fontSize: 11.5,
+                              fontSize: 10.5,
                               fontWeight: FontWeight.w500,
-                              height: 1.4,
+                              height: 1.45,
                             ),
                           ),
-                          const SizedBox(height: 18),
-                          const _FieldLabel(text: 'Nama Lengkap'),
-                          const SizedBox(height: 6),
-                          _buildInputField(
-                            controller: _nameC,
-                            hintText: 'Boma Digital',
-                            keyboardType: TextInputType.name,
+                          const SizedBox(height: 22),
+                          Center(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                _OtpBox(
+                                  controller: _otp1C,
+                                  focusNode: _otp1F,
+                                  onChanged: (value) => _onOtpChanged(
+                                    value: value,
+                                    currentFocus: _otp1F,
+                                    nextFocus: _otp2F,
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                _OtpBox(
+                                  controller: _otp2C,
+                                  focusNode: _otp2F,
+                                  onChanged: (value) => _onOtpChanged(
+                                    value: value,
+                                    currentFocus: _otp2F,
+                                    nextFocus: _otp3F,
+                                    previousFocus: _otp1F,
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                _OtpBox(
+                                  controller: _otp3C,
+                                  focusNode: _otp3F,
+                                  onChanged: (value) => _onOtpChanged(
+                                    value: value,
+                                    currentFocus: _otp3F,
+                                    nextFocus: _otp4F,
+                                    previousFocus: _otp2F,
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                _OtpBox(
+                                  controller: _otp4C,
+                                  focusNode: _otp4F,
+                                  onChanged: (value) => _onOtpChanged(
+                                    value: value,
+                                    currentFocus: _otp4F,
+                                    previousFocus: _otp3F,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                          const SizedBox(height: 12),
-                          const _FieldLabel(text: 'Nomor Telepon'),
-                          const SizedBox(height: 6),
-                          _buildInputField(
-                            controller: _phoneC,
-                            hintText: '0879687546353',
-                            keyboardType: TextInputType.phone,
-                          ),
-                          const SizedBox(height: 12),
-                          const _FieldLabel(text: 'Alamat Email'),
-                          const SizedBox(height: 6),
-                          _buildInputField(
-                            controller: _emailC,
-                            hintText: 'bomadigital@gmail.com',
-                            keyboardType: TextInputType.emailAddress,
-                            onSubmitted: (_) {
-                              if (!_loading) _submit();
-                            },
-                          ),
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 24),
                           SizedBox(
                             width: double.infinity,
-                            height: 38,
+                            height: 42,
                             child: ElevatedButton(
-                              onPressed: _loading ? null : _submit,
+                              onPressed: _resendCode,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFF742C92),
-                                disabledBackgroundColor:
-                                    const Color(0xFF742C92).withOpacity(0.7),
                                 elevation: 0,
                                 padding: EdgeInsets.zero,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                               ),
-                              child: _loading
-                                  ? const SizedBox(
-                                      width: 18,
-                                      height: 18,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2.0,
-                                        color: Colors.white,
-                                      ),
-                                    )
-                                  : const Text(
-                                      'Berikutnya',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        color: Colors.white,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
+                              child: const Text(
+                                'Resend Code',
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
                             ),
                           ),
                           const SizedBox(height: 12),
-                          Center(
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => const Login(),
-                                  ),
-                                );
-                              },
-                              child: RichText(
-                                text: const TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: 'Sudah punya akun? ',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        color: Color(0xFF6B257F),
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: 'Masuk',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        color: Color(0xFF6B257F),
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ],
+                          SizedBox(
+                            width: double.infinity,
+                            height: 42,
+                            child: ElevatedButton(
+                              onPressed: _verify,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF4CAF50),
+                                elevation: 0,
+                                padding: EdgeInsets.zero,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              child: const Text(
+                                'Verifikasi',
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
                                 ),
                               ),
                             ),
@@ -296,7 +297,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               _FooterLink(text: 'Bantuan'),
                             ],
                           ),
-                          const SizedBox(height: 52),
+                          const SizedBox(height: 62),
                           const Center(
                             child: Text(
                               '© Copyrights BOMA | All Rights Reserved',
@@ -321,65 +322,64 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
   }
-
-  Widget _buildInputField({
-    required TextEditingController controller,
-    required String hintText,
-    required TextInputType keyboardType,
-    ValueChanged<String>? onSubmitted,
-  }) {
-    return Container(
-      height: 36,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(
-          color: const Color(0xFFBEB6C2),
-          width: 1,
-        ),
-      ),
-      alignment: Alignment.center,
-      child: TextField(
-        controller: controller,
-        keyboardType: keyboardType,
-        onSubmitted: onSubmitted,
-        style: const TextStyle(
-          fontFamily: 'Poppins',
-          color: Color(0xFF2A2A2A),
-          fontSize: 12,
-          fontWeight: FontWeight.w500,
-        ),
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: hintText,
-          hintStyle: const TextStyle(
-            fontFamily: 'Poppins',
-            color: Color(0xFFB3B0B7),
-            fontSize: 11.5,
-            fontWeight: FontWeight.w500,
-          ),
-          isDense: true,
-        ),
-      ),
-    );
-  }
 }
 
-class _FieldLabel extends StatelessWidget {
-  final String text;
+class _OtpBox extends StatelessWidget {
+  final TextEditingController controller;
+  final FocusNode focusNode;
+  final ValueChanged<String> onChanged;
 
-  const _FieldLabel({required this.text});
+  const _OtpBox({
+    required this.controller,
+    required this.focusNode,
+    required this.onChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: const TextStyle(
-        fontFamily: 'Poppins',
-        color: Color(0xFF6B257F),
-        fontSize: 12,
-        fontWeight: FontWeight.w600,
+    return SizedBox(
+      width: 48,
+      height: 54,
+      child: TextField(
+        controller: controller,
+        focusNode: focusNode,
+        onChanged: onChanged,
+        maxLength: 1,
+        textAlign: TextAlign.center,
+        keyboardType: TextInputType.number,
+        style: const TextStyle(
+          fontFamily: 'Poppins',
+          color: Color(0xFF2A2A2A),
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
+        ),
+        decoration: InputDecoration(
+          counterText: '',
+          contentPadding: EdgeInsets.zero,
+          filled: true,
+          fillColor: Colors.white,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(4),
+            borderSide: const BorderSide(
+              color: Color(0xFF4A4A4A),
+              width: 1,
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(4),
+            borderSide: const BorderSide(
+              color: Color(0xFF4A4A4A),
+              width: 1,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(4),
+            borderSide: const BorderSide(
+              color: Color(0xFF6B257F),
+              width: 1.2,
+            ),
+          ),
+        ),
       ),
     );
   }

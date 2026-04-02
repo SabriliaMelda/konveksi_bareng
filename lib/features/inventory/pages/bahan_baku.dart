@@ -1,5 +1,7 @@
 // lib/pages/bahan_baku.dart
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/features/finance/pages/pembayaran.dart';
+import 'package:konveksi_bareng/features/finance/pages/penjualan.dart';
 import 'package:konveksi_bareng/features/home/pages/home.dart';
 import 'package:konveksi_bareng/features/marketplace/pages/marketplace.dart';
 import 'package:konveksi_bareng/features/marketplace/pages/wishlist.dart';
@@ -46,19 +48,15 @@ class _BahanBakuScreenState extends State<BahanBakuScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const _QuickMenuGrid(), // ✅ 2 baris, muat 6
+                    const _QuickMenuGrid(),
                     const SizedBox(height: 18),
-
                     _CategoryRow(
                       active: _activeCategory,
                       categories: _categories,
                       onChanged: (idx) => setState(() => _activeCategory = idx),
                     ),
-
                     const SizedBox(height: 18),
-
                     _RekomendasiSection(category: _category),
-
                     const SizedBox(height: 18),
                   ],
                 ),
@@ -189,7 +187,7 @@ class _SearchBar extends StatelessWidget {
   }
 }
 
-// ================== QUICK MENU (GRID 2 BARIS / 6 ITEM) ==================
+// ================== QUICK MENU (GRID 4 KOLOM / 8 ITEM) ==================
 class _QuickMenuGrid extends StatelessWidget {
   const _QuickMenuGrid();
 
@@ -202,6 +200,8 @@ class _QuickMenuGrid extends StatelessWidget {
       const _QuickItem('Chat', Icons.chat_bubble_outline),
       const _QuickItem('Pembelian', Icons.local_offer_outlined),
       const _QuickItem('Pengiriman', Icons.local_shipping_outlined),
+      const _QuickItem('Penjualan', Icons.point_of_sale_outlined),
+      const _QuickItem('Pembayaran', Icons.payment_outlined),
     ];
 
     return Column(
@@ -217,17 +217,15 @@ class _QuickMenuGrid extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 10),
-
-        // ✅ 2 baris, 3 kolom (muat 6)
         GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: items.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
+            crossAxisCount: 4,
             mainAxisSpacing: 12,
             crossAxisSpacing: 12,
-            childAspectRatio: 1.35, // makin kecil cardnya (lebih ramping)
+            childAspectRatio: 0.88,
           ),
           itemBuilder: (context, i) {
             final it = items[i];
@@ -285,6 +283,20 @@ class _QuickMenuGrid extends StatelessWidget {
       );
       return;
     }
+    if (label == 'Penjualan') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const PenjualanScreen()),
+      );
+      return;
+    }
+    if (label == 'Pembayaran') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const PembayaranScreen()),
+      );
+      return;
+    }
   }
 }
 
@@ -308,13 +320,13 @@ class _QuickCardSmall extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: BorderRadius.circular(18),
+      borderRadius: BorderRadius.circular(16),
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 10),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(16),
           boxShadow: const [
             BoxShadow(
               color: Color(0x14000000),
@@ -327,28 +339,28 @@ class _QuickCardSmall extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // ✅ ICON + BOX DIPERKECIL
             Container(
-              width: 36,
-              height: 36,
+              width: 32,
+              height: 32,
               decoration: BoxDecoration(
                 color: const Color(0xFFF3E4FF),
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(12),
               ),
               alignment: Alignment.center,
-              child: Icon(icon, color: kPurple, size: 20),
+              child: Icon(icon, color: kPurple, size: 18),
             ),
             const SizedBox(height: 8),
             Text(
               label,
-              maxLines: 1,
+              maxLines: 2,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: Color(0xFF24252C),
-                fontSize: 11.5,
+                fontSize: 10.5,
                 fontFamily: 'Work Sans',
                 fontWeight: FontWeight.w800,
+                height: 1.15,
               ),
             ),
           ],

@@ -525,9 +525,8 @@ class _MenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = isPrimary
-        ? const Color(0xFF6B257F)
-        : const Color(0xFFF6F4F0);
+    final bgColor =
+        isPrimary ? const Color(0xFF6B257F) : const Color(0xFFF6F4F0);
     final iconColor = isPrimary ? Colors.white : const Color(0xFF6B257F);
     final textColor = isPrimary ? Colors.black : const Color(0xFF7A7E86);
 
