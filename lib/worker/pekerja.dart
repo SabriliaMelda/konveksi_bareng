@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/worker/pages/daftar_pekerja.dart';
-import 'package:konveksi_bareng/worker/pages/status_tagihan_upah.dart';
-import 'package:konveksi_bareng/chat/pages/chat.dart';
+import 'package:konveksi_bareng/worker/daftar_pekerja.dart';
+import 'package:konveksi_bareng/worker/status_tagihan_upah.dart';
+import 'package:konveksi_bareng/chat/chat.dart';
 import 'package:konveksi_bareng/pages/home.dart';
 
 const kPurple = Color(0xFF6B257F);

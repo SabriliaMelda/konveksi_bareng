@@ -1,16 +1,16 @@
 // keuangan.dart
-import 'package:konveksi_bareng/finance/pages/operasional.dart';
-import 'package:konveksi_bareng/finance/pages/pemasukan.dart';
-import 'package:konveksi_bareng/inventory/pages/rencana_belanja.dart';
-import 'package:konveksi_bareng/finance/pages/rugi_laba.dart';
-import 'package:konveksi_bareng/worker/pages/upah.dart';
+import 'package:konveksi_bareng/finance/operasional.dart';
+import 'package:konveksi_bareng/finance/pemasukan.dart';
+import 'package:konveksi_bareng/inventory/rencana_belanja.dart';
+import 'package:konveksi_bareng/finance/rugi_laba.dart';
+import 'package:konveksi_bareng/worker/upah.dart';
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/finance/pages/pengeluaran.dart';
-import 'package:konveksi_bareng/promotion/pages/promosi.dart';
+import 'package:konveksi_bareng/finance/pengeluaran.dart';
+import 'package:konveksi_bareng/promotion/promosi.dart';
 import 'package:konveksi_bareng/pages/home.dart';
 
 // ✅ sesuaikan path sesuai struktur kamu
-import 'package:konveksi_bareng/finance/pages/keuanganproyek.dart';
+import 'package:konveksi_bareng/finance/keuanganproyek.dart';
 
 const kPurple = Color(0xFF6B257F);
 

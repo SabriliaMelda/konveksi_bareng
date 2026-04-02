@@ -3,9 +3,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import 'package:konveksi_bareng/pages/home.dart';
-import 'package:konveksi_bareng/marketplace/pages/wishlist.dart';
-import 'package:konveksi_bareng/profile/pages/settings.dart';
-import 'package:konveksi_bareng/profile/pages/profile.dart';
+import 'package:konveksi_bareng/marketplace/wishlist.dart';
+import 'package:konveksi_bareng/profile/settings.dart';
+import 'package:konveksi_bareng/profile/profile.dart';
 
 const kPurple = Color(0xFF6B257F);
 

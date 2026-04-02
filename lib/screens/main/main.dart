@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/auth/welcome.dart';
+import 'package:konveksi_bareng/screens/auth/welcome.dart';
 
 void main() {
   runApp(const MyApp());

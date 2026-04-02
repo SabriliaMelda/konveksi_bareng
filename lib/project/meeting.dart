@@ -1,6 +1,6 @@
 // meeting.dart
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/project/pages/buat_meeting.dart'; // ✅ tambah ini
+import 'package:konveksi_bareng/project/buat_meeting.dart'; // ✅ tambah ini
 
 const kPurple = Color(0xFF6B257F);
 

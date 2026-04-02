@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/project/pages/proyek_detail.dart';
+import 'package:konveksi_bareng/project/proyek_detail.dart';
 
 const kPurple = Color(0xFF6B257F);
 

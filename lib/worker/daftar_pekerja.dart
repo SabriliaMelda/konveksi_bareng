@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/worker/pages/pekerja_detail.dart';
+import 'package:konveksi_bareng/worker/pekerja_detail.dart';
 
 const kPurple = Color(0xFF6B257F);
 

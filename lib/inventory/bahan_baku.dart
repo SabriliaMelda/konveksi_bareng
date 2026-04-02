@@ -1,14 +1,14 @@
 // lib/pages/bahan_baku.dart
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/finance/pages/pembayaran.dart';
-import 'package:konveksi_bareng/finance/pages/penjualan.dart';
+import 'package:konveksi_bareng/finance/pembayaran.dart';
+import 'package:konveksi_bareng/finance/penjualan.dart';
 import 'package:konveksi_bareng/pages/home.dart';
-import 'package:konveksi_bareng/marketplace/pages/marketplace.dart';
-import 'package:konveksi_bareng/marketplace/pages/wishlist.dart';
-import 'package:konveksi_bareng/chat/pages/chat.dart';
-import 'package:konveksi_bareng/marketplace/pages/checkout.dart';
-import 'package:konveksi_bareng/finance/pages/pembelian.dart';
-import 'package:konveksi_bareng/inventory/pages/pengiriman.dart';
+import 'package:konveksi_bareng/marketplace/marketplace.dart';
+import 'package:konveksi_bareng/marketplace/wishlist.dart';
+import 'package:konveksi_bareng/chat/chat.dart';
+import 'package:konveksi_bareng/marketplace/checkout.dart';
+import 'package:konveksi_bareng/finance/pembelian.dart';
+import 'package:konveksi_bareng/inventory/pengiriman.dart';
 
 const Color kPurple = Color(0xFF6B257F);
 const Color kBg = Color(0xFFF7F7FB);

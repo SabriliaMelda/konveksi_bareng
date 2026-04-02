@@ -1,25 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/auth/login.dart';
+import 'package:konveksi_bareng/screens/auth/acc.dart';
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+class FindAccountPage extends StatefulWidget {
+  const FindAccountPage({super.key});
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<FindAccountPage> createState() => _FindAccountPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
-  final TextEditingController _nameC = TextEditingController();
-  final TextEditingController _phoneC = TextEditingController();
-  final TextEditingController _emailC = TextEditingController();
-
+class _FindAccountPageState extends State<FindAccountPage> {
+  final TextEditingController _accountC = TextEditingController();
   bool _loading = false;
 
   @override
   void dispose() {
-    _nameC.dispose();
-    _phoneC.dispose();
-    _emailC.dispose();
+    _accountC.dispose();
     super.dispose();
   }
 
@@ -46,32 +41,15 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future<void> _submit() async {
-    final name = _nameC.text.trim();
-    final phone = _phoneC.text.trim();
-    final email = _emailC.text.trim();
+    final value = _accountC.text.trim();
 
-    if (name.isEmpty) {
-      _toast('Nama lengkap wajib diisi.');
+    if (value.isEmpty) {
+      _toast('Email atau nomor telepon wajib diisi.');
       return;
     }
 
-    if (phone.isEmpty) {
-      _toast('Nomor telepon wajib diisi.');
-      return;
-    }
-
-    if (!_isPhone(phone)) {
-      _toast('Nomor telepon tidak valid.');
-      return;
-    }
-
-    if (email.isEmpty) {
-      _toast('Alamat email wajib diisi.');
-      return;
-    }
-
-    if (!_isEmail(email)) {
-      _toast('Format email tidak valid.');
+    if (!_isEmail(value) && !_isPhone(value)) {
+      _toast('Masukkan email atau nomor telepon yang valid.');
       return;
     }
 
@@ -81,7 +59,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
     if (!mounted) return;
 
-    _toast('Pendaftaran berhasil.');
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => const AccPage()),
+    );
 
     if (mounted) {
       setState(() => _loading = false);
@@ -168,54 +149,68 @@ class _RegisterPageState extends State<RegisterPage> {
                           const _LogoHeader(),
                           const SizedBox(height: 18),
                           const Text(
-                            'Buat Akun',
+                            'Temukan Akun Anda',
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               color: Color(0xFF6B257F),
                               fontSize: 24,
                               fontWeight: FontWeight.w800,
-                              height: 1.2,
+                              height: 1.22,
                             ),
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 12),
                           const Text(
-                            'Bergabung bersama kami hari ini',
+                            'Cari Akun Anda. Demi keamanan, silakan masukkan alamat email atau nomor telepon yang tertaut dengan akun ini.',
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               color: Color(0xFF7B4E88),
-                              fontSize: 11.5,
+                              fontSize: 10.5,
                               fontWeight: FontWeight.w500,
-                              height: 1.4,
+                              height: 1.45,
                             ),
                           ),
-                          const SizedBox(height: 18),
-                          const _FieldLabel(text: 'Nama Lengkap'),
-                          const SizedBox(height: 6),
-                          _buildInputField(
-                            controller: _nameC,
-                            hintText: 'Boma Digital',
-                            keyboardType: TextInputType.name,
+                          const SizedBox(height: 14),
+
+                          // INPUT BOX DISAMAKAN DENGAN LOGIN.DART
+                          Container(
+                            height: 46,
+                            padding: const EdgeInsets.symmetric(horizontal: 14),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: const Color(0xFFBEB6C2),
+                                width: 1,
+                              ),
+                            ),
+                            alignment: Alignment.center,
+                            child: TextField(
+                              controller: _accountC,
+                              keyboardType: TextInputType.emailAddress,
+                              style: const TextStyle(
+                                fontFamily: 'Poppins',
+                                color: Color(0xFF2A2A2A),
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                                hintText: 'Email atau nomor telepon',
+                                hintStyle: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  color: Color(0xFFAAA3AF),
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                isDense: true,
+                              ),
+                              onSubmitted: (_) {
+                                if (!_loading) _submit();
+                              },
+                            ),
                           ),
-                          const SizedBox(height: 12),
-                          const _FieldLabel(text: 'Nomor Telepon'),
-                          const SizedBox(height: 6),
-                          _buildInputField(
-                            controller: _phoneC,
-                            hintText: '0879687546353',
-                            keyboardType: TextInputType.phone,
-                          ),
-                          const SizedBox(height: 12),
-                          const _FieldLabel(text: 'Alamat Email'),
-                          const SizedBox(height: 6),
-                          _buildInputField(
-                            controller: _emailC,
-                            hintText: 'bomadigital@gmail.com',
-                            keyboardType: TextInputType.emailAddress,
-                            onSubmitted: (_) {
-                              if (!_loading) _submit();
-                            },
-                          ),
-                          const SizedBox(height: 16),
+
+                          const SizedBox(height: 10),
                           SizedBox(
                             width: double.infinity,
                             height: 38,
@@ -251,44 +246,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     ),
                             ),
                           ),
-                          const SizedBox(height: 12),
-                          Center(
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => const Login(),
-                                  ),
-                                );
-                              },
-                              child: RichText(
-                                text: const TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: 'Sudah punya akun? ',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        color: Color(0xFF6B257F),
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: 'Masuk',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        color: Color(0xFF6B257F),
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 12),
+                          const SizedBox(height: 10),
                           Row(
                             children: const [
                               _CountryChip(),
@@ -318,68 +276,6 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildInputField({
-    required TextEditingController controller,
-    required String hintText,
-    required TextInputType keyboardType,
-    ValueChanged<String>? onSubmitted,
-  }) {
-    return Container(
-      height: 36,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(
-          color: const Color(0xFFBEB6C2),
-          width: 1,
-        ),
-      ),
-      alignment: Alignment.center,
-      child: TextField(
-        controller: controller,
-        keyboardType: keyboardType,
-        onSubmitted: onSubmitted,
-        style: const TextStyle(
-          fontFamily: 'Poppins',
-          color: Color(0xFF2A2A2A),
-          fontSize: 12,
-          fontWeight: FontWeight.w500,
-        ),
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: hintText,
-          hintStyle: const TextStyle(
-            fontFamily: 'Poppins',
-            color: Color(0xFFB3B0B7),
-            fontSize: 11.5,
-            fontWeight: FontWeight.w500,
-          ),
-          isDense: true,
-        ),
-      ),
-    );
-  }
-}
-
-class _FieldLabel extends StatelessWidget {
-  final String text;
-
-  const _FieldLabel({required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: const TextStyle(
-        fontFamily: 'Poppins',
-        color: Color(0xFF6B257F),
-        fontSize: 12,
-        fontWeight: FontWeight.w600,
       ),
     );
   }
@@ -446,7 +342,7 @@ class _CountryChipState extends State<_CountryChip> {
             child: Text('English', style: TextStyle(fontFamily: 'Poppins'))),
       ],
       child: Container(
-        height: 28,
+        height: 26,
         padding: const EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -464,7 +360,7 @@ class _CountryChipState extends State<_CountryChip> {
               style: const TextStyle(
                 fontFamily: 'Poppins',
                 color: Color(0xFF6B257F),
-                fontSize: 12,
+                fontSize: 11,
                 fontWeight: FontWeight.w500,
               ),
             ),

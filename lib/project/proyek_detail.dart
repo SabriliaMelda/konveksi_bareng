@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/marketplace/pages/bookmark_menu_screen.dart';
-import 'package:konveksi_bareng/common/pages/simple_placeholder_page.dart';
+import 'package:konveksi_bareng/marketplace/bookmark_menu_screen.dart';
+import 'package:konveksi_bareng/common/simple_placeholder_page.dart';
 
 const kPurple = Color(0xFF6B257F);
 

@@ -2,22 +2,22 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-import 'package:konveksi_bareng/finance/pages/pembelian.dart';
-import 'package:konveksi_bareng/promotion/pages/promosi.dart';
-import 'package:konveksi_bareng/finance/pages/rugi_laba.dart';
-import 'package:konveksi_bareng/profile/pages/settings.dart';
-import 'package:konveksi_bareng/worker/pages/upah.dart';
-import 'package:konveksi_bareng/marketplace/pages/wishlist.dart';
-import 'package:konveksi_bareng/marketplace/pages/checkout.dart';
+import 'package:konveksi_bareng/finance/pembelian.dart';
+import 'package:konveksi_bareng/promotion/promosi.dart';
+import 'package:konveksi_bareng/finance/rugi_laba.dart';
+import 'package:konveksi_bareng/profile/settings.dart';
+import 'package:konveksi_bareng/worker/upah.dart';
+import 'package:konveksi_bareng/marketplace/wishlist.dart';
+import 'package:konveksi_bareng/marketplace/checkout.dart';
 
-import 'package:konveksi_bareng/profile/pages/profile.dart';
-import 'package:konveksi_bareng/project/pages/kelola_proyek.dart';
-import 'package:konveksi_bareng/inventory/pages/bahan_baku.dart';
-import 'package:konveksi_bareng/chat/pages/chat.dart';
-import 'package:konveksi_bareng/finance/pages/keuangan.dart';
-import 'package:konveksi_bareng/schedule/pages/jadwal.dart';
-import 'package:konveksi_bareng/production/pages/pola.dart';
-import 'package:konveksi_bareng/worker/pages/pekerja.dart';
+import 'package:konveksi_bareng/profile/profile.dart';
+import 'package:konveksi_bareng/project/kelola_proyek.dart';
+import 'package:konveksi_bareng/inventory/bahan_baku.dart';
+import 'package:konveksi_bareng/chat/chat.dart';
+import 'package:konveksi_bareng/finance/keuangan.dart';
+import 'package:konveksi_bareng/schedule/jadwal.dart';
+import 'package:konveksi_bareng/production/pola.dart';
+import 'package:konveksi_bareng/worker/pekerja.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

@@ -1,10 +1,10 @@
 // jadwal.dart
-import 'package:konveksi_bareng/schedule/pages/jadwal_belanja.dart';
-import 'package:konveksi_bareng/schedule/pages/jadwal_kirim.dart';
-import 'package:konveksi_bareng/worker/pages/jadwal_upah.dart';
+import 'package:konveksi_bareng/schedule/jadwal_belanja.dart';
+import 'package:konveksi_bareng/schedule/jadwal_kirim.dart';
+import 'package:konveksi_bareng/worker/jadwal_upah.dart';
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/schedule/pages/jadwal_buat.dart';
-import 'package:konveksi_bareng/project/pages/spk.dart';
+import 'package:konveksi_bareng/schedule/jadwal_buat.dart';
+import 'package:konveksi_bareng/project/spk.dart';
 import 'package:konveksi_bareng/pages/home.dart';
 
 const kPurple = Color(0xFF6B257F);

@@ -1,6 +1,6 @@
 // jadwal_buat.dart
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/project/pages/meeting.dart';
+import 'package:konveksi_bareng/project/meeting.dart';
 import 'package:konveksi_bareng/pages/home.dart';
 
 const kPurple = Color(0xFF6B257F);

@@ -1,6 +1,6 @@
 // operasional.dart
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/finance/pages/listrik.dart';
+import 'package:konveksi_bareng/finance/listrik.dart';
 import 'package:konveksi_bareng/pages/home.dart';
 
 const Color kPurple = Color(0xFF6B257F);

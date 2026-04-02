@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/project/pages/daftar_project.dart';
-import 'package:konveksi_bareng/schedule/pages/jadwal.dart';
-import 'package:konveksi_bareng/worker/pages/pekerja.dart';
-import 'package:konveksi_bareng/chat/pages/chat.dart';
-import 'package:konveksi_bareng/production/pages/pola.dart';
+import 'package:konveksi_bareng/project/daftar_project.dart';
+import 'package:konveksi_bareng/schedule/jadwal.dart';
+import 'package:konveksi_bareng/worker/pekerja.dart';
+import 'package:konveksi_bareng/chat/chat.dart';
+import 'package:konveksi_bareng/production/pola.dart';
 
 const kPurple = Color(0xFF6B257F);
 const kLightPurple = Color(0xFFF7E1FF);

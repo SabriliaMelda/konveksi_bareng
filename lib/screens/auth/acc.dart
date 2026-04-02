@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/auth/find_account.dart';
-import 'package:konveksi_bareng/auth/verification.dart';
+import 'package:konveksi_bareng/screens/auth/find_account.dart';
+import 'package:konveksi_bareng/screens/auth/verification.dart';
 
 class AccPage extends StatelessWidget {
   const AccPage({super.key});

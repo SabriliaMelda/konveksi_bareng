@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/auth/find_account.dart';
-import 'package:konveksi_bareng/auth/register.dart';
-import 'package:konveksi_bareng/auth/verification.dart';
+import 'package:konveksi_bareng/screens/auth/login.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginState extends State<Login> {
-  final TextEditingController _loginC = TextEditingController();
+class _RegisterPageState extends State<RegisterPage> {
+  final TextEditingController _nameC = TextEditingController();
+  final TextEditingController _phoneC = TextEditingController();
+  final TextEditingController _emailC = TextEditingController();
+
   bool _loading = false;
 
   @override
   void dispose() {
-    _loginC.dispose();
+    _nameC.dispose();
+    _phoneC.dispose();
+    _emailC.dispose();
     super.dispose();
   }
 
@@ -42,29 +45,43 @@ class _LoginState extends State<Login> {
     return clean.length >= 9;
   }
 
-  Future<void> _doLogin() async {
-    final value = _loginC.text.trim();
+  Future<void> _submit() async {
+    final name = _nameC.text.trim();
+    final phone = _phoneC.text.trim();
+    final email = _emailC.text.trim();
 
-    if (value.isEmpty) {
-      _toast('Email atau nomor telepon wajib diisi.');
+    if (name.isEmpty) {
+      _toast('Nama lengkap wajib diisi.');
       return;
     }
 
-    if (!_isEmail(value) && !_isPhone(value)) {
-      _toast('Masukkan email atau nomor telepon yang valid.');
+    if (phone.isEmpty) {
+      _toast('Nomor telepon wajib diisi.');
+      return;
+    }
+
+    if (!_isPhone(phone)) {
+      _toast('Nomor telepon tidak valid.');
+      return;
+    }
+
+    if (email.isEmpty) {
+      _toast('Alamat email wajib diisi.');
+      return;
+    }
+
+    if (!_isEmail(email)) {
+      _toast('Format email tidak valid.');
       return;
     }
 
     setState(() => _loading = true);
 
-    await Future.delayed(const Duration(milliseconds: 600));
+    await Future.delayed(const Duration(milliseconds: 700));
 
     if (!mounted) return;
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => const VerificationPage()),
-    );
+    _toast('Pendaftaran berhasil.');
 
     if (mounted) {
       setState(() => _loading = false);
@@ -77,8 +94,6 @@ class _LoginState extends State<Login> {
     final size = media.size;
     final bottomInset = media.viewInsets.bottom;
 
-    // Make the login card wider: use 85% of the screen on small devices,
-    // and a 340px fixed width on larger screens for better readability.
     final cardWidth = size.width < 380 ? size.width * 0.85 : 340.0;
 
     return Scaffold(
@@ -132,7 +147,7 @@ class _LoginState extends State<Login> {
                     ),
                     child: Container(
                       width: cardWidth,
-                      padding: const EdgeInsets.fromLTRB(22, 18, 22, 14),
+                      padding: const EdgeInsets.fromLTRB(18, 18, 18, 14),
                       decoration: BoxDecoration(
                         color: const Color(0xFFFDFDFD),
                         border: Border.all(
@@ -151,119 +166,61 @@ class _LoginState extends State<Login> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const _LogoHeader(),
-                          const SizedBox(height: 15),
+                          const SizedBox(height: 18),
                           const Text(
-                            'Login',
+                            'Buat Akun',
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               color: Color(0xFF6B257F),
-                              fontSize: 26,
+                              fontSize: 24,
                               fontWeight: FontWeight.w800,
-                              height: 1.0,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          const Text(
-                            'Buat akun untuk akses promo eksklusif\n'
-                            'dan penawaran terbaik setiap hari.',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              color: Color(0xFF7B4E88),
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                              height: 1.45,
-                            ),
-                          ),
-                          const SizedBox(height: 18),
-                          Container(
-                            height: 46,
-                            padding: const EdgeInsets.symmetric(horizontal: 14),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
-                                color: const Color(0xFFBEB6C2),
-                                width: 1,
-                              ),
-                            ),
-                            alignment: Alignment.center,
-                            child: TextField(
-                              controller: _loginC,
-                              keyboardType: TextInputType.emailAddress,
-                              style: const TextStyle(
-                                fontFamily: 'Poppins',
-                                color: Color(0xFF2A2A2A),
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Email atau nomor telepon',
-                                hintStyle: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  color: Color(0xFFAAA3AF),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                isDense: true,
-                              ),
-                              onSubmitted: (_) {
-                                if (!_loading) _doLogin();
-                              },
+                              height: 1.2,
                             ),
                           ),
                           const SizedBox(height: 10),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => const FindAccountPage(),
-                                      ),
-                                    );
-                                  },
-                                  child: const Text(
-                                    'Lupa email?',
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      color: Color(0xFF6B257F),
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => const RegisterPage(),
-                                    ),
-                                  );
-                                },
-                                child: const Text(
-                                  'Buat Akun',
-                                  textAlign: TextAlign.right,
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    color: Color(0xFF6B257F),
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              ),
-                            ],
+                          const Text(
+                            'Bergabung bersama kami hari ini',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              color: Color(0xFF7B4E88),
+                              fontSize: 11.5,
+                              fontWeight: FontWeight.w500,
+                              height: 1.4,
+                            ),
+                          ),
+                          const SizedBox(height: 18),
+                          const _FieldLabel(text: 'Nama Lengkap'),
+                          const SizedBox(height: 6),
+                          _buildInputField(
+                            controller: _nameC,
+                            hintText: 'Boma Digital',
+                            keyboardType: TextInputType.name,
                           ),
                           const SizedBox(height: 12),
+                          const _FieldLabel(text: 'Nomor Telepon'),
+                          const SizedBox(height: 6),
+                          _buildInputField(
+                            controller: _phoneC,
+                            hintText: '0879687546353',
+                            keyboardType: TextInputType.phone,
+                          ),
+                          const SizedBox(height: 12),
+                          const _FieldLabel(text: 'Alamat Email'),
+                          const SizedBox(height: 6),
+                          _buildInputField(
+                            controller: _emailC,
+                            hintText: 'bomadigital@gmail.com',
+                            keyboardType: TextInputType.emailAddress,
+                            onSubmitted: (_) {
+                              if (!_loading) _submit();
+                            },
+                          ),
+                          const SizedBox(height: 16),
                           SizedBox(
                             width: double.infinity,
-                            height: 42,
+                            height: 38,
                             child: ElevatedButton(
-                              onPressed: _loading ? null : _doLogin,
+                              onPressed: _loading ? null : _submit,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFF742C92),
                                 disabledBackgroundColor:
@@ -276,10 +233,10 @@ class _LoginState extends State<Login> {
                               ),
                               child: _loading
                                   ? const SizedBox(
-                                      width: 20,
-                                      height: 20,
+                                      width: 18,
+                                      height: 18,
                                       child: CircularProgressIndicator(
-                                        strokeWidth: 2.2,
+                                        strokeWidth: 2.0,
                                         color: Colors.white,
                                       ),
                                     )
@@ -288,13 +245,50 @@ class _LoginState extends State<Login> {
                                       style: TextStyle(
                                         fontFamily: 'Poppins',
                                         color: Colors.white,
-                                        fontSize: 14,
+                                        fontSize: 13,
                                         fontWeight: FontWeight.w700,
                                       ),
                                     ),
                             ),
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 12),
+                          Center(
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => const Login(),
+                                  ),
+                                );
+                              },
+                              child: RichText(
+                                text: const TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: 'Sudah punya akun? ',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        color: Color(0xFF6B257F),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: 'Masuk',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        color: Color(0xFF6B257F),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
                           Row(
                             children: const [
                               _CountryChip(),
@@ -302,15 +296,15 @@ class _LoginState extends State<Login> {
                               _FooterLink(text: 'Bantuan'),
                             ],
                           ),
-                          const SizedBox(height: 54),
+                          const SizedBox(height: 52),
                           const Center(
                             child: Text(
                               '© Copyrights BOMA | All Rights Reserved',
                               textAlign: TextAlign.center,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontFamily: 'Poppins',
                                 color: Color(0xFF8F8F8F),
-                                fontSize: 10.5,
+                                fontSize: 10,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
@@ -327,6 +321,68 @@ class _LoginState extends State<Login> {
       ),
     );
   }
+
+  Widget _buildInputField({
+    required TextEditingController controller,
+    required String hintText,
+    required TextInputType keyboardType,
+    ValueChanged<String>? onSubmitted,
+  }) {
+    return Container(
+      height: 36,
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(
+          color: const Color(0xFFBEB6C2),
+          width: 1,
+        ),
+      ),
+      alignment: Alignment.center,
+      child: TextField(
+        controller: controller,
+        keyboardType: keyboardType,
+        onSubmitted: onSubmitted,
+        style: const TextStyle(
+          fontFamily: 'Poppins',
+          color: Color(0xFF2A2A2A),
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+        ),
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          hintText: hintText,
+          hintStyle: const TextStyle(
+            fontFamily: 'Poppins',
+            color: Color(0xFFB3B0B7),
+            fontSize: 11.5,
+            fontWeight: FontWeight.w500,
+          ),
+          isDense: true,
+        ),
+      ),
+    );
+  }
+}
+
+class _FieldLabel extends StatelessWidget {
+  final String text;
+
+  const _FieldLabel({required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: const TextStyle(
+        fontFamily: 'Poppins',
+        color: Color(0xFF6B257F),
+        fontSize: 12,
+        fontWeight: FontWeight.w600,
+      ),
+    );
+  }
 }
 
 class _LogoHeader extends StatelessWidget {
@@ -334,38 +390,33 @@ class _LogoHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Shift the logo slightly left so it visually lines up with the "Login" text
-    // below the logo.
-    return Transform.translate(
-      offset: const Offset(-10, 0),
-      child: Image.asset(
-        'assets/images/logo1.png',
-        width: 120,
-        fit: BoxFit.contain,
-        errorBuilder: (_, __, ___) {
-          return Row(
-            mainAxisSize: MainAxisSize.min,
-            children: const [
-              Icon(
-                Icons.accessibility_new_rounded,
+    return Image.asset(
+      'assets/images/logo1.png',
+      width: 120,
+      fit: BoxFit.contain,
+      errorBuilder: (_, __, ___) {
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: const [
+            Icon(
+              Icons.accessibility_new_rounded,
+              color: Color(0xFF6B257F),
+              size: 34,
+            ),
+            SizedBox(width: 8),
+            Text(
+              'KONVEKSI\nBARENG',
+              style: TextStyle(
+                fontFamily: 'Poppins',
                 color: Color(0xFF6B257F),
-                size: 10,
+                fontSize: 13,
+                fontWeight: FontWeight.w800,
+                height: 1.0,
               ),
-              SizedBox(width: 8),
-              Text(
-                'KONVEKSI\nBARENG',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  color: Color(0xFF6B257F),
-                  fontSize: 13,
-                  fontWeight: FontWeight.w800,
-                  height: 1.0,
-                ),
-              ),
-            ],
-          );
-        },
-      ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -442,8 +493,9 @@ class _FooterLink extends StatelessWidget {
       child: Text(
         text,
         style: const TextStyle(
+          fontFamily: 'Poppins',
           color: Color(0xFF6B257F),
-          fontSize: 12,
+          fontSize: 11,
           fontWeight: FontWeight.w500,
         ),
       ),

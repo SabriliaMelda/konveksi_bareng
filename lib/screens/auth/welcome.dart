@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/auth/login.dart';
-import 'package:konveksi_bareng/auth/register.dart';
+import 'package:konveksi_bareng/screens/auth/login.dart';
+import 'package:konveksi_bareng/screens/auth/register.dart';
 
 void main() {
   runApp(const FigmaToCodeApp());

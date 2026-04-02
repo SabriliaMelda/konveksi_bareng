@@ -1,9 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 
 class AuthServiceEmu {
   final Dio _dio = Dio(
     BaseOptions(
-      baseUrl: 'http://10.0.2.2:8080', // KHUSUS emulator Android
+      baseUrl: kIsWeb
+          ? 'http://localhost:8080'
+          : 'http://10.0.2.2:8080', // localhost for web, 10.0.2.2 for Android emulator
       connectTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(seconds: 30),
       headers: {
