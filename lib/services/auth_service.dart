@@ -220,8 +220,12 @@ class AuthService {
   }
 
   static Future<
-          ({bool ok, List<Map<String, dynamic>> questions, String? message})>
-      getSecurityQuestions(String email) async {
+      ({
+        bool ok,
+        Map<String, dynamic>? user,
+        List<Map<String, dynamic>> questions,
+        String? message,
+      })> getSecurityQuestions(String email) async {
     try {
       final res = await _dio.get(
         '/auth/security-questions',
@@ -229,17 +233,24 @@ class AuthService {
         options: Options(responseType: ResponseType.plain),
       );
       final data = _asMap(res.data);
+      final user = data['user'] as Map<String, dynamic>?;
       final questions = (data['questions'] as List?)
               ?.map((q) => q as Map<String, dynamic>)
               .toList() ??
           [];
       return (
         ok: _isOk(res.statusCode),
+        user: user,
         questions: questions,
         message: data['message'] as String?,
       );
     } on DioException {
-      return (ok: false, questions: <Map<String, dynamic>>[], message: 'Network error');
+      return (
+        ok: false,
+        user: null,
+        questions: <Map<String, dynamic>>[],
+        message: 'Network error',
+      );
     }
   }
 

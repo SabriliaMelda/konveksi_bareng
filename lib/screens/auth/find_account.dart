@@ -1,42 +1,33 @@
 import 'package:flutter/material.dart';
+import '../../services/auth_service.dart';
+import '../../services/storage_service.dart';
 import '../../widgets/auth_background.dart';
 import 'account_screen.dart';
-import 'login.dart';
 
 const _strings = {
   'id': {
     'title': 'Temukan Akun Anda',
     'subtitle':
-        'Cari Akun Anda. Demi keamanan, silakan masukkan alamat email atau nomor telepon yang tertaut dengan akun ini.',
-    'error': 'Harap isi email atau nomor telepon.',
-    'errorInvalid': 'Harap isi email atau nomor telepon yang valid.',
-    'placeholder': 'Email atau nomor telepon',
+        'Cari Akun Anda. Demi keamanan, silakan masukkan alamat email yang tertaut dengan akun ini.',
+    'error': 'Harap isi alamat email.',
+    'errorInvalid': 'Harap isi alamat email yang valid.',
+    'placeholder': 'Alamat email',
     'searching': 'Mencari...',
     'next': 'Berikutnya',
     'help': 'Bantuan',
-    'sentTitle': 'Cek email Anda',
-    'sentSubtitle': 'Kami mengirimkan tautan verifikasi ke',
-    'sentCheck': 'Cek inbox Anda dan ikuti instruksinya.',
-    'sentNoReceive': 'Tidak menerima? ',
-    'sentTryAgain': 'Coba lagi',
-    'sentBack': 'Kembali ke Login',
+    'errorServer': 'Tidak dapat terhubung ke server.',
   },
   'en': {
     'title': 'Find Your Account',
     'subtitle':
-        'Search for your account. For security, please enter the email address or phone number associated with this account.',
-    'error': 'Please enter your email or phone number.',
-    'errorInvalid': 'Please enter a valid email or phone number.',
-    'placeholder': 'Email or phone number',
+        'Search for your account. For security, please enter the email address associated with this account.',
+    'error': 'Please enter your email address.',
+    'errorInvalid': 'Please enter a valid email address.',
+    'placeholder': 'Email address',
     'searching': 'Searching...',
     'next': 'Next',
     'help': 'Help',
-    'sentTitle': 'Check your email',
-    'sentSubtitle': 'We sent a verification link to',
-    'sentCheck': 'Check your inbox and follow the instructions.',
-    'sentNoReceive': "Didn't receive it? ",
-    'sentTryAgain': 'Try again',
-    'sentBack': 'Back to Login',
+    'errorServer': 'Cannot connect to server.',
   },
 };
 
@@ -54,23 +45,43 @@ class _FindAccountScreenState extends State<FindAccountScreen> {
   String _lang = 'id';
   String _error = '';
   bool _loading = false;
-  bool _sent = false;
 
   Map<String, String> get t => _strings[_lang]!;
 
-  void _handleSubmit() {
-    if (_controller.text.isEmpty) {
+  Future<void> _handleSubmit() async {
+    final email = _controller.text.trim().toLowerCase();
+    if (email.isEmpty) {
       setState(() => _error = t['error']!);
       return;
     }
-    if (!_emailRegex.hasMatch(_controller.text)) {
+    if (!_emailRegex.hasMatch(email)) {
       setState(() => _error = t['errorInvalid']!);
       return;
     }
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => const AccountScreen()),
-    );
+
+    setState(() {
+      _loading = true;
+      _error = '';
+    });
+
+    try {
+      final result = await AuthService.getSecurityQuestions(email);
+      if (!result.ok) {
+        setState(() => _error = result.message ?? 'Akun tidak ditemukan');
+      } else {
+        await StorageService.setItem('recovery_email', email);
+        if (mounted) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const AccountScreen()),
+          );
+        }
+      }
+    } catch (_) {
+      setState(() => _error = t['errorServer']!);
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
   }
 
   @override
@@ -81,96 +92,6 @@ class _FindAccountScreenState extends State<FindAccountScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Sent confirmation state
-    if (_sent) {
-      return AuthBackground(
-        child: Column(
-          children: [
-            Container(
-              width: 64,
-              height: 64,
-              decoration: const BoxDecoration(
-                color: Color(0xFF10B981),
-                shape: BoxShape.circle,
-              ),
-              child: const Center(
-                child: Text('\u2709',
-                    style: TextStyle(color: Colors.white, fontSize: 28)),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Text(t['sentTitle']!,
-                style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w800,
-                    color: kPurple)),
-            const SizedBox(height: 4),
-            Text.rich(
-              TextSpan(
-                text: '${t['sentSubtitle']!} ',
-                style: const TextStyle(
-                    fontSize: 12,
-                    color: kPurpleLight,
-                    height: 1.45),
-                children: [
-                  TextSpan(
-                    text: _controller.text,
-                    style: const TextStyle(fontWeight: FontWeight.w700),
-                  ),
-                  TextSpan(text: '.\n${t['sentCheck']!}'),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(t['sentNoReceive']!,
-                    style: const TextStyle(
-                        fontSize: 12,
-                        color: kPurple)),
-                GestureDetector(
-                  onTap: () => setState(() {
-                    _sent = false;
-                    _controller.clear();
-                    _error = '';
-                  }),
-                  child: Text(t['sentTryAgain']!,
-                      style: const TextStyle(
-                          fontSize: 12,
-                          color: Color(0xFF667EEA),
-                          fontWeight: FontWeight.w500)),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            SizedBox(
-              width: double.infinity,
-              height: 42,
-              child: OutlinedButton(
-                onPressed: () => Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => const LoginScreen()),
-                ),
-                style: OutlinedButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  side: const BorderSide(color: kPurple, width: 1.5),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                ),
-                child: Text(t['sentBack']!,
-                    style: const TextStyle(
-                        color: kPurple,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700)),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    // Search form state
     return AuthBackground(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -208,6 +129,7 @@ class _FindAccountScreenState extends State<FindAccountScreen> {
             child: TextField(
               controller: _controller,
               keyboardType: TextInputType.emailAddress,
+              textCapitalization: TextCapitalization.none,
               onChanged: (_) => setState(() => _error = ''),
               onSubmitted: (_) {
                 if (!_loading) _handleSubmit();
