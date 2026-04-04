@@ -4,9 +4,10 @@ class ApiService {
   ApiService._();
 
   // GANTI dengan base URL API Anda:
-  // - Emulator Android: http://10.0.2.2:8000
-  // - HP fisik (satu wifi/hotspot): http://IP_LAPTOP:8000 (mis. http://192.168.1.10:8000)
-  static const String baseUrl = 'http://10.0.2.2:8000';
+  // - Emulator Android: http://10.0.2.2:4001
+  // - HP fisik (satu wifi): http://IP_LAPTOP:4001
+  // - Web/Desktop: http://localhost:4001
+  static const String baseUrl = 'http://10.0.2.2:4001';
 
   static final Dio dio = Dio(
     BaseOptions(

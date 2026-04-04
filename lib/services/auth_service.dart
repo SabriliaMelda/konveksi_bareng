@@ -1,12 +1,25 @@
 import 'dart:convert';
+import 'dart:io' show Platform;
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class AuthService {
   AuthService._();
 
+  static String get _baseUrl {
+    // Web/Desktop → localhost
+    if (kIsWeb) return 'http://localhost:4001';
+    // Android Emulator → 10.0.2.2 (alias ke host localhost)
+    if (Platform.isAndroid) return 'http://10.0.2.2:4001';
+    // iOS Simulator → localhost
+    if (Platform.isIOS) return 'http://localhost:4001';
+    // Desktop (Windows/macOS/Linux)
+    return 'http://localhost:4001';
+  }
+
   static final Dio _dio = Dio(
     BaseOptions(
-      baseUrl: 'https://www.xsoftco.com/api-auth',
+      baseUrl: _baseUrl,
       connectTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(seconds: 30),
       headers: {
@@ -43,7 +56,7 @@ class AuthService {
       String email) async {
     try {
       final res = await _dio.post(
-        '/request-otp.php',
+        '/auth/request-otp',
         data: {'email': email},
         options: Options(responseType: ResponseType.plain),
       );
@@ -73,7 +86,7 @@ class AuthService {
   }) async {
     try {
       final res = await _dio.post(
-        '/verify-otp.php',
+        '/auth/verify-otp',
         data: {'email': email, 'otp': otp},
         options: Options(responseType: ResponseType.plain),
       );
@@ -105,7 +118,7 @@ class AuthService {
   }) async {
     try {
       final res = await _dio.post(
-        '/register.php',
+        '/auth/register',
         data: {
           'name': name,
           'email': email.toLowerCase().trim(),

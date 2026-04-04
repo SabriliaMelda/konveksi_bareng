@@ -285,14 +285,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       _MenuRow(
                         accent: _purple,
-                        icon: Icons.lock_reset_rounded,
-                        title: 'Ubah Password',
-                        subtitle: 'Atur ulang kata sandi',
-                        onTap: () => _toast('Ubah password (dummy)'),
-                      ),
-                      const _DividerSoft(),
-                      _MenuRow(
-                        accent: _purple,
                         icon: Icons.verified_user_outlined,
                         title: 'Verifikasi Akun',
                         subtitle: 'Email / nomor HP',

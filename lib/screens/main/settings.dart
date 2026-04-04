@@ -65,7 +65,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     final umumHas =
         _match('profil nama foto kontak', q) ||
-        _match('keamanan pin password perangkat', q) ||
+        _match('keamanan pin perangkat', q) ||
         _match('bahasa indonesia', q) ||
         _match('tema tampilan warna font layout', q);
 
@@ -391,7 +391,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               tileBorder: tileBorder,
                             ),
                           if (_match('profil nama foto kontak', q) &&
-                              (_match('keamanan pin password perangkat', q) ||
+                              (_match('keamanan pin perangkat', q) ||
                                   _match('bahasa indonesia', q) ||
                                   _match('tema tampilan warna font layout', q)))
                             _DividerSoft(
@@ -400,19 +400,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   : const Color(0x110F172A),
                             ),
 
-                          if (_match('keamanan pin password perangkat', q))
+                          if (_match('keamanan pin perangkat', q))
                             _MenuRow(
                               accent: _purple,
                               icon: Icons.lock_outline_rounded,
                               title: 'Keamanan',
-                              subtitle: 'PIN, password, perangkat',
+                              subtitle: 'PIN, perangkat',
                               onTap: () => _toast(context, 'Keamanan (dummy)'),
                               ink: ink,
                               muted: muted,
                               tile: tile,
                               tileBorder: tileBorder,
                             ),
-                          if (_match('keamanan pin password perangkat', q) &&
+                          if (_match('keamanan pin perangkat', q) &&
                               (_match('bahasa indonesia', q) ||
                                   _match('tema tampilan warna font layout', q)))
                             _DividerSoft(
