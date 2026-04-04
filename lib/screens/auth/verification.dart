@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:konveksi_bareng/screens/main/home.dart';
 
-class VerificationPage extends StatefulWidget {
-  const VerificationPage({super.key});
+class VerificationScreen extends StatefulWidget {
+  const VerificationScreen({super.key});
 
   @override
-  State<VerificationPage> createState() => _VerificationPageState();
+  State<VerificationScreen> createState() => _VerificationScreenState();
 }
 
-class _VerificationPageState extends State<VerificationPage> {
+class _VerificationScreenState extends State<VerificationScreen> {
   final TextEditingController _otp1C = TextEditingController();
   final TextEditingController _otp2C = TextEditingController();
   final TextEditingController _otp3C = TextEditingController();

@@ -2,22 +2,22 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-import 'package:konveksi_bareng/screens/finance/pembelian.dart';
-import 'package:konveksi_bareng/screens/promotion/promosi.dart';
-import 'package:konveksi_bareng/screens/finance/rugi_laba.dart';
-import 'package:konveksi_bareng/screens/profile/settings.dart';
-import 'package:konveksi_bareng/screens/worker/upah.dart';
-import 'package:konveksi_bareng/screens/marketplace/wishlist.dart';
+import 'package:konveksi_bareng/screens/finance/purchase_screen.dart';
+import 'package:konveksi_bareng/screens/promotion/promotion_screen.dart';
+import 'package:konveksi_bareng/screens/finance/profit_loss_screen.dart';
+import 'package:konveksi_bareng/screens/main/settings.dart';
+import 'package:konveksi_bareng/screens/worker/wage_screen.dart';
+import 'package:konveksi_bareng/screens/main/wishlist.dart';
 import 'package:konveksi_bareng/screens/marketplace/checkout.dart';
 
-import 'package:konveksi_bareng/screens/profile/profile.dart';
-import 'package:konveksi_bareng/screens/project/kelola_proyek.dart';
-import 'package:konveksi_bareng/screens/inventory/bahan_baku.dart';
-import 'package:konveksi_bareng/screens/chat/chat.dart';
-import 'package:konveksi_bareng/screens/finance/keuangan.dart';
-import 'package:konveksi_bareng/screens/schedule/jadwal.dart';
-import 'package:konveksi_bareng/screens/production/pola.dart';
-import 'package:konveksi_bareng/screens/worker/pekerja.dart';
+import 'package:konveksi_bareng/screens/main/profile.dart';
+import 'package:konveksi_bareng/screens/project/manage_project_screen.dart';
+import 'package:konveksi_bareng/screens/inventory/raw_material_screen.dart';
+import 'package:konveksi_bareng/screens/main/chat.dart';
+import 'package:konveksi_bareng/screens/finance/finance_screen.dart';
+import 'package:konveksi_bareng/screens/schedule/schedule_screen.dart';
+import 'package:konveksi_bareng/screens/production/pattern_screen.dart';
+import 'package:konveksi_bareng/screens/worker/worker_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -434,21 +434,21 @@ class _MenuGrid extends StatelessWidget {
             onTap = () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const JadwalScreen()),
+                MaterialPageRoute(builder: (_) => const ScheduleScreen()),
               );
             };
           } else if (label == 'Pola') {
             onTap = () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const PolaScreen()),
+                MaterialPageRoute(builder: (_) => const PatternScreen()),
               );
             };
           } else if (label == 'Pekerja') {
             onTap = () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const PekerjaScreen()),
+                MaterialPageRoute(builder: (_) => const WorkerScreen()),
               );
             };
           } else if (label == 'Chat') {
@@ -462,14 +462,14 @@ class _MenuGrid extends StatelessWidget {
             onTap = () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const PembelianScreen()),
+                MaterialPageRoute(builder: (_) => const PurchaseScreen()),
               );
             };
           } else if (label == 'Promosi') {
             onTap = () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const PromosiScreen()),
+                MaterialPageRoute(builder: (_) => const PromotionScreen()),
               );
             };
           } else if (label == 'Wishlist') {
@@ -483,14 +483,14 @@ class _MenuGrid extends StatelessWidget {
             onTap = () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const RugiLabaScreen()),
+                MaterialPageRoute(builder: (_) => const ProfitLossScreen()),
               );
             };
           } else if (label == 'Upah') {
             onTap = () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const UpahScreen()),
+                MaterialPageRoute(builder: (_) => const WageScreen()),
               );
             };
           } else if (label == 'More') {
@@ -615,14 +615,14 @@ class _FeatureGrid extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => const KelolaProyekScreen(),
+                        builder: (_) => const ManageProjectScreen(),
                       ),
                     );
                   } else if (title == 'Bahan Baku') {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => const BahanBakuScreen(),
+                        builder: (_) => const RawMaterialScreen(),
                       ),
                     );
                   } else if (title == 'Komunitas') {
@@ -633,7 +633,7 @@ class _FeatureGrid extends StatelessWidget {
                   } else if (title == 'Keuangan') {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const KeuanganScreen()),
+                      MaterialPageRoute(builder: (_) => const FinanceScreen()),
                     );
                   }
                 },
@@ -1171,21 +1171,21 @@ class _AppSidebar extends StatelessWidget {
                       icon: Icons.assignment_rounded,
                       label: 'Kelola Proyek',
                       subtitle: 'Manajemen order & pekerjaan',
-                      onTap: () => _go(context, const KelolaProyekScreen()),
+                      onTap: () => _go(context, const ManageProjectScreen()),
                     ),
                     _navTile(
                       context,
                       icon: Icons.inventory_2_rounded,
                       label: 'Bahan Baku',
                       subtitle: 'Stok, supplier, pemakaian',
-                      onTap: () => _go(context, const BahanBakuScreen()),
+                      onTap: () => _go(context, const RawMaterialScreen()),
                     ),
                     _navTile(
                       context,
                       icon: Icons.account_balance_wallet_outlined,
                       label: 'Keuangan',
                       subtitle: 'Cashflow & pencatatan',
-                      onTap: () => _go(context, const KeuanganScreen()),
+                      onTap: () => _go(context, const FinanceScreen()),
                     ),
                     _navTile(
                       context,

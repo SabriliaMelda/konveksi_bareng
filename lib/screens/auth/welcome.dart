@@ -4,11 +4,11 @@ import 'package:konveksi_bareng/screens/auth/login.dart';
 import 'package:konveksi_bareng/screens/auth/register.dart';
 
 void main() {
-  runApp(const FigmaToCodeApp());
+  runApp(const WelcomeApp());
 }
 
-class FigmaToCodeApp extends StatelessWidget {
-  const FigmaToCodeApp({super.key});
+class WelcomeApp extends StatelessWidget {
+  const WelcomeApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,19 +17,19 @@ class FigmaToCodeApp extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: const Color.fromARGB(255, 18, 32, 47),
       ),
-      home: const Welcome(),
+      home: const WelcomeScreen(),
     );
   }
 }
 
-class Welcome extends StatefulWidget {
-  const Welcome({super.key});
+class WelcomeScreen extends StatefulWidget {
+  const WelcomeScreen({super.key});
 
   @override
-  State<Welcome> createState() => _WelcomeState();
+  State<WelcomeScreen> createState() => _WelcomeScreenState();
 }
 
-class _WelcomeState extends State<Welcome> {
+class _WelcomeScreenState extends State<WelcomeScreen> {
   // ====== LIST GAMBAR SLIDER ATAS ======
   final List<String> _sliderImages = [
     'assets/images/baju.png',
@@ -139,7 +139,7 @@ class _WelcomeState extends State<Welcome> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const Login()),
+                    MaterialPageRoute(builder: (context) => const LoginScreen()),
                   );
                 },
                 child: Container(
@@ -172,7 +172,7 @@ class _WelcomeState extends State<Welcome> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => RegisterPage(), // <-- KE REGISTER
+                      builder: (context) => RegisterScreen(), // <-- KE REGISTER
                     ),
                   );
                 },

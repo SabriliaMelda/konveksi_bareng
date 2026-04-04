@@ -1,6 +1,6 @@
 // meeting.dart
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/screens/project/buat_meeting.dart'; // ✅ tambah ini
+import 'package:konveksi_bareng/screens/project/create_meeting_screen.dart'; // ✅ tambah ini
 
 const kPurple = Color(0xFF6B257F);
 
@@ -62,7 +62,7 @@ class _MeetingScreenState extends State<MeetingScreen> {
           // ✅ pindah ke halaman buat_meeting.dart
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => const BuatMeetingScreen()),
+            MaterialPageRoute(builder: (_) => const CreateMeetingScreen()),
           );
         },
         child: const Icon(Icons.add, size: 28),

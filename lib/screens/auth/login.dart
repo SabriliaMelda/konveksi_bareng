@@ -3,14 +3,14 @@ import 'package:konveksi_bareng/screens/auth/find_account.dart';
 import 'package:konveksi_bareng/screens/auth/register.dart';
 import 'package:konveksi_bareng/screens/auth/verification.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
+  State<LoginScreen> createState() => _LoginState();
 }
 
-class _LoginState extends State<Login> {
+class _LoginState extends State<LoginScreen> {
   final TextEditingController _loginC = TextEditingController();
   bool _loading = false;
 
@@ -63,7 +63,7 @@ class _LoginState extends State<Login> {
 
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (_) => const VerificationPage()),
+      MaterialPageRoute(builder: (_) => const VerificationScreen()),
     );
 
     if (mounted) {
@@ -221,7 +221,7 @@ class _LoginState extends State<Login> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (_) => const FindAccountPage(),
+                                        builder: (_) => const FindAccountScreen(),
                                       ),
                                     );
                                   },
@@ -241,7 +241,7 @@ class _LoginState extends State<Login> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (_) => const RegisterPage(),
+                                      builder: (_) => const RegisterScreen(),
                                     ),
                                   );
                                 },

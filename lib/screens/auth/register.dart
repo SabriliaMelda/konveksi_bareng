@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:konveksi_bareng/screens/auth/login.dart';
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _nameC = TextEditingController();
   final TextEditingController _phoneC = TextEditingController();
   final TextEditingController _emailC = TextEditingController();
@@ -258,7 +258,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (_) => const Login(),
+                                    builder: (_) => const LoginScreen(),
                                   ),
                                 );
                               },

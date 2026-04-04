@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/screens/auth/acc.dart';
+import 'package:konveksi_bareng/screens/auth/account_screen.dart';
 
-class FindAccountPage extends StatefulWidget {
-  const FindAccountPage({super.key});
+class FindAccountScreen extends StatefulWidget {
+  const FindAccountScreen({super.key});
 
   @override
-  State<FindAccountPage> createState() => _FindAccountPageState();
+  State<FindAccountScreen> createState() => _FindAccountScreenState();
 }
 
-class _FindAccountPageState extends State<FindAccountPage> {
+class _FindAccountScreenState extends State<FindAccountScreen> {
   final TextEditingController _accountC = TextEditingController();
   bool _loading = false;
 
@@ -61,7 +61,7 @@ class _FindAccountPageState extends State<FindAccountPage> {
 
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (_) => const AccPage()),
+      MaterialPageRoute(builder: (_) => const AccountScreen()),
     );
 
     if (mounted) {
