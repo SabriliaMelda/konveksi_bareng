@@ -101,7 +101,6 @@ class _FindAccountScreenState extends State<FindAccountScreen> {
             const SizedBox(height: 20),
             Text(t['sentTitle']!,
                 style: const TextStyle(
-                    fontFamily: 'Poppins',
                     fontSize: 24,
                     fontWeight: FontWeight.w800,
                     color: kPurple)),
@@ -110,7 +109,6 @@ class _FindAccountScreenState extends State<FindAccountScreen> {
               TextSpan(
                 text: '${t['sentSubtitle']!} ',
                 style: const TextStyle(
-                    fontFamily: 'Poppins',
                     fontSize: 12,
                     color: kPurpleLight,
                     height: 1.45),
@@ -129,7 +127,6 @@ class _FindAccountScreenState extends State<FindAccountScreen> {
               children: [
                 Text(t['sentNoReceive']!,
                     style: const TextStyle(
-                        fontFamily: 'Poppins',
                         fontSize: 12,
                         color: kPurple)),
                 GestureDetector(
@@ -140,7 +137,6 @@ class _FindAccountScreenState extends State<FindAccountScreen> {
                   }),
                   child: Text(t['sentTryAgain']!,
                       style: const TextStyle(
-                          fontFamily: 'Poppins',
                           fontSize: 12,
                           color: Color(0xFF667EEA),
                           fontWeight: FontWeight.w500)),
@@ -164,7 +160,6 @@ class _FindAccountScreenState extends State<FindAccountScreen> {
                 ),
                 child: Text(t['sentBack']!,
                     style: const TextStyle(
-                        fontFamily: 'Poppins',
                         color: kPurple,
                         fontSize: 14,
                         fontWeight: FontWeight.w700)),
@@ -184,7 +179,6 @@ class _FindAccountScreenState extends State<FindAccountScreen> {
           const SizedBox(height: 18),
           Text(t['title']!,
               style: const TextStyle(
-                  fontFamily: 'Poppins',
                   color: kPurple,
                   fontSize: 24,
                   fontWeight: FontWeight.w800,
@@ -192,7 +186,6 @@ class _FindAccountScreenState extends State<FindAccountScreen> {
           const SizedBox(height: 12),
           Text(t['subtitle']!,
               style: const TextStyle(
-                  fontFamily: 'Poppins',
                   color: kPurpleLight,
                   fontSize: 10.5,
                   fontWeight: FontWeight.w500,
@@ -220,7 +213,6 @@ class _FindAccountScreenState extends State<FindAccountScreen> {
                 if (!_loading) _handleSubmit();
               },
               style: const TextStyle(
-                  fontFamily: 'Poppins',
                   color: Color(0xFF2A2A2A),
                   fontSize: 13,
                   fontWeight: FontWeight.w500),
@@ -228,7 +220,6 @@ class _FindAccountScreenState extends State<FindAccountScreen> {
                 border: InputBorder.none,
                 hintText: t['placeholder'],
                 hintStyle: const TextStyle(
-                    fontFamily: 'Poppins',
                     color: Color(0xFFAAA3AF),
                     fontSize: 12,
                     fontWeight: FontWeight.w500),
@@ -255,7 +246,6 @@ class _FindAccountScreenState extends State<FindAccountScreen> {
               child: Text(
                 _loading ? t['searching']! : t['next']!,
                 style: const TextStyle(
-                    fontFamily: 'Poppins',
                     color: Colors.white,
                     fontSize: 13,
                     fontWeight: FontWeight.w700),

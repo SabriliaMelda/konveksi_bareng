@@ -174,7 +174,6 @@ class _TopHeader extends StatelessWidget {
             style: const TextStyle(
               color: Color(0xFF121111),
               fontSize: 16,
-              fontFamily: 'Encode Sans',
               fontWeight: FontWeight.w600,
               height: 1.4,
             ),
@@ -252,7 +251,6 @@ class _SearchBox extends StatelessWidget {
                 hintStyle: TextStyle(
                   color: Color(0xFF8F9BB3),
                   fontSize: 14,
-                  fontFamily: 'Lato',
                 ),
               ),
             ),
@@ -283,7 +281,6 @@ class _SectionLabel extends StatelessWidget {
       style: const TextStyle(
         color: Color(0xFF6B7280),
         fontSize: 12,
-        fontFamily: 'Work Sans',
         fontWeight: FontWeight.w800,
       ),
     );
@@ -334,7 +331,6 @@ class _PekerjaTile extends StatelessWidget {
                     style: const TextStyle(
                       color: Color(0xFF111111),
                       fontSize: 14,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -346,7 +342,6 @@ class _PekerjaTile extends StatelessWidget {
                     style: const TextStyle(
                       color: Color(0xFF8F9BB3),
                       fontSize: 12,
-                      fontFamily: 'Lato',
                       fontWeight: FontWeight.w400,
                     ),
                   ),

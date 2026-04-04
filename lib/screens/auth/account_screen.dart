@@ -25,7 +25,6 @@ class AccountScreen extends StatelessWidget {
             'Akun Ditemukan',
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontFamily: 'Poppins',
               color: kPurple,
               fontSize: 20,
               fontWeight: FontWeight.w800,
@@ -55,7 +54,6 @@ class AccountScreen extends StatelessWidget {
             userName,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontFamily: 'Poppins',
               color: kPurple,
               fontSize: 14,
               fontWeight: FontWeight.w700,
@@ -66,7 +64,6 @@ class AccountScreen extends StatelessWidget {
             userEmail,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontFamily: 'Poppins',
               color: kPurple,
               fontSize: 13,
               fontWeight: FontWeight.w400,
@@ -97,7 +94,6 @@ class AccountScreen extends StatelessWidget {
                     child: const Text(
                       'Salah',
                       style: TextStyle(
-                        fontFamily: 'Poppins',
                         color: kPurple,
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
@@ -126,7 +122,6 @@ class AccountScreen extends StatelessWidget {
                     child: const Text(
                       'Benar',
                       style: TextStyle(
-                        fontFamily: 'Poppins',
                         color: Colors.white,
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
@@ -143,7 +138,6 @@ class AccountScreen extends StatelessWidget {
               '\u00a9 Copyrights BOMA | All Rights Reserved',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontFamily: 'Poppins',
                 color: Color(0xFF8F8F8F),
                 fontSize: 10,
                 fontWeight: FontWeight.w400,

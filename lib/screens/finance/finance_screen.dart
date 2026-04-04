@@ -64,7 +64,6 @@ class FinanceScreen extends StatelessWidget {
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
-                            fontFamily: 'Encode Sans',
                             fontWeight: FontWeight.w900,
                           ),
                         ),
@@ -103,7 +102,6 @@ class FinanceScreen extends StatelessWidget {
                           style: TextStyle(
                             color: Colors.white70,
                             fontSize: 12,
-                            fontFamily: 'Work Sans',
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -113,7 +111,6 @@ class FinanceScreen extends StatelessWidget {
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 26,
-                            fontFamily: 'Encode Sans',
                             fontWeight: FontWeight.w900,
                             height: 1.0,
                           ),
@@ -166,7 +163,6 @@ class FinanceScreen extends StatelessWidget {
                               style: TextStyle(
                                 color: Colors.white70,
                                 fontSize: 12,
-                                fontFamily: 'Work Sans',
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
@@ -176,7 +172,6 @@ class FinanceScreen extends StatelessWidget {
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 12,
-                                fontFamily: 'Work Sans',
                                 fontWeight: FontWeight.w900,
                               ),
                             ),
@@ -203,7 +198,6 @@ class FinanceScreen extends StatelessWidget {
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 13,
-                            fontFamily: 'Work Sans',
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -251,7 +245,6 @@ class FinanceScreen extends StatelessWidget {
                       style: TextStyle(
                         color: Color(0xFF24252C),
                         fontSize: 16,
-                        fontFamily: 'Encode Sans',
                         fontWeight: FontWeight.w900,
                       ),
                     ),
@@ -339,7 +332,6 @@ class _MiniStat extends StatelessWidget {
                   style: const TextStyle(
                     color: Colors.white70,
                     fontSize: 12,
-                    fontFamily: 'Work Sans',
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -351,7 +343,6 @@ class _MiniStat extends StatelessWidget {
                   style: TextStyle(
                     color: valueColor,
                     fontSize: 14,
-                    fontFamily: 'Work Sans',
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -559,7 +550,6 @@ class _FinanceCard extends StatelessWidget {
                     style: const TextStyle(
                       color: Color(0xFF24252C),
                       fontSize: 14,
-                      fontFamily: 'Encode Sans',
                       fontWeight: FontWeight.w900,
                     ),
                   ),
@@ -571,7 +561,6 @@ class _FinanceCard extends StatelessWidget {
                     style: const TextStyle(
                       color: Color(0xFF6B7280),
                       fontSize: 12,
-                      fontFamily: 'Work Sans',
                       fontWeight: FontWeight.w600,
                     ),
                   ),

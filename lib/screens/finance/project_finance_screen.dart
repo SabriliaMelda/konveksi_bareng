@@ -48,7 +48,6 @@ class _ProjectFinanceScreenState extends State<ProjectFinanceScreen> {
                       style: TextStyle(
                         color: Color(0xFF1E232C),
                         fontSize: 18,
-                        fontFamily: 'Plus Jakarta Sans',
                         fontWeight: FontWeight.w800,
                       ),
                     ),
@@ -221,7 +220,6 @@ class _ProjectFinanceScreenState extends State<ProjectFinanceScreen> {
                       style: const TextStyle(
                         color: Color(0xFF1E232C),
                         fontSize: 16,
-                        fontFamily: 'Plus Jakarta Sans',
                         fontWeight: FontWeight.w900,
                       ),
                     ),
@@ -400,7 +398,6 @@ class _BookmarkFolder extends StatelessWidget {
                 child: Text(
                   e,
                   style: const TextStyle(
-                    fontFamily: 'Plus Jakarta Sans',
                     fontWeight: FontWeight.w700,
                     fontSize: 12.5,
                   ),
@@ -426,7 +423,6 @@ class _BookmarkFolder extends StatelessWidget {
               style: TextStyle(
                 color: txt,
                 fontSize: 12.5,
-                fontFamily: 'Plus Jakarta Sans',
                 fontWeight: FontWeight.w800,
               ),
             ),
@@ -454,7 +450,6 @@ class _BreadCrumb extends StatelessWidget {
           style: const TextStyle(
             color: Color(0xFF6A707C),
             fontSize: 12.5,
-            fontFamily: 'Plus Jakarta Sans',
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -473,7 +468,6 @@ class _BreadCrumb extends StatelessWidget {
             style: const TextStyle(
               color: Color(0xFF1E232C),
               fontSize: 12.5,
-              fontFamily: 'Plus Jakarta Sans',
               fontWeight: FontWeight.w900,
             ),
           ),
@@ -534,7 +528,6 @@ class _StatCard extends StatelessWidget {
                   style: const TextStyle(
                     color: Color(0xFF6A707C),
                     fontSize: 12,
-                    fontFamily: 'Plus Jakarta Sans',
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -546,7 +539,6 @@ class _StatCard extends StatelessWidget {
                   style: const TextStyle(
                     color: Color(0xFF1E232C),
                     fontSize: 14,
-                    fontFamily: 'Plus Jakarta Sans',
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -556,7 +548,6 @@ class _StatCard extends StatelessWidget {
                   style: const TextStyle(
                     color: Color(0xFF6A707C),
                     fontSize: 11.5,
-                    fontFamily: 'Plus Jakarta Sans',
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -592,7 +583,6 @@ class _SectionCard extends StatelessWidget {
             style: const TextStyle(
               color: Color(0xFF1E232C),
               fontSize: 13.5,
-              fontFamily: 'Plus Jakarta Sans',
               fontWeight: FontWeight.w900,
             ),
           ),
@@ -650,7 +640,6 @@ class _TxnRow extends StatelessWidget {
                 style: const TextStyle(
                   color: Color(0xFF1E232C),
                   fontSize: 12.5,
-                  fontFamily: 'Plus Jakarta Sans',
                   fontWeight: FontWeight.w900,
                 ),
               ),
@@ -662,7 +651,6 @@ class _TxnRow extends StatelessWidget {
                 style: const TextStyle(
                   color: Color(0xFF6A707C),
                   fontSize: 11.5,
-                  fontFamily: 'Plus Jakarta Sans',
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -678,7 +666,6 @@ class _TxnRow extends StatelessWidget {
               style: TextStyle(
                 color: amtColor,
                 fontSize: 12.5,
-                fontFamily: 'Plus Jakarta Sans',
                 fontWeight: FontWeight.w900,
               ),
             ),
@@ -688,7 +675,6 @@ class _TxnRow extends StatelessWidget {
               style: const TextStyle(
                 color: Color(0xFF6A707C),
                 fontSize: 11.5,
-                fontFamily: 'Plus Jakarta Sans',
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -744,7 +730,6 @@ class _QuickAction extends StatelessWidget {
               style: const TextStyle(
                 color: Color(0xFF1E232C),
                 fontSize: 11.5,
-                fontFamily: 'Plus Jakarta Sans',
                 fontWeight: FontWeight.w800,
                 height: 1.2,
               ),

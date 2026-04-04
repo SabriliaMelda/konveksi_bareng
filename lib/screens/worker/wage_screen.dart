@@ -186,7 +186,6 @@ class _WageScreenState extends State<WageScreen> {
                     'Tambah Tagihan Upah (dummy)',
                     style: TextStyle(
                       fontSize: 14,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w900,
                       color: Color(0xFF111827),
                     ),
@@ -222,7 +221,6 @@ class _WageScreenState extends State<WageScreen> {
                     style: TextStyle(
                       color: Color(0xFF6A707C),
                       fontSize: 12,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w800,
                     ),
                   ),
@@ -249,7 +247,6 @@ class _WageScreenState extends State<WageScreen> {
                     style: TextStyle(
                       color: Color(0xFF6A707C),
                       fontSize: 12,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w800,
                     ),
                   ),
@@ -287,7 +284,6 @@ class _WageScreenState extends State<WageScreen> {
                             style: const TextStyle(
                               color: Color(0xFF111827),
                               fontSize: 12.5,
-                              fontFamily: 'Plus Jakarta Sans',
                               fontWeight: FontWeight.w900,
                             ),
                           ),
@@ -301,7 +297,6 @@ class _WageScreenState extends State<WageScreen> {
                     style: TextStyle(
                       color: Color(0xFF6A707C),
                       fontSize: 12,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w800,
                     ),
                   ),
@@ -402,7 +397,6 @@ class _WageScreenState extends State<WageScreen> {
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 12.5,
-                                fontFamily: 'Plus Jakarta Sans',
                                 fontWeight: FontWeight.w900,
                               ),
                             ),
@@ -446,7 +440,6 @@ class _WageScreenState extends State<WageScreen> {
                 e.workerName,
                 style: const TextStyle(
                   fontSize: 14,
-                  fontFamily: 'Plus Jakarta Sans',
                   fontWeight: FontWeight.w900,
                   color: Color(0xFF111827),
                 ),
@@ -457,7 +450,6 @@ class _WageScreenState extends State<WageScreen> {
                 style: const TextStyle(
                   color: Color(0xFF6A707C),
                   fontSize: 12,
-                  fontFamily: 'Plus Jakarta Sans',
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -643,7 +635,6 @@ class _WageScreenState extends State<WageScreen> {
               style: const TextStyle(
                 color: Color(0xFF6A707C),
                 fontSize: 12,
-                fontFamily: 'Plus Jakarta Sans',
                 fontWeight: FontWeight.w800,
               ),
             ),
@@ -694,7 +685,6 @@ class _WageScreenState extends State<WageScreen> {
                       style: const TextStyle(
                         color: Color(0xFF111827),
                         fontSize: 12.5,
-                        fontFamily: 'Plus Jakarta Sans',
                         fontWeight: FontWeight.w900,
                       ),
                     ),
@@ -717,7 +707,6 @@ class _WageScreenState extends State<WageScreen> {
           style: TextStyle(
             color: Color(0xFF6A707C),
             fontSize: 12.5,
-            fontFamily: 'Plus Jakarta Sans',
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -773,7 +762,6 @@ class _WageScreenState extends State<WageScreen> {
                             style: const TextStyle(
                               color: Color(0xFF1E232C),
                               fontSize: 13,
-                              fontFamily: 'Plus Jakarta Sans',
                               fontWeight: FontWeight.w900,
                             ),
                           ),
@@ -790,7 +778,6 @@ class _WageScreenState extends State<WageScreen> {
                       style: const TextStyle(
                         color: Color(0xFF6A707C),
                         fontSize: 12,
-                        fontFamily: 'Plus Jakarta Sans',
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -802,7 +789,6 @@ class _WageScreenState extends State<WageScreen> {
                       style: const TextStyle(
                         color: Color(0xFF9AA4B2),
                         fontSize: 11.5,
-                        fontFamily: 'Plus Jakarta Sans',
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -815,7 +801,6 @@ class _WageScreenState extends State<WageScreen> {
                 style: const TextStyle(
                   color: Color(0xFF111827),
                   fontSize: 12.5,
-                  fontFamily: 'Plus Jakarta Sans',
                   fontWeight: FontWeight.w900,
                 ),
               ),
@@ -877,7 +862,6 @@ class _WageScreenState extends State<WageScreen> {
                     'Upah',
                     style: TextStyle(
                       fontSize: 16,
-                      fontFamily: 'Encode Sans',
                       fontWeight: FontWeight.w600,
                       color: Color(0xFF121111),
                       height: 1.4,
@@ -983,7 +967,6 @@ class _TabPill extends StatelessWidget {
               style: TextStyle(
                 color: active ? Colors.white : const Color(0xFF1E232C),
                 fontSize: 11.5,
-                fontFamily: 'Plus Jakarta Sans',
                 fontWeight: active ? FontWeight.w900 : FontWeight.w800,
               ),
             ),
@@ -1023,7 +1006,6 @@ class _ChoicePill extends StatelessWidget {
           style: TextStyle(
             color: active ? Colors.white : const Color(0xFF1E232C),
             fontSize: 11.5,
-            fontFamily: 'Plus Jakarta Sans',
             fontWeight: active ? FontWeight.w900 : FontWeight.w800,
           ),
         ),
@@ -1079,7 +1061,6 @@ class _MiniStat extends StatelessWidget {
                   style: const TextStyle(
                     color: Color(0xFF6A707C),
                     fontSize: 11.5,
-                    fontFamily: 'Plus Jakarta Sans',
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -1091,7 +1072,6 @@ class _MiniStat extends StatelessWidget {
                   style: TextStyle(
                     color: valueColor,
                     fontSize: 12.5,
-                    fontFamily: 'Plus Jakarta Sans',
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -1101,7 +1081,6 @@ class _MiniStat extends StatelessWidget {
                   style: const TextStyle(
                     color: Color(0xFF9AA4B2),
                     fontSize: 11,
-                    fontFamily: 'Plus Jakarta Sans',
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -1133,7 +1112,6 @@ class _Badge extends StatelessWidget {
         style: TextStyle(
           color: color,
           fontSize: 11,
-          fontFamily: 'Plus Jakarta Sans',
           fontWeight: FontWeight.w900,
         ),
       ),
@@ -1177,7 +1155,6 @@ class _SheetAction extends StatelessWidget {
                 style: TextStyle(
                   color: color,
                   fontSize: 12.5,
-                  fontFamily: 'Plus Jakarta Sans',
                   fontWeight: FontWeight.w900,
                 ),
               ),
@@ -1227,7 +1204,6 @@ class _GhostButton extends StatelessWidget {
               style: const TextStyle(
                 color: kPurple,
                 fontSize: 12.5,
-                fontFamily: 'Plus Jakarta Sans',
                 fontWeight: FontWeight.w900,
               ),
             ),
@@ -1261,7 +1237,6 @@ class _InputField extends StatelessWidget {
           style: const TextStyle(
             color: Color(0xFF6A707C),
             fontSize: 12,
-            fontFamily: 'Plus Jakarta Sans',
             fontWeight: FontWeight.w800,
           ),
         ),
@@ -1274,7 +1249,6 @@ class _InputField extends StatelessWidget {
             hintStyle: const TextStyle(
               color: Color(0xFF9AA4B2),
               fontSize: 12,
-              fontFamily: 'Plus Jakarta Sans',
               fontWeight: FontWeight.w600,
             ),
             filled: true,

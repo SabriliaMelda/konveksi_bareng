@@ -38,7 +38,6 @@ class WorkerDetailScreen extends StatelessWidget {
             style: TextStyle(
               color: Color(0xFF24252C),
               fontSize: 14,
-              fontFamily: 'Encode Sans',
               fontWeight: FontWeight.w900,
             ),
           ),
@@ -107,7 +106,6 @@ class _ProfileCard extends StatelessWidget {
                   nama,
                   style: const TextStyle(
                     fontSize: 16,
-                    fontFamily: 'Encode Sans',
                     fontWeight: FontWeight.w900,
                     color: Color(0xFF111111),
                   ),
@@ -117,7 +115,6 @@ class _ProfileCard extends StatelessWidget {
                   role,
                   style: const TextStyle(
                     fontSize: 12,
-                    fontFamily: 'Work Sans',
                     fontWeight: FontWeight.w700,
                     color: Color(0xFF6B7280),
                   ),
@@ -190,7 +187,6 @@ class _ProjectTile extends StatelessWidget {
                     title,
                     style: const TextStyle(
                       fontSize: 14,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w800,
                       color: Color(0xFF111111),
                     ),
@@ -200,7 +196,6 @@ class _ProjectTile extends StatelessWidget {
                     subtitle,
                     style: const TextStyle(
                       fontSize: 12,
-                      fontFamily: 'Work Sans',
                       fontWeight: FontWeight.w700,
                       color: Color(0xFF8F9BB3),
                     ),

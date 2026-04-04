@@ -174,7 +174,6 @@ class _PromotionScreenState extends State<PromotionScreen> {
                     'Promosi',
                     style: TextStyle(
                       fontSize: 16,
-                      fontFamily: 'Encode Sans',
                       fontWeight: FontWeight.w600,
                       color: Color(0xFF121111),
                       height: 1.4,
@@ -267,7 +266,6 @@ class _PromotionScreenState extends State<PromotionScreen> {
                       style: const TextStyle(
                         color: Color(0xFF1E232C),
                         fontSize: 13,
-                        fontFamily: 'Plus Jakarta Sans',
                         fontWeight: FontWeight.w900,
                       ),
                     ),
@@ -279,7 +277,6 @@ class _PromotionScreenState extends State<PromotionScreen> {
                       style: const TextStyle(
                         color: Color(0xFF6A707C),
                         fontSize: 12,
-                        fontFamily: 'Plus Jakarta Sans',
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -289,7 +286,6 @@ class _PromotionScreenState extends State<PromotionScreen> {
                       style: const TextStyle(
                         color: Color(0xFF9AA4B2),
                         fontSize: 11.5,
-                        fontFamily: 'Plus Jakarta Sans',
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -360,7 +356,6 @@ class _PromotionScreenState extends State<PromotionScreen> {
                       style: const TextStyle(
                         color: Color(0xFF1E232C),
                         fontSize: 13,
-                        fontFamily: 'Plus Jakarta Sans',
                         fontWeight: FontWeight.w900,
                       ),
                     ),
@@ -372,7 +367,6 @@ class _PromotionScreenState extends State<PromotionScreen> {
                       style: const TextStyle(
                         color: Color(0xFF6A707C),
                         fontSize: 12,
-                        fontFamily: 'Plus Jakarta Sans',
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -389,7 +383,6 @@ class _PromotionScreenState extends State<PromotionScreen> {
                             style: const TextStyle(
                               color: Color(0xFF9AA4B2),
                               fontSize: 11.5,
-                              fontFamily: 'Plus Jakarta Sans',
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -475,7 +468,6 @@ class _PromotionScreenState extends State<PromotionScreen> {
                         style: const TextStyle(
                           color: Color(0xFF1E232C),
                           fontSize: 13,
-                          fontFamily: 'Plus Jakarta Sans',
                           fontWeight: FontWeight.w900,
                         ),
                       ),
@@ -487,7 +479,6 @@ class _PromotionScreenState extends State<PromotionScreen> {
                         style: const TextStyle(
                           color: Color(0xFF6A707C),
                           fontSize: 12,
-                          fontFamily: 'Plus Jakarta Sans',
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -497,7 +488,6 @@ class _PromotionScreenState extends State<PromotionScreen> {
                         style: const TextStyle(
                           color: Color(0xFF9AA4B2),
                           fontSize: 11.5,
-                          fontFamily: 'Plus Jakarta Sans',
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -551,7 +541,6 @@ class _TabPill extends StatelessWidget {
           style: TextStyle(
             color: active ? Colors.white : const Color(0xFF1E232C),
             fontSize: 11.5,
-            fontFamily: 'Plus Jakarta Sans',
             fontWeight: active ? FontWeight.w900 : FontWeight.w800,
           ),
         ),
@@ -603,7 +592,6 @@ class _Badge extends StatelessWidget {
         style: const TextStyle(
           color: kPurple,
           fontSize: 11,
-          fontFamily: 'Plus Jakarta Sans',
           fontWeight: FontWeight.w900,
         ),
       ),
@@ -629,7 +617,6 @@ class _CodeChip extends StatelessWidget {
         style: const TextStyle(
           color: Color(0xFF111827),
           fontSize: 11.5,
-          fontFamily: 'Plus Jakarta Sans',
           fontWeight: FontWeight.w900,
           letterSpacing: 0.6,
         ),
@@ -661,7 +648,6 @@ class _PrimaryMiniButton extends StatelessWidget {
           style: const TextStyle(
             color: Colors.white,
             fontSize: 11.5,
-            fontFamily: 'Plus Jakarta Sans',
             fontWeight: FontWeight.w900,
           ),
         ),
@@ -694,7 +680,6 @@ class _GhostMiniButton extends StatelessWidget {
           style: const TextStyle(
             color: kPurple,
             fontSize: 11.5,
-            fontFamily: 'Plus Jakarta Sans',
             fontWeight: FontWeight.w900,
           ),
         ),
@@ -729,7 +714,6 @@ class _HighlightCard extends StatelessWidget {
                   style: TextStyle(
                     color: Color(0xFF1E232C),
                     fontSize: 13,
-                    fontFamily: 'Plus Jakarta Sans',
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -739,7 +723,6 @@ class _HighlightCard extends StatelessWidget {
                   style: TextStyle(
                     color: Color(0xFF6A707C),
                     fontSize: 12,
-                    fontFamily: 'Plus Jakarta Sans',
                     fontWeight: FontWeight.w600,
                   ),
                 ),

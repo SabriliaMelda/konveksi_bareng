@@ -90,7 +90,6 @@ class _MeetingScreenState extends State<MeetingScreen> {
                     style: TextStyle(
                       color: Color(0xFF121111),
                       fontSize: 16,
-                      fontFamily: 'Encode Sans',
                       fontWeight: FontWeight.w600,
                       height: 1.4,
                     ),
@@ -115,7 +114,6 @@ class _MeetingScreenState extends State<MeetingScreen> {
                       style: TextStyle(
                         color: Color(0xFF333333),
                         fontSize: 20,
-                        fontFamily: 'Almarai',
                         fontWeight: FontWeight.w700,
                         height: 1.6,
                       ),
@@ -152,7 +150,6 @@ class _MeetingScreenState extends State<MeetingScreen> {
                           style: TextStyle(
                             color: Color(0xFFCCCCCC),
                             fontSize: 14,
-                            fontFamily: 'Lato',
                             fontWeight: FontWeight.w400,
                             height: 1.4,
                           ),
@@ -162,7 +159,6 @@ class _MeetingScreenState extends State<MeetingScreen> {
                           style: TextStyle(
                             color: Color(0xFF575A66),
                             fontSize: 16,
-                            fontFamily: 'Lato',
                             fontWeight: FontWeight.w400,
                             height: 1.2,
                           ),
@@ -190,7 +186,6 @@ class _MeetingScreenState extends State<MeetingScreen> {
                           style: TextStyle(
                             color: Color(0xFFCCCCCC),
                             fontSize: 14,
-                            fontFamily: 'Lato',
                             fontWeight: FontWeight.w400,
                             height: 1.4,
                           ),
@@ -200,7 +195,6 @@ class _MeetingScreenState extends State<MeetingScreen> {
                           style: TextStyle(
                             color: Color(0xFF575A66),
                             fontSize: 14,
-                            fontFamily: 'Lato',
                             fontWeight: FontWeight.w400,
                             height: 1.4,
                           ),
@@ -210,7 +204,6 @@ class _MeetingScreenState extends State<MeetingScreen> {
                           style: TextStyle(
                             color: Color(0xFF575A66),
                             fontSize: 16,
-                            fontFamily: 'Lato',
                             fontWeight: FontWeight.w400,
                             height: 1.2,
                           ),
@@ -362,7 +355,6 @@ class _MeetingCard extends StatelessWidget {
                         style: const TextStyle(
                           color: Color(0xE59A9A9A),
                           fontSize: 12,
-                          fontFamily: 'Lato',
                           fontWeight: FontWeight.w400,
                           height: 1.4,
                         ),
@@ -381,7 +373,6 @@ class _MeetingCard extends StatelessWidget {
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 16,
-                      fontFamily: 'Almarai',
                       fontWeight: FontWeight.w700,
                       height: 1.2,
                     ),
@@ -394,7 +385,6 @@ class _MeetingCard extends StatelessWidget {
                     style: const TextStyle(
                       color: Color(0xFF575A66),
                       fontSize: 12,
-                      fontFamily: 'Lato',
                       fontWeight: FontWeight.w400,
                       height: 1.4,
                     ),
@@ -413,7 +403,6 @@ class _MeetingCard extends StatelessWidget {
                         style: const TextStyle(
                           color: Color(0xFF575A66),
                           fontSize: 12,
-                          fontFamily: 'Lato',
                           fontWeight: FontWeight.w400,
                           height: 1.4,
                         ),
@@ -475,7 +464,6 @@ class _MeetingsBottomBar extends StatelessWidget {
               style: TextStyle(
                 color: Color(0xFF111111),
                 fontSize: 16,
-                fontFamily: 'Lato',
                 fontWeight: FontWeight.w700,
                 height: 1,
               ),

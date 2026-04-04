@@ -89,7 +89,6 @@ class _ProductionScheduleScreenState extends State<ProductionScheduleScreen> {
                         style: TextStyle(
                           color: Color(0xFF222B45),
                           fontSize: 18,
-                          fontFamily: 'Lato',
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -99,7 +98,6 @@ class _ProductionScheduleScreenState extends State<ProductionScheduleScreen> {
                         style: TextStyle(
                           color: Color(0xFF8F9BB3),
                           fontSize: 12,
-                          fontFamily: 'Lato',
                         ),
                       ),
                     ],
@@ -166,7 +164,6 @@ class _ProductionScheduleScreenState extends State<ProductionScheduleScreen> {
                         style: const TextStyle(
                           color: Color(0xFFECECEC),
                           fontSize: 14,
-                          fontFamily: 'Lato',
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -242,7 +239,6 @@ class _TopHeader extends StatelessWidget {
             style: const TextStyle(
               color: Color(0xFF121111),
               fontSize: 16,
-              fontFamily: 'Encode Sans',
               fontWeight: FontWeight.w600,
               height: 1.4,
             ),
@@ -306,7 +302,6 @@ class _WDay extends StatelessWidget {
       style: const TextStyle(
         color: Color(0xFF8F9BB3),
         fontSize: 13,
-        fontFamily: 'Lato',
       ),
     );
   }
@@ -403,7 +398,6 @@ class _CalendarGrid extends StatelessWidget {
                         ? const Color(0xFF8F9BB3)
                         : (isSelected ? kPurple : const Color(0xFF222B45)),
                     fontSize: 14.5,
-                    fontFamily: 'Lato',
                     fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                   ),
                 ),
@@ -532,7 +526,6 @@ class _ScheduleCard extends StatelessWidget {
                         style: const TextStyle(
                           color: Color(0xFF9A9A9A),
                           fontSize: 12,
-                          fontFamily: 'Lato',
                         ),
                       ),
                       const Spacer(),
@@ -549,7 +542,6 @@ class _ScheduleCard extends StatelessWidget {
                     style: const TextStyle(
                       color: Color(0xFF1B1B1B),
                       fontSize: 16,
-                      fontFamily: 'Almarai',
                       fontWeight: FontWeight.w700,
                       height: 1.2,
                     ),
@@ -562,7 +554,6 @@ class _ScheduleCard extends StatelessWidget {
                     style: const TextStyle(
                       color: Color(0xFF575A66),
                       fontSize: 12,
-                      fontFamily: 'Lato',
                       height: 1.4,
                     ),
                   ),
@@ -581,7 +572,6 @@ class _ScheduleCard extends StatelessWidget {
                           style: const TextStyle(
                             color: Color(0xFF575A66),
                             fontSize: 12,
-                            fontFamily: 'Lato',
                           ),
                         ),
                       ),

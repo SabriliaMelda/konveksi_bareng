@@ -184,7 +184,6 @@ class _ChatScreenState extends State<ChatScreen> {
                         color: Color(0xFF1F1F1F),
                         fontSize: 22,
                         fontWeight: FontWeight.w900,
-                        fontFamily: 'Plus Jakarta Sans',
                       ),
                     ),
                   ),
@@ -232,7 +231,6 @@ class _ChatScreenState extends State<ChatScreen> {
                               color: kPurple,
                               fontSize: 12,
                               fontWeight: FontWeight.w800,
-                              fontFamily: 'Plus Jakarta Sans',
                             ),
                           ),
                         ],
@@ -362,7 +360,6 @@ class _HeaderGradient extends StatelessWidget {
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
-                    fontFamily: 'Plus Jakarta Sans',
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -446,14 +443,12 @@ class _SearchPillBetter extends StatelessWidget {
                 hintStyle: TextStyle(
                   color: Colors.white70,
                   fontSize: 12,
-                  fontFamily: 'Plus Jakarta Sans',
                   fontWeight: FontWeight.w600,
                 ),
               ),
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 12,
-                fontFamily: 'Plus Jakarta Sans',
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -557,7 +552,6 @@ class _ChipItem extends StatelessWidget {
           style: TextStyle(
             color: active ? kPurple : const Color(0xFF6B7280),
             fontSize: 13,
-            fontFamily: 'Plus Jakarta Sans',
             fontWeight: FontWeight.w900,
           ),
         ),
@@ -686,7 +680,6 @@ class _SwipeChatRow extends StatelessWidget {
                             style: const TextStyle(
                               color: Color(0xFF111827),
                               fontSize: 14,
-                              fontFamily: 'Plus Jakarta Sans',
                               fontWeight: FontWeight.w900,
                             ),
                           ),
@@ -697,7 +690,6 @@ class _SwipeChatRow extends StatelessWidget {
                           style: const TextStyle(
                             color: Color(0xFF6B7280),
                             fontSize: 11,
-                            fontFamily: 'Plus Jakarta Sans',
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -714,7 +706,6 @@ class _SwipeChatRow extends StatelessWidget {
                             style: const TextStyle(
                               color: Color(0xFF4B5563),
                               fontSize: 13,
-                              fontFamily: 'Plus Jakarta Sans',
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -776,7 +767,6 @@ class _UnreadBadge extends StatelessWidget {
         style: const TextStyle(
           color: Colors.white,
           fontSize: 11,
-          fontFamily: 'Plus Jakarta Sans',
           fontWeight: FontWeight.w900,
         ),
       ),
@@ -822,7 +812,6 @@ class _AvatarNetwork extends StatelessWidget {
                 style: TextStyle(
                   color: bg,
                   fontSize: 16,
-                  fontFamily: 'Plus Jakarta Sans',
                   fontWeight: FontWeight.w900,
                 ),
               ),
@@ -888,7 +877,6 @@ class _GroupRow extends StatelessWidget {
                           style: const TextStyle(
                             color: Color(0xFF111827),
                             fontSize: 14,
-                            fontFamily: 'Plus Jakarta Sans',
                             fontWeight: FontWeight.w900,
                           ),
                         ),
@@ -899,7 +887,6 @@ class _GroupRow extends StatelessWidget {
                         style: const TextStyle(
                           color: Color(0xFF6B7280),
                           fontSize: 11,
-                          fontFamily: 'Plus Jakarta Sans',
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -913,7 +900,6 @@ class _GroupRow extends StatelessWidget {
                     style: const TextStyle(
                       color: Color(0xFF4B5563),
                       fontSize: 13,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -925,7 +911,6 @@ class _GroupRow extends StatelessWidget {
                     style: const TextStyle(
                       color: Color(0xFF9CA3AF),
                       fontSize: 11,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -1046,7 +1031,6 @@ class _NavItem extends StatelessWidget {
               style: TextStyle(
                 color: color,
                 fontSize: 12,
-                fontFamily: 'Plus Jakarta Sans',
                 fontWeight: fontWeight,
               ),
             ),

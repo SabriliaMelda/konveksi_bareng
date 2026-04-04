@@ -145,7 +145,6 @@ class AuthLogo extends StatelessWidget {
               Text(
                 'KONVEKSI\nBARENG',
                 style: TextStyle(
-                  fontFamily: 'Poppins',
                   color: kPurple,
                   fontSize: 13,
                   fontWeight: FontWeight.w800,
@@ -183,7 +182,6 @@ class AuthErrorBox extends StatelessWidget {
         TextSpan(
           text: message,
           style: const TextStyle(
-            fontFamily: 'Poppins',
             color: Color(0xFFB91C1C),
             fontSize: 12,
           ),
@@ -215,7 +213,6 @@ class AuthInfoBox extends StatelessWidget {
       child: Text(
         message,
         style: const TextStyle(
-          fontFamily: 'Poppins',
           color: kPurple,
           fontSize: 12,
         ),
@@ -261,7 +258,6 @@ class LanguageDropdown extends StatelessWidget {
               _languages.firstWhere(
                   (l) => l['code'] == currentLang)['label']!,
               style: const TextStyle(
-                fontFamily: 'Poppins',
                 color: kPurple,
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
@@ -278,7 +274,6 @@ class LanguageDropdown extends StatelessWidget {
                 child: Text(
                   l['label']!,
                   style: TextStyle(
-                    fontFamily: 'Poppins',
                     fontSize: 13,
                     color: l['code'] == currentLang
                         ? kPurple
@@ -319,7 +314,6 @@ class AuthBottomBar extends StatelessWidget {
             Text(
               helpLabel,
               style: const TextStyle(
-                fontFamily: 'Poppins',
                 color: kPurple,
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
@@ -332,7 +326,6 @@ class AuthBottomBar extends StatelessWidget {
           '\u00a9 Copyrights BOMA | All Rights Reserved',
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontFamily: 'Poppins',
             color: Color(0xFF8F8F8F),
             fontSize: 10.5,
             fontWeight: FontWeight.w400,

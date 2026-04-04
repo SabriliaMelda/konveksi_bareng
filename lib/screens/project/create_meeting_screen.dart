@@ -92,7 +92,6 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
                         style: TextStyle(
                           color: Color(0xFF1B1B1B),
                           fontSize: 20,
-                          fontFamily: 'Lato',
                           fontWeight: FontWeight.w600,
                           height: 1.1,
                         ),
@@ -116,7 +115,6 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 16,
-                          fontFamily: 'Lato',
                           fontWeight: FontWeight.w600,
                           height: 1.6,
                         ),
@@ -321,14 +319,12 @@ class _TextFieldBox extends StatelessWidget {
         style: const TextStyle(
           color: Color(0xFF1B1B1B),
           fontSize: 14,
-          fontFamily: 'Lato',
         ),
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: const TextStyle(
             color: kHint,
             fontSize: 14,
-            fontFamily: 'Lato',
             fontWeight: FontWeight.w400,
           ),
           border: InputBorder.none,
@@ -371,7 +367,6 @@ class _TapField extends StatelessWidget {
                 style: TextStyle(
                   color: value == null ? kHint : const Color(0xFF1B1B1B),
                   fontSize: 14,
-                  fontFamily: 'Lato',
                 ),
               ),
             ),
@@ -414,7 +409,6 @@ class _RowItem extends StatelessWidget {
               style: const TextStyle(
                 color: kHint,
                 fontSize: 14,
-                fontFamily: 'Lato',
                 fontWeight: FontWeight.w400,
                 height: 1.43,
               ),
@@ -457,7 +451,6 @@ class _SwitchRow extends StatelessWidget {
               style: const TextStyle(
                 color: kHint,
                 fontSize: 14,
-                fontFamily: 'Lato',
                 fontWeight: FontWeight.w400,
                 height: 1.43,
               ),
@@ -500,7 +493,6 @@ class _ColorRow extends StatelessWidget {
               style: TextStyle(
                 color: kHint,
                 fontSize: 14,
-                fontFamily: 'Lato',
                 fontWeight: FontWeight.w400,
                 height: 1.43,
               ),
@@ -510,7 +502,6 @@ class _ColorRow extends StatelessWidget {
               style: TextStyle(
                 color: Color(0x998F9BB3),
                 fontSize: 12,
-                fontFamily: 'Lato',
                 fontWeight: FontWeight.w400,
                 height: 1.67,
               ),

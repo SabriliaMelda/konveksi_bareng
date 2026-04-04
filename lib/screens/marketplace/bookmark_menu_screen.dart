@@ -168,7 +168,6 @@ class _TopHeader extends StatelessWidget {
                   style: const TextStyle(
                     color: Color(0xFF121111),
                     fontSize: 18,
-                    fontFamily: 'Plus Jakarta Sans',
                     fontWeight: FontWeight.w900,
                     height: 1.1,
                   ),
@@ -269,7 +268,6 @@ class _HeaderInfoCard extends StatelessWidget {
                   style: const TextStyle(
                     color: Color(0xFF475569),
                     fontSize: 12,
-                    fontFamily: 'Work Sans',
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -302,7 +300,6 @@ class _Chip extends StatelessWidget {
         style: const TextStyle(
           color: kPurple,
           fontSize: 11,
-          fontFamily: 'Work Sans',
           fontWeight: FontWeight.w800,
           height: 1,
         ),
@@ -394,7 +391,6 @@ class _BookmarkTile extends StatelessWidget {
                 style: const TextStyle(
                   color: Color(0xFF121111),
                   fontSize: 13,
-                  fontFamily: 'Plus Jakarta Sans',
                   fontWeight: FontWeight.w800,
                 ),
               ),

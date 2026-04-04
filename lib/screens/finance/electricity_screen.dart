@@ -149,7 +149,6 @@ class _ElectricityScreenState extends State<ElectricityScreen> {
                     'Listrik',
                     style: TextStyle(
                       fontSize: 16,
-                      fontFamily: 'Encode Sans',
                       fontWeight: FontWeight.w600,
                       color: Color(0xFF121111),
                       height: 1.4,
@@ -194,7 +193,6 @@ class _ElectricityScreenState extends State<ElectricityScreen> {
                             style: const TextStyle(
                               color: Color(0xFF111827),
                               fontSize: 14,
-                              fontFamily: 'Plus Jakarta Sans',
                               fontWeight: FontWeight.w900,
                             ),
                           ),
@@ -226,7 +224,6 @@ class _ElectricityScreenState extends State<ElectricityScreen> {
                                 style: const TextStyle(
                                   color: Color(0xFF6A707C),
                                   fontSize: 12,
-                                  fontFamily: 'Plus Jakarta Sans',
                                   fontWeight: FontWeight.w800,
                                 ),
                               ),
@@ -253,7 +250,6 @@ class _ElectricityScreenState extends State<ElectricityScreen> {
                           style: const TextStyle(
                             color: kPurple,
                             fontSize: 22,
-                            fontFamily: 'Plus Jakarta Sans',
                             fontWeight: FontWeight.w900,
                           ),
                         ),
@@ -375,7 +371,6 @@ class _ElectricityScreenState extends State<ElectricityScreen> {
                           style: TextStyle(
                             color: Color(0xFF6A707C),
                             fontSize: 11.5,
-                            fontFamily: 'Plus Jakarta Sans',
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -445,7 +440,6 @@ class _InfoCard extends StatelessWidget {
                 style: const TextStyle(
                   color: Color(0xFF6A707C),
                   fontSize: 12,
-                  fontFamily: 'Plus Jakarta Sans',
                   fontWeight: FontWeight.w800,
                 ),
               ),
@@ -492,7 +486,6 @@ class _GhostButton extends StatelessWidget {
               style: const TextStyle(
                 color: kPurple,
                 fontSize: 12.5,
-                fontFamily: 'Plus Jakarta Sans',
                 fontWeight: FontWeight.w900,
               ),
             ),
@@ -526,7 +519,6 @@ class _MiniStat extends StatelessWidget {
             style: const TextStyle(
               color: Color(0xFF6A707C),
               fontSize: 11.5,
-              fontFamily: 'Plus Jakarta Sans',
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -538,7 +530,6 @@ class _MiniStat extends StatelessWidget {
             style: const TextStyle(
               color: Color(0xFF111827),
               fontSize: 12.5,
-              fontFamily: 'Plus Jakarta Sans',
               fontWeight: FontWeight.w900,
             ),
           ),
@@ -573,7 +564,6 @@ class _RowItem extends StatelessWidget {
               style: const TextStyle(
                 color: Color(0xFF111827),
                 fontSize: 12.5,
-                fontFamily: 'Plus Jakarta Sans',
                 fontWeight: FontWeight.w900,
               ),
             ),
@@ -587,7 +577,6 @@ class _RowItem extends StatelessWidget {
               style: const TextStyle(
                 color: Color(0xFF6A707C),
                 fontSize: 11.5,
-                fontFamily: 'Plus Jakarta Sans',
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -600,7 +589,6 @@ class _RowItem extends StatelessWidget {
               style: const TextStyle(
                 color: Color(0xFF111827),
                 fontSize: 12.5,
-                fontFamily: 'Plus Jakarta Sans',
                 fontWeight: FontWeight.w900,
               ),
             ),
@@ -638,7 +626,6 @@ class _Chip extends StatelessWidget {
         style: TextStyle(
           color: fg,
           fontSize: 11,
-          fontFamily: 'Plus Jakarta Sans',
           fontWeight: FontWeight.w900,
         ),
       ),

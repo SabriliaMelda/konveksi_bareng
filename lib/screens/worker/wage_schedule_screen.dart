@@ -133,7 +133,6 @@ class _WageScheduleScreenState extends State<WageScheduleScreen> {
                     'Tambah Jadwal Upah (dummy)',
                     style: TextStyle(
                       fontSize: 14,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w900,
                       color: Color(0xFF111827),
                     ),
@@ -187,7 +186,6 @@ class _WageScheduleScreenState extends State<WageScheduleScreen> {
                     style: TextStyle(
                       color: Color(0xFF6A707C),
                       fontSize: 12,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w800,
                     ),
                   ),
@@ -306,7 +304,6 @@ class _WageScheduleScreenState extends State<WageScheduleScreen> {
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 12.5,
-                                fontFamily: 'Plus Jakarta Sans',
                                 fontWeight: FontWeight.w900,
                               ),
                             ),
@@ -350,7 +347,6 @@ class _WageScheduleScreenState extends State<WageScheduleScreen> {
                 item.title,
                 style: const TextStyle(
                   fontSize: 14,
-                  fontFamily: 'Plus Jakarta Sans',
                   fontWeight: FontWeight.w900,
                   color: Color(0xFF111827),
                 ),
@@ -361,7 +357,6 @@ class _WageScheduleScreenState extends State<WageScheduleScreen> {
                 style: const TextStyle(
                   color: Color(0xFF6A707C),
                   fontSize: 12,
-                  fontFamily: 'Plus Jakarta Sans',
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -429,7 +424,6 @@ class _WageScheduleScreenState extends State<WageScheduleScreen> {
                         style: TextStyle(
                           color: Color(0xFF222B45),
                           fontSize: 20,
-                          fontFamily: 'Lato',
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -439,7 +433,6 @@ class _WageScheduleScreenState extends State<WageScheduleScreen> {
                         style: TextStyle(
                           color: Color(0xFF8F9BB3),
                           fontSize: 12,
-                          fontFamily: 'Lato',
                         ),
                       ),
                     ],
@@ -502,7 +495,6 @@ class _WageScheduleScreenState extends State<WageScheduleScreen> {
                     style: const TextStyle(
                       color: Color(0xFFECECEC),
                       fontSize: 14,
-                      fontFamily: 'Lato',
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -528,7 +520,6 @@ class _WageScheduleScreenState extends State<WageScheduleScreen> {
                           style: TextStyle(
                             color: Color(0xFF6A707C),
                             fontSize: 12.5,
-                            fontFamily: 'Plus Jakarta Sans',
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -581,7 +572,6 @@ class _TopHeader extends StatelessWidget {
             style: const TextStyle(
               color: Color(0xFF121111),
               fontSize: 16,
-              fontFamily: 'Encode Sans',
               fontWeight: FontWeight.w600,
               height: 1.4,
             ),
@@ -635,7 +625,6 @@ class _WDay extends StatelessWidget {
       style: const TextStyle(
         color: Color(0xFF8F9BB3),
         fontSize: 13,
-        fontFamily: 'Lato',
       ),
     );
   }
@@ -731,7 +720,6 @@ class _CalendarGrid extends StatelessWidget {
                         ? const Color(0xFF8F9BB3)
                         : (isSelected ? Colors.white : const Color(0xFF222B45)),
                     fontSize: 15,
-                    fontFamily: 'Lato',
                     fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
                   ),
                 ),
@@ -892,7 +880,6 @@ class _ScheduleCardUpah extends StatelessWidget {
                         style: const TextStyle(
                           color: Color(0xE59A9A9A),
                           fontSize: 12,
-                          fontFamily: 'Lato',
                         ),
                       ),
                       const Spacer(),
@@ -911,7 +898,6 @@ class _ScheduleCardUpah extends StatelessWidget {
                           style: TextStyle(
                             color: _statusColor,
                             fontSize: 11,
-                            fontFamily: 'Plus Jakarta Sans',
                             fontWeight: FontWeight.w900,
                           ),
                         ),
@@ -924,7 +910,6 @@ class _ScheduleCardUpah extends StatelessWidget {
                     style: const TextStyle(
                       color: Color(0xFF1B1B1B),
                       fontSize: 16,
-                      fontFamily: 'Almarai',
                       fontWeight: FontWeight.w700,
                       height: 1.2,
                     ),
@@ -937,7 +922,6 @@ class _ScheduleCardUpah extends StatelessWidget {
                     style: const TextStyle(
                       color: Color(0xFF575A66),
                       fontSize: 12,
-                      fontFamily: 'Lato',
                       height: 1.4,
                     ),
                   ),
@@ -949,7 +933,6 @@ class _ScheduleCardUpah extends StatelessWidget {
                     style: const TextStyle(
                       color: Color(0xFF575A66),
                       fontSize: 12,
-                      fontFamily: 'Lato',
                       height: 1.35,
                     ),
                   ),
@@ -970,7 +953,6 @@ class _ScheduleCardUpah extends StatelessWidget {
                           style: const TextStyle(
                             color: Color(0xFF575A66),
                             fontSize: 12,
-                            fontFamily: 'Lato',
                           ),
                         ),
                       ),
@@ -1030,7 +1012,6 @@ class _SheetAction extends StatelessWidget {
                 style: TextStyle(
                   color: color,
                   fontSize: 12.5,
-                  fontFamily: 'Plus Jakarta Sans',
                   fontWeight: FontWeight.w900,
                 ),
               ),
@@ -1080,7 +1061,6 @@ class _GhostButton extends StatelessWidget {
               style: const TextStyle(
                 color: kPurple,
                 fontSize: 12.5,
-                fontFamily: 'Plus Jakarta Sans',
                 fontWeight: FontWeight.w900,
               ),
             ),
@@ -1120,7 +1100,6 @@ class _ChoicePill extends StatelessWidget {
           style: TextStyle(
             color: active ? Colors.white : const Color(0xFF1E232C),
             fontSize: 11.5,
-            fontFamily: 'Plus Jakarta Sans',
             fontWeight: active ? FontWeight.w900 : FontWeight.w800,
           ),
         ),
@@ -1152,7 +1131,6 @@ class _InputField extends StatelessWidget {
           style: const TextStyle(
             color: Color(0xFF6A707C),
             fontSize: 12,
-            fontFamily: 'Plus Jakarta Sans',
             fontWeight: FontWeight.w800,
           ),
         ),
@@ -1165,7 +1143,6 @@ class _InputField extends StatelessWidget {
             hintStyle: const TextStyle(
               color: Color(0xFF9AA4B2),
               fontSize: 12,
-              fontFamily: 'Plus Jakarta Sans',
               fontWeight: FontWeight.w600,
             ),
             filled: true,

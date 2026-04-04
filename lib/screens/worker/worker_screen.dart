@@ -30,7 +30,6 @@ class WorkerScreen extends StatelessWidget {
                       style: TextStyle(
                         color: Color(0xFF111111),
                         fontSize: 16,
-                        fontFamily: 'Plus Jakarta Sans',
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -109,7 +108,6 @@ class _TopHeader extends StatelessWidget {
             style: const TextStyle(
               color: Color(0xFF121111),
               fontSize: 16,
-              fontFamily: 'Encode Sans',
               fontWeight: FontWeight.w600,
               height: 1.4,
             ),
@@ -205,7 +203,6 @@ class _BookmarkMenuCard extends StatelessWidget {
                 style: const TextStyle(
                   color: Color(0xFF111111),
                   fontSize: 14,
-                  fontFamily: 'Plus Jakarta Sans',
                   fontWeight: FontWeight.w600,
                 ),
               ),

@@ -126,7 +126,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                       ? Colors.white
                                       : const Color(0xFF6B7280),
                                   fontSize: 12,
-                                  fontFamily: 'Work Sans',
                                   fontWeight: FontWeight.w800,
                                 ),
                               ),
@@ -189,7 +188,6 @@ class _Header extends StatelessWidget {
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
-                    fontFamily: 'Encode Sans',
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -219,7 +217,6 @@ class _Header extends StatelessWidget {
                   style: TextStyle(
                     color: Colors.white70,
                     fontSize: 13,
-                    fontFamily: 'Work Sans',
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -304,7 +301,6 @@ class _CurrentStatusCard extends StatelessWidget {
                   style: TextStyle(
                     color: Color(0xFF24252C),
                     fontSize: 14,
-                    fontFamily: 'Encode Sans',
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -314,7 +310,6 @@ class _CurrentStatusCard extends StatelessWidget {
                   style: TextStyle(
                     color: Color(0xFF6B7280),
                     fontSize: 11.5,
-                    fontFamily: 'Work Sans',
                     fontWeight: FontWeight.w700,
                     height: 1.45,
                   ),
@@ -334,7 +329,6 @@ class _CurrentStatusCard extends StatelessWidget {
                     style: TextStyle(
                       color: Color(0xFFF59E0B),
                       fontSize: 10.5,
-                      fontFamily: 'Work Sans',
                       fontWeight: FontWeight.w800,
                     ),
                   ),
@@ -431,7 +425,6 @@ class _PaymentMethodCard extends StatelessWidget {
                   style: TextStyle(
                     color: Color(0xFF24252C),
                     fontSize: 12,
-                    fontFamily: 'Encode Sans',
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -441,7 +434,6 @@ class _PaymentMethodCard extends StatelessWidget {
                   style: TextStyle(
                     color: Color(0xFF6B7280),
                     fontSize: 11.5,
-                    fontFamily: 'Work Sans',
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -569,7 +561,6 @@ class _TimelineItem extends StatelessWidget {
                         ? const Color(0xFFF59E0B)
                         : const Color(0xFF24252C),
                     fontSize: 12.5,
-                    fontFamily: 'Work Sans',
                     fontWeight: FontWeight.w800,
                   ),
                 ),
@@ -579,7 +570,6 @@ class _TimelineItem extends StatelessWidget {
                   style: const TextStyle(
                     color: Color(0xFF6B7280),
                     fontSize: 10.5,
-                    fontFamily: 'Work Sans',
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -604,7 +594,6 @@ class _SectionTitle extends StatelessWidget {
       style: const TextStyle(
         color: Color(0xFF24252C),
         fontSize: 16,
-        fontFamily: 'Encode Sans',
         fontWeight: FontWeight.w900,
       ),
     );
@@ -635,7 +624,6 @@ class _InfoRow extends StatelessWidget {
               style: const TextStyle(
                 color: Color(0xFF6B7280),
                 fontSize: 11,
-                fontFamily: 'Work Sans',
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -646,7 +634,6 @@ class _InfoRow extends StatelessWidget {
               style: TextStyle(
                 color: const Color(0xFF24252C),
                 fontSize: isStrong ? 13 : 11.5,
-                fontFamily: 'Work Sans',
                 fontWeight: isStrong ? FontWeight.w900 : FontWeight.w700,
               ),
             ),
@@ -734,7 +721,6 @@ class _HistoryCard extends StatelessWidget {
                   style: const TextStyle(
                     color: Color(0xFF24252C),
                     fontSize: 13,
-                    fontFamily: 'Encode Sans',
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -744,7 +730,6 @@ class _HistoryCard extends StatelessWidget {
                   style: const TextStyle(
                     color: Color(0xFF6B7280),
                     fontSize: 11,
-                    fontFamily: 'Work Sans',
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -757,7 +742,6 @@ class _HistoryCard extends StatelessWidget {
                         style: const TextStyle(
                           color: Color(0xFF24252C),
                           fontSize: 12,
-                          fontFamily: 'Work Sans',
                           fontWeight: FontWeight.w900,
                         ),
                       ),
@@ -776,7 +760,6 @@ class _HistoryCard extends StatelessWidget {
                         style: TextStyle(
                           color: statusColor,
                           fontSize: 10.5,
-                          fontFamily: 'Work Sans',
                           fontWeight: FontWeight.w800,
                         ),
                       ),
@@ -789,7 +772,6 @@ class _HistoryCard extends StatelessWidget {
                   style: const TextStyle(
                     color: Color(0xFF9CA3AF),
                     fontSize: 10.5,
-                    fontFamily: 'Work Sans',
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -843,7 +825,6 @@ class _BottomActionBar extends StatelessWidget {
                   'Cek Status',
                   style: TextStyle(
                     color: kPurple,
-                    fontFamily: 'Work Sans',
                     fontWeight: FontWeight.w800,
                     fontSize: 13,
                   ),
@@ -865,7 +846,6 @@ class _BottomActionBar extends StatelessWidget {
                   'Bayar Lagi',
                   style: TextStyle(
                     color: Colors.white,
-                    fontFamily: 'Work Sans',
                     fontWeight: FontWeight.w800,
                     fontSize: 13,
                   ),

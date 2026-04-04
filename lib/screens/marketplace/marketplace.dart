@@ -173,7 +173,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                       style: TextStyle(
                         color: Color(0xFF1E232C),
                         fontSize: 22,
-                        fontFamily: 'Plus Jakarta Sans',
                         fontWeight: FontWeight.w800,
                       ),
                     ),
@@ -196,7 +195,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                             style: TextStyle(
                               color: kPurple,
                               fontSize: 12,
-                              fontFamily: 'Plus Jakarta Sans',
                               fontWeight: FontWeight.w700,
                             ),
                           ),
@@ -378,14 +376,12 @@ class _SearchPill extends StatelessWidget {
                 hintStyle: const TextStyle(
                   color: Color(0xFF010101),
                   fontSize: 12,
-                  fontFamily: 'Plus Jakarta Sans',
                   fontWeight: FontWeight.w400,
                 ),
               ),
               style: const TextStyle(
                 color: Color(0xFF010101),
                 fontSize: 12,
-                fontFamily: 'Plus Jakarta Sans',
               ),
             ),
           ),
@@ -478,7 +474,6 @@ class _PromoBanner extends StatelessWidget {
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w800,
                     ),
                   ),
@@ -488,7 +483,6 @@ class _PromoBanner extends StatelessWidget {
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 12,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w500,
                       height: 1.3,
                     ),
@@ -545,7 +539,6 @@ class _CategoryChip extends StatelessWidget {
           style: TextStyle(
             color: active ? Colors.white : const Color(0xFF1E232C),
             fontSize: 12,
-            fontFamily: 'Plus Jakarta Sans',
             fontWeight: active ? FontWeight.w800 : FontWeight.w600,
           ),
         ),
@@ -652,7 +645,6 @@ class _ProductCard extends StatelessWidget {
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 10.5,
-                          fontFamily: 'Plus Jakarta Sans',
                           fontWeight: FontWeight.w800,
                         ),
                       ),
@@ -674,7 +666,6 @@ class _ProductCard extends StatelessWidget {
                     style: const TextStyle(
                       color: Color(0xFF1E232C),
                       fontSize: 13,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w800,
                       height: 1.2,
                     ),
@@ -687,7 +678,6 @@ class _ProductCard extends StatelessWidget {
                     style: const TextStyle(
                       color: Color(0xFF6A707C),
                       fontSize: 11.5,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -697,7 +687,6 @@ class _ProductCard extends StatelessWidget {
                     style: const TextStyle(
                       color: kPurple,
                       fontSize: 13,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w900,
                     ),
                   ),
@@ -715,7 +704,6 @@ class _ProductCard extends StatelessWidget {
                         style: const TextStyle(
                           color: Color(0xFF1E232C),
                           fontSize: 11.5,
-                          fontFamily: 'Plus Jakarta Sans',
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -728,7 +716,6 @@ class _ProductCard extends StatelessWidget {
                           style: const TextStyle(
                             color: Color(0xFF6A707C),
                             fontSize: 11.5,
-                            fontFamily: 'Plus Jakarta Sans',
                             fontWeight: FontWeight.w600,
                           ),
                         ),

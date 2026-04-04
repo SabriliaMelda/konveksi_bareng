@@ -119,7 +119,6 @@ class _LoginScreenState extends State<LoginScreen> {
           const Text(
             'Login',
             style: TextStyle(
-              fontFamily: 'Poppins',
               color: kPurple,
               fontSize: 26,
               fontWeight: FontWeight.w800,
@@ -130,7 +129,6 @@ class _LoginScreenState extends State<LoginScreen> {
           Text(
             t['subtitle']!,
             style: const TextStyle(
-              fontFamily: 'Poppins',
               color: kPurpleLight,
               fontSize: 12,
               fontWeight: FontWeight.w500,
@@ -154,7 +152,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Text(
                           t['registerPrompt']!,
                           style: const TextStyle(
-                            fontFamily: 'Poppins',
                             color: Color(0xFF2563EB),
                             fontWeight: FontWeight.w600,
                             decoration: TextDecoration.underline,
@@ -185,7 +182,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 if (!_loading) _handleSubmit();
               },
               style: const TextStyle(
-                fontFamily: 'Poppins',
                 color: Color(0xFF2A2A2A),
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
@@ -194,7 +190,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 border: InputBorder.none,
                 hintText: t['placeholder'],
                 hintStyle: const TextStyle(
-                  fontFamily: 'Poppins',
                   color: Color(0xFFAAA3AF),
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
@@ -218,7 +213,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Text(
                     t['forgotEmail']!,
                     style: const TextStyle(
-                      fontFamily: 'Poppins',
                       color: kPurple,
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
@@ -235,7 +229,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   t['createAccount']!,
                   textAlign: TextAlign.right,
                   style: const TextStyle(
-                    fontFamily: 'Poppins',
                     color: kPurple,
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
@@ -263,7 +256,6 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Text(
                 _loading ? t['processing']! : t['next']!,
                 style: const TextStyle(
-                  fontFamily: 'Poppins',
                   color: Colors.white,
                   fontSize: 14,
                   fontWeight: FontWeight.w700,

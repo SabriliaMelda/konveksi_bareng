@@ -135,7 +135,6 @@ class _SalesScreenState extends State<SalesScreen> {
                                       ? Colors.white
                                       : const Color(0xFF6B7280),
                                   fontSize: 12,
-                                  fontFamily: 'Work Sans',
                                   fontWeight: FontWeight.w800,
                                 ),
                               ),
@@ -205,7 +204,6 @@ class _Header extends StatelessWidget {
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
-                    fontFamily: 'Encode Sans',
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -234,7 +232,6 @@ class _Header extends StatelessWidget {
                   style: TextStyle(
                     color: Colors.white70,
                     fontSize: 13,
-                    fontFamily: 'Work Sans',
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -353,7 +350,6 @@ class _SummaryCard extends StatelessWidget {
                   style: const TextStyle(
                     color: Color(0xFF6B7280),
                     fontSize: 11,
-                    fontFamily: 'Work Sans',
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -363,7 +359,6 @@ class _SummaryCard extends StatelessWidget {
                   style: const TextStyle(
                     color: Color(0xFF24252C),
                     fontSize: 13,
-                    fontFamily: 'Encode Sans',
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -373,7 +368,6 @@ class _SummaryCard extends StatelessWidget {
                   style: const TextStyle(
                     color: Color(0xFF9CA3AF),
                     fontSize: 10.5,
-                    fontFamily: 'Work Sans',
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -413,7 +407,6 @@ class _TodaySalesCard extends StatelessWidget {
             style: TextStyle(
               color: Color(0xFF24252C),
               fontSize: 15,
-              fontFamily: 'Encode Sans',
               fontWeight: FontWeight.w900,
             ),
           ),
@@ -453,7 +446,6 @@ class _InfoRow extends StatelessWidget {
               style: const TextStyle(
                 color: Color(0xFF6B7280),
                 fontSize: 11,
-                fontFamily: 'Work Sans',
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -464,7 +456,6 @@ class _InfoRow extends StatelessWidget {
               style: TextStyle(
                 color: const Color(0xFF24252C),
                 fontSize: strong ? 13 : 11.5,
-                fontFamily: 'Work Sans',
                 fontWeight: strong ? FontWeight.w900 : FontWeight.w700,
               ),
             ),
@@ -487,7 +478,6 @@ class _SectionTitle extends StatelessWidget {
       style: const TextStyle(
         color: Color(0xFF24252C),
         fontSize: 16,
-        fontFamily: 'Encode Sans',
         fontWeight: FontWeight.w900,
       ),
     );
@@ -581,7 +571,6 @@ class _SaleCard extends StatelessWidget {
                   style: const TextStyle(
                     color: Color(0xFF24252C),
                     fontSize: 13,
-                    fontFamily: 'Encode Sans',
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -591,7 +580,6 @@ class _SaleCard extends StatelessWidget {
                   style: const TextStyle(
                     color: Color(0xFF6B7280),
                     fontSize: 11,
-                    fontFamily: 'Work Sans',
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -604,7 +592,6 @@ class _SaleCard extends StatelessWidget {
                         style: const TextStyle(
                           color: Color(0xFF24252C),
                           fontSize: 12,
-                          fontFamily: 'Work Sans',
                           fontWeight: FontWeight.w900,
                         ),
                       ),
@@ -623,7 +610,6 @@ class _SaleCard extends StatelessWidget {
                         style: TextStyle(
                           color: statusColor,
                           fontSize: 10.5,
-                          fontFamily: 'Work Sans',
                           fontWeight: FontWeight.w800,
                         ),
                       ),
@@ -640,7 +626,6 @@ class _SaleCard extends StatelessWidget {
                       style: const TextStyle(
                         color: Color(0xFF9CA3AF),
                         fontSize: 10.5,
-                        fontFamily: 'Work Sans',
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -649,7 +634,6 @@ class _SaleCard extends StatelessWidget {
                       style: const TextStyle(
                         color: Color(0xFF9CA3AF),
                         fontSize: 10.5,
-                        fontFamily: 'Work Sans',
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -658,7 +642,6 @@ class _SaleCard extends StatelessWidget {
                       style: const TextStyle(
                         color: Color(0xFF9CA3AF),
                         fontSize: 10.5,
-                        fontFamily: 'Work Sans',
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -679,7 +662,6 @@ class _SaleCard extends StatelessWidget {
                     style: TextStyle(
                       color: sourceColor,
                       fontSize: 10.5,
-                      fontFamily: 'Work Sans',
                       fontWeight: FontWeight.w800,
                     ),
                   ),
@@ -734,7 +716,6 @@ class _BottomActionBar extends StatelessWidget {
                   'Sinkron Marketplace',
                   style: TextStyle(
                     color: kPurple,
-                    fontFamily: 'Work Sans',
                     fontWeight: FontWeight.w800,
                     fontSize: 12.5,
                   ),
@@ -756,7 +737,6 @@ class _BottomActionBar extends StatelessWidget {
                   'Tambah Offline',
                   style: TextStyle(
                     color: Colors.white,
-                    fontFamily: 'Work Sans',
                     fontWeight: FontWeight.w800,
                     fontSize: 12.5,
                   ),

@@ -100,7 +100,6 @@ class _Header extends StatelessWidget {
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
-                    fontFamily: 'Encode Sans',
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -176,7 +175,6 @@ class _SearchBar extends StatelessWidget {
               style: TextStyle(
                 color: Colors.white70,
                 fontSize: 13,
-                fontFamily: 'Work Sans',
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -212,7 +210,6 @@ class _QuickMenuGrid extends StatelessWidget {
           style: TextStyle(
             color: Color(0xFF24252C),
             fontSize: 16,
-            fontFamily: 'Encode Sans',
             fontWeight: FontWeight.w900,
           ),
         ),
@@ -358,7 +355,6 @@ class _QuickCardSmall extends StatelessWidget {
               style: const TextStyle(
                 color: Color(0xFF24252C),
                 fontSize: 10.5,
-                fontFamily: 'Work Sans',
                 fontWeight: FontWeight.w800,
                 height: 1.15,
               ),
@@ -392,7 +388,6 @@ class _CategoryRow extends StatelessWidget {
           style: TextStyle(
             color: Color(0xFF24252C),
             fontSize: 16,
-            fontFamily: 'Encode Sans',
             fontWeight: FontWeight.w900,
           ),
         ),
@@ -434,7 +429,6 @@ class _CategoryRow extends StatelessWidget {
                     style: TextStyle(
                       color: isActive ? Colors.white : const Color(0xFF6B7280),
                       fontSize: 12,
-                      fontFamily: 'Work Sans',
                       fontWeight: FontWeight.w800,
                     ),
                   ),
@@ -631,7 +625,6 @@ class _RekomendasiSection extends StatelessWidget {
               'Rekomendasi • $category',
               style: const TextStyle(
                 fontSize: 16,
-                fontFamily: 'Encode Sans',
                 fontWeight: FontWeight.w900,
                 color: Color(0xFF24252C),
               ),
@@ -647,7 +640,6 @@ class _RekomendasiSection extends StatelessWidget {
                   style: TextStyle(
                     color: kPurple,
                     fontSize: 12,
-                    fontFamily: 'Work Sans',
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -750,7 +742,6 @@ class _ProductCard extends StatelessWidget {
                             product.rating,
                             style: const TextStyle(
                               fontSize: 12,
-                              fontFamily: 'Work Sans',
                               fontWeight: FontWeight.w900,
                               color: Color(0xFF24252C),
                             ),
@@ -790,7 +781,6 @@ class _ProductCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       fontSize: 13,
-                      fontFamily: 'Encode Sans',
                       fontWeight: FontWeight.w900,
                       color: Color(0xFF121111),
                       height: 1.15,
@@ -803,7 +793,6 @@ class _ProductCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       fontSize: 11,
-                      fontFamily: 'Work Sans',
                       fontWeight: FontWeight.w700,
                       color: Color(0xFF6B7280),
                     ),
@@ -816,7 +805,6 @@ class _ProductCard extends StatelessWidget {
                           product.price,
                           style: const TextStyle(
                             fontSize: 13,
-                            fontFamily: 'Work Sans',
                             fontWeight: FontWeight.w900,
                             color: Color(0xFF24252C),
                           ),

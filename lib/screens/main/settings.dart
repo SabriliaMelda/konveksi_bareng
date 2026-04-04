@@ -106,7 +106,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       'Settings',
                       style: TextStyle(
                         fontSize: 16,
-                        fontFamily: 'Encode Sans',
                         fontWeight: FontWeight.w700,
                         color: ink,
                         height: 1.2,
@@ -144,7 +143,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           onChanged: (_) => setState(() {}),
                           style: TextStyle(
                             color: ink,
-                            fontFamily: 'Plus Jakarta Sans',
                             fontWeight: FontWeight.w700,
                             fontSize: 12.5,
                           ),
@@ -154,7 +152,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 'Cari setting... (contoh: notifikasi, tema)',
                             hintStyle: TextStyle(
                               color: muted,
-                              fontFamily: 'Plus Jakarta Sans',
                               fontWeight: FontWeight.w600,
                               fontSize: 12.5,
                             ),
@@ -221,7 +218,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               style: TextStyle(
                                 color: ink,
                                 fontSize: 14,
-                                fontFamily: 'Plus Jakarta Sans',
                                 fontWeight: FontWeight.w800,
                               ),
                             ),
@@ -233,7 +229,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               style: TextStyle(
                                 color: muted,
                                 fontSize: 12,
-                                fontFamily: 'Plus Jakarta Sans',
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -581,7 +576,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             style: TextStyle(
                               color: Color(0xFFEF4444),
                               fontSize: 12.5,
-                              fontFamily: 'Plus Jakarta Sans',
                               fontWeight: FontWeight.w900,
                             ),
                           ),
@@ -805,7 +799,6 @@ class _AccordionHeader extends StatelessWidget {
                     style: TextStyle(
                       color: ink,
                       fontSize: 13,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w900,
                     ),
                   ),
@@ -815,7 +808,6 @@ class _AccordionHeader extends StatelessWidget {
                     style: TextStyle(
                       color: muted,
                       fontSize: 12,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -875,7 +867,6 @@ class _Pill extends StatelessWidget {
           style: TextStyle(
             color: color,
             fontSize: 11.5,
-            fontFamily: 'Plus Jakarta Sans',
             fontWeight: FontWeight.w900,
           ),
         ),
@@ -936,7 +927,6 @@ class _SwitchRow extends StatelessWidget {
                 style: TextStyle(
                   color: ink,
                   fontSize: 12.5,
-                  fontFamily: 'Plus Jakarta Sans',
                   fontWeight: FontWeight.w900,
                 ),
               ),
@@ -946,7 +936,6 @@ class _SwitchRow extends StatelessWidget {
                 style: TextStyle(
                   color: muted,
                   fontSize: 11.5,
-                  fontFamily: 'Plus Jakarta Sans',
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -1018,7 +1007,6 @@ class _MenuRow extends StatelessWidget {
                     style: TextStyle(
                       color: ink,
                       fontSize: 12.5,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w900,
                     ),
                   ),
@@ -1028,7 +1016,6 @@ class _MenuRow extends StatelessWidget {
                     style: TextStyle(
                       color: muted,
                       fontSize: 11.5,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w600,
                     ),
                   ),

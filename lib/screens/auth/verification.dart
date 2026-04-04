@@ -209,7 +209,6 @@ class _VerificationScreenState extends State<VerificationScreen> {
           const SizedBox(height: 20),
           Text(t['title']!,
               style: const TextStyle(
-                  fontFamily: 'Poppins',
                   color: kPurple,
                   fontSize: 24,
                   fontWeight: FontWeight.w800,
@@ -219,7 +218,6 @@ class _VerificationScreenState extends State<VerificationScreen> {
             TextSpan(
               text: '${t['subtitle']!} ',
               style: const TextStyle(
-                  fontFamily: 'Poppins',
                   color: kPurpleLight,
                   fontSize: 10.5,
                   fontWeight: FontWeight.w500,
@@ -259,7 +257,6 @@ class _VerificationScreenState extends State<VerificationScreen> {
                     keyboardType: TextInputType.number,
                     maxLength: 1,
                     style: const TextStyle(
-                        fontFamily: 'Poppins',
                         color: Color(0xFF2A2A2A),
                         fontSize: 20,
                         fontWeight: FontWeight.w700),
@@ -308,7 +305,6 @@ class _VerificationScreenState extends State<VerificationScreen> {
               child: Text(
                 _loading ? t['processing']! : t['resend']!,
                 style: const TextStyle(
-                    fontFamily: 'Poppins',
                     color: Colors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.w700),
@@ -335,7 +331,6 @@ class _VerificationScreenState extends State<VerificationScreen> {
               child: Text(
                 t['verify']!,
                 style: const TextStyle(
-                    fontFamily: 'Poppins',
                     color: Colors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.w700),

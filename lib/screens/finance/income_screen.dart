@@ -99,7 +99,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
                 'Tambah Pemasukan',
                 style: TextStyle(
                   fontSize: 14,
-                  fontFamily: 'Plus Jakarta Sans',
                   fontWeight: FontWeight.w900,
                   color: Color(0xFF111827),
                 ),
@@ -179,7 +178,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 12.5,
-                            fontFamily: 'Plus Jakarta Sans',
                             fontWeight: FontWeight.w900,
                           ),
                         ),
@@ -222,7 +220,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
                 e.title,
                 style: const TextStyle(
                   fontSize: 14,
-                  fontFamily: 'Plus Jakarta Sans',
                   fontWeight: FontWeight.w900,
                   color: Color(0xFF111827),
                 ),
@@ -288,7 +285,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
                 'Pemasukan Proyek',
                 style: TextStyle(
                   fontSize: 14,
-                  fontFamily: 'Plus Jakarta Sans',
                   fontWeight: FontWeight.w900,
                   color: Color(0xFF111827),
                 ),
@@ -405,7 +401,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
                     'Pemasukan',
                     style: TextStyle(
                       fontSize: 16,
-                      fontFamily: 'Encode Sans',
                       fontWeight: FontWeight.w600,
                       color: Color(0xFF121111),
                       height: 1.4,
@@ -492,7 +487,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
                   style: TextStyle(
                     color: Color(0xFF6A707C),
                     fontSize: 12,
-                    fontFamily: 'Plus Jakarta Sans',
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -502,7 +496,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
                   style: const TextStyle(
                     color: kPurple,
                     fontSize: 22,
-                    fontFamily: 'Plus Jakarta Sans',
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -567,7 +560,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
                     style: const TextStyle(
                       color: Color(0xFF1E232C),
                       fontSize: 12,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -627,7 +619,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             style: const TextStyle(
                               color: Color(0xFF1E232C),
                               fontSize: 13,
-                              fontFamily: 'Plus Jakarta Sans',
                               fontWeight: FontWeight.w900,
                             ),
                           ),
@@ -639,7 +630,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             style: const TextStyle(
                               color: Color(0xFF6A707C),
                               fontSize: 12,
-                              fontFamily: 'Plus Jakarta Sans',
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -649,7 +639,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             style: const TextStyle(
                               color: Color(0xFF9AA4B2),
                               fontSize: 11.5,
-                              fontFamily: 'Plus Jakarta Sans',
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -662,7 +651,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
                       style: const TextStyle(
                         color: Color(0xFF2E7D32),
                         fontSize: 12.5,
-                        fontFamily: 'Plus Jakarta Sans',
                         fontWeight: FontWeight.w900,
                       ),
                     ),
@@ -703,7 +691,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
               style: TextStyle(
                 color: Color(0xFF6A707C),
                 fontSize: 12.5,
-                fontFamily: 'Plus Jakarta Sans',
                 fontWeight: FontWeight.w800,
               ),
             ),
@@ -758,7 +745,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
                               style: const TextStyle(
                                 color: Color(0xFF1E232C),
                                 fontSize: 13,
-                                fontFamily: 'Plus Jakarta Sans',
                                 fontWeight: FontWeight.w900,
                               ),
                             ),
@@ -770,7 +756,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
                               style: const TextStyle(
                                 color: Color(0xFF6A707C),
                                 fontSize: 12,
-                                fontFamily: 'Plus Jakarta Sans',
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -780,7 +765,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
                               style: const TextStyle(
                                 color: Color(0xFF9AA4B2),
                                 fontSize: 11.5,
-                                fontFamily: 'Plus Jakarta Sans',
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -832,7 +816,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
                     style: const TextStyle(
                       color: Color(0xFF111827),
                       fontSize: 12.5,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w900,
                     ),
                   ),
@@ -852,7 +835,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
                       style: TextStyle(
                         color: kPurple,
                         fontSize: 11.5,
-                        fontFamily: 'Plus Jakarta Sans',
                         fontWeight: FontWeight.w900,
                       ),
                     ),
@@ -871,7 +853,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
               style: const TextStyle(
                 color: Color(0xFF6A707C),
                 fontSize: 12.5,
-                fontFamily: 'Plus Jakarta Sans',
                 fontWeight: FontWeight.w800,
               ),
             ),
@@ -918,7 +899,6 @@ class _TabPill extends StatelessWidget {
           style: TextStyle(
             color: active ? Colors.white : const Color(0xFF1E232C),
             fontSize: 11.5,
-            fontFamily: 'Plus Jakarta Sans',
             fontWeight: active ? FontWeight.w900 : FontWeight.w800,
           ),
         ),
@@ -956,7 +936,6 @@ class _PeriodPill extends StatelessWidget {
           style: TextStyle(
             color: active ? Colors.white : const Color(0xFF1E232C),
             fontSize: 11,
-            fontFamily: 'Plus Jakarta Sans',
             fontWeight: active ? FontWeight.w900 : FontWeight.w700,
           ),
         ),
@@ -998,7 +977,6 @@ class _GhostButton extends StatelessWidget {
               style: const TextStyle(
                 color: kPurple,
                 fontSize: 12.5,
-                fontFamily: 'Plus Jakarta Sans',
                 fontWeight: FontWeight.w900,
               ),
             ),
@@ -1045,7 +1023,6 @@ class _SheetAction extends StatelessWidget {
                 style: TextStyle(
                   color: color,
                   fontSize: 12.5,
-                  fontFamily: 'Plus Jakarta Sans',
                   fontWeight: FontWeight.w900,
                 ),
               ),
@@ -1081,7 +1058,6 @@ class _InputField extends StatelessWidget {
           style: const TextStyle(
             color: Color(0xFF6A707C),
             fontSize: 12,
-            fontFamily: 'Plus Jakarta Sans',
             fontWeight: FontWeight.w800,
           ),
         ),
@@ -1094,7 +1070,6 @@ class _InputField extends StatelessWidget {
             hintStyle: const TextStyle(
               color: Color(0xFF9AA4B2),
               fontSize: 12,
-              fontFamily: 'Plus Jakarta Sans',
               fontWeight: FontWeight.w600,
             ),
             filled: true,

@@ -38,7 +38,6 @@ class _PatternScreenState extends State<PatternScreen> {
                   style: TextStyle(
                     color: Colors.black.withOpacity(0.55),
                     fontSize: 14,
-                    fontFamily: 'Plus Jakarta Sans',
                   ),
                 ),
               ),
@@ -82,7 +81,6 @@ class _TopHeader extends StatelessWidget {
             style: const TextStyle(
               color: Color(0xFF121111),
               fontSize: 16,
-              fontFamily: 'Encode Sans',
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -204,7 +202,6 @@ class _CreatePolaSheetState extends State<_CreatePolaSheet> {
                       style: TextStyle(
                         color: Color(0xFF6D6D6D),
                         fontSize: 11.5,
-                        fontFamily: 'Plus Jakarta Sans',
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -217,7 +214,6 @@ class _CreatePolaSheetState extends State<_CreatePolaSheet> {
                   'Unggah Desain Anda',
                   style: TextStyle(
                     fontSize: 12,
-                    fontFamily: 'Plus Jakarta Sans',
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -227,7 +223,6 @@ class _CreatePolaSheetState extends State<_CreatePolaSheet> {
                   style: TextStyle(
                     color: Color(0xFF6D6D6D),
                     fontSize: 10.5,
-                    fontFamily: 'Plus Jakarta Sans',
                   ),
                 ),
                 const SizedBox(height: 10),

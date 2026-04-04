@@ -128,14 +128,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
             const SizedBox(height: 20),
             Text(t['successTitle']!,
                 style: const TextStyle(
-                    fontFamily: 'Poppins',
                     fontSize: 24,
                     fontWeight: FontWeight.w800,
                     color: kPurple)),
             const SizedBox(height: 4),
             Text(t['successSubtitle']!,
                 style: const TextStyle(
-                    fontFamily: 'Poppins',
                     fontSize: 12,
                     color: kPurpleLight)),
             const SizedBox(height: 24),
@@ -155,7 +153,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 child: Text(t['goToLogin']!,
                     style: const TextStyle(
-                        fontFamily: 'Poppins',
                         color: Colors.white,
                         fontSize: 14,
                         fontWeight: FontWeight.w700)),
@@ -174,7 +171,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           const SizedBox(height: 18),
           Text(t['title']!,
               style: const TextStyle(
-                  fontFamily: 'Poppins',
                   color: kPurple,
                   fontSize: 24,
                   fontWeight: FontWeight.w800,
@@ -182,7 +178,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           const SizedBox(height: 10),
           Text(t['subtitle']!,
               style: const TextStyle(
-                  fontFamily: 'Poppins',
                   color: kPurpleLight,
                   fontSize: 11.5,
                   fontWeight: FontWeight.w500,
@@ -225,7 +220,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: Text(
                 _loading ? t['creating']! : t['create']!,
                 style: const TextStyle(
-                    fontFamily: 'Poppins',
                     color: Colors.white,
                     fontSize: 13,
                     fontWeight: FontWeight.w700),
@@ -245,7 +239,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 TextSpan(
                   text: t['alreadyHave']!,
                   style: const TextStyle(
-                      fontFamily: 'Poppins',
                       color: kPurple,
                       fontSize: 12,
                       fontWeight: FontWeight.w400),
@@ -286,7 +279,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       children: [
         Text(label,
             style: const TextStyle(
-                fontFamily: 'Poppins',
                 color: kPurple,
                 fontSize: 12,
                 fontWeight: FontWeight.w600)),
@@ -312,7 +304,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   }
                 : (_) => setState(() => _error = ''),
             style: const TextStyle(
-                fontFamily: 'Poppins',
                 color: Color(0xFF2A2A2A),
                 fontSize: 12,
                 fontWeight: FontWeight.w500),
@@ -321,7 +312,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
               border: InputBorder.none,
               hintText: placeholder,
               hintStyle: const TextStyle(
-                  fontFamily: 'Poppins',
                   color: Color(0xFFB3B0B7),
                   fontSize: 11.5,
                   fontWeight: FontWeight.w500),

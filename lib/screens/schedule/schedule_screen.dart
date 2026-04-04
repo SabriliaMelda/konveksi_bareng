@@ -89,7 +89,6 @@ class _HeaderBar extends StatelessWidget {
             style: TextStyle(
               color: Color(0xFF121111),
               fontSize: 16,
-              fontFamily: 'Encode Sans',
               fontWeight: FontWeight.w600,
               height: 1.4,
             ),
@@ -200,7 +199,6 @@ class _DaySelector extends StatelessWidget {
                               ? const Color(0xFFC7B2BB)
                               : const Color(0xFFABABAB),
                           fontSize: 14,
-                          fontFamily: 'Lato',
                           fontWeight: FontWeight.w300,
                           height: 1.6,
                         ),
@@ -212,7 +210,6 @@ class _DaySelector extends StatelessWidget {
                               ? const Color(0xFF81616F)
                               : const Color(0xFF797979),
                           fontSize: 16,
-                          fontFamily: 'Lato',
                           fontWeight: FontWeight.w500,
                           height: 1.6,
                         ),
@@ -376,7 +373,6 @@ class _JadwalMenuCard extends StatelessWidget {
                 style: const TextStyle(
                   color: Color(0xFF393333),
                   fontSize: 12,
-                  fontFamily: 'Work Sans',
                   fontWeight: FontWeight.w600,
                 ),
               ),

@@ -188,7 +188,6 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
                     'Tambah Transaksi (dummy)',
                     style: TextStyle(
                       fontSize: 14,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w900,
                       color: Color(0xFF111827),
                     ),
@@ -218,7 +217,6 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
                     style: TextStyle(
                       color: Color(0xFF6A707C),
                       fontSize: 12,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w800,
                     ),
                   ),
@@ -312,7 +310,6 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 12.5,
-                                fontFamily: 'Plus Jakarta Sans',
                                 fontWeight: FontWeight.w900,
                               ),
                             ),
@@ -357,7 +354,6 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
                 e.title,
                 style: const TextStyle(
                   fontSize: 14,
-                  fontFamily: 'Plus Jakarta Sans',
                   fontWeight: FontWeight.w900,
                   color: Color(0xFF111827),
                 ),
@@ -368,7 +364,6 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
                 style: const TextStyle(
                   color: Color(0xFF6A707C),
                   fontSize: 12,
-                  fontFamily: 'Plus Jakarta Sans',
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -468,7 +463,6 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
               style: const TextStyle(
                 color: Color(0xFF6A707C),
                 fontSize: 12,
-                fontFamily: 'Plus Jakarta Sans',
                 fontWeight: FontWeight.w800,
               ),
             ),
@@ -531,7 +525,6 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
                       style: const TextStyle(
                         color: Color(0xFF6A707C),
                         fontSize: 12,
-                        fontFamily: 'Plus Jakarta Sans',
                         fontWeight: FontWeight.w800,
                       ),
                     ),
@@ -543,7 +536,6 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
                           ? const Color(0xFF2E7D32)
                           : const Color(0xFFD32F2F),
                       fontSize: 14,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w900,
                     ),
                   ),
@@ -565,7 +557,6 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
           style: TextStyle(
             color: Color(0xFF6A707C),
             fontSize: 12.5,
-            fontFamily: 'Plus Jakarta Sans',
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -629,7 +620,6 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
                         style: const TextStyle(
                           color: Color(0xFF1E232C),
                           fontSize: 13,
-                          fontFamily: 'Plus Jakarta Sans',
                           fontWeight: FontWeight.w900,
                         ),
                       ),
@@ -641,7 +631,6 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
                         style: const TextStyle(
                           color: Color(0xFF6A707C),
                           fontSize: 12,
-                          fontFamily: 'Plus Jakarta Sans',
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -651,7 +640,6 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
                         style: const TextStyle(
                           color: Color(0xFF9AA4B2),
                           fontSize: 11.5,
-                          fontFamily: 'Plus Jakarta Sans',
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -666,7 +654,6 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
                         ? const Color(0xFF2E7D32)
                         : const Color(0xFFD32F2F),
                     fontSize: 12.5,
-                    fontFamily: 'Plus Jakarta Sans',
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -722,7 +709,6 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
                     'Rugi Laba',
                     style: TextStyle(
                       fontSize: 16,
-                      fontFamily: 'Encode Sans',
                       fontWeight: FontWeight.w600,
                       color: Color(0xFF121111),
                       height: 1.4,
@@ -811,7 +797,6 @@ class _TabPill extends StatelessWidget {
           style: TextStyle(
             color: active ? Colors.white : const Color(0xFF1E232C),
             fontSize: 11.5,
-            fontFamily: 'Plus Jakarta Sans',
             fontWeight: active ? FontWeight.w900 : FontWeight.w800,
           ),
         ),
@@ -865,7 +850,6 @@ class _MiniStat extends StatelessWidget {
                   style: const TextStyle(
                     color: Color(0xFF6A707C),
                     fontSize: 11.5,
-                    fontFamily: 'Plus Jakarta Sans',
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -877,7 +861,6 @@ class _MiniStat extends StatelessWidget {
                   style: TextStyle(
                     color: valueColor,
                     fontSize: 12.5,
-                    fontFamily: 'Plus Jakarta Sans',
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -923,7 +906,6 @@ class _GhostButton extends StatelessWidget {
               style: const TextStyle(
                 color: kPurple,
                 fontSize: 12.5,
-                fontFamily: 'Plus Jakarta Sans',
                 fontWeight: FontWeight.w900,
               ),
             ),
@@ -970,7 +952,6 @@ class _SheetAction extends StatelessWidget {
                 style: TextStyle(
                   color: color,
                   fontSize: 12.5,
-                  fontFamily: 'Plus Jakarta Sans',
                   fontWeight: FontWeight.w900,
                 ),
               ),
@@ -1016,7 +997,6 @@ class _ChoicePill extends StatelessWidget {
           style: TextStyle(
             color: active ? Colors.white : const Color(0xFF1E232C),
             fontSize: 11.5,
-            fontFamily: 'Plus Jakarta Sans',
             fontWeight: active ? FontWeight.w900 : FontWeight.w800,
           ),
         ),
@@ -1048,7 +1028,6 @@ class _InputField extends StatelessWidget {
           style: const TextStyle(
             color: Color(0xFF6A707C),
             fontSize: 12,
-            fontFamily: 'Plus Jakarta Sans',
             fontWeight: FontWeight.w800,
           ),
         ),
@@ -1061,7 +1040,6 @@ class _InputField extends StatelessWidget {
             hintStyle: const TextStyle(
               color: Color(0xFF9AA4B2),
               fontSize: 12,
-              fontFamily: 'Plus Jakarta Sans',
               fontWeight: FontWeight.w600,
             ),
             filled: true,

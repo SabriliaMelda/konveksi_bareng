@@ -60,7 +60,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       'Profil',
                       style: TextStyle(
                         fontSize: 16,
-                        fontFamily: 'Encode Sans',
                         fontWeight: FontWeight.w700,
                         color: _ink,
                         height: 1.2,
@@ -116,7 +115,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               style: const TextStyle(
                                 color: _ink,
                                 fontSize: 14,
-                                fontFamily: 'Plus Jakarta Sans',
                                 fontWeight: FontWeight.w800,
                               ),
                             ),
@@ -128,7 +126,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               style: const TextStyle(
                                 color: _muted,
                                 fontSize: 12,
-                                fontFamily: 'Plus Jakarta Sans',
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -149,7 +146,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     style: const TextStyle(
                                       color: _muted,
                                       fontSize: 12,
-                                      fontFamily: 'Plus Jakarta Sans',
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
@@ -267,7 +263,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 12.5,
-                              fontFamily: 'Plus Jakarta Sans',
                               fontWeight: FontWeight.w900,
                             ),
                           ),
@@ -448,7 +443,6 @@ class _SectionTitle extends StatelessWidget {
           style: const TextStyle(
             color: Color(0xFF0F172A),
             fontSize: 13,
-            fontFamily: 'Plus Jakarta Sans',
             fontWeight: FontWeight.w900,
           ),
         ),
@@ -458,7 +452,6 @@ class _SectionTitle extends StatelessWidget {
           style: const TextStyle(
             color: Color(0xFF64748B),
             fontSize: 12,
-            fontFamily: 'Plus Jakarta Sans',
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -506,7 +499,6 @@ class _Pill extends StatelessWidget {
           style: TextStyle(
             color: color,
             fontSize: 11.5,
-            fontFamily: 'Plus Jakarta Sans',
             fontWeight: FontWeight.w900,
           ),
         ),
@@ -543,7 +535,6 @@ class _MiniStat extends StatelessWidget {
             style: const TextStyle(
               color: Color(0xFF0F172A),
               fontSize: 14,
-              fontFamily: 'Plus Jakarta Sans',
               fontWeight: FontWeight.w900,
             ),
           ),
@@ -553,7 +544,6 @@ class _MiniStat extends StatelessWidget {
             style: const TextStyle(
               color: Color(0xFF64748B),
               fontSize: 11.5,
-              fontFamily: 'Plus Jakarta Sans',
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -590,7 +580,6 @@ class _InputField extends StatelessWidget {
           style: const TextStyle(
             color: Color(0xFF64748B),
             fontSize: 12,
-            fontFamily: 'Plus Jakarta Sans',
             fontWeight: FontWeight.w800,
           ),
         ),
@@ -604,7 +593,6 @@ class _InputField extends StatelessWidget {
             hintStyle: const TextStyle(
               color: Color(0xFF94A3B8),
               fontSize: 12,
-              fontFamily: 'Plus Jakarta Sans',
               fontWeight: FontWeight.w600,
             ),
             filled: true,
@@ -681,7 +669,6 @@ class _MenuRow extends StatelessWidget {
                           ? const Color(0xFFEF4444)
                           : const Color(0xFF0F172A),
                       fontSize: 12.5,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w900,
                     ),
                   ),
@@ -691,7 +678,6 @@ class _MenuRow extends StatelessWidget {
                     style: const TextStyle(
                       color: Color(0xFF64748B),
                       fontSize: 11.5,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w600,
                     ),
                   ),

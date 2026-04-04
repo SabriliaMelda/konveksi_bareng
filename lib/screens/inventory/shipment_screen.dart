@@ -150,7 +150,6 @@ class _ShipmentScreenState extends State<ShipmentScreen> {
                   style: TextStyle(
                     color: Color(0xFF1E232C),
                     fontSize: 22,
-                    fontFamily: 'Plus Jakarta Sans',
                     fontWeight: FontWeight.w800,
                   ),
                 ),
@@ -359,14 +358,12 @@ class _SearchPill extends StatelessWidget {
                 hintStyle: const TextStyle(
                   color: Color(0xFF6A707C),
                   fontSize: 12,
-                  fontFamily: 'Plus Jakarta Sans',
                   fontWeight: FontWeight.w600,
                 ),
               ),
               style: const TextStyle(
                 color: Color(0xFF010101),
                 fontSize: 12,
-                fontFamily: 'Plus Jakarta Sans',
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -414,7 +411,6 @@ class _FilterChipItem extends StatelessWidget {
           style: TextStyle(
             color: active ? Colors.white : const Color(0xFF1E232C),
             fontSize: 12,
-            fontFamily: 'Plus Jakarta Sans',
             fontWeight: active ? FontWeight.w800 : FontWeight.w600,
           ),
         ),
@@ -482,7 +478,6 @@ class _ShipmentCard extends StatelessWidget {
                               style: const TextStyle(
                                 color: Color(0xFF1E232C),
                                 fontSize: 13.5,
-                                fontFamily: 'Plus Jakarta Sans',
                                 fontWeight: FontWeight.w800,
                               ),
                             ),
@@ -505,7 +500,6 @@ class _ShipmentCard extends StatelessWidget {
                               style: TextStyle(
                                 color: item.statusColor,
                                 fontSize: 10.5,
-                                fontFamily: 'Plus Jakarta Sans',
                                 fontWeight: FontWeight.w800,
                               ),
                             ),
@@ -520,7 +514,6 @@ class _ShipmentCard extends StatelessWidget {
                         style: const TextStyle(
                           color: Color(0xFF6A707C),
                           fontSize: 11.5,
-                          fontFamily: 'Plus Jakarta Sans',
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -530,7 +523,6 @@ class _ShipmentCard extends StatelessWidget {
                         style: const TextStyle(
                           color: Color(0xFF6A707C),
                           fontSize: 11.5,
-                          fontFamily: 'Plus Jakarta Sans',
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -565,7 +557,6 @@ class _ShipmentCard extends StatelessWidget {
                       style: const TextStyle(
                         color: Color(0xFF1E232C),
                         fontSize: 12,
-                        fontFamily: 'Plus Jakarta Sans',
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -589,7 +580,6 @@ class _ShipmentCard extends StatelessWidget {
                         style: TextStyle(
                           color: kPurple,
                           fontSize: 12,
-                          fontFamily: 'Plus Jakarta Sans',
                           fontWeight: FontWeight.w800,
                         ),
                       ),
@@ -611,7 +601,6 @@ class _ShipmentCard extends StatelessWidget {
                     style: TextStyle(
                       color: Color(0xFF6A707C),
                       fontSize: 11.5,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -664,7 +653,6 @@ class _TrackingSheet extends StatelessWidget {
                         style: const TextStyle(
                           color: Color(0xFF1E232C),
                           fontSize: 16,
-                          fontFamily: 'Plus Jakarta Sans',
                           fontWeight: FontWeight.w900,
                         ),
                       ),
@@ -699,7 +687,6 @@ class _TrackingSheet extends StatelessWidget {
                   style: TextStyle(
                     color: Color(0xFF1E232C),
                     fontSize: 13.5,
-                    fontFamily: 'Plus Jakarta Sans',
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -772,7 +759,6 @@ class _InfoTile extends StatelessWidget {
                   style: const TextStyle(
                     color: Color(0xFF1E232C),
                     fontSize: 13.5,
-                    fontFamily: 'Plus Jakarta Sans',
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -784,7 +770,6 @@ class _InfoTile extends StatelessWidget {
                   style: const TextStyle(
                     color: Color(0xFF6A707C),
                     fontSize: 12,
-                    fontFamily: 'Plus Jakarta Sans',
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -804,7 +789,6 @@ class _InfoTile extends StatelessWidget {
               style: TextStyle(
                 color: statusColor,
                 fontSize: 10.5,
-                fontFamily: 'Plus Jakarta Sans',
                 fontWeight: FontWeight.w800,
               ),
             ),
@@ -881,7 +865,6 @@ class _Timeline extends StatelessWidget {
                             style: const TextStyle(
                               color: Color(0xFF1E232C),
                               fontSize: 12.5,
-                              fontFamily: 'Plus Jakarta Sans',
                               fontWeight: FontWeight.w900,
                             ),
                           ),
@@ -891,7 +874,6 @@ class _Timeline extends StatelessWidget {
                             style: const TextStyle(
                               color: Color(0xFF6A707C),
                               fontSize: 12,
-                              fontFamily: 'Plus Jakarta Sans',
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -904,7 +886,6 @@ class _Timeline extends StatelessWidget {
                       style: const TextStyle(
                         color: Color(0xFF6A707C),
                         fontSize: 12,
-                        fontFamily: 'Plus Jakarta Sans',
                         fontWeight: FontWeight.w800,
                       ),
                     ),
@@ -958,7 +939,6 @@ class _EmptyState extends StatelessWidget {
               style: const TextStyle(
                 color: Color(0xFF6A707C),
                 fontSize: 13,
-                fontFamily: 'Plus Jakarta Sans',
                 fontWeight: FontWeight.w600,
                 height: 1.35,
               ),
@@ -981,7 +961,6 @@ class _EmptyState extends StatelessWidget {
                   style: TextStyle(
                     color: kPurple,
                     fontSize: 12.5,
-                    fontFamily: 'Plus Jakarta Sans',
                     fontWeight: FontWeight.w800,
                   ),
                 ),

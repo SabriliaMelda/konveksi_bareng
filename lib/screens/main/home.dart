@@ -97,7 +97,6 @@ class _HeaderSection extends StatelessWidget {
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,
-                  fontFamily: 'Plus Jakarta Sans',
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -156,7 +155,6 @@ class _HeaderSection extends StatelessWidget {
                   style: TextStyle(
                     color: Colors.white70,
                     fontSize: 14,
-                    fontFamily: 'Plus Jakarta Sans',
                   ),
                 ),
               ],
@@ -332,7 +330,6 @@ class _PromoCard extends StatelessWidget {
                         style: const TextStyle(
                           color: Colors.black,
                           fontSize: 20,
-                          fontFamily: 'Plus Jakarta Sans',
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -342,7 +339,6 @@ class _PromoCard extends StatelessWidget {
                         style: const TextStyle(
                           color: Color(0xFF7A7E86),
                           fontSize: 14,
-                          fontFamily: 'Plus Jakarta Sans',
                         ),
                       ),
                     ],
@@ -362,7 +358,6 @@ class _PromoCard extends StatelessWidget {
                       child: const Text(
                         'Check Now',
                         style: TextStyle(
-                          fontFamily: 'Plus Jakarta Sans',
                           fontWeight: FontWeight.w700,
                           fontSize: 13,
                         ),
@@ -553,7 +548,6 @@ class _MenuItem extends StatelessWidget {
               style: TextStyle(
                 color: textColor,
                 fontSize: 12,
-                fontFamily: 'Plus Jakarta Sans',
               ),
             ),
           ],
@@ -588,7 +582,6 @@ class _FeatureGrid extends StatelessWidget {
             style: TextStyle(
               color: Colors.black,
               fontSize: 16,
-              fontFamily: 'Plus Jakarta Sans',
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -653,7 +646,6 @@ class _FeatureGrid extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontSize: 15,
-                          fontFamily: 'Plus Jakarta Sans',
                           fontWeight: FontWeight.w700,
                           color: Colors.black,
                         ),
@@ -693,7 +685,6 @@ class _FlashDealSection extends StatelessWidget {
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -712,7 +703,6 @@ class _FlashDealSection extends StatelessWidget {
                       style: TextStyle(
                         color: Color(0xFFEB6383),
                         fontSize: 12,
-                        fontFamily: 'Plus Jakarta Sans',
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -724,7 +714,6 @@ class _FlashDealSection extends StatelessWidget {
                 style: TextStyle(
                   color: Color(0xFF6B257F),
                   fontSize: 12,
-                  fontFamily: 'Plus Jakarta Sans',
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -827,7 +816,6 @@ class _ProductCard extends StatelessWidget {
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 12,
-                          fontFamily: 'Plus Jakarta Sans',
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -842,7 +830,6 @@ class _ProductCard extends StatelessWidget {
             title,
             style: const TextStyle(
               fontSize: 14,
-              fontFamily: 'Plus Jakarta Sans',
               fontWeight: FontWeight.w700,
               color: Colors.black,
             ),
@@ -851,7 +838,6 @@ class _ProductCard extends StatelessWidget {
             subtitle,
             style: const TextStyle(
               fontSize: 12,
-              fontFamily: 'Plus Jakarta Sans',
               color: Color(0xFF7A7E86),
             ),
           ),
@@ -863,7 +849,6 @@ class _ProductCard extends StatelessWidget {
                 style: const TextStyle(
                   color: Colors.black,
                   fontSize: 16,
-                  fontFamily: 'Plus Jakarta Sans',
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -873,7 +858,6 @@ class _ProductCard extends StatelessWidget {
                 style: const TextStyle(
                   color: Color(0xFF7A7E86),
                   fontSize: 12,
-                  fontFamily: 'Plus Jakarta Sans',
                   decoration: TextDecoration.lineThrough,
                 ),
               ),
@@ -910,7 +894,6 @@ class _SeeAllCard extends StatelessWidget {
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 12,
-                  fontFamily: 'Plus Jakarta Sans',
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -1024,7 +1007,6 @@ class _BottomNavItem extends StatelessWidget {
               style: TextStyle(
                 color: color,
                 fontSize: 12,
-                fontFamily: 'Plus Jakarta Sans',
                 fontWeight: fontWeight,
               ),
             ),
@@ -1106,7 +1088,6 @@ class _AppSidebar extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             color: Colors.white,
-                            fontFamily: 'Plus Jakarta Sans',
                             fontWeight: FontWeight.w800,
                             fontSize: 16,
                           ),
@@ -1130,7 +1111,6 @@ class _AppSidebar extends StatelessWidget {
                                 'Owner Konveksi',
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontFamily: 'Plus Jakarta Sans',
                                   fontWeight: FontWeight.w700,
                                   fontSize: 11,
                                 ),
@@ -1241,7 +1221,6 @@ class _AppSidebar extends StatelessWidget {
                               'Tips: rapikan alur produksi di Kelola Proyek untuk hasil lebih cepat.',
                               style: TextStyle(
                                 color: _muted,
-                                fontFamily: 'Plus Jakarta Sans',
                                 fontSize: 12,
                                 height: 1.3,
                               ),
@@ -1297,7 +1276,6 @@ class _AppSidebar extends StatelessWidget {
         text,
         style: const TextStyle(
           color: _muted,
-          fontFamily: 'Plus Jakarta Sans',
           fontWeight: FontWeight.w800,
           fontSize: 11,
           letterSpacing: 0.8,
@@ -1356,7 +1334,6 @@ class _AppSidebar extends StatelessWidget {
                       label,
                       style: const TextStyle(
                         color: _text,
-                        fontFamily: 'Plus Jakarta Sans',
                         fontWeight: FontWeight.w800,
                         fontSize: 14,
                       ),
@@ -1366,7 +1343,6 @@ class _AppSidebar extends StatelessWidget {
                       subtitle,
                       style: const TextStyle(
                         color: _muted,
-                        fontFamily: 'Plus Jakarta Sans',
                         fontSize: 12,
                       ),
                     ),
@@ -1394,7 +1370,6 @@ class _AppSidebar extends StatelessWidget {
         label: Text(
           label,
           style: const TextStyle(
-            fontFamily: 'Plus Jakarta Sans',
             fontWeight: FontWeight.w800,
           ),
         ),
@@ -1423,7 +1398,6 @@ class _AppSidebar extends StatelessWidget {
         label: Text(
           label,
           style: const TextStyle(
-            fontFamily: 'Plus Jakarta Sans',
             fontWeight: FontWeight.w800,
             color: _main,
           ),

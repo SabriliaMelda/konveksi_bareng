@@ -73,7 +73,6 @@ class _SecurityScreenState extends State<SecurityScreen> {
           Center(
             child: Text(t['title'] as String,
                 style: const TextStyle(
-                    fontFamily: 'Poppins',
                     fontSize: 24,
                     fontWeight: FontWeight.w800,
                     color: kPurple)),
@@ -82,7 +81,6 @@ class _SecurityScreenState extends State<SecurityScreen> {
           Center(
             child: Text(t['subtitle'] as String,
                 style: const TextStyle(
-                    fontFamily: 'Poppins',
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
                     color: kPurpleLight)),
@@ -126,7 +124,6 @@ class _SecurityScreenState extends State<SecurityScreen> {
               ),
               child: Text(t['confirm'] as String,
                   style: const TextStyle(
-                      fontFamily: 'Poppins',
                       color: Colors.white,
                       fontSize: 14,
                       fontWeight: FontWeight.w700)),
@@ -153,7 +150,6 @@ class _SecurityScreenState extends State<SecurityScreen> {
       padding: const EdgeInsets.only(bottom: 6, top: 14),
       child: Text(text,
           style: const TextStyle(
-              fontFamily: 'Poppins',
               fontSize: 12,
               fontWeight: FontWeight.w600,
               color: kPurple)),
@@ -173,7 +169,6 @@ class _SecurityScreenState extends State<SecurityScreen> {
       child: TextField(
         controller: controller,
         style: const TextStyle(
-            fontFamily: 'Poppins',
             color: Color(0xFF2A2A2A),
             fontSize: 13,
             fontWeight: FontWeight.w500),
@@ -202,7 +197,6 @@ class _SecurityScreenState extends State<SecurityScreen> {
           value: value,
           isExpanded: true,
           style: const TextStyle(
-              fontFamily: 'Poppins',
               fontSize: 12,
               color: Color(0xFF2A2A2A)),
           items: List.generate(

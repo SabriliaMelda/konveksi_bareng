@@ -12,7 +12,7 @@ class WelcomeApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: const Color.fromARGB(255, 18, 32, 47),
-      ),
+      ).copyWith(textTheme: ThemeData(fontFamily: 'Poppins').textTheme),
       home: const WelcomeScreen(),
     );
   }
@@ -132,7 +132,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 15,
-                      fontFamily: 'Urbanist',
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -165,7 +164,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     style: TextStyle(
                       color: Color(0xFF1E232C),
                       fontSize: 15,
-                      fontFamily: 'Urbanist',
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -184,7 +182,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   style: TextStyle(
                     color: Color(0xFF6B257F),
                     fontSize: 15,
-                    fontFamily: 'Urbanist',
                     fontWeight: FontWeight.w700,
                     decoration: TextDecoration.underline,
                   ),

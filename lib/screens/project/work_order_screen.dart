@@ -91,7 +91,6 @@ class _WorkOrderScreenState extends State<WorkOrderScreen> {
                         style: TextStyle(
                           color: Colors.black.withOpacity(0.55),
                           fontSize: 14,
-                          fontFamily: 'Plus Jakarta Sans',
                         ),
                       ),
                     )
@@ -174,7 +173,6 @@ class _TopHeader extends StatelessWidget {
             style: const TextStyle(
               color: Color(0xFF121111),
               fontSize: 16,
-              fontFamily: 'Encode Sans',
               fontWeight: FontWeight.w600,
               height: 1.4,
             ),
@@ -263,13 +261,11 @@ class _SearchBox extends StatelessWidget {
                 hintStyle: const TextStyle(
                   color: Color(0xFF8F9BB3),
                   fontSize: 13,
-                  fontFamily: 'Plus Jakarta Sans',
                 ),
               ),
               style: const TextStyle(
                 color: Color(0xFF111111),
                 fontSize: 13,
-                fontFamily: 'Plus Jakarta Sans',
               ),
             ),
           ),
@@ -341,7 +337,6 @@ class _SpkCard extends StatelessWidget {
                     style: const TextStyle(
                       color: Color(0xFF111111),
                       fontSize: 14,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -353,7 +348,6 @@ class _SpkCard extends StatelessWidget {
                     style: const TextStyle(
                       color: Color(0xFF8F9BB3),
                       fontSize: 12,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w400,
                     ),
                   ),
@@ -367,7 +361,6 @@ class _SpkCard extends StatelessWidget {
                         style: const TextStyle(
                           color: Color(0xFF3C3C3C),
                           fontSize: 12,
-                          fontFamily: 'Plus Jakarta Sans',
                         ),
                       ),
                     ],
@@ -424,7 +417,6 @@ class _SpkCard extends StatelessWidget {
         style: TextStyle(
           color: fg,
           fontSize: 11,
-          fontFamily: 'Plus Jakarta Sans',
           fontWeight: FontWeight.w700,
         ),
       ),
@@ -493,7 +485,6 @@ class _CreateSpkSheetState extends State<_CreateSpkSheet> {
                   style: TextStyle(
                     color: Color(0xFF111111),
                     fontSize: 14,
-                    fontFamily: 'Plus Jakarta Sans',
                     fontWeight: FontWeight.w800,
                   ),
                 ),
@@ -549,7 +540,6 @@ class _CreateSpkSheetState extends State<_CreateSpkSheet> {
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 14,
-                        fontFamily: 'Plus Jakarta Sans',
                         fontWeight: FontWeight.w800,
                       ),
                     ),
@@ -575,7 +565,6 @@ class _InputLabel extends StatelessWidget {
       style: const TextStyle(
         color: Colors.black,
         fontSize: 12,
-        fontFamily: 'Plus Jakarta Sans',
         fontWeight: FontWeight.w700,
       ),
     );
@@ -607,13 +596,11 @@ class _TextFieldBox extends StatelessWidget {
           hintStyle: const TextStyle(
             color: Color(0xFF8F9BB3),
             fontSize: 12,
-            fontFamily: 'Plus Jakarta Sans',
           ),
         ),
         style: const TextStyle(
           color: Color(0xFF111111),
           fontSize: 12,
-          fontFamily: 'Plus Jakarta Sans',
           fontWeight: FontWeight.w600,
         ),
       ),
@@ -656,7 +643,6 @@ class _StatusDropdown extends StatelessWidget {
           style: const TextStyle(
             color: Color(0xFF111111),
             fontSize: 12,
-            fontFamily: 'Plus Jakarta Sans',
             fontWeight: FontWeight.w600,
           ),
         ),
