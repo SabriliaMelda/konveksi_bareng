@@ -2,101 +2,126 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 
 class AuthService {
-  final Dio _dio = Dio(
+  AuthService._();
+
+  static final Dio _dio = Dio(
     BaseOptions(
       baseUrl: 'https://www.xsoftco.com/api-auth',
       connectTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(seconds: 30),
-      headers: {'Accept': 'application/json'},
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
       followRedirects: false,
       validateStatus: (status) => status != null && status < 500,
     ),
   );
 
-  Map<String, dynamic> _asMap(dynamic data) {
-    // 1) Kalau sudah Map
+  static Map<String, dynamic> _asMap(dynamic data) {
     if (data is Map<String, dynamic>) return data;
     if (data is Map) return Map<String, dynamic>.from(data);
-
-    // 2) Kalau String, coba decode JSON
     if (data is String) {
       final s = data.trim();
-
-      // kalau HTML / teks biasa
       if (!s.startsWith('{') && !s.startsWith('[')) {
-        return {
-          'success': false,
-          'message': s.isEmpty ? 'Response kosong dari server' : s,
-        };
+        return {'success': false, 'message': s.isEmpty ? 'Empty response' : s};
       }
-
       try {
         final decoded = jsonDecode(s);
         if (decoded is Map) return Map<String, dynamic>.from(decoded);
-        return {
-          'success': true,
-          'data': decoded,
-        };
+        return {'success': true, 'data': decoded};
       } catch (_) {
-        return {
-          'success': false,
-          'message': 'Response String tapi bukan JSON valid',
-          'raw': s,
-        };
+        return {'success': false, 'message': 'Invalid JSON', 'raw': s};
       }
     }
-
-    // 3) Tipe lain
-    return {
-      'success': false,
-      'message': 'Format response tidak didukung',
-      'raw': data,
-    };
+    return {'success': false, 'message': 'Unsupported response format'};
   }
 
-  Future<Map<String, dynamic>> register({
+  // ── Request OTP ──
+
+  static Future<({bool ok, int statusCode, String? message})> requestOtp(
+      String email) async {
+    try {
+      final res = await _dio.post(
+        '/request-otp.php',
+        data: {'email': email},
+        options: Options(responseType: ResponseType.plain),
+      );
+      final data = _asMap(res.data);
+      return (
+        ok: res.statusCode != null &&
+            res.statusCode! >= 200 &&
+            res.statusCode! < 300,
+        statusCode: res.statusCode ?? 500,
+        message: data['message'] as String?,
+      );
+    } on DioException catch (e) {
+      return (
+        ok: false,
+        statusCode: e.response?.statusCode ?? 0,
+        message: 'Network error',
+      );
+    }
+  }
+
+  // ── Verify OTP ──
+
+  static Future<
+      ({bool ok, int statusCode, String? token, String? message})> verifyOtp({
+    required String email,
+    required String otp,
+  }) async {
+    try {
+      final res = await _dio.post(
+        '/verify-otp.php',
+        data: {'email': email, 'otp': otp},
+        options: Options(responseType: ResponseType.plain),
+      );
+      final data = _asMap(res.data);
+      return (
+        ok: res.statusCode != null &&
+            res.statusCode! >= 200 &&
+            res.statusCode! < 300,
+        statusCode: res.statusCode ?? 500,
+        token: data['token'] as String?,
+        message: data['message'] as String?,
+      );
+    } on DioException catch (e) {
+      return (
+        ok: false,
+        statusCode: e.response?.statusCode ?? 0,
+        token: null,
+        message: 'Network error',
+      );
+    }
+  }
+
+  // ── Register ──
+
+  static Future<({bool ok, String? message})> register({
     required String name,
-    String? phone,
-    String? email,
-    required String password,
-    required String passwordConfirmation,
-    required bool agreeTerms,
+    required String email,
+    required String phone,
   }) async {
-    final response = await _dio.post(
-      '/register.php',
-      data: {
-        'name': name,
-        'phone': phone,
-        'email': email,
-        'password': password,
-        'password_confirmation': passwordConfirmation,
-        'agree_terms': agreeTerms,
-      },
-      options: Options(
-        responseType: ResponseType.plain, // ✅ biar aman kalau server balas string
-        contentType: Headers.jsonContentType,
-      ),
-    );
-
-    return _asMap(response.data);
-  }
-
-  Future<Map<String, dynamic>> login({
-    required String login,
-    required String password,
-  }) async {
-    final response = await _dio.post(
-      '/login.php',
-      data: {
-        'login': login,
-        'password': password,
-      },
-      options: Options(
-        responseType: ResponseType.plain, // ✅ biar aman kalau server balas string
-        contentType: Headers.jsonContentType,
-      ),
-    );
-
-    return _asMap(response.data);
+    try {
+      final res = await _dio.post(
+        '/register.php',
+        data: {
+          'name': name,
+          'email': email.toLowerCase().trim(),
+          'phone': phone,
+        },
+        options: Options(responseType: ResponseType.plain),
+      );
+      final data = _asMap(res.data);
+      return (
+        ok: res.statusCode != null &&
+            res.statusCode! >= 200 &&
+            res.statusCode! < 300,
+        message: data['message'] as String?,
+      );
+    } on DioException {
+      return (ok: false, message: 'Network error');
+    }
   }
 }

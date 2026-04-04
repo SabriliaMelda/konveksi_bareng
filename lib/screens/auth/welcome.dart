@@ -1,11 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/screens/auth/login.dart';
-import 'package:konveksi_bareng/screens/auth/register.dart';
-
-void main() {
-  runApp(const WelcomeApp());
-}
+import 'login.dart';
+import 'register.dart';
 
 class WelcomeApp extends StatelessWidget {
   const WelcomeApp({super.key});
@@ -30,7 +26,6 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
-  // ====== LIST GAMBAR SLIDER ATAS ======
   final List<String> _sliderImages = [
     'assets/images/baju.png',
     'assets/images/logo.png',
@@ -44,21 +39,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   void initState() {
     super.initState();
-
-    // ===== AUTO SLIDE SETIAP 1 DETIK =====
-    _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
-      int nextPage;
-
-      if (_currentPage < _sliderImages.length - 1) {
-        nextPage = _currentPage + 1;
-      } else {
-        nextPage = 0; // balik ke halaman pertama
-      }
-
-      setState(() {
-        _currentPage = nextPage;
-      });
-
+    _timer = Timer.periodic(const Duration(seconds: 3), (_) {
+      final nextPage = (_currentPage + 1) % _sliderImages.length;
+      setState(() => _currentPage = nextPage);
       _pageController.animateToPage(
         nextPage,
         duration: const Duration(milliseconds: 300),
@@ -86,7 +69,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         color: Colors.white,
         child: Stack(
           children: [
-            // ===== TOP IMAGE SLIDER =====
+            // Image slider
             Positioned(
               top: screenHeight * 0.10,
               left: 0,
@@ -96,13 +79,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 child: PageView.builder(
                   controller: _pageController,
                   itemCount: _sliderImages.length,
-                  onPageChanged: (index) {
-                    setState(() {
-                      _currentPage = index;
-                    });
-                    print('Halaman slider: ${index + 1}');
-                  },
-                  itemBuilder: (context, index) {
+                  onPageChanged: (index) =>
+                      setState(() => _currentPage = index),
+                  itemBuilder: (_, index) {
                     return Center(
                       child: Image.asset(
                         _sliderImages[index],
@@ -114,7 +93,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
             ),
 
-            // ===== DOT INDICATOR UNGU =====
+            // Dot indicators
             Positioned(
               top: screenHeight * 0.65,
               left: 0,
@@ -125,23 +104,21 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   _sliderImages.length,
                   (index) => Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 3),
-                    child: Dot(isActive: _currentPage == index),
+                    child: _Dot(isActive: _currentPage == index),
                   ),
                 ),
               ),
             ),
 
-            // ===== LOGIN BUTTON =====
+            // Login button
             Positioned(
               left: 22,
               bottom: screenHeight * 0.22,
               child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginScreen()),
-                  );
-                },
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const LoginScreen()),
+                ),
                 child: Container(
                   width: screenWidth - 44,
                   height: 56,
@@ -163,19 +140,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
             ),
 
-            // ===== REGISTER BUTTON =====
+            // Register button
             Positioned(
               left: 22,
               bottom: screenHeight * 0.12,
               child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => RegisterScreen(), // <-- KE REGISTER
-                    ),
-                  );
-                },
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const RegisterScreen()),
+                ),
                 child: Container(
                   width: screenWidth - 44,
                   height: 56,
@@ -200,7 +173,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
             ),
 
-            // ===== CONTINUE AS GUEST =====
+            // Continue as guest
             Positioned(
               left: 0,
               right: 0,
@@ -225,10 +198,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   }
 }
 
-class Dot extends StatelessWidget {
+class _Dot extends StatelessWidget {
   final bool isActive;
 
-  const Dot({super.key, this.isActive = false});
+  const _Dot({this.isActive = false});
 
   @override
   Widget build(BuildContext context) {
@@ -238,8 +211,8 @@ class Dot extends StatelessWidget {
       height: 8,
       decoration: ShapeDecoration(
         color: isActive
-            ? const Color(0xFF6B257F) // ungu kalau aktif
-            : const Color(0xFFD4DBE1), // abu kalau non-aktif
+            ? const Color(0xFF6B257F)
+            : const Color(0xFFD4DBE1),
         shape: const OvalBorder(),
       ),
     );
