@@ -5,6 +5,7 @@ import '../../services/storage_service.dart';
 import '../../widgets/auth_background.dart';
 import '../main/home.dart';
 import 'login.dart';
+import 'security_screen.dart';
 
 const _strings = {
   'id': {
@@ -55,6 +56,7 @@ class VerificationScreen extends StatefulWidget {
 
 class _VerificationScreenState extends State<VerificationScreen> {
   String _email = '';
+  String _mode = 'login'; // 'login' or 'register'
   final List<TextEditingController> _otpControllers =
       List.generate(4, (_) => TextEditingController());
   final List<FocusNode> _focusNodes = List.generate(4, (_) => FocusNode());
@@ -69,14 +71,15 @@ class _VerificationScreenState extends State<VerificationScreen> {
   @override
   void initState() {
     super.initState();
-    _loadEmail();
+    _loadData();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _focusNodes[0].requestFocus();
     });
   }
 
-  Future<void> _loadEmail() async {
+  Future<void> _loadData() async {
     final email = await StorageService.getItem('pending_email');
+    final mode = await StorageService.getItem('pending_mode');
     if (email == null && mounted) {
       Navigator.pushReplacement(
         context,
@@ -84,7 +87,10 @@ class _VerificationScreenState extends State<VerificationScreen> {
       );
       return;
     }
-    setState(() => _email = email ?? '');
+    setState(() {
+      _email = email ?? '';
+      _mode = mode ?? 'login';
+    });
   }
 
   String get _code => _otpControllers.map((c) => c.text).join();
@@ -132,16 +138,29 @@ class _VerificationScreenState extends State<VerificationScreen> {
       _loading = true;
     });
     try {
-      final result = await AuthService.requestOtp(_email);
-      setState(() {
-        if (!result.ok) {
-          _error = result.statusCode == 429
-              ? t['resendWait']!
-              : (result.message ?? t['errorNetwork']!);
-        } else {
-          _info = t['resendInfo']!;
-        }
-      });
+      if (_mode == 'register') {
+        final result = await AuthService.resendRegisterOtp(_email);
+        setState(() {
+          if (!result.ok) {
+            _error = result.statusCode == 429
+                ? t['resendWait']!
+                : (result.message ?? t['errorNetwork']!);
+          } else {
+            _info = t['resendInfo']!;
+          }
+        });
+      } else {
+        final result = await AuthService.requestOtp(_email);
+        setState(() {
+          if (!result.ok) {
+            _error = result.statusCode == 429
+                ? t['resendWait']!
+                : (result.message ?? t['errorNetwork']!);
+          } else {
+            _info = t['resendInfo']!;
+          }
+        });
+      }
     } catch (_) {
       setState(() => _error = t['errorNetwork']!);
     } finally {
@@ -157,30 +176,61 @@ class _VerificationScreenState extends State<VerificationScreen> {
     setState(() => _loading = true);
 
     try {
-      final result = await AuthService.verifyOtp(email: _email, otp: _code);
-      if (!result.ok) {
-        setState(() {
-          if (result.statusCode == 429) {
-            _error = t['errorTooMany']!;
-          } else if (result.message?.contains('kadaluarsa') ?? false) {
-            _error = t['errorExpired']!;
-          } else {
-            _error = t['errorOtp']!;
-          }
-        });
-        if (mounted) setState(() => _loading = false);
-        return;
-      }
-      if (result.token != null) {
-        await StorageService.setItem('auth_token', result.token!);
-      }
-      await StorageService.deleteItem('pending_email');
-      if (mounted) {
-        setState(() => _loading = false);
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const HomeScreen()),
-        );
+      if (_mode == 'register') {
+        final result = await AuthService.verifyRegisterOtp(
+            email: _email, otp: _code);
+        if (!result.ok) {
+          setState(() {
+            if (result.statusCode == 429) {
+              _error = t['errorTooMany']!;
+            } else if (result.message?.contains('kadaluarsa') ?? false) {
+              _error = t['errorExpired']!;
+            } else {
+              _error = t['errorOtp']!;
+            }
+          });
+          if (mounted) setState(() => _loading = false);
+          return;
+        }
+        // Simpan email untuk security screen
+        await StorageService.setItem('security_email', _email);
+        await StorageService.deleteItem('pending_email');
+        await StorageService.deleteItem('pending_mode');
+        if (mounted) {
+          setState(() => _loading = false);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const SecurityScreen()),
+          );
+        }
+      } else {
+        final result =
+            await AuthService.verifyOtp(email: _email, otp: _code);
+        if (!result.ok) {
+          setState(() {
+            if (result.statusCode == 429) {
+              _error = t['errorTooMany']!;
+            } else if (result.message?.contains('kadaluarsa') ?? false) {
+              _error = t['errorExpired']!;
+            } else {
+              _error = t['errorOtp']!;
+            }
+          });
+          if (mounted) setState(() => _loading = false);
+          return;
+        }
+        if (result.token != null) {
+          await StorageService.setItem('auth_token', result.token!);
+        }
+        await StorageService.deleteItem('pending_email');
+        await StorageService.deleteItem('pending_mode');
+        if (mounted) {
+          setState(() => _loading = false);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const HomeScreen()),
+          );
+        }
       }
     } catch (_) {
       setState(() => _error = t['errorNetwork']!);

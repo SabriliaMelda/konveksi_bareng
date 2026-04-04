@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../services/auth_service.dart';
+import '../../services/storage_service.dart';
 import '../../widgets/auth_background.dart';
 import 'login.dart';
+import 'verification.dart';
 
 const _strings = {
   'id': {
@@ -57,7 +59,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String _lang = 'id';
   String _error = '';
   bool _loading = false;
-  bool _success = false;
 
   Map<String, String> get t => _strings[_lang]!;
 
@@ -87,7 +88,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
       if (!result.ok) {
         setState(() => _error = result.message ?? 'Gagal membuat akun');
       } else {
-        setState(() => _success = true);
+        // Simpan email dan mode untuk verification screen
+        await StorageService.setItem(
+            'pending_email', _emailCtrl.text.toLowerCase().trim());
+        await StorageService.setItem('pending_mode', 'register');
+        if (mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const VerificationScreen()),
+          );
+        }
+        return;
       }
     } catch (_) {
       setState(() => _error = t['errorServer']!);
@@ -106,63 +117,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_success) {
-      return AuthBackground(
-        child: Column(
-          children: [
-            Container(
-              width: 64,
-              height: 64,
-              decoration: const BoxDecoration(
-                color: Color(0xFF10B981),
-                shape: BoxShape.circle,
-              ),
-              child: const Center(
-                child: Text('\u2713',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 28,
-                        fontWeight: FontWeight.w700)),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Text(t['successTitle']!,
-                style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w800,
-                    color: kPurple)),
-            const SizedBox(height: 4),
-            Text(t['successSubtitle']!,
-                style: const TextStyle(
-                    fontSize: 12,
-                    color: kPurpleLight)),
-            const SizedBox(height: 24),
-            SizedBox(
-              width: double.infinity,
-              height: 42,
-              child: ElevatedButton(
-                onPressed: () => Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => const LoginScreen()),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: kPurpleButton,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                ),
-                child: Text(t['goToLogin']!,
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700)),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
     return AuthBackground(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

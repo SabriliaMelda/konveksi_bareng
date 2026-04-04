@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../services/auth_service.dart';
+import '../../services/storage_service.dart';
 import '../../widgets/auth_background.dart';
+import 'login.dart';
 
 const _strings = {
   'id': {
@@ -11,6 +14,14 @@ const _strings = {
     'label2': 'Pertanyaan keamanan 2:',
     'answer2': 'Jawaban keamanan 2:',
     'confirm': 'Konfirmasi',
+    'saving': 'Menyimpan...',
+    'errorFill': 'Harap isi semua jawaban.',
+    'errorSame': 'Pertanyaan keamanan tidak boleh sama.',
+    'errorServer': 'Tidak dapat terhubung ke server.',
+    'successTitle': 'Akun berhasil dibuat!',
+    'successSubtitle':
+        'Akun Anda telah berhasil dibuat dan pertanyaan keamanan tersimpan.',
+    'goToLogin': 'Masuk ke Login',
     'questions': [
       'Apa nama tengah ayah/ibu Anda?',
       'Apa nama panggilan masa kecil Anda?',
@@ -29,6 +40,14 @@ const _strings = {
     'label2': 'Security question 2:',
     'answer2': 'Security answer 2:',
     'confirm': 'Confirm',
+    'saving': 'Saving...',
+    'errorFill': 'Please fill in all answers.',
+    'errorSame': 'Security questions must be different.',
+    'errorServer': 'Cannot connect to server.',
+    'successTitle': 'Account created!',
+    'successSubtitle':
+        'Your account has been created and security questions saved.',
+    'goToLogin': 'Go to Login',
     'questions': [
       "What is your father/mother's middle name?",
       'What was your childhood nickname?',
@@ -54,8 +73,67 @@ class _SecurityScreenState extends State<SecurityScreen> {
   final _answer1Ctrl = TextEditingController();
   final _answer2Ctrl = TextEditingController();
 
+  String _error = '';
+  bool _loading = false;
+  bool _success = false;
+  String _email = '';
+
   Map<String, dynamic> get t => _strings[_lang]!;
   List<String> get questions => List<String>.from(t['questions'] as List);
+
+  @override
+  void initState() {
+    super.initState();
+    _loadEmail();
+  }
+
+  Future<void> _loadEmail() async {
+    final email = await StorageService.getItem('security_email');
+    if (email == null && mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const LoginScreen()),
+      );
+      return;
+    }
+    setState(() => _email = email ?? '');
+  }
+
+  Future<void> _handleSubmit() async {
+    if (_answer1Ctrl.text.trim().isEmpty || _answer2Ctrl.text.trim().isEmpty) {
+      setState(() => _error = t['errorFill'] as String);
+      return;
+    }
+    if (_question1Index == _question2Index) {
+      setState(() => _error = t['errorSame'] as String);
+      return;
+    }
+
+    setState(() {
+      _loading = true;
+      _error = '';
+    });
+
+    try {
+      final result = await AuthService.saveSecurityQuestions(
+        email: _email,
+        question1: questions[_question1Index],
+        answer1: _answer1Ctrl.text.trim(),
+        question2: questions[_question2Index],
+        answer2: _answer2Ctrl.text.trim(),
+      );
+      if (!result.ok) {
+        setState(() => _error = result.message ?? 'Gagal menyimpan');
+      } else {
+        await StorageService.deleteItem('security_email');
+        setState(() => _success = true);
+      }
+    } catch (_) {
+      setState(() => _error = t['errorServer'] as String);
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
 
   @override
   void dispose() {
@@ -66,6 +144,62 @@ class _SecurityScreenState extends State<SecurityScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_success) {
+      return AuthBackground(
+        child: Column(
+          children: [
+            Container(
+              width: 64,
+              height: 64,
+              decoration: const BoxDecoration(
+                color: Color(0xFF10B981),
+                shape: BoxShape.circle,
+              ),
+              child: const Center(
+                child: Text('\u2713',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 28,
+                        fontWeight: FontWeight.w700)),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(t['successTitle'] as String,
+                style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w800,
+                    color: kPurple)),
+            const SizedBox(height: 4),
+            Text(t['successSubtitle'] as String,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12, color: kPurpleLight)),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              height: 42,
+              child: ElevatedButton(
+                onPressed: () => Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => const LoginScreen()),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: kPurpleButton,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
+                ),
+                child: Text(t['goToLogin'] as String,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700)),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return AuthBackground(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,6 +220,9 @@ class _SecurityScreenState extends State<SecurityScreen> {
                     color: kPurpleLight)),
           ),
           const SizedBox(height: 24),
+
+          // Error
+          AuthErrorBox(message: _error),
 
           // Question 1
           _buildLabel(t['label1'] as String),
@@ -114,19 +251,24 @@ class _SecurityScreenState extends State<SecurityScreen> {
             width: double.infinity,
             height: 42,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: _loading ? null : _handleSubmit,
               style: ElevatedButton.styleFrom(
                 backgroundColor: kPurpleButton,
+                disabledBackgroundColor: kPurpleButton.withOpacity(0.7),
                 elevation: 0,
                 padding: EdgeInsets.zero,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8)),
               ),
-              child: Text(t['confirm'] as String,
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700)),
+              child: Text(
+                _loading
+                    ? t['saving'] as String
+                    : t['confirm'] as String,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700),
+              ),
             ),
           ),
 
@@ -137,6 +279,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
               _lang = code;
               _question1Index = 0;
               _question2Index = 1;
+              _error = '';
             }),
             helpLabel: t['help'] as String,
           ),
@@ -168,6 +311,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
       alignment: Alignment.center,
       child: TextField(
         controller: controller,
+        onChanged: (_) => setState(() => _error = ''),
         style: const TextStyle(
             color: Color(0xFF2A2A2A),
             fontSize: 13,

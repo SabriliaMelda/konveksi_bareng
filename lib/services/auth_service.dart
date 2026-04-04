@@ -50,6 +50,9 @@ class AuthService {
     return {'success': false, 'message': 'Unsupported response format'};
   }
 
+  static bool _isOk(int? statusCode) =>
+      statusCode != null && statusCode >= 200 && statusCode < 300;
+
   // ── Request OTP ──
 
   static Future<({bool ok, int statusCode, String? message})> requestOtp(
@@ -62,9 +65,7 @@ class AuthService {
       );
       final data = _asMap(res.data);
       return (
-        ok: res.statusCode != null &&
-            res.statusCode! >= 200 &&
-            res.statusCode! < 300,
+        ok: _isOk(res.statusCode),
         statusCode: res.statusCode ?? 500,
         message: data['message'] as String?,
       );
@@ -92,9 +93,7 @@ class AuthService {
       );
       final data = _asMap(res.data);
       return (
-        ok: res.statusCode != null &&
-            res.statusCode! >= 200 &&
-            res.statusCode! < 300,
+        ok: _isOk(res.statusCode),
         statusCode: res.statusCode ?? 500,
         token: data['token'] as String?,
         message: data['message'] as String?,
@@ -128,9 +127,140 @@ class AuthService {
       );
       final data = _asMap(res.data);
       return (
-        ok: res.statusCode != null &&
-            res.statusCode! >= 200 &&
-            res.statusCode! < 300,
+        ok: _isOk(res.statusCode),
+        message: data['message'] as String?,
+      );
+    } on DioException {
+      return (ok: false, message: 'Network error');
+    }
+  }
+
+  // ── Verify Register OTP ──
+
+  static Future<({bool ok, int statusCode, String? message})>
+      verifyRegisterOtp({
+    required String email,
+    required String otp,
+  }) async {
+    try {
+      final res = await _dio.post(
+        '/auth/verify-register-otp',
+        data: {'email': email, 'otp': otp},
+        options: Options(responseType: ResponseType.plain),
+      );
+      final data = _asMap(res.data);
+      return (
+        ok: _isOk(res.statusCode),
+        statusCode: res.statusCode ?? 500,
+        message: data['message'] as String?,
+      );
+    } on DioException catch (e) {
+      return (
+        ok: false,
+        statusCode: e.response?.statusCode ?? 0,
+        message: 'Network error',
+      );
+    }
+  }
+
+  // ── Resend Register OTP ──
+
+  static Future<({bool ok, int statusCode, String? message})>
+      resendRegisterOtp(String email) async {
+    try {
+      final res = await _dio.post(
+        '/auth/resend-register-otp',
+        data: {'email': email},
+        options: Options(responseType: ResponseType.plain),
+      );
+      final data = _asMap(res.data);
+      return (
+        ok: _isOk(res.statusCode),
+        statusCode: res.statusCode ?? 500,
+        message: data['message'] as String?,
+      );
+    } on DioException catch (e) {
+      return (
+        ok: false,
+        statusCode: e.response?.statusCode ?? 0,
+        message: 'Network error',
+      );
+    }
+  }
+
+  // ── Security Questions ──
+
+  static Future<({bool ok, String? message})> saveSecurityQuestions({
+    required String email,
+    required String question1,
+    required String answer1,
+    required String question2,
+    required String answer2,
+  }) async {
+    try {
+      final res = await _dio.post(
+        '/auth/security-questions',
+        data: {
+          'email': email,
+          'question1': question1,
+          'answer1': answer1,
+          'question2': question2,
+          'answer2': answer2,
+        },
+        options: Options(responseType: ResponseType.plain),
+      );
+      final data = _asMap(res.data);
+      return (
+        ok: _isOk(res.statusCode),
+        message: data['message'] as String?,
+      );
+    } on DioException {
+      return (ok: false, message: 'Network error');
+    }
+  }
+
+  static Future<
+          ({bool ok, List<Map<String, dynamic>> questions, String? message})>
+      getSecurityQuestions(String email) async {
+    try {
+      final res = await _dio.get(
+        '/auth/security-questions',
+        queryParameters: {'email': email},
+        options: Options(responseType: ResponseType.plain),
+      );
+      final data = _asMap(res.data);
+      final questions = (data['questions'] as List?)
+              ?.map((q) => q as Map<String, dynamic>)
+              .toList() ??
+          [];
+      return (
+        ok: _isOk(res.statusCode),
+        questions: questions,
+        message: data['message'] as String?,
+      );
+    } on DioException {
+      return (ok: false, questions: <Map<String, dynamic>>[], message: 'Network error');
+    }
+  }
+
+  static Future<({bool ok, String? message})> verifySecurityAnswers({
+    required String email,
+    required String answer1,
+    required String answer2,
+  }) async {
+    try {
+      final res = await _dio.post(
+        '/auth/verify-security-answers',
+        data: {
+          'email': email,
+          'answer1': answer1,
+          'answer2': answer2,
+        },
+        options: Options(responseType: ResponseType.plain),
+      );
+      final data = _asMap(res.data);
+      return (
+        ok: _isOk(res.statusCode),
         message: data['message'] as String?,
       );
     } on DioException {
