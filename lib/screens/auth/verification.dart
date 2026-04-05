@@ -1,3 +1,6 @@
+import 'dart:io' show Platform;
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../services/auth_service.dart';
@@ -91,6 +94,29 @@ class _VerificationScreenState extends State<VerificationScreen> {
       _email = email ?? '';
       _mode = mode ?? 'login';
     });
+  }
+
+  Future<Map<String, dynamic>?> _getDeviceInfo() async {
+    if (kIsWeb) return null;
+    final plugin = DeviceInfoPlugin();
+    if (Platform.isAndroid) {
+      final info = await plugin.androidInfo;
+      return {
+        'deviceName': '${info.brand} ${info.model}',
+        'deviceType': info.isPhysicalDevice ? 'Phone' : 'Emulator',
+        'osName': 'Android',
+        'osVersion': info.version.release,
+      };
+    } else if (Platform.isIOS) {
+      final info = await plugin.iosInfo;
+      return {
+        'deviceName': info.name,
+        'deviceType': info.isPhysicalDevice ? 'Phone' : 'Simulator',
+        'osName': 'iOS',
+        'osVersion': info.systemVersion,
+      };
+    }
+    return null;
   }
 
   String get _code => _otpControllers.map((c) => c.text).join();
@@ -204,8 +230,9 @@ class _VerificationScreenState extends State<VerificationScreen> {
           );
         }
       } else {
+        final deviceInfo = await _getDeviceInfo();
         final result =
-            await AuthService.verifyOtp(email: _email, otp: _code);
+            await AuthService.verifyOtp(email: _email, otp: _code, deviceInfo: deviceInfo);
         if (!result.ok) {
           setState(() {
             if (result.statusCode == 429) {

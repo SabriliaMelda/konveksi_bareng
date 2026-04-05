@@ -84,19 +84,22 @@ class AuthService {
       ({bool ok, int statusCode, String? token, String? message})> verifyOtp({
     required String email,
     required String otp,
+    Map<String, dynamic>? deviceInfo,
   }) async {
     try {
+      final body = <String, dynamic>{'email': email, 'otp': otp};
+      if (deviceInfo != null) body['deviceInfo'] = deviceInfo;
       final res = await _dio.post(
         '/auth/verify-otp',
-        data: {'email': email, 'otp': otp},
+        data: body,
         options: Options(responseType: ResponseType.plain),
       );
-      final data = _asMap(res.data);
+      final parsed = _asMap(res.data);
       return (
         ok: _isOk(res.statusCode),
         statusCode: res.statusCode ?? 500,
-        token: data['token'] as String?,
-        message: data['message'] as String?,
+        token: parsed['token'] as String?,
+        message: parsed['message'] as String?,
       );
     } on DioException catch (e) {
       return (
@@ -276,6 +279,39 @@ class AuthService {
       );
     } on DioException {
       return (ok: false, message: 'Network error');
+    }
+  }
+
+  // ── Check Session (untuk Session Guard) ──
+
+  static Future<int> checkSession(String token) async {
+    try {
+      final res = await _dio.get(
+        '/auth/me',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+          responseType: ResponseType.plain,
+        ),
+      );
+      return res.statusCode ?? 500;
+    } on DioException catch (e) {
+      return e.response?.statusCode ?? 0;
+    }
+  }
+
+  // ── Logout ──
+
+  static Future<bool> logout(String token) async {
+    try {
+      final res = await _dio.post(
+        '/auth/logout',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+      return _isOk(res.statusCode);
+    } on DioException {
+      return false;
     }
   }
 }

@@ -18,9 +18,40 @@ import 'package:konveksi_bareng/screens/finance/finance_screen.dart';
 import 'package:konveksi_bareng/screens/schedule/schedule_screen.dart';
 import 'package:konveksi_bareng/screens/production/pattern_screen.dart';
 import 'package:konveksi_bareng/screens/worker/worker_screen.dart';
+import 'package:konveksi_bareng/screens/auth/login.dart';
+import 'package:konveksi_bareng/services/session_guard.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final _sessionGuard = SessionGuard();
+
+  @override
+  void initState() {
+    super.initState();
+    _sessionGuard.start(
+      onExpired: () {
+        if (mounted) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (_) => const LoginScreen()),
+            (_) => false,
+          );
+        }
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _sessionGuard.stop();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
