@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'auth_service.dart';
-import 'storage_service.dart';
+import '../services/auth_service.dart';
+import '../services/storage_service.dart';
 
 /// Polls /auth/me every 15 seconds.
 /// If 401 -> clears token and calls [onSessionExpired].

@@ -1,25 +1,13 @@
 import 'dart:convert';
-import 'dart:io' show Platform;
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:konveksi_bareng/config/api_config.dart';
 
 class AuthService {
   AuthService._();
 
-  static String get _baseUrl {
-    // Web/Desktop → localhost
-    if (kIsWeb) return 'http://localhost:4001';
-    // Android Emulator → 10.0.2.2 (alias ke host localhost)
-    if (Platform.isAndroid) return 'http://10.0.2.2:4001';
-    // iOS Simulator → localhost
-    if (Platform.isIOS) return 'http://localhost:4001';
-    // Desktop (Windows/macOS/Linux)
-    return 'http://localhost:4001';
-  }
-
   static final Dio _dio = Dio(
     BaseOptions(
-      baseUrl: _baseUrl,
+      baseUrl: ApiConfig.baseUrl,
       connectTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(seconds: 30),
       headers: {

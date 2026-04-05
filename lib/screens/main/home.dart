@@ -19,7 +19,7 @@ import 'package:konveksi_bareng/screens/schedule/schedule_screen.dart';
 import 'package:konveksi_bareng/screens/production/pattern_screen.dart';
 import 'package:konveksi_bareng/screens/worker/worker_screen.dart';
 import 'package:konveksi_bareng/screens/auth/login.dart';
-import 'package:konveksi_bareng/services/session_guard.dart';
+import 'package:konveksi_bareng/providers/session_guard.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

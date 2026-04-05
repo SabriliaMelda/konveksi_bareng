@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:konveksi_bareng/config/api_config.dart';
 import 'package:konveksi_bareng/screens/auth/welcome.dart';
 
-void main() {
+Future<void> main() async {
+  await dotenv.load(fileName: ".env");
+  await ApiConfig.init();
   runApp(const MyApp());
 }
 
