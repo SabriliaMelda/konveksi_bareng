@@ -93,39 +93,85 @@ Page<void> _fadePage(Widget child, GoRouterState state) {
 
 final GoRouter appRouter = GoRouter(
   navigatorKey: rootNavigatorKey,
-  initialLocation: '/welcome',
+  initialLocation: '/home',
   routes: [
     // ── Auth routes ──
-    GoRoute(path: '/welcome', pageBuilder: (_, s) => _fadePage(const WelcomeScreen(), s)),
-    GoRoute(path: '/login', pageBuilder: (_, s) => _fadePage(const LoginScreen(), s)),
-    GoRoute(path: '/register', pageBuilder: (_, s) => _fadePage(const RegisterScreen(), s)),
-    GoRoute(path: '/verification', pageBuilder: (_, s) => _fadePage(const VerificationScreen(), s)),
-    GoRoute(path: '/find-account', pageBuilder: (_, s) => _fadePage(const FindAccountScreen(), s)),
-    GoRoute(path: '/account', pageBuilder: (_, s) => _fadePage(const AccountScreen(), s)),
-    GoRoute(path: '/security', pageBuilder: (_, s) => _fadePage(const SecurityScreen(), s)),
+    GoRoute(
+        path: '/welcome',
+        pageBuilder: (_, s) => _fadePage(const WelcomeScreen(), s)),
+    GoRoute(
+        path: '/login',
+        pageBuilder: (_, s) => _fadePage(const LoginScreen(), s)),
+    GoRoute(
+        path: '/register',
+        pageBuilder: (_, s) => _fadePage(const RegisterScreen(), s)),
+    GoRoute(
+        path: '/verification',
+        pageBuilder: (_, s) => _fadePage(const VerificationScreen(), s)),
+    GoRoute(
+        path: '/find-account',
+        pageBuilder: (_, s) => _fadePage(const FindAccountScreen(), s)),
+    GoRoute(
+        path: '/account',
+        pageBuilder: (_, s) => _fadePage(const AccountScreen(), s)),
+    GoRoute(
+        path: '/security',
+        pageBuilder: (_, s) => _fadePage(const SecurityScreen(), s)),
 
     // ── Main routes ──
-    GoRoute(path: '/home', pageBuilder: (_, s) => _fadePage(const HomeScreen(), s)),
-    GoRoute(path: '/settings', pageBuilder: (_, s) => _fadePage(const SettingsScreen(), s)),
-    GoRoute(path: '/profile', pageBuilder: (_, s) => _fadePage(const ProfileScreen(), s)),
-    GoRoute(path: '/wishlist', pageBuilder: (_, s) => _fadePage(const WishlistScreen(), s)),
-    GoRoute(path: '/chat', pageBuilder: (_, s) => _fadePage(const ChatScreen(), s)),
+    GoRoute(
+        path: '/home', pageBuilder: (_, s) => _fadePage(const HomeScreen(), s)),
+    GoRoute(
+        path: '/settings',
+        pageBuilder: (_, s) => _fadePage(const SettingsScreen(), s)),
+    GoRoute(
+        path: '/profile',
+        pageBuilder: (_, s) => _fadePage(const ProfileScreen(), s)),
+    GoRoute(
+        path: '/wishlist',
+        pageBuilder: (_, s) => _fadePage(const WishlistScreen(), s)),
+    GoRoute(
+        path: '/chat', pageBuilder: (_, s) => _fadePage(const ChatScreen(), s)),
 
     // ── Finance routes ──
-    GoRoute(path: '/finance', pageBuilder: (_, s) => _fadePage(const FinanceScreen(), s)),
-    GoRoute(path: '/profit-loss', pageBuilder: (_, s) => _fadePage(const ProfitLossScreen(), s)),
-    GoRoute(path: '/purchase', pageBuilder: (_, s) => _fadePage(const PurchaseScreen(), s)),
-    GoRoute(path: '/sales', pageBuilder: (_, s) => _fadePage(const SalesScreen(), s)),
-    GoRoute(path: '/payment', pageBuilder: (_, s) => _fadePage(const PaymentScreen(), s)),
-    GoRoute(path: '/income', pageBuilder: (_, s) => _fadePage(const IncomeScreen(), s)),
-    GoRoute(path: '/expense', pageBuilder: (_, s) => _fadePage(const ExpenseScreen(), s)),
-    GoRoute(path: '/operational', pageBuilder: (_, s) => _fadePage(const OperationalScreen(), s)),
-    GoRoute(path: '/electricity', pageBuilder: (_, s) => _fadePage(const ElectricityScreen(), s)),
-    GoRoute(path: '/project-finance', pageBuilder: (_, s) => _fadePage(const ProjectFinanceScreen(), s)),
+    GoRoute(
+        path: '/finance',
+        pageBuilder: (_, s) => _fadePage(const FinanceScreen(), s)),
+    GoRoute(
+        path: '/profit-loss',
+        pageBuilder: (_, s) => _fadePage(const ProfitLossScreen(), s)),
+    GoRoute(
+        path: '/purchase',
+        pageBuilder: (_, s) => _fadePage(const PurchaseScreen(), s)),
+    GoRoute(
+        path: '/sales',
+        pageBuilder: (_, s) => _fadePage(const SalesScreen(), s)),
+    GoRoute(
+        path: '/payment',
+        pageBuilder: (_, s) => _fadePage(const PaymentScreen(), s)),
+    GoRoute(
+        path: '/income',
+        pageBuilder: (_, s) => _fadePage(const IncomeScreen(), s)),
+    GoRoute(
+        path: '/expense',
+        pageBuilder: (_, s) => _fadePage(const ExpenseScreen(), s)),
+    GoRoute(
+        path: '/operational',
+        pageBuilder: (_, s) => _fadePage(const OperationalScreen(), s)),
+    GoRoute(
+        path: '/electricity',
+        pageBuilder: (_, s) => _fadePage(const ElectricityScreen(), s)),
+    GoRoute(
+        path: '/project-finance',
+        pageBuilder: (_, s) => _fadePage(const ProjectFinanceScreen(), s)),
 
     // ── Project routes ──
-    GoRoute(path: '/manage-project', pageBuilder: (_, s) => _fadePage(const ManageProjectScreen(), s)),
-    GoRoute(path: '/project-list', pageBuilder: (_, s) => _fadePage(const ProjectListScreen(), s)),
+    GoRoute(
+        path: '/manage-project',
+        pageBuilder: (_, s) => _fadePage(const ManageProjectScreen(), s)),
+    GoRoute(
+        path: '/project-list',
+        pageBuilder: (_, s) => _fadePage(const ProjectListScreen(), s)),
     GoRoute(
       path: '/project-detail',
       pageBuilder: (_, s) {
@@ -139,13 +185,23 @@ final GoRouter appRouter = GoRouter(
         );
       },
     ),
-    GoRoute(path: '/work-order', pageBuilder: (_, s) => _fadePage(const WorkOrderScreen(), s)),
-    GoRoute(path: '/meeting', pageBuilder: (_, s) => _fadePage(const MeetingScreen(), s)),
-    GoRoute(path: '/create-meeting', pageBuilder: (_, s) => _fadePage(const CreateMeetingScreen(), s)),
+    GoRoute(
+        path: '/work-order',
+        pageBuilder: (_, s) => _fadePage(const WorkOrderScreen(), s)),
+    GoRoute(
+        path: '/meeting',
+        pageBuilder: (_, s) => _fadePage(const MeetingScreen(), s)),
+    GoRoute(
+        path: '/create-meeting',
+        pageBuilder: (_, s) => _fadePage(const CreateMeetingScreen(), s)),
 
     // ── Worker routes ──
-    GoRoute(path: '/worker', pageBuilder: (_, s) => _fadePage(const WorkerScreen(), s)),
-    GoRoute(path: '/worker-list', pageBuilder: (_, s) => _fadePage(const WorkerListScreen(), s)),
+    GoRoute(
+        path: '/worker',
+        pageBuilder: (_, s) => _fadePage(const WorkerScreen(), s)),
+    GoRoute(
+        path: '/worker-list',
+        pageBuilder: (_, s) => _fadePage(const WorkerListScreen(), s)),
     GoRoute(
       path: '/worker-detail',
       pageBuilder: (_, s) {
@@ -161,27 +217,52 @@ final GoRouter appRouter = GoRouter(
         );
       },
     ),
-    GoRoute(path: '/wage', pageBuilder: (_, s) => _fadePage(const WageScreen(), s)),
-    GoRoute(path: '/wage-schedule', pageBuilder: (_, s) => _fadePage(const WageScheduleScreen(), s)),
-    GoRoute(path: '/wage-billing-status', pageBuilder: (_, s) => _fadePage(const WageBillingStatusScreen(), s)),
+    GoRoute(
+        path: '/wage', pageBuilder: (_, s) => _fadePage(const WageScreen(), s)),
+    GoRoute(
+        path: '/wage-schedule',
+        pageBuilder: (_, s) => _fadePage(const WageScheduleScreen(), s)),
+    GoRoute(
+        path: '/wage-billing-status',
+        pageBuilder: (_, s) => _fadePage(const WageBillingStatusScreen(), s)),
 
     // ── Schedule routes ──
-    GoRoute(path: '/schedule', pageBuilder: (_, s) => _fadePage(const ScheduleScreen(), s)),
-    GoRoute(path: '/production-schedule', pageBuilder: (_, s) => _fadePage(const ProductionScheduleScreen(), s)),
-    GoRoute(path: '/shopping-schedule', pageBuilder: (_, s) => _fadePage(const ShoppingScheduleScreen(), s)),
-    GoRoute(path: '/delivery-schedule', pageBuilder: (_, s) => _fadePage(const DeliveryScheduleScreen(), s)),
+    GoRoute(
+        path: '/schedule',
+        pageBuilder: (_, s) => _fadePage(const ScheduleScreen(), s)),
+    GoRoute(
+        path: '/production-schedule',
+        pageBuilder: (_, s) => _fadePage(const ProductionScheduleScreen(), s)),
+    GoRoute(
+        path: '/shopping-schedule',
+        pageBuilder: (_, s) => _fadePage(const ShoppingScheduleScreen(), s)),
+    GoRoute(
+        path: '/delivery-schedule',
+        pageBuilder: (_, s) => _fadePage(const DeliveryScheduleScreen(), s)),
 
     // ── Inventory routes ──
-    GoRoute(path: '/raw-material', pageBuilder: (_, s) => _fadePage(const RawMaterialScreen(), s)),
-    GoRoute(path: '/shipment', pageBuilder: (_, s) => _fadePage(const ShipmentScreen(), s)),
-    GoRoute(path: '/shopping-plan', pageBuilder: (_, s) => _fadePage(const ShoppingPlanScreen(), s)),
+    GoRoute(
+        path: '/raw-material',
+        pageBuilder: (_, s) => _fadePage(const RawMaterialScreen(), s)),
+    GoRoute(
+        path: '/shipment',
+        pageBuilder: (_, s) => _fadePage(const ShipmentScreen(), s)),
+    GoRoute(
+        path: '/shopping-plan',
+        pageBuilder: (_, s) => _fadePage(const ShoppingPlanScreen(), s)),
 
     // ── Production ──
-    GoRoute(path: '/pattern', pageBuilder: (_, s) => _fadePage(const PatternScreen(), s)),
+    GoRoute(
+        path: '/pattern',
+        pageBuilder: (_, s) => _fadePage(const PatternScreen(), s)),
 
     // ── Marketplace ──
-    GoRoute(path: '/marketplace', pageBuilder: (_, s) => _fadePage(const MarketplaceScreen(), s)),
-    GoRoute(path: '/checkout', pageBuilder: (_, s) => _fadePage(const CheckoutScreen(), s)),
+    GoRoute(
+        path: '/marketplace',
+        pageBuilder: (_, s) => _fadePage(const MarketplaceScreen(), s)),
+    GoRoute(
+        path: '/checkout',
+        pageBuilder: (_, s) => _fadePage(const CheckoutScreen(), s)),
     GoRoute(
       path: '/bookmark-menu',
       pageBuilder: (_, s) {
@@ -198,7 +279,9 @@ final GoRouter appRouter = GoRouter(
     ),
 
     // ── Promotion ──
-    GoRoute(path: '/promotion', pageBuilder: (_, s) => _fadePage(const PromotionScreen(), s)),
+    GoRoute(
+        path: '/promotion',
+        pageBuilder: (_, s) => _fadePage(const PromotionScreen(), s)),
 
     // ── Common ──
     GoRoute(

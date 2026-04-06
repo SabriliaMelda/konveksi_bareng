@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:konveksi_bareng/config/api_config.dart';
 
 class AuthService {
@@ -273,6 +274,13 @@ class AuthService {
   // ── Check Session (untuk Session Guard) ──
 
   static Future<int> checkSession(String token) async {
+    // Dev bypass: when DEV_AUTH_BYPASS=true in .env, always return 200 so
+    // SessionGuard won't treat the session as expired while developing UI.
+    try {
+      final bypass = dotenv.env['DEV_AUTH_BYPASS'];
+      if (bypass != null && bypass.toLowerCase() == 'true') return 200;
+    } catch (_) {}
+
     try {
       final res = await _dio.get(
         '/auth/me',
