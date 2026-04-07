@@ -1,11 +1,8 @@
 // chat.dart
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-import 'package:konveksi_bareng/screens/main/home.dart';
-import 'package:konveksi_bareng/screens/main/wishlist.dart';
-import 'package:konveksi_bareng/screens/main/settings.dart';
-import 'package:konveksi_bareng/screens/main/profile.dart';
 
 const kPurple = Color(0xFF6B257F);
 
@@ -351,7 +348,7 @@ class _HeaderGradient extends StatelessWidget {
               // Back
               _HeaderIcon(
                 icon: Icons.arrow_back_ios_new_rounded,
-                onTap: () => Navigator.pop(context),
+                onTap: () => context.pop(),
               ),
               const SizedBox(width: 10),
               const Expanded(
@@ -947,10 +944,7 @@ class _BottomNavBar extends StatelessWidget {
             icon: Icons.home_filled,
             active: activeIndex == 0,
             onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => const HomeScreen()),
-              );
+              context.go('/home');
             },
           ),
           _NavItem(
@@ -958,10 +952,7 @@ class _BottomNavBar extends StatelessWidget {
             icon: Icons.favorite_border,
             active: activeIndex == 1,
             onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => const WishlistScreen()),
-              );
+              context.go('/wishlist');
             },
           ),
           _NavItem(
@@ -969,10 +960,7 @@ class _BottomNavBar extends StatelessWidget {
             icon: Icons.settings_outlined,
             active: activeIndex == 2,
             onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => const SettingsScreen()),
-              );
+              context.go('/settings');
             },
           ),
           _NavItem(
@@ -986,10 +974,7 @@ class _BottomNavBar extends StatelessWidget {
             icon: Icons.person_outline,
             active: activeIndex == 4,
             onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => const ProfileScreen()),
-              );
+              context.go('/profile');
             },
           ),
         ],
