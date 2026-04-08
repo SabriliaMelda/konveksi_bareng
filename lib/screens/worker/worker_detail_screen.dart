@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/screens/project/project_detail_screen.dart';
+import 'package:go_router/go_router.dart';
 
 const kPurple = Color(0xFF6B257F);
 
@@ -50,13 +50,10 @@ class WorkerDetailScreen extends StatelessWidget {
                 title: p,
                 subtitle: 'Status: On going',
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) =>
-                          ProjectDetailScreen(projectName: p, workerName: nama),
-                    ),
-                  );
+                  context.push('/project-detail', extra: {
+                    'projectName': p,
+                    'workerName': nama,
+                  });
                 },
               ),
             ),
