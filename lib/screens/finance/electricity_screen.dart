@@ -201,7 +201,7 @@ class _ElectricityScreenState extends State<ElectricityScreen> {
                           text: _daysLeftText(_deadline),
                           bg: const Color(0xFFEFE7F3),
                           fg: kPurple,
-                          border: kPurple.withOpacity(.25),
+                          border: kPurple.withValues(alpha: .25),
                         ),
                       ],
                     ),
@@ -681,7 +681,7 @@ class _BarChartPainter extends CustomPainter {
     }
 
     // bar paint (purple)
-    final barPaint = Paint()..color = kPurple.withOpacity(0.85);
+    final barPaint = Paint()..color = kPurple.withValues(alpha: 0.85);
 
     // min->max normalize
     double norm(int v) {

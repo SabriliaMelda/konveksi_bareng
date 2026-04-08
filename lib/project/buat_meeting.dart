@@ -456,7 +456,7 @@ class _SwitchRow extends StatelessWidget {
               ),
             ),
           ),
-          Switch(value: value, onChanged: onChanged, activeColor: kPurple),
+          Switch(value: value, onChanged: onChanged, activeThumbColor: kPurple),
         ],
       ),
     );

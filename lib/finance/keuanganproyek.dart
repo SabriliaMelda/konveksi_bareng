@@ -382,8 +382,8 @@ class _BookmarkFolder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = active ? kPurple.withOpacity(0.10) : Colors.white;
-    final br = active ? kPurple.withOpacity(0.40) : const Color(0xFFE8ECF4);
+    final bg = active ? kPurple.withValues(alpha: 0.10) : Colors.white;
+    final br = active ? kPurple.withValues(alpha: 0.40) : const Color(0xFFE8ECF4);
     final txt = active ? kPurple : const Color(0xFF1E232C);
 
     return PopupMenuButton<String>(
@@ -512,7 +512,7 @@ class _StatCard extends StatelessWidget {
             width: 42,
             height: 42,
             decoration: BoxDecoration(
-              color: kPurple.withOpacity(0.10),
+              color: kPurple.withValues(alpha: 0.10),
               borderRadius: BorderRadius.circular(14),
             ),
             alignment: Alignment.center,
@@ -618,7 +618,7 @@ class _TxnRow extends StatelessWidget {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: kPurple.withOpacity(0.08),
+            color: kPurple.withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(14),
           ),
           alignment: Alignment.center,

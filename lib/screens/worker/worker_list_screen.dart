@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-<<<<<<<< HEAD:lib/worker/daftar_pekerja.dart
-import 'package:konveksi_bareng/worker/pekerja_detail.dart';
-========
 import 'package:konveksi_bareng/screens/worker/worker_detail_screen.dart';
->>>>>>>> db0fead1bdd8415c3e0d6567f9ffcc9446bff833:lib/screens/worker/worker_list_screen.dart
 
 const kPurple = Color(0xFF6B257F);
 

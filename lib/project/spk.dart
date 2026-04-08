@@ -89,7 +89,7 @@ class _WorkOrderScreenState extends State<WorkOrderScreen> {
                       child: Text(
                         'Data SPK tidak ditemukan.',
                         style: TextStyle(
-                          color: Colors.black.withOpacity(0.55),
+                          color: Colors.black.withValues(alpha: 0.55),
                           fontSize: 14,
                         ),
                       ),

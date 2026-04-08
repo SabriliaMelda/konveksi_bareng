@@ -177,7 +177,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                         'Wishlist kosong.\nTambahkan produk favorit kamu.',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: Colors.black.withOpacity(0.55),
+                          color: Colors.black.withValues(alpha: 0.55),
                           fontSize: 14,
                           height: 1.3,
                         ),

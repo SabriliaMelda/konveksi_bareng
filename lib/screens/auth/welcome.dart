@@ -1,12 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
-import 'package:konveksi_bareng/screens/auth/login.dart';
-import 'package:konveksi_bareng/screens/auth/register.dart';
-=======
 import 'login.dart';
 import 'register.dart';
->>>>>>> db0fead1bdd8415c3e0d6567f9ffcc9446bff833
 
 class WelcomeApp extends StatelessWidget {
   const WelcomeApp({super.key});

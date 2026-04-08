@@ -855,11 +855,11 @@ class _Pill extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(999),
-          border: Border.all(color: color.withOpacity(0.18)),
+          border: Border.all(color: color.withValues(alpha: 0.18)),
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [color.withOpacity(0.14), const Color(0x00FFFFFF)],
+            colors: [color.withValues(alpha: 0.14), const Color(0x00FFFFFF)],
           ),
         ),
         child: Text(
@@ -945,7 +945,7 @@ class _SwitchRow extends StatelessWidget {
         Switch(
           value: value,
           onChanged: onChanged,
-          activeColor: accent,
+          activeThumbColor: accent,
           inactiveThumbColor: isDark ? const Color(0xFFCBD5E1) : null,
           inactiveTrackColor: isDark ? const Color(0x33475569) : null,
         ),

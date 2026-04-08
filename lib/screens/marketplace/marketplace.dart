@@ -494,7 +494,7 @@ class _PromoBanner extends StatelessWidget {
               width: 82,
               height: 82,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.22),
+                color: Colors.white.withValues(alpha: 0.22),
                 borderRadius: BorderRadius.circular(16),
               ),
               alignment: Alignment.center,
@@ -614,7 +614,7 @@ class _ProductCard extends StatelessWidget {
                       width: 34,
                       height: 34,
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withValues(alpha: 0.9),
                         borderRadius: BorderRadius.circular(999),
                         border: Border.all(color: const Color(0xFFE8ECF4)),
                       ),

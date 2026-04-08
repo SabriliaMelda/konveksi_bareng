@@ -3,27 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-<<<<<<< HEAD:lib/pages/home.dart
-import 'package:konveksi_bareng/finance/pembelian.dart';
-import 'package:konveksi_bareng/promotion/promosi.dart';
-import 'package:konveksi_bareng/finance/rugi_laba.dart';
-import 'package:konveksi_bareng/profile/settings.dart';
-import 'package:konveksi_bareng/worker/upah.dart';
-import 'package:konveksi_bareng/marketplace/wishlist.dart';
-import 'package:konveksi_bareng/marketplace/checkout.dart';
-
-import 'package:konveksi_bareng/profile/profile.dart';
-import 'package:konveksi_bareng/project/kelola_proyek.dart';
-import 'package:konveksi_bareng/inventory/bahan_baku.dart';
-import 'package:konveksi_bareng/chat/chat.dart';
-import 'package:konveksi_bareng/finance/keuangan.dart';
-import 'package:konveksi_bareng/schedule/jadwal.dart';
-import 'package:konveksi_bareng/production/pola.dart';
-import 'package:konveksi_bareng/worker/pekerja.dart';
-=======
 
 import 'package:konveksi_bareng/providers/session_guard.dart';
->>>>>>> db0fead1bdd8415c3e0d6567f9ffcc9446bff833:lib/screens/main/home.dart
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -1038,9 +1019,9 @@ class _AppSidebar extends StatelessWidget {
                     width: 52,
                     height: 52,
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.18),
+                      color: Colors.white.withValues(alpha: 0.18),
                       borderRadius: BorderRadius.circular(18),
-                      border: Border.all(color: Colors.white.withOpacity(0.25)),
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.25)),
                     ),
                     child: const Icon(
                       Icons.person,
@@ -1074,10 +1055,10 @@ class _AppSidebar extends StatelessWidget {
                                 vertical: 5,
                               ),
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.18),
+                                color: Colors.white.withValues(alpha: 0.18),
                                 borderRadius: BorderRadius.circular(999),
                                 border: Border.all(
-                                  color: Colors.white.withOpacity(0.25),
+                                  color: Colors.white.withValues(alpha: 0.25),
                                 ),
                               ),
                               child: const Text(

@@ -1,18 +1,4 @@
 // keuangan.dart
-<<<<<<<< HEAD:lib/finance/keuangan.dart
-import 'package:konveksi_bareng/finance/operasional.dart';
-import 'package:konveksi_bareng/finance/pemasukan.dart';
-import 'package:konveksi_bareng/inventory/rencana_belanja.dart';
-import 'package:konveksi_bareng/finance/rugi_laba.dart';
-import 'package:konveksi_bareng/worker/upah.dart';
-import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/finance/pengeluaran.dart';
-import 'package:konveksi_bareng/promotion/promosi.dart';
-import 'package:konveksi_bareng/pages/home.dart';
-
-// ✅ sesuaikan path sesuai struktur kamu
-import 'package:konveksi_bareng/finance/keuanganproyek.dart';
-========
 import 'package:konveksi_bareng/screens/finance/operational_screen.dart';
 import 'package:konveksi_bareng/screens/finance/income_screen.dart';
 import 'package:konveksi_bareng/screens/inventory/shopping_plan_screen.dart';
@@ -25,7 +11,6 @@ import 'package:konveksi_bareng/screens/main/home.dart';
 
 // ✅ sesuaikan path sesuai struktur kamu
 import 'package:konveksi_bareng/screens/finance/project_finance_screen.dart';
->>>>>>>> db0fead1bdd8415c3e0d6567f9ffcc9446bff833:lib/screens/finance/finance_screen.dart
 
 const kPurple = Color(0xFF6B257F);
 
@@ -105,9 +90,9 @@ class FinanceScreen extends StatelessWidget {
                     width: double.infinity,
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.12),
+                      color: Colors.white.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(18),
-                      border: Border.all(color: Colors.white.withOpacity(0.12)),
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -164,9 +149,9 @@ class FinanceScreen extends StatelessWidget {
                     width: double.infinity,
                     padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.10),
+                      color: Colors.white.withValues(alpha: 0.10),
                       borderRadius: BorderRadius.circular(18),
-                      border: Border.all(color: Colors.white.withOpacity(0.12)),
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -200,7 +185,7 @@ class FinanceScreen extends StatelessWidget {
                           child: LinearProgressIndicator(
                             value: progressValue,
                             minHeight: 10,
-                            backgroundColor: Colors.white.withOpacity(0.18),
+                            backgroundColor: Colors.white.withValues(alpha: 0.18),
                             valueColor: const AlwaysStoppedAnimation<Color>(
                               Color(0xFFF1FFF3),
                             ),
@@ -293,9 +278,9 @@ class _HeaderIcon extends StatelessWidget {
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.12),
+          color: Colors.white.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.white.withOpacity(0.12)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
         ),
         child: Icon(icon, color: Colors.white, size: 20),
       ),
@@ -322,9 +307,9 @@ class _MiniStat extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.10),
+        color: Colors.white.withValues(alpha: 0.10),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withOpacity(0.12)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
       ),
       child: Row(
         children: [
@@ -332,7 +317,7 @@ class _MiniStat extends StatelessWidget {
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.14),
+              color: Colors.white.withValues(alpha: 0.14),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(icon, color: Colors.white, size: 18),

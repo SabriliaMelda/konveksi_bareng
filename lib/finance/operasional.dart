@@ -1,12 +1,7 @@
 // operasional.dart
 import 'package:flutter/material.dart';
-<<<<<<<< HEAD:lib/finance/operasional.dart
-import 'package:konveksi_bareng/finance/listrik.dart';
-import 'package:konveksi_bareng/pages/home.dart';
-========
 import 'package:konveksi_bareng/screens/finance/electricity_screen.dart';
 import 'package:konveksi_bareng/screens/main/home.dart';
->>>>>>>> db0fead1bdd8415c3e0d6567f9ffcc9446bff833:lib/screens/finance/operational_screen.dart
 
 const Color kPurple = Color(0xFF6B257F);
 

@@ -1,16 +1,5 @@
 // lib/pages/bahan_baku.dart
 import 'package:flutter/material.dart';
-<<<<<<<< HEAD:lib/inventory/bahan_baku.dart
-import 'package:konveksi_bareng/finance/pembayaran.dart';
-import 'package:konveksi_bareng/finance/penjualan.dart';
-import 'package:konveksi_bareng/pages/home.dart';
-import 'package:konveksi_bareng/marketplace/marketplace.dart';
-import 'package:konveksi_bareng/marketplace/wishlist.dart';
-import 'package:konveksi_bareng/chat/chat.dart';
-import 'package:konveksi_bareng/marketplace/checkout.dart';
-import 'package:konveksi_bareng/finance/pembelian.dart';
-import 'package:konveksi_bareng/inventory/pengiriman.dart';
-========
 import 'package:konveksi_bareng/screens/finance/payment_screen.dart';
 import 'package:konveksi_bareng/screens/finance/sales_screen.dart';
 import 'package:konveksi_bareng/screens/main/home.dart';
@@ -20,7 +9,6 @@ import 'package:konveksi_bareng/screens/main/chat.dart';
 import 'package:konveksi_bareng/screens/marketplace/checkout.dart';
 import 'package:konveksi_bareng/screens/finance/purchase_screen.dart';
 import 'package:konveksi_bareng/screens/inventory/shipment_screen.dart';
->>>>>>>> db0fead1bdd8415c3e0d6567f9ffcc9446bff833:lib/screens/inventory/raw_material_screen.dart
 
 const Color kPurple = Color(0xFF6B257F);
 const Color kBg = Color(0xFFF7F7FB);
@@ -151,9 +139,9 @@ class _HeaderIcon extends StatelessWidget {
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.12),
+          color: Colors.white.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.white.withOpacity(0.12)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
         ),
         child: Icon(icon, color: Colors.white, size: 20),
       ),
@@ -174,9 +162,9 @@ class _SearchBar extends StatelessWidget {
         height: 46,
         padding: const EdgeInsets.symmetric(horizontal: 12),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.14),
+          color: Colors.white.withValues(alpha: 0.14),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.white.withOpacity(0.12)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
         ),
         child: Row(
           children: const [
@@ -742,7 +730,7 @@ class _ProductCard extends StatelessWidget {
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.92),
+                        color: Colors.white.withValues(alpha: 0.92),
                         borderRadius: BorderRadius.circular(999),
                       ),
                       child: Row(
@@ -769,7 +757,7 @@ class _ProductCard extends StatelessWidget {
                       width: 34,
                       height: 34,
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.92),
+                        color: Colors.white.withValues(alpha: 0.92),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: const Icon(

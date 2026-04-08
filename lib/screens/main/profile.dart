@@ -243,7 +243,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(18),
                             border: Border.all(
-                              color: _purple.withOpacity(0.18),
+                              color: _purple.withValues(alpha: 0.18),
                             ),
                             gradient: const LinearGradient(
                               begin: Alignment.topLeft,
@@ -479,11 +479,11 @@ class _Pill extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(999),
-          border: Border.all(color: color.withOpacity(0.18)),
+          border: Border.all(color: color.withValues(alpha: 0.18)),
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [color.withOpacity(0.14), const Color(0x00FFFFFF)],
+            colors: [color.withValues(alpha: 0.14), const Color(0x00FFFFFF)],
           ),
         ),
         child: Text(

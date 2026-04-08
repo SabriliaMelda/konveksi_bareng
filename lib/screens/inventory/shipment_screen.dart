@@ -489,10 +489,10 @@ class _ShipmentCard extends StatelessWidget {
                               vertical: 6,
                             ),
                             decoration: BoxDecoration(
-                              color: item.statusColor.withOpacity(0.12),
+                              color: item.statusColor.withValues(alpha: 0.12),
                               borderRadius: BorderRadius.circular(999),
                               border: Border.all(
-                                color: item.statusColor.withOpacity(0.35),
+                                color: item.statusColor.withValues(alpha: 0.35),
                               ),
                             ),
                             child: Text(
@@ -737,7 +737,7 @@ class _InfoTile extends StatelessWidget {
             width: 42,
             height: 42,
             decoration: BoxDecoration(
-              color: kPurple.withOpacity(0.08),
+              color: kPurple.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(14),
             ),
             alignment: Alignment.center,
@@ -780,9 +780,9 @@ class _InfoTile extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             decoration: BoxDecoration(
-              color: statusColor.withOpacity(0.12),
+              color: statusColor.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(999),
-              border: Border.all(color: statusColor.withOpacity(0.35)),
+              border: Border.all(color: statusColor.withValues(alpha: 0.35)),
             ),
             child: Text(
               statusText,
@@ -922,7 +922,7 @@ class _EmptyState extends StatelessWidget {
               width: 64,
               height: 64,
               decoration: BoxDecoration(
-                color: kPurple.withOpacity(0.08),
+                color: kPurple.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(18),
               ),
               alignment: Alignment.center,

@@ -562,10 +562,10 @@ class _OrderCard extends StatelessWidget {
                               vertical: 6,
                             ),
                             decoration: BoxDecoration(
-                              color: item.statusColor.withOpacity(0.12),
+                              color: item.statusColor.withValues(alpha: 0.12),
                               borderRadius: BorderRadius.circular(999),
                               border: Border.all(
-                                color: item.statusColor.withOpacity(0.35),
+                                color: item.statusColor.withValues(alpha: 0.35),
                               ),
                             ),
                             child: Text(
@@ -712,7 +712,7 @@ class _EmptyState extends StatelessWidget {
               width: 64,
               height: 64,
               decoration: BoxDecoration(
-                color: kPurple.withOpacity(0.08),
+                color: kPurple.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(18),
               ),
               alignment: Alignment.center,

@@ -3,13 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-<<<<<<<< HEAD:lib/chat/chat.dart
-import 'package:konveksi_bareng/pages/home.dart';
-import 'package:konveksi_bareng/marketplace/wishlist.dart';
-import 'package:konveksi_bareng/profile/settings.dart';
-import 'package:konveksi_bareng/profile/profile.dart';
-========
->>>>>>>> db0fead1bdd8415c3e0d6567f9ffcc9446bff833:lib/screens/main/chat.dart
 
 const kPurple = Color(0xFF6B257F);
 
@@ -20,10 +13,7 @@ class ChatScreen extends StatefulWidget {
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
-// NOTE: typo fix (CreateState -> createState)
-extension _FixState on ChatScreen {
-  State<ChatScreen> createState() => _ChatScreenState();
-}
+// NOTE: duplicate createState extension removed
 
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _searchC = TextEditingController();
@@ -402,9 +392,9 @@ class _HeaderIcon extends StatelessWidget {
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.14),
+          color: Colors.white.withValues(alpha: 0.14),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.white.withOpacity(0.16)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.16)),
         ),
         child: Icon(icon, color: Colors.white, size: 20),
       ),
@@ -429,9 +419,9 @@ class _SearchPillBetter extends StatelessWidget {
       height: 46,
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.14),
+        color: Colors.white.withValues(alpha: 0.14),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withOpacity(0.16)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.16)),
       ),
       child: Row(
         children: [
@@ -809,7 +799,7 @@ class _AvatarNetwork extends StatelessWidget {
           fit: BoxFit.cover,
           errorBuilder: (_, __, ___) {
             return Container(
-              color: bg.withOpacity(0.22),
+              color: bg.withValues(alpha: 0.22),
               alignment: Alignment.center,
               child: Text(
                 initial,

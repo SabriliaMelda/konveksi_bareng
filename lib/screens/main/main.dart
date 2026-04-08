@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD:lib/screens/main/main.dart
-=======
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:konveksi_bareng/config/api_config.dart';
->>>>>>> db0fead1bdd8415c3e0d6567f9ffcc9446bff833:lib/main.dart
 import 'package:konveksi_bareng/screens/auth/welcome.dart';
 
 Future<void> main() async {

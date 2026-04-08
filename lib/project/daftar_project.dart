@@ -139,7 +139,7 @@ class _ProjectListScreenState extends State<ProjectListScreen> {
                     decoration: BoxDecoration(
                       color: const Color(0xFF50047D),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withOpacity(0.12)),
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
                     ),
                     child: Row(
                       children: [
@@ -247,10 +247,10 @@ class _FilterChips extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
-                color: active ? Colors.white : Colors.white.withOpacity(0.14),
+                color: active ? Colors.white : Colors.white.withValues(alpha: 0.14),
                 borderRadius: BorderRadius.circular(999),
                 border: Border.all(
-                  color: Colors.white.withOpacity(active ? 0.0 : 0.18),
+                  color: Colors.white.withValues(alpha: active ? 0.0 : 0.18),
                 ),
               ),
               child: Text(
@@ -285,9 +285,9 @@ class _HeaderIcon extends StatelessWidget {
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.12),
+          color: Colors.white.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.white.withOpacity(0.12)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
         ),
         child: Icon(icon, color: Colors.white, size: 20),
       ),
@@ -362,8 +362,8 @@ class _ProjectCard extends StatelessWidget {
                         ),
                         gradient: LinearGradient(
                           colors: [
-                            Colors.black.withOpacity(0.0),
-                            Colors.black.withOpacity(0.45),
+                            Colors.black.withValues(alpha: 0.0),
+                            Colors.black.withValues(alpha: 0.45),
                           ],
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
@@ -382,7 +382,7 @@ class _ProjectCard extends StatelessWidget {
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: statusColor.withOpacity(0.95),
+                        color: statusColor.withValues(alpha: 0.95),
                         borderRadius: BorderRadius.circular(999),
                       ),
                       child: Text(
@@ -406,7 +406,7 @@ class _ProjectCard extends StatelessWidget {
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.92),
+                        color: Colors.white.withValues(alpha: 0.92),
                         borderRadius: BorderRadius.circular(999),
                       ),
                       child: Text(
@@ -484,7 +484,7 @@ class _ProjectCard extends StatelessWidget {
                           gradient: LinearGradient(
                             colors: [
                               statusColor,
-                              statusColor.withOpacity(0.65),
+                              statusColor.withValues(alpha: 0.65),
                             ],
                             begin: Alignment.centerLeft,
                             end: Alignment.centerRight,

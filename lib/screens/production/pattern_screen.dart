@@ -36,7 +36,7 @@ class _PatternScreenState extends State<PatternScreen> {
                   'Belum ada pola.\nKlik tombol + untuk buat pola.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Colors.black.withOpacity(0.55),
+                    color: Colors.black.withValues(alpha: 0.55),
                     fontSize: 14,
                   ),
                 ),
