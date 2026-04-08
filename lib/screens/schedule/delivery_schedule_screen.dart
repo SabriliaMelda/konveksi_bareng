@@ -1,107 +1,93 @@
-// jadwal_belanja.dart
+// jadwal_kirim.dart
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/pages/home.dart';
 
 const kPurple = Color(0xFF6B257F);
 
-class JadwalBelanjaScreen extends StatefulWidget {
-  const JadwalBelanjaScreen({super.key});
+class DeliveryScheduleScreen extends StatefulWidget {
+  const DeliveryScheduleScreen({super.key});
 
   @override
-  State<JadwalBelanjaScreen> createState() => _JadwalBelanjaScreenState();
+  State<DeliveryScheduleScreen> createState() => _DeliveryScheduleScreenState();
 }
 
-class _JadwalBelanjaScreenState extends State<JadwalBelanjaScreen> {
-  int selectedDay = DateTime.now().day;
+class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
+  int selectedDay = 5;
 
   // indikator dot per tanggal (dummy)
   final Map<int, List<Color>> dots = {
-    2: [Color(0xFF00B383), Color(0xFF0095FF)],
-    5: [Color(0xFF735BF2)],
-    10: [Color(0xFF0095FF), Color(0xFF735BF2)],
-    15: [Color(0xFF00B383)],
-    22: [Color(0xFF0095FF)],
-    29: [Color(0xFF00B383), Color(0xFF0095FF), Color(0xFF735BF2)],
+    2: [Color(0xFF00B383)],
+    5: [Color(0xFF0095FF), Color(0xFF735BF2)],
+    8: [Color(0xFF0095FF)],
+    10: [Color(0xFF00B383), Color(0xFF0095FF), Color(0xFF735BF2)],
+    12: [Color(0xFF735BF2)],
+    18: [Color(0xFF00B383)],
+    29: [Color(0xFF0095FF)],
   };
 
-  // dummy data jadwal belanja (fashion)
-  final List<_BelanjaSchedule> schedules = [
-    _BelanjaSchedule(
-      day: 5,
-      time: '10:00 - 12:00',
-      title: 'Belanja kain (Cotton Combed)',
-      desc: 'Cari bahan untuk produksi kaos basic, bandingkan 2 toko.',
-      location: 'Pasar Baru',
-      tag: _BelanjaTag.bahan,
-    ),
-    _BelanjaSchedule(
-      day: 5,
-      time: '13:30 - 14:30',
-      title: 'Beli aksesoris (kancing & resleting)',
-      desc: 'Kebutuhan untuk 30 pcs outerwear.',
-      location: 'Toko Aksesoris Sinar',
-      tag: _BelanjaTag.aksesoris,
-    ),
-    _BelanjaSchedule(
-      day: 10,
-      time: '09:00 - 10:30',
-      title: 'Belanja packaging',
-      desc: 'Poly mailer + sticker logo + thank you card.',
-      location: 'Marketplace (Online)',
-      tag: _BelanjaTag.packaging,
-    ),
-    _BelanjaSchedule(
-      day: 15,
-      time: '15:00 - 16:00',
-      title: 'Cetak label brand',
-      desc: 'Order label woven untuk batch produksi berikutnya.',
-      location: 'Vendor Label',
-      tag: _BelanjaTag.vendor,
-    ),
-  ];
+  // dummy jadwal kirim per tanggal
+  final Map<int, List<_KirimSchedule>> schedulesByDay = {
+    5: const [
+      _KirimSchedule(
+        time: '10:00 - 10:30',
+        title: 'Pickup Paket Proyek 1',
+        desc: 'Kurir menjemput 2 box (Blouse) dari workshop.',
+        pickup: 'Workshop Bandung',
+        destination: 'Gudang Jakarta',
+        courier: 'JNE',
+        awb: 'JNE-23920193',
+        status: _KirimStatus.siap,
+        borderColor: Color(0xFF26BFBF),
+        barColor: Color(0xFF26BFBF),
+      ),
+      _KirimSchedule(
+        time: '15:00 - 15:30',
+        title: 'Kirim Paket QC',
+        desc: 'Dokumen QC + sample dikirim ke client.',
+        pickup: 'Workshop Bandung',
+        destination: 'Client (Bekasi)',
+        courier: 'SiCepat',
+        awb: 'SICEPAT-990122',
+        status: _KirimStatus.dikirim,
+        borderColor: Color(0xFF89AFFF),
+        barColor: Color(0xFF89AFFF),
+      ),
+    ],
+    10: const [
+      _KirimSchedule(
+        time: '11:00 - 11:30',
+        title: 'Pickup Bahan (Supplier)',
+        desc: 'Ambil kain 5 roll dari supplier.',
+        pickup: 'Supplier Cimahi',
+        destination: 'Workshop Bandung',
+        courier: 'Kurir Internal',
+        awb: '-',
+        status: _KirimStatus.dijemput,
+        borderColor: Color(0xFF735BF2),
+        barColor: Color(0xFF735BF2),
+      ),
+    ],
+  };
 
   // =========================
-  // HELPERS
+  // Helpers
   // =========================
-  String _monthName(int m) {
-    const months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
-    return months[m - 1];
+  String _fmtDateBar(int day) {
+    return 'Thursday, ${day.toString().padLeft(2, '0')} Jan, 2024';
   }
 
-  String _dateLabel() {
-    final now = DateTime.now();
-    final dt = DateTime(now.year, now.month, selectedDay);
-    const w = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    final wd = w[dt.weekday - 1];
-    String two(int x) => x.toString().padLeft(2, '0');
-    return '$wd, ${two(dt.day)} ${_monthName(dt.month).substring(0, 3)}, ${dt.year}';
-  }
+  List<_KirimSchedule> get _activeSchedules =>
+      schedulesByDay[selectedDay] ?? const [];
 
-  List<_BelanjaSchedule> get _activeSchedules =>
-      schedules.where((e) => e.day == selectedDay).toList();
-
-  // =========================
-  // ACTIONS
-  // =========================
   void _openAddSheet() {
-    final titleC = TextEditingController();
+    final titleC = TextEditingController(text: 'Kirim Paket');
+    final awbC = TextEditingController();
+    final courierC = TextEditingController(text: 'JNE');
     final descC = TextEditingController();
-    final locC = TextEditingController();
-    final timeC = TextEditingController(text: '10:00 - 11:00');
-    _BelanjaTag tag = _BelanjaTag.bahan;
+    final pickupC = TextEditingController(text: 'Workshop');
+    final destC = TextEditingController(text: 'Gudang/Client');
+    final timeC = TextEditingController(text: '10:00 - 10:30');
+
+    _KirimStatus status = _KirimStatus.siap;
 
     showModalBottomSheet(
       context: context,
@@ -132,74 +118,94 @@ class _JadwalBelanjaScreenState extends State<JadwalBelanjaScreen> {
                   ),
                   const SizedBox(height: 12),
                   const Text(
-                    'Tambah Jadwal Belanja (dummy)',
+                    'Tambah Jadwal Kirim (dummy)',
                     style: TextStyle(
                       fontSize: 14,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w900,
                       color: Color(0xFF111827),
                     ),
                   ),
                   const SizedBox(height: 12),
+
                   _InputField(
                     controller: titleC,
                     label: 'Judul',
-                    hint: 'Contoh: Belanja kain untuk produksi',
+                    hint: 'Contoh: Pickup Paket Proyek 1',
+                  ),
+                  const SizedBox(height: 10),
+                  _InputField(
+                    controller: courierC,
+                    label: 'Kurir',
+                    hint: 'Contoh: JNE / SiCepat / Internal',
+                  ),
+                  const SizedBox(height: 10),
+                  _InputField(
+                    controller: awbC,
+                    label: 'No. Resi / AWB',
+                    hint: 'Contoh: JNE-123456 (boleh kosong)',
+                  ),
+                  const SizedBox(height: 10),
+                  _InputField(
+                    controller: pickupC,
+                    label: 'Pickup',
+                    hint: 'Contoh: Workshop Bandung',
+                  ),
+                  const SizedBox(height: 10),
+                  _InputField(
+                    controller: destC,
+                    label: 'Tujuan',
+                    hint: 'Contoh: Gudang Jakarta / Client',
                   ),
                   const SizedBox(height: 10),
                   _InputField(
                     controller: timeC,
-                    label: 'Waktu',
-                    hint: 'Contoh: 10:00 - 12:00',
-                  ),
-                  const SizedBox(height: 10),
-                  _InputField(
-                    controller: locC,
-                    label: 'Lokasi',
-                    hint: 'Contoh: Pasar Baru / Marketplace',
+                    label: 'Jam',
+                    hint: 'Contoh: 10:00 - 10:30',
                   ),
                   const SizedBox(height: 10),
                   _InputField(
                     controller: descC,
                     label: 'Catatan',
-                    hint: 'Contoh: bandingkan 2 toko',
+                    hint: 'Contoh: 2 box blouse + invoice',
                   ),
                   const SizedBox(height: 10),
+
                   const Text(
-                    'Kategori',
+                    'Status',
                     style: TextStyle(
                       color: Color(0xFF6A707C),
                       fontSize: 12,
-                      fontFamily: 'Plus Jakarta Sans',
                       fontWeight: FontWeight.w800,
                     ),
                   ),
                   const SizedBox(height: 6),
+
                   Row(
                     children: [
                       Expanded(
                         child: _ChoicePill(
-                          label: 'Bahan',
-                          active: tag == _BelanjaTag.bahan,
-                          onTap: () => setLocal(() => tag = _BelanjaTag.bahan),
+                          label: 'Siap',
+                          active: status == _KirimStatus.siap,
+                          onTap: () =>
+                              setLocal(() => status = _KirimStatus.siap),
                         ),
                       ),
                       const SizedBox(width: 10),
                       Expanded(
                         child: _ChoicePill(
-                          label: 'Aksesoris',
-                          active: tag == _BelanjaTag.aksesoris,
+                          label: 'Dijemput',
+                          active: status == _KirimStatus.dijemput,
                           onTap: () =>
-                              setLocal(() => tag = _BelanjaTag.aksesoris),
+                              setLocal(() => status = _KirimStatus.dijemput),
                         ),
                       ),
                       const SizedBox(width: 10),
                       Expanded(
                         child: _ChoicePill(
-                          label: 'Pack',
-                          active: tag == _BelanjaTag.packaging,
+                          label: 'Dikirim',
+                          active: status == _KirimStatus.dikirim,
                           onTap: () =>
-                              setLocal(() => tag = _BelanjaTag.packaging),
+                              setLocal(() => status = _KirimStatus.dikirim),
                         ),
                       ),
                     ],
@@ -209,24 +215,19 @@ class _JadwalBelanjaScreenState extends State<JadwalBelanjaScreen> {
                     children: [
                       Expanded(
                         child: _ChoicePill(
-                          label: 'Vendor',
-                          active: tag == _BelanjaTag.vendor,
-                          onTap: () => setLocal(() => tag = _BelanjaTag.vendor),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: _ChoicePill(
-                          label: 'Lainnya',
-                          active: tag == _BelanjaTag.lainnya,
+                          label: 'Selesai',
+                          active: status == _KirimStatus.selesai,
                           onTap: () =>
-                              setLocal(() => tag = _BelanjaTag.lainnya),
+                              setLocal(() => status = _KirimStatus.selesai),
                         ),
                       ),
                       const SizedBox(width: 10),
                       const Expanded(child: SizedBox()),
+                      const SizedBox(width: 10),
+                      const Expanded(child: SizedBox()),
                     ],
                   ),
+
                   const SizedBox(height: 14),
                   Row(
                     children: [
@@ -242,8 +243,8 @@ class _JadwalBelanjaScreenState extends State<JadwalBelanjaScreen> {
                         child: InkWell(
                           borderRadius: BorderRadius.circular(14),
                           onTap: () {
-                            final t = titleC.text.trim();
-                            if (t.isEmpty) {
+                            final title = titleC.text.trim();
+                            if (title.isEmpty) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text('Judul wajib diisi'),
@@ -251,32 +252,49 @@ class _JadwalBelanjaScreenState extends State<JadwalBelanjaScreen> {
                               );
                               return;
                             }
+
+                            final newItem = _KirimSchedule(
+                              time: timeC.text.trim().isEmpty
+                                  ? '-'
+                                  : timeC.text.trim(),
+                              title: title,
+                              desc: descC.text.trim().isEmpty
+                                  ? '-'
+                                  : descC.text.trim(),
+                              pickup: pickupC.text.trim().isEmpty
+                                  ? '-'
+                                  : pickupC.text.trim(),
+                              destination: destC.text.trim().isEmpty
+                                  ? '-'
+                                  : destC.text.trim(),
+                              courier: courierC.text.trim().isEmpty
+                                  ? '-'
+                                  : courierC.text.trim(),
+                              awb: awbC.text.trim().isEmpty
+                                  ? '-'
+                                  : awbC.text.trim(),
+                              status: status,
+                              borderColor: const Color(0xFF26BFBF),
+                              barColor: const Color(0xFF26BFBF),
+                            );
+
                             setState(() {
-                              schedules.insert(
-                                0,
-                                _BelanjaSchedule(
-                                  day: selectedDay,
-                                  time: timeC.text.trim().isEmpty
-                                      ? '10:00 - 11:00'
-                                      : timeC.text.trim(),
-                                  title: t,
-                                  desc: descC.text.trim().isEmpty
-                                      ? '-'
-                                      : descC.text.trim(),
-                                  location: locC.text.trim().isEmpty
-                                      ? '-'
-                                      : locC.text.trim(),
-                                  tag: tag,
-                                ),
+                              final list = List<_KirimSchedule>.from(
+                                _activeSchedules,
                               );
-                              dots[selectedDay] =
-                                  (dots[selectedDay] ??
-                                  [const Color(0xFF0095FF)]);
+                              list.insert(0, newItem);
+                              schedulesByDay[selectedDay] = list;
+
+                              dots[selectedDay] = (dots[selectedDay] ?? [])
+                                ..add(const Color(0xFF735BF2));
                             });
+
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text('Jadwal ditambahkan (dummy)'),
+                                content: Text(
+                                  'Jadwal kirim ditambahkan (dummy)',
+                                ),
                               ),
                             );
                           },
@@ -293,7 +311,6 @@ class _JadwalBelanjaScreenState extends State<JadwalBelanjaScreen> {
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 12.5,
-                                fontFamily: 'Plus Jakarta Sans',
                                 fontWeight: FontWeight.w900,
                               ),
                             ),
@@ -311,7 +328,7 @@ class _JadwalBelanjaScreenState extends State<JadwalBelanjaScreen> {
     );
   }
 
-  void _openItemAction(_BelanjaSchedule e) {
+  void _openItemAction(_KirimSchedule item) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
@@ -334,12 +351,20 @@ class _JadwalBelanjaScreenState extends State<JadwalBelanjaScreen> {
               ),
               const SizedBox(height: 12),
               Text(
-                e.title,
+                item.title,
                 style: const TextStyle(
                   fontSize: 14,
-                  fontFamily: 'Plus Jakarta Sans',
                   fontWeight: FontWeight.w900,
                   color: Color(0xFF111827),
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                '${item.courier} • ${item.awb}',
+                style: const TextStyle(
+                  color: Color(0xFF6A707C),
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
               const SizedBox(height: 12),
@@ -373,68 +398,52 @@ class _JadwalBelanjaScreenState extends State<JadwalBelanjaScreen> {
     );
   }
 
-  // =========================
-  // UI
-  // =========================
   @override
   Widget build(BuildContext context) {
-    final now = DateTime.now();
     return Scaffold(
       backgroundColor: Colors.white,
+
       floatingActionButton: FloatingActionButton(
         backgroundColor: kPurple,
         foregroundColor: Colors.white,
+        elevation: 3,
         onPressed: _openAddSheet,
-        child: const Icon(Icons.add_rounded, size: 28),
+        child: const Icon(Icons.add_rounded, size: 26),
       ),
+
       body: SafeArea(
         child: Column(
           children: [
+            const _TopHeader(title: 'Jadwal Kirim'),
             const SizedBox(height: 8),
-            _TopHeader(
-              title: 'Jadwal Belanja',
-              onTapBack: () => Navigator.pop(context),
-              onTapHome: () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (_) => const HomeScreen()),
-                  (route) => false,
-                );
-              },
-            ),
 
-            const SizedBox(height: 10),
-
-            // MONTH HEADER
+            // month header (dummy)
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 18),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _CircleIcon(icon: Icons.chevron_left, onTap: () {}),
-                  const Spacer(),
                   Column(
-                    children: [
+                    children: const [
                       Text(
-                        _monthName(now.month),
-                        style: const TextStyle(
+                        'January',
+                        style: TextStyle(
                           color: Color(0xFF222B45),
-                          fontSize: 18,
-                          fontFamily: 'Lato',
-                          fontWeight: FontWeight.w700,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      SizedBox(height: 2),
                       Text(
-                        '${now.year}',
-                        style: const TextStyle(
+                        '2024',
+                        style: TextStyle(
                           color: Color(0xFF8F9BB3),
                           fontSize: 12,
-                          fontFamily: 'Lato',
                         ),
                       ),
                     ],
                   ),
-                  const Spacer(),
                   _CircleIcon(icon: Icons.chevron_right, onTap: () {}),
                 ],
               ),
@@ -442,7 +451,7 @@ class _JadwalBelanjaScreenState extends State<JadwalBelanjaScreen> {
 
             const SizedBox(height: 10),
 
-            // WEEKDAY HEADER
+            // weekday
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Row(
@@ -461,7 +470,7 @@ class _JadwalBelanjaScreenState extends State<JadwalBelanjaScreen> {
 
             const SizedBox(height: 8),
 
-            // CALENDAR GRID
+            // calendar
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14),
               child: _CalendarGrid(
@@ -473,99 +482,68 @@ class _JadwalBelanjaScreenState extends State<JadwalBelanjaScreen> {
 
             const SizedBox(height: 12),
 
-            // PURPLE DATE BAR
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
+            // purple date bar
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+              decoration: const BoxDecoration(
+                color: kPurple,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20),
                 ),
-                decoration: BoxDecoration(
-                  color: kPurple,
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                child: Row(
-                  children: [
-                    const _SmallDot(),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        _dateLabel(),
-                        style: const TextStyle(
-                          color: Color(0xFFECECEC),
-                          fontSize: 14,
-                          fontFamily: 'Lato',
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+              ),
+              child: Row(
+                children: [
+                  const _SmallDot(),
+                  const SizedBox(width: 10),
+                  Text(
+                    _fmtDateBar(selectedDay),
+                    style: const TextStyle(
+                      color: Color(0xFFECECEC),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
                     ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.15),
-                        borderRadius: BorderRadius.circular(999),
-                        border: Border.all(
-                          color: Colors.white.withOpacity(0.25),
-                        ),
-                      ),
-                      child: Text(
-                        '${_activeSchedules.length} item',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontFamily: 'Lato',
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
 
-            const SizedBox(height: 10),
-
-            // LIST
+            // list
             Expanded(
-              child: _activeSchedules.isEmpty
-                  ? const Center(
-                      child: Text(
-                        'Belum ada jadwal belanja pada tanggal ini.',
-                        style: TextStyle(
-                          color: Color(0xFF6A707C),
-                          fontSize: 12.5,
-                          fontFamily: 'Plus Jakarta Sans',
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    )
-                  : ListView.separated(
-                      padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
-                      itemCount: _activeSchedules.length,
-                      separatorBuilder: (_, __) => const SizedBox(height: 12),
-                      itemBuilder: (context, i) {
-                        final e = _activeSchedules[i];
-                        final meta = _tagMeta(e.tag);
-                        return InkWell(
-                          borderRadius: BorderRadius.circular(14),
-                          onTap: () => _openItemAction(e),
-                          child: _ScheduleCard(
-                            time: e.time,
-                            title: e.title,
-                            desc: e.desc,
-                            location: e.location,
-                            barColor: meta.color,
-                            borderColor: meta.color,
-                            badge: meta.text,
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                ),
+                child: _activeSchedules.isEmpty
+                    ? const Center(
+                        child: Text(
+                          'Belum ada jadwal kirim pada tanggal ini.',
+                          style: TextStyle(
+                            color: Color(0xFF6A707C),
+                            fontSize: 12.5,
+                            fontWeight: FontWeight.w700,
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      )
+                    : ListView.separated(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 90),
+                        itemCount: _activeSchedules.length,
+                        separatorBuilder: (_, __) => const SizedBox(height: 12),
+                        itemBuilder: (context, i) {
+                          final item = _activeSchedules[i];
+                          return GestureDetector(
+                            onTap: () => _openItemAction(item),
+                            child: _ScheduleCardKirim(item: item),
+                          );
+                        },
+                      ),
+              ),
             ),
           ],
         ),
@@ -575,33 +553,28 @@ class _JadwalBelanjaScreenState extends State<JadwalBelanjaScreen> {
 }
 
 //
-// ================== WIDGETS ==================
+// ================== TOP HEADER ==================
 //
 class _TopHeader extends StatelessWidget {
   final String title;
-  final VoidCallback onTapBack;
-  final VoidCallback onTapHome;
-
-  const _TopHeader({
-    required this.title,
-    required this.onTapBack,
-    required this.onTapHome,
-  });
+  const _TopHeader({required this.title});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 18).copyWith(top: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _CircleIcon(icon: Icons.arrow_back, onTap: onTapBack),
+          _CircleIcon(
+            icon: Icons.arrow_back,
+            onTap: () => Navigator.pop(context),
+          ),
           Text(
             title,
             style: const TextStyle(
               color: Color(0xFF121111),
               fontSize: 16,
-              fontFamily: 'Encode Sans',
               fontWeight: FontWeight.w600,
               height: 1.4,
             ),
@@ -609,7 +582,7 @@ class _TopHeader extends StatelessWidget {
           _CircleIcon(
             icon: Icons.home_filled,
             iconColor: kPurple,
-            onTap: onTapHome,
+            onTap: () => Navigator.pop(context),
           ),
         ],
       ),
@@ -636,13 +609,6 @@ class _CircleIcon extends StatelessWidget {
           borderRadius: BorderRadius.circular(32),
           border: Border.all(color: const Color(0xFFDFDEDE)),
           color: Colors.white,
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0x0C1C252C),
-              blurRadius: 10,
-              offset: Offset(0, 6),
-            ),
-          ],
         ),
         alignment: Alignment.center,
         child: Icon(icon, size: 20, color: iconColor ?? Colors.black87),
@@ -662,12 +628,14 @@ class _WDay extends StatelessWidget {
       style: const TextStyle(
         color: Color(0xFF8F9BB3),
         fontSize: 13,
-        fontFamily: 'Lato',
       ),
     );
   }
 }
 
+//
+// ================== CALENDAR GRID ==================
+//
 class _CalendarGrid extends StatelessWidget {
   final int selectedDay;
   final Map<int, List<Color>> dots;
@@ -681,8 +649,43 @@ class _CalendarGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // grid sederhana: 1..31 (tanpa offset weekday biar simpel)
-    final days = List<int>.generate(31, (i) => i + 1);
+    final days = <_CalCell>[
+      const _CalCell(day: 31, muted: true),
+      const _CalCell(day: 30, muted: true),
+      const _CalCell(day: 1),
+      const _CalCell(day: 2),
+      const _CalCell(day: 3),
+      const _CalCell(day: 4),
+      const _CalCell(day: 5),
+      const _CalCell(day: 6),
+      const _CalCell(day: 7),
+      const _CalCell(day: 8),
+      const _CalCell(day: 9),
+      const _CalCell(day: 10),
+      const _CalCell(day: 11),
+      const _CalCell(day: 12),
+      const _CalCell(day: 13),
+      const _CalCell(day: 14),
+      const _CalCell(day: 15),
+      const _CalCell(day: 16),
+      const _CalCell(day: 17),
+      const _CalCell(day: 18),
+      const _CalCell(day: 19),
+      const _CalCell(day: 20),
+      const _CalCell(day: 21),
+      const _CalCell(day: 22),
+      const _CalCell(day: 23),
+      const _CalCell(day: 24),
+      const _CalCell(day: 25),
+      const _CalCell(day: 26),
+      const _CalCell(day: 27),
+      const _CalCell(day: 28),
+      const _CalCell(day: 29),
+      const _CalCell(day: 30),
+      const _CalCell(day: 31),
+      const _CalCell(day: 1, muted: true),
+      const _CalCell(day: 2, muted: true),
+    ];
 
     return GridView.builder(
       itemCount: days.length,
@@ -692,19 +695,18 @@ class _CalendarGrid extends StatelessWidget {
         crossAxisCount: 7,
         mainAxisSpacing: 10,
         crossAxisSpacing: 6,
-        childAspectRatio: 1.15,
+        childAspectRatio: 1.1,
       ),
       itemBuilder: (context, index) {
-        final day = days[index];
-        final isSelected = day == selectedDay;
+        final cell = days[index];
+        final isSelected = !cell.muted && cell.day == selectedDay;
 
         return GestureDetector(
-          onTap: () => onTapDay(day),
+          onTap: cell.muted ? null : () => onTapDay(cell.day),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 150),
+              Container(
                 width: 30,
                 height: 30,
                 decoration: BoxDecoration(
@@ -715,12 +717,13 @@ class _CalendarGrid extends StatelessWidget {
                 ),
                 alignment: Alignment.center,
                 child: Text(
-                  '$day',
+                  '${cell.day}',
                   style: TextStyle(
-                    color: isSelected ? kPurple : const Color(0xFF222B45),
-                    fontSize: 14.5,
-                    fontFamily: 'Lato',
-                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                    color: cell.muted
+                        ? const Color(0xFF8F9BB3)
+                        : (isSelected ? Colors.white : const Color(0xFF222B45)),
+                    fontSize: 15,
+                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
                   ),
                 ),
               ),
@@ -729,7 +732,7 @@ class _CalendarGrid extends StatelessWidget {
                 height: 6,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
-                  children: (dots[day] ?? const [])
+                  children: (dots[cell.day] ?? const [])
                       .take(3)
                       .map(
                         (c) => Container(
@@ -753,6 +756,12 @@ class _CalendarGrid extends StatelessWidget {
   }
 }
 
+class _CalCell {
+  final int day;
+  final bool muted;
+  const _CalCell({required this.day, this.muted = false});
+}
+
 class _SmallDot extends StatelessWidget {
   const _SmallDot();
 
@@ -769,37 +778,80 @@ class _SmallDot extends StatelessWidget {
   }
 }
 
-class _ScheduleCard extends StatelessWidget {
+//
+// ================== CARD KIRIM ==================
+//
+enum _KirimStatus { siap, dijemput, dikirim, selesai }
+
+class _KirimSchedule {
   final String time;
   final String title;
   final String desc;
-  final String location;
+  final String pickup;
+  final String destination;
+  final String courier;
+  final String awb;
+  final _KirimStatus status;
   final Color borderColor;
   final Color barColor;
-  final String badge;
 
-  const _ScheduleCard({
+  const _KirimSchedule({
     required this.time,
     required this.title,
     required this.desc,
-    required this.location,
+    required this.pickup,
+    required this.destination,
+    required this.courier,
+    required this.awb,
+    required this.status,
     required this.borderColor,
     required this.barColor,
-    required this.badge,
   });
+}
+
+class _ScheduleCardKirim extends StatelessWidget {
+  final _KirimSchedule item;
+  const _ScheduleCardKirim({required this.item});
+
+  Color get _statusColor {
+    switch (item.status) {
+      case _KirimStatus.siap:
+        return const Color(0xFFD32F2F);
+      case _KirimStatus.dijemput:
+        return const Color(0xFFE65100);
+      case _KirimStatus.dikirim:
+        return const Color(0xFF1565C0);
+      case _KirimStatus.selesai:
+        return const Color(0xFF2E7D32);
+    }
+  }
+
+  String get _statusText {
+    switch (item.status) {
+      case _KirimStatus.siap:
+        return 'Siap';
+      case _KirimStatus.dijemput:
+        return 'Dijemput';
+      case _KirimStatus.dikirim:
+        return 'Dikirim';
+      case _KirimStatus.selesai:
+        return 'Selesai';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      constraints: const BoxConstraints(minHeight: 132),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: borderColor, width: 1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: item.borderColor, width: 1),
         boxShadow: const [
           BoxShadow(
             color: Color(0x0C1C252C),
-            blurRadius: 10,
-            offset: Offset(0, 6),
+            blurRadius: 8,
+            offset: Offset(0, 4),
           ),
         ],
       ),
@@ -807,9 +859,8 @@ class _ScheduleCard extends StatelessWidget {
         children: [
           Container(
             width: 10,
-            height: 128,
             decoration: BoxDecoration(
-              color: barColor,
+              color: item.barColor,
               borderRadius: BorderRadius.circular(10),
             ),
           ),
@@ -825,15 +876,14 @@ class _ScheduleCard extends StatelessWidget {
                       const Icon(
                         Icons.access_time,
                         size: 16,
-                        color: Color(0xFF9A9A9A),
+                        color: Color(0xE59A9A9A),
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        time,
+                        item.time,
                         style: const TextStyle(
-                          color: Color(0xFF9A9A9A),
+                          color: Color(0xE59A9A9A),
                           fontSize: 12,
-                          fontFamily: 'Lato',
                         ),
                       ),
                       const Spacer(),
@@ -848,11 +898,10 @@ class _ScheduleCard extends StatelessWidget {
                           border: Border.all(color: const Color(0xFFE8ECF4)),
                         ),
                         child: Text(
-                          badge,
+                          _statusText,
                           style: TextStyle(
-                            color: barColor,
+                            color: _statusColor,
                             fontSize: 11,
-                            fontFamily: 'Plus Jakarta Sans',
                             fontWeight: FontWeight.w900,
                           ),
                         ),
@@ -861,45 +910,60 @@ class _ScheduleCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    title,
+                    item.title,
                     style: const TextStyle(
                       color: Color(0xFF1B1B1B),
-                      fontSize: 15.5,
-                      fontFamily: 'Almarai',
+                      fontSize: 16,
                       fontWeight: FontWeight.w700,
                       height: 1.2,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    desc,
+                    '${item.courier} • ${item.awb}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: Color(0xFF575A66),
+                      fontSize: 12,
+                      height: 1.35,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    item.desc,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       color: Color(0xFF575A66),
                       fontSize: 12,
-                      fontFamily: 'Lato',
-                      height: 1.4,
+                      height: 1.35,
                     ),
                   ),
                   const SizedBox(height: 10),
                   Row(
                     children: [
                       const Icon(
-                        Icons.location_on_outlined,
+                        Icons.place_outlined,
                         size: 18,
                         color: Color(0xFF575A66),
                       ),
                       const SizedBox(width: 6),
                       Expanded(
                         child: Text(
-                          location,
+                          '${item.pickup} → ${item.destination}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                             color: Color(0xFF575A66),
                             fontSize: 12,
-                            fontFamily: 'Lato',
                           ),
                         ),
+                      ),
+                      const Icon(
+                        Icons.more_vert,
+                        size: 18,
+                        color: Color(0xFFD8DEF3),
                       ),
                     ],
                   ),
@@ -913,102 +977,55 @@ class _ScheduleCard extends StatelessWidget {
   }
 }
 
-class _InputField extends StatelessWidget {
-  final TextEditingController controller;
+//
+// ================== BottomSheet Components ==================
+//
+class _SheetAction extends StatelessWidget {
+  final IconData icon;
   final String label;
-  final String hint;
-  final TextInputType keyboardType;
-
-  const _InputField({
-    required this.controller,
-    required this.label,
-    required this.hint,
-    this.keyboardType = TextInputType.text,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            color: Color(0xFF6A707C),
-            fontSize: 12,
-            fontFamily: 'Plus Jakarta Sans',
-            fontWeight: FontWeight.w800,
-          ),
-        ),
-        const SizedBox(height: 6),
-        TextField(
-          controller: controller,
-          keyboardType: keyboardType,
-          decoration: InputDecoration(
-            hintText: hint,
-            hintStyle: const TextStyle(
-              color: Color(0xFF9AA4B2),
-              fontSize: 12,
-              fontFamily: 'Plus Jakarta Sans',
-              fontWeight: FontWeight.w600,
-            ),
-            filled: true,
-            fillColor: const Color(0xFFF6F7F8),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 12,
-              vertical: 12,
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: const BorderSide(color: Color(0xFFE8ECF4)),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: const BorderSide(color: Color(0xFFE8ECF4)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: const BorderSide(color: kPurple),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _ChoicePill extends StatelessWidget {
-  final String label;
-  final bool active;
+  final Color color;
   final VoidCallback onTap;
 
-  const _ChoicePill({
+  const _SheetAction({
+    required this.icon,
     required this.label,
-    required this.active,
+    required this.color,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: BorderRadius.circular(999),
+      borderRadius: BorderRadius.circular(14),
       onTap: onTap,
       child: Container(
-        height: 40,
-        alignment: Alignment.center,
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
-          color: active ? kPurple : const Color(0xFFF6F7F8),
-          borderRadius: BorderRadius.circular(999),
-          border: Border.all(color: active ? kPurple : const Color(0xFFE8ECF4)),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: const Color(0xFFE8ECF4)),
+          color: Colors.white,
         ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: active ? Colors.white : const Color(0xFF1E232C),
-            fontSize: 11.5,
-            fontFamily: 'Plus Jakarta Sans',
-            fontWeight: active ? FontWeight.w900 : FontWeight.w800,
-          ),
+        child: Row(
+          children: [
+            Icon(icon, color: color, size: 18),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                label,
+                style: TextStyle(
+                  color: color,
+                  fontSize: 12.5,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+            ),
+            const Icon(
+              Icons.chevron_right_rounded,
+              color: Color(0xFF9AA4B2),
+              size: 18,
+            ),
+          ],
         ),
       ),
     );
@@ -1048,7 +1065,6 @@ class _GhostButton extends StatelessWidget {
               style: const TextStyle(
                 color: kPurple,
                 fontSize: 12.5,
-                fontFamily: 'Plus Jakarta Sans',
                 fontWeight: FontWeight.w900,
               ),
             ),
@@ -1059,99 +1075,101 @@ class _GhostButton extends StatelessWidget {
   }
 }
 
-class _SheetAction extends StatelessWidget {
-  final IconData icon;
+class _ChoicePill extends StatelessWidget {
   final String label;
-  final Color color;
+  final bool active;
   final VoidCallback onTap;
 
-  const _SheetAction({
-    required this.icon,
+  const _ChoicePill({
     required this.label,
-    required this.color,
+    required this.active,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(999),
       onTap: onTap,
       child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        height: 40,
+        alignment: Alignment.center,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
-          color: Colors.white,
+          color: active ? kPurple : const Color(0xFFF6F7F8),
+          borderRadius: BorderRadius.circular(999),
+          border: Border.all(color: active ? kPurple : const Color(0xFFE8ECF4)),
         ),
-        child: Row(
-          children: [
-            Icon(icon, color: color, size: 18),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                label,
-                style: TextStyle(
-                  color: color,
-                  fontSize: 12.5,
-                  fontFamily: 'Plus Jakarta Sans',
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-            ),
-            const Icon(
-              Icons.chevron_right_rounded,
-              color: Color(0xFF9AA4B2),
-              size: 18,
-            ),
-          ],
+        child: Text(
+          label,
+          style: TextStyle(
+            color: active ? Colors.white : const Color(0xFF1E232C),
+            fontSize: 11.5,
+            fontWeight: active ? FontWeight.w900 : FontWeight.w800,
+          ),
         ),
       ),
     );
   }
 }
 
-//
-// ================== MODELS ==================
-//
-enum _BelanjaTag { bahan, aksesoris, packaging, vendor, lainnya }
+class _InputField extends StatelessWidget {
+  final TextEditingController controller;
+  final String label;
+  final String hint;
+  final TextInputType keyboardType;
 
-class _BelanjaSchedule {
-  final int day;
-  final String time;
-  final String title;
-  final String desc;
-  final String location;
-  final _BelanjaTag tag;
-
-  _BelanjaSchedule({
-    required this.day,
-    required this.time,
-    required this.title,
-    required this.desc,
-    required this.location,
-    required this.tag,
+  const _InputField({
+    required this.controller,
+    required this.label,
+    required this.hint,
+    this.keyboardType = TextInputType.text,
   });
-}
 
-class _TagMeta {
-  final String text;
-  final Color color;
-  const _TagMeta(this.text, this.color);
-}
-
-_TagMeta _tagMeta(_BelanjaTag t) {
-  switch (t) {
-    case _BelanjaTag.bahan:
-      return const _TagMeta('Bahan', Color(0xFF26BFBF));
-    case _BelanjaTag.aksesoris:
-      return const _TagMeta('Aksesoris', Color(0xFF735BF2));
-    case _BelanjaTag.packaging:
-      return const _TagMeta('Packaging', Color(0xFF0095FF));
-    case _BelanjaTag.vendor:
-      return const _TagMeta('Vendor', Color(0xFF00B383));
-    case _BelanjaTag.lainnya:
-      return const _TagMeta('Lainnya', Color(0xFFE65100));
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            color: Color(0xFF6A707C),
+            fontSize: 12,
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+        const SizedBox(height: 6),
+        TextField(
+          controller: controller,
+          keyboardType: keyboardType,
+          decoration: InputDecoration(
+            hintText: hint,
+            hintStyle: const TextStyle(
+              color: Color(0xFF9AA4B2),
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+            ),
+            filled: true,
+            fillColor: const Color(0xFFF6F7F8),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 12,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(14),
+              borderSide: const BorderSide(color: Color(0xFFE8ECF4)),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(14),
+              borderSide: const BorderSide(color: Color(0xFFE8ECF4)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(14),
+              borderSide: const BorderSide(color: kPurple),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
