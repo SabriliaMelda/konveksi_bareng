@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../services/auth_service.dart';
 import '../../services/storage_service.dart';
 import '../../widgets/auth_background.dart';
-import 'find_account.dart';
-import 'verification.dart';
 
 const _strings = {
   'id': {
@@ -64,10 +63,7 @@ class _AccountScreenState extends State<AccountScreen> {
   Future<void> _loadData() async {
     final email = await StorageService.getItem('recovery_email');
     if (email == null && mounted) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const FindAccountScreen()),
-      );
+      context.go('/find-account');
       return;
     }
     _email = email!;
@@ -76,10 +72,7 @@ class _AccountScreenState extends State<AccountScreen> {
       final result = await AuthService.getSecurityQuestions(_email);
       if (!result.ok) {
         if (mounted) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (_) => const FindAccountScreen()),
-          );
+          context.go('/find-account');
         }
         return;
       }
@@ -91,10 +84,7 @@ class _AccountScreenState extends State<AccountScreen> {
       });
     } catch (_) {
       if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const FindAccountScreen()),
-        );
+        context.go('/find-account');
       }
     }
   }
@@ -138,10 +128,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
       if (mounted) {
         setState(() => _loading = false);
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const VerificationScreen()),
-        );
+        context.go('/verification');
       }
     } catch (_) {
       setState(() => _error = t['errorServer']!);
@@ -284,11 +271,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   ? null
                   : () {
                       StorageService.deleteItem('recovery_email');
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => const FindAccountScreen()),
-                      );
+                      context.go('/find-account');
                     },
               style: OutlinedButton.styleFrom(
                 padding: EdgeInsets.zero,

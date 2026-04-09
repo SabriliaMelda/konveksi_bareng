@@ -1,6 +1,6 @@
 // promosi.dart
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/screens/main/home.dart';
+import 'package:go_router/go_router.dart';
 
 const Color kPurple = Color(0xFF6B257F);
 
@@ -155,7 +155,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                 children: [
                   InkWell(
                     borderRadius: BorderRadius.circular(32),
-                    onTap: () => Navigator.pop(context),
+                    onTap: () => context.pop(),
                     child: Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
@@ -182,11 +182,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                   InkWell(
                     borderRadius: BorderRadius.circular(32),
                     onTap: () {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (_) => const HomeScreen()),
-                        (route) => false,
-                      );
+                      context.go('/home');
                     },
                     child: Container(
                       padding: const EdgeInsets.all(8),
