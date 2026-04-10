@@ -1,6 +1,6 @@
 // meeting.dart
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/screens/project/create_meeting_screen.dart'; // ✅ tambah ini
+import 'package:go_router/go_router.dart';
 
 const kPurple = Color(0xFF6B257F);
 
@@ -60,10 +60,7 @@ class _MeetingScreenState extends State<MeetingScreen> {
         backgroundColor: kPurple,
         onPressed: () {
           // ✅ pindah ke halaman buat_meeting.dart
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const CreateMeetingScreen()),
-          );
+          context.push('/create-meeting');
         },
         child: const Icon(Icons.add, size: 28),
       ),
@@ -83,7 +80,7 @@ class _MeetingScreenState extends State<MeetingScreen> {
                 children: [
                   _CircleBtn(
                     icon: Icons.arrow_back,
-                    onTap: () => Navigator.pop(context),
+                    onTap: () => context.pop(),
                   ),
                   const Text(
                     'Jadwal Buat',
@@ -97,7 +94,7 @@ class _MeetingScreenState extends State<MeetingScreen> {
                   _CircleBtn(
                     icon: Icons.home_filled,
                     iconColor: kPurple,
-                    onTap: () => Navigator.pop(context),
+                    onTap: () => context.pop(),
                   ),
                 ],
               ),

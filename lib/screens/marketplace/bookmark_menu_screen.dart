@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 const kPurple = Color(0xFF6B257F);
 
@@ -85,7 +86,7 @@ class BookmarkMenuScreen extends StatelessWidget {
             _TopHeader(
               title: formatBookmarkTitle(title),
               subtitle: subtitle,
-              onBack: () => Navigator.pop(context),
+              onBack: () => context.pop(),
             ),
             Expanded(
               child: ListView.separated(
@@ -320,16 +321,11 @@ class _BookmarkTile extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       onTap: () {
         if (isFolder) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => BookmarkMenuScreen(
-                title: formatBookmarkTitle(item.title),
-                subtitle: 'Submenu',
-                items: item.children!,
-              ),
-            ),
-          );
+          context.push('/bookmark-menu', extra: {
+            'title': formatBookmarkTitle(item.title),
+            'subtitle': 'Submenu',
+            'items': item.children!,
+          });
           return;
         }
         if (item.page != null) {

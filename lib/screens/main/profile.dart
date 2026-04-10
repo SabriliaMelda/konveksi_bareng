@@ -1,6 +1,6 @@
 // profile.dart
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/screens/main/home.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -54,7 +54,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   children: [
                     _CircleIcon(
                       icon: Icons.arrow_back_ios_new,
-                      onTap: () => Navigator.pop(context),
+                      onTap: () => context.pop(),
                     ),
                     const Text(
                       'Profil',
@@ -69,11 +69,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       icon: Icons.home_filled,
                       iconColor: _purple,
                       onTap: () {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (_) => const HomeScreen()),
-                          (route) => false,
-                        );
+                        context.go('/home');
                       },
                     ),
                   ],

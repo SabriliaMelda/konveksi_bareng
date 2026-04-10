@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'login.dart';
-import 'register.dart';
+import 'package:go_router/go_router.dart';
 
 class WelcomeApp extends StatelessWidget {
   const WelcomeApp({super.key});
@@ -115,10 +114,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               left: 22,
               bottom: screenHeight * 0.22,
               child: GestureDetector(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const LoginScreen()),
-                ),
+                onTap: () => context.push('/login'),
                 child: Container(
                   width: screenWidth - 44,
                   height: 56,
@@ -144,10 +140,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               left: 22,
               bottom: screenHeight * 0.12,
               child: GestureDetector(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const RegisterScreen()),
-                ),
+                onTap: () => context.push('/register'),
                 child: Container(
                   width: screenWidth - 44,
                   height: 56,

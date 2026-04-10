@@ -1,7 +1,6 @@
 // operasional.dart
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/screens/finance/electricity_screen.dart';
-import 'package:konveksi_bareng/screens/main/home.dart';
+import 'package:go_router/go_router.dart';
 
 const Color kPurple = Color(0xFF6B257F);
 
@@ -127,7 +126,7 @@ class _OperationalScreenState extends State<OperationalScreen> {
                 label: 'Edit transaksi (dummy)',
                 color: kPurple,
                 onTap: () {
-                  Navigator.pop(context);
+                  context.pop();
                   ScaffoldMessenger.of(
                     context,
                   ).showSnackBar(const SnackBar(content: Text('Edit (dummy)')));
@@ -139,7 +138,7 @@ class _OperationalScreenState extends State<OperationalScreen> {
                 label: 'Hapus transaksi (dummy)',
                 color: const Color(0xFFD32F2F),
                 onTap: () {
-                  Navigator.pop(context);
+                  context.pop();
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Hapus (dummy)')),
                   );
@@ -220,7 +219,7 @@ class _OperationalScreenState extends State<OperationalScreen> {
                     child: _GhostButton(
                       icon: Icons.close_rounded,
                       text: 'Batal',
-                      onTap: () => Navigator.pop(context),
+                      onTap: () => context.pop(),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -255,7 +254,7 @@ class _OperationalScreenState extends State<OperationalScreen> {
                           );
                         });
 
-                        Navigator.pop(context);
+                        context.pop();
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text('Pengeluaran ditambahkan (dummy)'),
@@ -317,10 +316,7 @@ class _OperationalScreenState extends State<OperationalScreen> {
               active: _tab == _OpTab.listrik,
               onTap: () async {
                 setState(() => _tab = _OpTab.listrik);
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const ElectricityScreen()),
-                );
+                await context.push('/electricity');
                 if (mounted) setState(() => _tab = _OpTab.input);
               },
             ),
@@ -357,7 +353,7 @@ class _OperationalScreenState extends State<OperationalScreen> {
                 children: [
                   InkWell(
                     borderRadius: BorderRadius.circular(32),
-                    onTap: () => Navigator.pop(context),
+                    onTap: () => context.pop(),
                     child: Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
@@ -384,11 +380,7 @@ class _OperationalScreenState extends State<OperationalScreen> {
                   InkWell(
                     borderRadius: BorderRadius.circular(32),
                     onTap: () {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (_) => const HomeScreen()),
-                        (route) => false,
-                      );
+                      context.go('/home');
                     },
                     child: Container(
                       padding: const EdgeInsets.all(8),

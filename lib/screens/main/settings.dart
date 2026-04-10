@@ -1,6 +1,9 @@
 // settings.dart
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/screens/main/home.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:konveksi_bareng/config/app_theme.dart';
+import 'package:konveksi_bareng/providers/theme_provider.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -10,15 +13,11 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  // ===== Brand accent =====
-  static const _purple = Color(0xFF6B257F);
-
   // ===== Search =====
   final _searchC = TextEditingController();
 
   // ===== Dummy states =====
   bool _notif = true;
-  bool _darkMode = false;
   bool _biometric = false;
   bool _autoBackup = true;
 
@@ -41,20 +40,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final q = _searchC.text.trim().toLowerCase();
+    final tp = context.watch<ThemeProvider>();
 
-    // ===== Theme tokens based on darkMode =====
-    final bool isDark = _darkMode;
+    // ===== Theme tokens from ThemeProvider =====
+    final bool isDark = tp.darkMode;
+    const _purple = AppColors.purple;
 
-    final bg = isDark ? const Color(0xFF0B1220) : const Color(0xFFF7FAFF);
-    final ink = isDark ? const Color(0xFFE5E7EB) : const Color(0xFF0F172A);
-    final muted = isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B);
-    final border = isDark ? const Color(0x1FFFFFFF) : const Color(0x1A0F172A);
-    final card = isDark ? const Color(0xCC0F172A) : const Color(0xCCFFFFFF);
-    final tile = isDark ? const Color(0xFF111827) : const Color(0xFFF1F5F9);
-    final tileBorder = isDark
-        ? const Color(0x22FFFFFF)
-        : const Color(0x110F172A);
-    final iconSurface = isDark ? const Color(0xFF0F172A) : Colors.white;
+    final bg = tp.bg;
+    final ink = tp.ink;
+    final muted = tp.muted;
+    final border = tp.border;
+    final card = tp.card;
+    final tile = tp.tile;
+    final tileBorder = tp.tileBorder;
+    final iconSurface = tp.iconSurface;
 
     // === Auto open section kalau ada hasil search ===
     final prefHas =
@@ -97,7 +96,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   children: [
                     _CircleIcon(
                       icon: Icons.arrow_back_ios_new,
-                      onTap: () => Navigator.pop(context),
+                      onTap: () => context.pop(),
                       iconColor: ink,
                       surface: iconSurface,
                       borderColor: border,
@@ -115,11 +114,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       icon: Icons.home_filled,
                       iconColor: _purple,
                       onTap: () {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (_) => const HomeScreen()),
-                          (route) => false,
-                        );
+                        context.go('/home');
                       },
                       surface: iconSurface,
                       borderColor: border,
@@ -297,10 +292,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               icon: Icons.dark_mode_outlined,
                               title: 'Dark Mode',
                               subtitle: 'Tema gelap',
-                              value: _darkMode,
-                              onChanged: (v) => setState(
-                                () => _darkMode = v,
-                              ), // ✅ beneran ganti tema
+                              value: isDark,
+                              onChanged: (v) => tp.setDarkMode(v),
                               ink: ink,
                               muted: muted,
                               tile: tile,

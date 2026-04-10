@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../services/auth_service.dart';
 import '../../services/storage_service.dart';
 import '../../widgets/auth_background.dart';
-import 'account_screen.dart';
 
 const _strings = {
   'id': {
@@ -71,10 +71,7 @@ class _FindAccountScreenState extends State<FindAccountScreen> {
       } else {
         await StorageService.setItem('recovery_email', email);
         if (mounted) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const AccountScreen()),
-          );
+          context.push('/account');
         }
       }
     } catch (_) {

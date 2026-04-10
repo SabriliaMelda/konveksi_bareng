@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/screens/worker/worker_list_screen.dart';
-import 'package:konveksi_bareng/screens/worker/wage_billing_status_screen.dart';
-import 'package:konveksi_bareng/screens/main/chat.dart';
-import 'package:konveksi_bareng/screens/main/home.dart';
+import 'package:go_router/go_router.dart';
 
 const kPurple = Color(0xFF6B257F);
 
@@ -38,28 +35,14 @@ class WorkerScreen extends StatelessWidget {
                     _BookmarkMenuCard(
                       title: 'Daftar pekerja',
                       icon: Icons.badge_outlined,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const WorkerListScreen(),
-                          ),
-                        );
-                      },
+                      onTap: () => context.push('/worker-list'),
                     ),
                     const SizedBox(height: 12),
 
                     _BookmarkMenuCard(
                       title: 'Status tagihan upah',
                       icon: Icons.receipt_long_outlined,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const WageBillingStatusScreen(),
-                          ),
-                        );
-                      },
+                      onTap: () => context.push('/wage-billing-status'),
                     ),
                     const SizedBox(height: 12),
 
@@ -67,10 +50,7 @@ class WorkerScreen extends StatelessWidget {
                       title: 'Chat',
                       icon: Icons.chat_bubble_outline,
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => const ChatScreen()),
-                        );
+                        context.push('/chat');
                       },
                     ),
                     const SizedBox(height: 12),
@@ -101,7 +81,7 @@ class _TopHeader extends StatelessWidget {
         children: [
           _CircleIcon(
             icon: Icons.arrow_back,
-            onTap: () => Navigator.pop(context),
+            onTap: () => context.pop(),
           ),
           Text(
             title,
@@ -116,11 +96,7 @@ class _TopHeader extends StatelessWidget {
             icon: Icons.home_filled,
             iconColor: kPurple,
             onTap: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (_) => const HomeScreen()),
-                (route) => false,
-              );
+              context.go('/home');
             },
           ),
         ],

@@ -1,6 +1,6 @@
 // daftar_project.dart
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/screens/main/home.dart';
+import 'package:go_router/go_router.dart';
 
 const kPurple = Color(0xFF6B257F);
 
@@ -100,7 +100,7 @@ class _ProjectListScreenState extends State<ProjectListScreen> {
                       // back
                       _HeaderIcon(
                         icon: Icons.arrow_back_ios_new_rounded,
-                        onTap: () => Navigator.pop(context),
+                        onTap: () => context.pop(),
                       ),
                       const SizedBox(width: 12),
                       const Expanded(
@@ -117,15 +117,7 @@ class _ProjectListScreenState extends State<ProjectListScreen> {
                       // home
                       _HeaderIcon(
                         icon: Icons.home_filled,
-                        onTap: () {
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const HomeScreen(),
-                            ),
-                            (route) => false,
-                          );
-                        },
+                        onTap: () => context.go('/home'),
                       ),
                     ],
                   ),

@@ -1,6 +1,6 @@
 // spk.dart
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/screens/main/home.dart';
+import 'package:go_router/go_router.dart';
 
 const kPurple = Color(0xFF6B257F);
 
@@ -166,7 +166,7 @@ class _TopHeader extends StatelessWidget {
         children: [
           _CircleIcon(
             icon: Icons.arrow_back,
-            onTap: () => Navigator.pop(context),
+            onTap: () => context.pop(),
           ),
           Text(
             title,
@@ -181,11 +181,7 @@ class _TopHeader extends StatelessWidget {
             icon: Icons.home_filled,
             iconColor: kPurple,
             onTap: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (_) => const HomeScreen()),
-                (route) => false,
-              );
+              context.go('/home');
             },
           ),
         ],
@@ -528,7 +524,7 @@ class _CreateSpkSheetState extends State<_CreateSpkSheet> {
                       elevation: 2,
                     ),
                     onPressed: () {
-                      Navigator.pop(context);
+                      context.pop();
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('SPK berhasil dibuat (placeholder)'),

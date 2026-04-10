@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 const Color kPurple = Color(0xFF6B257F);
 
@@ -111,7 +112,7 @@ class _CheckoutAppBar extends StatelessWidget {
         children: [
           _RoundIconButton(
             icon: Icons.arrow_back,
-            onTap: () => Navigator.pop(context),
+            onTap: () => context.pop(),
           ),
           const Text(
             'Checkout',

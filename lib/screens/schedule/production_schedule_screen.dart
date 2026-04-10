@@ -1,7 +1,6 @@
 // jadwal_buat.dart
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/screens/project/meeting.dart';
-import 'package:konveksi_bareng/screens/main/home.dart';
+import 'package:go_router/go_router.dart';
 
 const kPurple = Color(0xFF6B257F);
 
@@ -63,13 +62,9 @@ class _ProductionScheduleScreenState extends State<ProductionScheduleScreen> {
             const SizedBox(height: 8),
             _TopHeader(
               title: 'Jadwal Buat',
-              onTapBack: () => Navigator.pop(context),
+              onTapBack: () => context.pop(),
               onTapHome: () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (_) => const HomeScreen()),
-                  (route) => false,
-                );
+                context.go('/home');
               },
             ),
 
@@ -199,10 +194,7 @@ class _ProductionScheduleScreenState extends State<ProductionScheduleScreen> {
           // TODO: aksi kalender mini
         },
         onTapMiddle: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const MeetingScreen()),
-          );
+          context.push('/meeting');
         },
         onTapPlus: () {
           // TODO: tambah jadwal
