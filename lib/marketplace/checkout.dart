@@ -1,93 +1,246 @@
 import 'package:flutter/material.dart';
 
 const Color kPurple = Color(0xFF6B257F);
+const Color _kBg = Color(0xFFF7F7FB);
 
-class CheckoutScreen extends StatelessWidget {
+// ── Models ───────────────────────────────────────────────────────────────────
+
+class _CartProduct {
+  final String nama;
+  final String model;
+  final String seller;
+  final int harga;
+  final String imagePath;
+  int qty;
+  bool selected;
+
+  _CartProduct({
+    required this.nama,
+    required this.model,
+    required this.seller,
+    required this.harga,
+    required this.imagePath,
+    this.qty = 1,
+    this.selected = true,
+  });
+}
+
+// ── Payment options ───────────────────────────────────────────────────────────
+
+class _PaymentOption {
+  final String label;
+  final String group;
+  final IconData icon;
+  final Color color;
+  const _PaymentOption(
+      {required this.label,
+      required this.group,
+      required this.icon,
+      required this.color});
+}
+
+const _paymentOptions = [
+  _PaymentOption(
+      label: 'Visa',
+      group: 'Kartu Kredit',
+      icon: Icons.credit_card,
+      color: Color(0xFF1A1F71)),
+  _PaymentOption(
+      label: 'Mastercard',
+      group: 'Kartu Kredit',
+      icon: Icons.credit_card,
+      color: Color(0xFFEB001B)),
+  _PaymentOption(
+      label: 'GoPay',
+      group: 'E-Wallet',
+      icon: Icons.account_balance_wallet_outlined,
+      color: Color(0xFF00AED6)),
+  _PaymentOption(
+      label: 'DANA',
+      group: 'E-Wallet',
+      icon: Icons.account_balance_wallet_outlined,
+      color: Color(0xFF118EEA)),
+  _PaymentOption(
+      label: 'ShopeePay',
+      group: 'E-Wallet',
+      icon: Icons.account_balance_wallet_outlined,
+      color: Color(0xFFEE4D2D)),
+  _PaymentOption(
+      label: 'QRIS',
+      group: 'QRIS',
+      icon: Icons.qr_code_2_rounded,
+      color: Color(0xFF6B257F)),
+];
+
+// ── Helper ────────────────────────────────────────────────────────────────────
+
+String _rupiah(int n) {
+  final s = n.toString();
+  final buf = StringBuffer('Rp ');
+  for (int i = 0; i < s.length; i++) {
+    final fromEnd = s.length - i;
+    buf.write(s[i]);
+    if (fromEnd > 1 && fromEnd % 3 == 1) buf.write('.');
+  }
+  return buf.toString();
+}
+
+// ── Screen ────────────────────────────────────────────────────────────────────
+
+class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({super.key});
+
+  @override
+  State<CheckoutScreen> createState() => _CheckoutScreenState();
+}
+
+class _CheckoutScreenState extends State<CheckoutScreen> {
+  _PaymentOption? _selectedPayment;
+
+  final List<_CartProduct> _products = [
+    _CartProduct(
+      nama: 'Kaos Oversize',
+      model: 'Basic Cotton 30s',
+      seller: 'Adidas',
+      harga: 212000,
+      imagePath: 'assets/images/adidas.jpg',
+      qty: 4,
+    ),
+    _CartProduct(
+      nama: 'Jaket Windbreaker',
+      model: 'Slim Fit Series',
+      seller: 'Adidas',
+      harga: 389000,
+      imagePath: 'assets/images/adidas.jpg',
+    ),
+    _CartProduct(
+      nama: 'Hoodie Fleece',
+      model: 'Premium Oversized',
+      seller: 'Nike',
+      harga: 459000,
+      imagePath: 'assets/images/nike.jpg',
+      qty: 2,
+    ),
+    _CartProduct(
+      nama: 'Celana Jogger',
+      model: 'Dri-FIT Tech',
+      seller: 'Nike',
+      harga: 325000,
+      imagePath: 'assets/images/nike.jpg',
+    ),
+    _CartProduct(
+      nama: 'Kemeja Oxford',
+      model: 'Slim Casual',
+      seller: 'Rucas',
+      harga: 189000,
+      imagePath: 'assets/images/rucas.jpg',
+    ),
+  ];
+
+  List<String> get _sellerList =>
+      (_products.map((p) => p.seller).toSet().toList()..sort());
+
+  List<_CartProduct> _bySeller(String seller) =>
+      _products.where((p) => p.seller == seller).toList();
+
+  int get _totalHarga =>
+      _products.where((p) => p.selected).fold(0, (s, p) => s + p.harga * p.qty);
+
+  int get _totalItems =>
+      _products.where((p) => p.selected).fold(0, (s, p) => s + p.qty);
+
+  void _showPaymentPicker() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (_) => DraggableScrollableSheet(
+        initialChildSize: 0.55,
+        minChildSize: 0.4,
+        maxChildSize: 0.85,
+        expand: false,
+        builder: (_, scrollController) => _PaymentPickerSheet(
+          selected: _selectedPayment,
+          scrollController: scrollController,
+          onSelect: (opt) {
+            setState(() => _selectedPayment = opt);
+            Navigator.pop(context);
+          },
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // BG putih
+      backgroundColor: _kBg,
       body: SafeArea(
         child: Column(
           children: [
-            const _CheckoutAppBar(),
-            const Divider(height: 1, color: Color(0xFFF2F2F2)),
+            const _AppBar(),
+            const Divider(height: 1, color: Color(0xFFEEEEEE)),
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 16,
-                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    // CART LIST
-                    _CartItem(
-                      imagePath: 'assets/images/adidas.jpg',
-                      title: 'Modern light clothes',
-                      subtitle: 'Dress modern',
-                      price: '\$212.99',
-                      quantity: 4,
-                      selected: true,
-                    ),
-                    SizedBox(height: 16),
-                    Divider(height: 1, color: Color(0xFFF6F6F6)),
-                    SizedBox(height: 16),
-                    _CartItem(
-                      imagePath: 'assets/images/nike.jpg',
-                      title: 'Modern light clothes',
-                      subtitle: 'Dress modern',
-                      price: '\$162.99',
-                      quantity: 1,
-                      selected: true,
-                    ),
-                    SizedBox(height: 24),
+                  children: [
+                    // Products grouped by seller
+                    for (final seller in _sellerList) ...[
+                      _SellerHeader(name: seller),
+                      const SizedBox(height: 8),
+                      for (final p in _bySeller(seller)) ...[
+                        _CartTile(
+                          product: p,
+                          onToggle: () =>
+                              setState(() => p.selected = !p.selected),
+                          onQtyChange: (v) => setState(() => p.qty = v),
+                        ),
+                        const SizedBox(height: 10),
+                      ],
+                      const SizedBox(height: 6),
+                    ],
+                    const Divider(color: Color(0xFFEEEEEE)),
+                    const SizedBox(height: 16),
 
-                    // ====== SECTION REKOMENDASI / FLASH DEAL ======
-                    _RecommendedSection(),
-                    SizedBox(height: 24),
+                    // Flash deal
+                    const _FlashDealSection(),
+                    const SizedBox(height: 20),
+                    const Divider(color: Color(0xFFEEEEEE)),
+                    const SizedBox(height: 16),
 
-                    // ====== SHIPPING & SUMMARY DIPINDAH KE BAWAH ======
-                    _ShippingSection(),
-                    SizedBox(height: 24),
+                    // Payment
+                    _PaymentSection(
+                        selected: _selectedPayment, onTap: _showPaymentPicker),
+                    const SizedBox(height: 20),
+                    const Divider(color: Color(0xFFEEEEEE)),
+                    const SizedBox(height: 16),
 
-                    _SummarySection(),
-                    SizedBox(height: 32),
+                    // Summary
+                    _SummarySection(
+                        totalItems: _totalItems, totalHarga: _totalHarga),
+                    const SizedBox(height: 32),
                   ],
                 ),
               ),
             ),
-
-            // PAY BUTTON
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24.0,
-                vertical: 16,
-              ),
-              child: SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: kPurple,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(45),
-                    ),
-                    elevation: 0,
-                  ),
-                  onPressed: () {},
-                  child: const Text(
-                    'Pay',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-              ),
+            _PayBar(
+              total: _totalHarga,
+              onPay: () {
+                if (_selectedPayment == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content:
+                          Text('Pilih metode pembayaran terlebih dahulu')));
+                  return;
+                }
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content:
+                        Text('Bayar via ${_selectedPayment!.label} (dummy)')));
+              },
             ),
           ],
         ),
@@ -96,43 +249,39 @@ class CheckoutScreen extends StatelessWidget {
   }
 }
 
-//
-// ================== APP BAR ==================
-//
-class _CheckoutAppBar extends StatelessWidget {
-  const _CheckoutAppBar();
+// ── App bar ───────────────────────────────────────────────────────────────────
+
+class _AppBar extends StatelessWidget {
+  const _AppBar();
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 24, right: 24, top: 12, bottom: 8),
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _RoundIconButton(
-            icon: Icons.arrow_back,
-            onTap: () => Navigator.pop(context),
+          _RoundBtn(
+              icon: Icons.arrow_back_ios_new,
+              onTap: () => Navigator.pop(context)),
+          const Expanded(
+            child: Text('Checkout',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Color(0xFF121111),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700)),
           ),
-          const Text(
-            'Checkout',
-            style: TextStyle(
-              color: Color(0xFF121111),
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          _RoundIconButton(icon: Icons.more_horiz, onTap: () {}),
+          _RoundBtn(icon: Icons.more_horiz, onTap: () {}),
         ],
       ),
     );
   }
 }
 
-class _RoundIconButton extends StatelessWidget {
+class _RoundBtn extends StatelessWidget {
   final IconData icon;
-  final VoidCallback? onTap;
-
-  const _RoundIconButton({required this.icon, this.onTap});
+  final VoidCallback onTap;
+  const _RoundBtn({required this.icon, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -144,389 +293,149 @@ class _RoundIconButton extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(32),
           border: Border.all(color: const Color(0xFFDFDEDE)),
+          color: Colors.white,
         ),
-        child: Icon(icon, size: 20, color: const Color(0xFF121111)),
+        child: Icon(icon, size: 18, color: const Color(0xFF121111)),
       ),
     );
   }
 }
 
-//
-// ================== CART ITEM (DENGAN CHECKBOX UNGU) ==================
-//
-class _CartItem extends StatelessWidget {
-  final String imagePath;
-  final String title;
-  final String subtitle;
-  final String price;
-  final int quantity;
-  final bool selected; // <- status checkbox
+// ── Seller header ─────────────────────────────────────────────────────────────
 
-  const _CartItem({
-    super.key,
-    required this.imagePath,
-    required this.title,
-    required this.subtitle,
-    required this.price,
-    required this.quantity,
-    this.selected = true,
-  });
+class _SellerHeader extends StatelessWidget {
+  final String name;
+  const _SellerHeader({required this.name});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        // CHECKBOX UNGU
-        _SelectCheckbox(selected: selected),
-        const SizedBox(width: 12),
-
-        // IMAGE
-        ClipRRect(
-          borderRadius: BorderRadius.circular(14),
-          child: Container(
-            width: 70,
-            height: 70,
-            color: Colors.grey.shade200,
-            child: Image.asset(imagePath, fit: BoxFit.cover),
-          ),
+        Container(
+          width: 4,
+          height: 18,
+          decoration: BoxDecoration(
+              color: kPurple, borderRadius: BorderRadius.circular(2)),
         ),
-        const SizedBox(width: 15),
-
-        // TEXT
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  color: Color(0xFF121111),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                subtitle,
-                style: const TextStyle(color: Color(0xFF787676), fontSize: 10),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                price,
-                style: const TextStyle(
-                  color: Color(0xFF292526),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        // BUTTON + MORE
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            IconButton(
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(),
-              icon: const Icon(Icons.more_horiz, size: 20),
-              onPressed: () {},
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                _QtyButton(icon: Icons.remove, onTap: () {}),
-                const SizedBox(width: 12),
-                Text(
-                  quantity.toString(),
-                  style: const TextStyle(
-                    color: Color(0xFF292526),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                _QtyButton(icon: Icons.add, onTap: () {}),
-              ],
-            ),
-          ],
-        ),
+        const SizedBox(width: 8),
+        const Icon(Icons.storefront_outlined, size: 16, color: kPurple),
+        const SizedBox(width: 6),
+        Text(name,
+            style: const TextStyle(
+                color: Color(0xFF1E232C),
+                fontSize: 14,
+                fontWeight: FontWeight.w800)),
       ],
     );
   }
 }
 
-// kotak checkbox ungu di sebelah kiri gambar
-class _SelectCheckbox extends StatelessWidget {
-  final bool selected;
+// ── Cart tile ─────────────────────────────────────────────────────────────────
 
-  const _SelectCheckbox({required this.selected});
-
-  @override
-  Widget build(BuildContext context) {
-    if (selected) {
-      return Container(
-        width: 22,
-        height: 22,
-        decoration: BoxDecoration(
-          color: kPurple,
-          borderRadius: BorderRadius.circular(6),
-        ),
-        child: const Icon(Icons.check, size: 16, color: Colors.white),
-      );
-    } else {
-      return Container(
-        width: 22,
-        height: 22,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(6),
-          border: Border.all(color: const Color(0xFFDFDEDE), width: 1.5),
-        ),
-      );
-    }
-  }
-}
-
-class _QtyButton extends StatelessWidget {
-  final IconData icon;
-  final VoidCallback? onTap;
-
-  const _QtyButton({required this.icon, this.onTap});
+class _CartTile extends StatelessWidget {
+  final _CartProduct product;
+  final VoidCallback onToggle;
+  final ValueChanged<int> onQtyChange;
+  const _CartTile(
+      {required this.product,
+      required this.onToggle,
+      required this.onQtyChange});
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(32),
-      onTap: onTap,
-      child: Container(
-        width: 24,
-        height: 24,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(32),
-          border: Border.all(color: const Color(0xFFDFDEDE)),
-        ),
-        child: Icon(icon, size: 16, color: const Color(0xFF292526)),
+    final p = product;
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: const Color(0xFFEEEEEE)),
       ),
-    );
-  }
-}
-
-//
-// =============== RECOMMENDED / FLASH DEAL SECTION =================
-//
-class _RecommendedSection extends StatelessWidget {
-  const _RecommendedSection();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Header: Flash Deal + timer + See All
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                const Text(
-                  'Flash Deal',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: const Color(0x1FEB6383),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: const Text(
-                    '10:20:35',
-                    style: TextStyle(
-                      color: Color(0xFFEB6383),
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const Text(
-              'See All',
-              style: TextStyle(
-                color: kPurple,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-
-        SizedBox(
-          height: 220,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: const [
-              _RecommendedProductCard(
-                imagePath: 'assets/images/nike.jpg',
-                title: 'Sportswear Club',
-                subtitle: 'Nike Sports T-Shirt',
-                price: '\$54,80',
-                oldPrice: '\$60,00',
-                rating: 4.8,
-              ),
-              SizedBox(width: 16),
-              _RecommendedProductCard(
-                imagePath: 'assets/images/adidas.jpg',
-                title: 'Originals Trefoil',
-                subtitle: 'Adidas Sports T-Shirt',
-                price: '\$69,10',
-                oldPrice: '\$76,90',
-                rating: 4.8,
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _RecommendedProductCard extends StatelessWidget {
-  final String imagePath;
-  final String title;
-  final String subtitle;
-  final String price;
-  final String oldPrice;
-  final double rating;
-
-  const _RecommendedProductCard({
-    super.key,
-    required this.imagePath,
-    required this.title,
-    required this.subtitle,
-    required this.price,
-    required this.oldPrice,
-    required this.rating,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 170,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          // image + love + add to cart
-          Container(
-            height: 130,
-            decoration: BoxDecoration(
-              color: const Color(0xFFF6F4F0),
-              borderRadius: BorderRadius.circular(16),
+          // Checkbox
+          GestureDetector(
+            onTap: onToggle,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 150),
+              width: 22,
+              height: 22,
+              decoration: BoxDecoration(
+                color: p.selected ? kPurple : Colors.white,
+                borderRadius: BorderRadius.circular(6),
+                border: Border.all(
+                  color: p.selected ? kPurple : const Color(0xFFDFDEDE),
+                  width: 1.5,
+                ),
+              ),
+              child: p.selected
+                  ? const Icon(Icons.check, size: 14, color: Colors.white)
+                  : null,
             ),
-            child: Stack(
+          ),
+          const SizedBox(width: 10),
+
+          // Image
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Image.asset(
+              p.imagePath,
+              width: 64,
+              height: 64,
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) => Container(
+                width: 64,
+                height: 64,
+                color: const Color(0xFFF3E4FF),
+                child: const Icon(Icons.image_not_supported_outlined,
+                    color: kPurple, size: 24),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+
+          // Info
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Positioned.fill(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: Image.asset(imagePath, fit: BoxFit.cover),
-                  ),
-                ),
-                // love icon
-                Positioned(
-                  right: 10,
-                  top: 10,
-                  child: Container(
-                    width: 28,
-                    height: 28,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Icon(
-                      Icons.favorite_border,
-                      size: 16,
-                      color: kPurple,
-                    ),
-                  ),
-                ),
-                // rating
-                Positioned(
-                  left: 10,
-                  bottom: 10,
-                  child: Row(
-                    children: [
-                      const Icon(Icons.star, size: 16, color: Colors.amber),
-                      const SizedBox(width: 4),
-                      Text(
-                        rating.toString(),
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                // add to cart button
-                Positioned(
-                  right: 10,
-                  bottom: 10,
-                  child: Container(
-                    width: 30,
-                    height: 30,
-                    decoration: BoxDecoration(
-                      color: kPurple,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Icon(
-                      Icons.add_shopping_cart,
-                      size: 16,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
+                Text(p.nama,
+                    style: const TextStyle(
+                        color: Color(0xFF121111),
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700)),
+                const SizedBox(height: 2),
+                Text(p.model,
+                    style: const TextStyle(
+                        color: Color(0xFF787676),
+                        fontSize: 11,
+                        fontWeight: FontWeight.w500)),
+                const SizedBox(height: 6),
+                Text(_rupiah(p.harga),
+                    style: const TextStyle(
+                        color: kPurple,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w800)),
               ],
             ),
           ),
-          const SizedBox(height: 8),
-          Text(
-            title,
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
-          ),
-          Text(
-            subtitle,
-            style: const TextStyle(fontSize: 12, color: Color(0xFF7A7E86)),
-          ),
-          const SizedBox(height: 4),
+
+          // Qty stepper
           Row(
             children: [
-              Text(
-                price,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(width: 4),
-              Text(
-                oldPrice,
-                style: const TextStyle(
-                  color: Color(0xFF7A7E86),
-                  fontSize: 12,
-                  decoration: TextDecoration.lineThrough,
-                ),
-              ),
+              _QtyBtn(
+                  icon: Icons.remove,
+                  onTap: () {
+                    if (p.qty > 1) onQtyChange(p.qty - 1);
+                  }),
+              const SizedBox(width: 10),
+              Text('${p.qty}',
+                  style: const TextStyle(
+                      color: Color(0xFF292526),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700)),
+              const SizedBox(width: 10),
+              _QtyBtn(icon: Icons.add, onTap: () => onQtyChange(p.qty + 1)),
             ],
           ),
         ],
@@ -535,67 +444,88 @@ class _RecommendedProductCard extends StatelessWidget {
   }
 }
 
-//
-// ================== SHIPPING ==================
-//
-class _ShippingSection extends StatelessWidget {
-  const _ShippingSection();
+class _QtyBtn extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onTap;
+  const _QtyBtn({required this.icon, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(32),
+      onTap: onTap,
+      child: Container(
+        width: 26,
+        height: 26,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(32),
+          border: Border.all(color: const Color(0xFFDFDEDE)),
+          color: Colors.white,
+        ),
+        child: Icon(icon, size: 14, color: const Color(0xFF292526)),
+      ),
+    );
+  }
+}
+
+// ── Flash deal ────────────────────────────────────────────────────────────────
+
+class _FlashDealSection extends StatelessWidget {
+  const _FlashDealSection();
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Shipping Information',
-          style: TextStyle(
-            color: Color(0xFF121111),
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-          ),
+        Row(
+          children: [
+            const Text('Flash Deal',
+                style: TextStyle(
+                    color: Color(0xFF121111),
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700)),
+            const SizedBox(width: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                  color: const Color(0x1FEB6383),
+                  borderRadius: BorderRadius.circular(20)),
+              child: const Text('10:20:35',
+                  style: TextStyle(
+                      color: Color(0xFFEB6383),
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700)),
+            ),
+            const Spacer(),
+            const Text('Lihat Semua',
+                style: TextStyle(
+                    color: kPurple, fontSize: 12, fontWeight: FontWeight.w700)),
+          ],
         ),
         const SizedBox(height: 12),
-        Container(
-          height: 62,
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          decoration: BoxDecoration(
-            color: const Color(0xFFF2F2F2),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    width: 55,
-                    height: 32,
-                    decoration: BoxDecoration(
-                      color: kPurple,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    alignment: Alignment.center,
-                    child: const Text(
-                      'VISA',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  const Text(
-                    '**** **** **** 2143',
-                    style: TextStyle(
-                      color: Color(0xFF292526),
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
+        SizedBox(
+          height: 210,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: const [
+              _FlashCard(
+                imagePath: 'assets/images/nike.jpg',
+                nama: 'Sportswear Club',
+                model: 'Nike Sports T-Shirt',
+                harga: 548000,
+                hargaCoret: 600000,
+                rating: 4.8,
               ),
-              const Icon(Icons.keyboard_arrow_down, color: Color(0xFF292526)),
+              SizedBox(width: 14),
+              _FlashCard(
+                imagePath: 'assets/images/adidas.jpg',
+                nama: 'Originals Trefoil',
+                model: 'Adidas Sports T-Shirt',
+                harga: 691000,
+                hargaCoret: 769000,
+                rating: 4.8,
+              ),
             ],
           ),
         ),
@@ -604,26 +534,349 @@ class _ShippingSection extends StatelessWidget {
   }
 }
 
-//
-// ================== SUMMARY ==================
-//
-class _SummarySection extends StatelessWidget {
-  const _SummarySection();
+class _FlashCard extends StatelessWidget {
+  final String imagePath;
+  final String nama;
+  final String model;
+  final int harga;
+  final int hargaCoret;
+  final double rating;
+
+  const _FlashCard({
+    required this.imagePath,
+    required this.nama,
+    required this.model,
+    required this.harga,
+    required this.hargaCoret,
+    required this.rating,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 160,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 120,
+            decoration: BoxDecoration(
+                color: const Color(0xFFF6F4F0),
+                borderRadius: BorderRadius.circular(14)),
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(14),
+                    child: Image.asset(imagePath, fit: BoxFit.cover),
+                  ),
+                ),
+                Positioned(
+                  right: 8,
+                  top: 8,
+                  child: Container(
+                    width: 26,
+                    height: 26,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20)),
+                    child: const Icon(Icons.favorite_border,
+                        size: 14, color: kPurple),
+                  ),
+                ),
+                Positioned(
+                  left: 8,
+                  bottom: 8,
+                  child: Row(
+                    children: [
+                      const Icon(Icons.star, size: 14, color: Colors.amber),
+                      const SizedBox(width: 3),
+                      Text(rating.toString(),
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700)),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  right: 8,
+                  bottom: 8,
+                  child: Container(
+                    width: 28,
+                    height: 28,
+                    decoration: BoxDecoration(
+                        color: kPurple,
+                        borderRadius: BorderRadius.circular(20)),
+                    child: const Icon(Icons.add_shopping_cart,
+                        size: 14, color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(nama,
+              style:
+                  const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+          Text(model,
+              style: const TextStyle(fontSize: 11, color: Color(0xFF7A7E86))),
+          const SizedBox(height: 4),
+          Row(
+            children: [
+              Text(_rupiah(harga),
+                  style: const TextStyle(
+                      color: kPurple,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w800)),
+              const SizedBox(width: 6),
+              Text(_rupiah(hargaCoret),
+                  style: const TextStyle(
+                      color: Color(0xFF7A7E86),
+                      fontSize: 11,
+                      decoration: TextDecoration.lineThrough)),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Payment section ───────────────────────────────────────────────────────────
+
+class _PaymentSection extends StatelessWidget {
+  final _PaymentOption? selected;
+  final VoidCallback onTap;
+  const _PaymentSection({required this.selected, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        _SummaryRow(label: 'Total (9 items)', value: '\$1,014.95'),
-        SizedBox(height: 8),
-        _SummaryRow(label: 'Shipping Fee', value: '\$0.00'),
-        SizedBox(height: 8),
-        _SummaryRow(label: 'Discount', value: '\$0.00'),
-        SizedBox(height: 16),
-        Divider(color: Color(0xFFF2F2F2)),
-        SizedBox(height: 12),
-        _SummaryRow(label: 'Sub Total', value: '\$1,014.95', bold: true),
+      children: [
+        const Text('Metode Pembayaran',
+            style: TextStyle(
+                color: Color(0xFF121111),
+                fontSize: 14,
+                fontWeight: FontWeight.w700)),
+        const SizedBox(height: 10),
+        InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: onTap,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                  color: selected != null ? kPurple : const Color(0xFFDFDEDE)),
+            ),
+            child: Row(
+              children: [
+                if (selected != null) ...[
+                  Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: selected!.color.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child:
+                        Icon(selected!.icon, color: selected!.color, size: 20),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(selected!.label,
+                            style: const TextStyle(
+                                color: Color(0xFF121111),
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700)),
+                        Text(selected!.group,
+                            style: const TextStyle(
+                                color: Color(0xFF787676),
+                                fontSize: 11,
+                                fontWeight: FontWeight.w500)),
+                      ],
+                    ),
+                  ),
+                ] else ...[
+                  const Icon(Icons.payment_outlined,
+                      color: Color(0xFF9E9E9E), size: 22),
+                  const SizedBox(width: 12),
+                  const Expanded(
+                    child: Text('Pilih metode pembayaran',
+                        style: TextStyle(
+                            color: Color(0xFF9E9E9E),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500)),
+                  ),
+                ],
+                const Icon(Icons.keyboard_arrow_down, color: Color(0xFF292526)),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _PaymentPickerSheet extends StatelessWidget {
+  final _PaymentOption? selected;
+  final ValueChanged<_PaymentOption> onSelect;
+  final ScrollController scrollController;
+  const _PaymentPickerSheet(
+      {required this.selected,
+      required this.onSelect,
+      required this.scrollController});
+
+  @override
+  Widget build(BuildContext context) {
+    final groups = <String, List<_PaymentOption>>{};
+    for (final opt in _paymentOptions) {
+      groups.putIfAbsent(opt.group, () => []).add(opt);
+    }
+    return Column(
+      children: [
+        // Fixed handle + title
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                      color: const Color(0xFFE0E0E0),
+                      borderRadius: BorderRadius.circular(2)),
+                ),
+              ),
+              const SizedBox(height: 14),
+              const Text('Pilih Metode Pembayaran',
+                  style: TextStyle(
+                      color: Color(0xFF121111),
+                      fontSize: 15,
+                      fontWeight: FontWeight.w800)),
+              const SizedBox(height: 14),
+            ],
+          ),
+        ),
+        // Scrollable options
+        Expanded(
+          child: ListView(
+            controller: scrollController,
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+            children: [
+              for (final entry in groups.entries) ...[
+                Text(entry.key,
+                    style: const TextStyle(
+                        color: Color(0xFF787676),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600)),
+                const SizedBox(height: 8),
+                for (final opt in entry.value)
+                  _PaymentTile(
+                    option: opt,
+                    isSelected: selected?.label == opt.label,
+                    onTap: () => onSelect(opt),
+                  ),
+                const SizedBox(height: 10),
+              ],
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _PaymentTile extends StatelessWidget {
+  final _PaymentOption option;
+  final bool isSelected;
+  final VoidCallback onTap;
+  const _PaymentTile(
+      {required this.option, required this.isSelected, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(10),
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFFF3E4FF) : const Color(0xFFF7F7FB),
+          borderRadius: BorderRadius.circular(10),
+          border:
+              Border.all(color: isSelected ? kPurple : const Color(0xFFEEEEEE)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 34,
+              height: 34,
+              decoration: BoxDecoration(
+                color: option.color.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(option.icon, color: option.color, size: 18),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(option.label,
+                  style: TextStyle(
+                      color: isSelected ? kPurple : const Color(0xFF121111),
+                      fontSize: 13,
+                      fontWeight:
+                          isSelected ? FontWeight.w700 : FontWeight.w600)),
+            ),
+            if (isSelected)
+              const Icon(Icons.check_circle_rounded, color: kPurple, size: 20),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ── Summary ───────────────────────────────────────────────────────────────────
+
+class _SummarySection extends StatelessWidget {
+  final int totalItems;
+  final int totalHarga;
+  const _SummarySection({required this.totalItems, required this.totalHarga});
+
+  @override
+  Widget build(BuildContext context) {
+    const ongkir = 0;
+    const diskon = 0;
+    final subtotal = totalHarga + ongkir - diskon;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Ringkasan Pesanan',
+            style: TextStyle(
+                color: Color(0xFF121111),
+                fontSize: 14,
+                fontWeight: FontWeight.w700)),
+        const SizedBox(height: 12),
+        _SummaryRow(
+            label: 'Total ($totalItems barang)', value: _rupiah(totalHarga)),
+        const SizedBox(height: 8),
+        _SummaryRow(label: 'Ongkos Kirim', value: _rupiah(ongkir)),
+        const SizedBox(height: 8),
+        _SummaryRow(label: 'Diskon', value: '- ${_rupiah(diskon)}'),
+        const SizedBox(height: 14),
+        const Divider(color: Color(0xFFEEEEEE)),
+        const SizedBox(height: 12),
+        _SummaryRow(label: 'Subtotal', value: _rupiah(subtotal), bold: true),
       ],
     );
   }
@@ -633,31 +886,82 @@ class _SummaryRow extends StatelessWidget {
   final String label;
   final String value;
   final bool bold;
-
-  const _SummaryRow({
-    required this.label,
-    required this.value,
-    this.bold = false,
-  });
+  const _SummaryRow(
+      {required this.label, required this.value, this.bold = false});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          label,
-          style: const TextStyle(color: Color(0xFF292526), fontSize: 14),
-        ),
-        Text(
-          value,
-          style: TextStyle(
-            color: const Color(0xFF121111),
-            fontSize: 14,
-            fontWeight: bold ? FontWeight.w700 : FontWeight.w600,
-          ),
-        ),
+        Text(label,
+            style: const TextStyle(color: Color(0xFF787676), fontSize: 13)),
+        Text(value,
+            style: TextStyle(
+                color: bold ? kPurple : const Color(0xFF121111),
+                fontSize: bold ? 15 : 13,
+                fontWeight: bold ? FontWeight.w800 : FontWeight.w600)),
       ],
+    );
+  }
+}
+
+// ── Pay bar ───────────────────────────────────────────────────────────────────
+
+class _PayBar extends StatelessWidget {
+  final int total;
+  final VoidCallback onPay;
+  const _PayBar({required this.total, required this.onPay});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        border: Border(top: BorderSide(color: Color(0xFFEEEEEE))),
+      ),
+      child: Row(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('Total Pembayaran',
+                  style: TextStyle(
+                      color: Color(0xFF787676),
+                      fontSize: 11,
+                      fontWeight: FontWeight.w500)),
+              const SizedBox(height: 2),
+              Text(_rupiah(total),
+                  style: const TextStyle(
+                      color: kPurple,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w900)),
+            ],
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: SizedBox(
+              height: 50,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: kPurple,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14)),
+                  elevation: 0,
+                ),
+                onPressed: onPay,
+                child: const Text('Bayar Sekarang',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700)),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

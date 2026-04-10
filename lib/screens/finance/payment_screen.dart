@@ -4,6 +4,66 @@ import 'package:konveksi_bareng/screens/main/home.dart';
 const Color kPurple = Color(0xFF6B257F);
 const Color kBg = Color(0xFFF7F7FB);
 
+// ── Payment options (same as checkout) ───────────────────────────────────────
+
+class _PaymentOption {
+  final String label;
+  final String group;
+  final IconData icon;
+  final Color color;
+  const _PaymentOption(
+      {required this.label,
+      required this.group,
+      required this.icon,
+      required this.color});
+}
+
+const _paymentOptions = [
+  _PaymentOption(
+      label: 'Visa',
+      group: 'Kartu Kredit',
+      icon: Icons.credit_card,
+      color: Color(0xFF1A1F71)),
+  _PaymentOption(
+      label: 'Mastercard',
+      group: 'Kartu Kredit',
+      icon: Icons.credit_card,
+      color: Color(0xFFEB001B)),
+  _PaymentOption(
+      label: 'GoPay',
+      group: 'E-Wallet',
+      icon: Icons.account_balance_wallet_outlined,
+      color: Color(0xFF00AED6)),
+  _PaymentOption(
+      label: 'DANA',
+      group: 'E-Wallet',
+      icon: Icons.account_balance_wallet_outlined,
+      color: Color(0xFF118EEA)),
+  _PaymentOption(
+      label: 'ShopeePay',
+      group: 'E-Wallet',
+      icon: Icons.account_balance_wallet_outlined,
+      color: Color(0xFFEE4D2D)),
+  _PaymentOption(
+      label: 'QRIS',
+      group: 'QRIS',
+      icon: Icons.qr_code_2_rounded,
+      color: Color(0xFF6B257F)),
+];
+
+// ── Helper ────────────────────────────────────────────────────────────────────
+
+String _rupiah(int n) {
+  final s = n.toString();
+  final buf = StringBuffer('Rp ');
+  for (int i = 0; i < s.length; i++) {
+    final fromEnd = s.length - i;
+    buf.write(s[i]);
+    if (fromEnd > 1 && fromEnd % 3 == 1) buf.write('.');
+  }
+  return buf.toString();
+}
+
 class PaymentScreen extends StatefulWidget {
   const PaymentScreen({super.key});
 
@@ -13,6 +73,7 @@ class PaymentScreen extends StatefulWidget {
 
 class _PaymentScreenState extends State<PaymentScreen> {
   int _selectedFilter = 0;
+  _PaymentOption? _selectedPayment;
 
   final List<String> _filters = const [
     'Semua',
@@ -21,29 +82,35 @@ class _PaymentScreenState extends State<PaymentScreen> {
     'Gagal',
   ];
 
-  final List<_PaymentHistoryItem> _history = const [
+  final List<_PaymentHistoryItem> _history = [
     _PaymentHistoryItem(
       orderId: 'INV-2026-001',
-      title: 'Modern Light Clothes',
-      total: '\$1,014.95',
+      nama: 'Kaos Oversize Basic',
+      model: 'Basic Cotton 30s',
+      seller: 'Konveksi Bareng',
+      total: 1014000,
       date: '12 Mar 2026',
-      method: 'VISA',
+      method: 'Visa',
       status: 'Menunggu',
     ),
     _PaymentHistoryItem(
       orderId: 'INV-2026-002',
-      title: 'Nike Sports T-Shirt',
-      total: '\$162.99',
+      nama: 'Hoodie Premium Fleece',
+      model: 'Premium Oversized',
+      seller: 'Bareng Official',
+      total: 459000,
       date: '10 Mar 2026',
       method: 'QRIS',
       status: 'Berhasil',
     ),
     _PaymentHistoryItem(
       orderId: 'INV-2026-003',
-      title: 'Adidas Sports T-Shirt',
-      total: '\$69.10',
+      nama: 'Jaket Windbreaker',
+      model: 'Slim Fit Series',
+      seller: 'Bareng Wear',
+      total: 389000,
       date: '08 Mar 2026',
-      method: 'E-Wallet',
+      method: 'GoPay',
       status: 'Gagal',
     ),
   ];
@@ -56,8 +123,30 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   void _showMessage(String text) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(text)),
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
+  }
+
+  void _showPaymentPicker() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (_) => DraggableScrollableSheet(
+        initialChildSize: 0.55,
+        minChildSize: 0.4,
+        maxChildSize: 0.85,
+        expand: false,
+        builder: (_, scrollController) => _PaymentPickerSheet(
+          selected: _selectedPayment,
+          scrollController: scrollController,
+          onSelect: (opt) {
+            setState(() => _selectedPayment = opt);
+            Navigator.pop(context);
+          },
+        ),
+      ),
     );
   }
 
@@ -87,7 +176,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     const SizedBox(height: 16),
                     const _OrderInfoCard(),
                     const SizedBox(height: 16),
-                    const _PaymentMethodCard(),
+                    _PaymentMethodCard(
+                      selected: _selectedPayment,
+                      onTap: _showPaymentPicker,
+                    ),
                     const SizedBox(height: 16),
                     const _TimelineSection(),
                     const SizedBox(height: 18),
@@ -367,10 +459,11 @@ class _OrderInfoCard extends StatelessWidget {
           _SectionTitle(title: 'Detail Pesanan'),
           SizedBox(height: 12),
           _InfoRow(label: 'Order ID', value: 'INV-2026-001'),
-          _InfoRow(label: 'Produk', value: 'Modern Light Clothes'),
+          _InfoRow(label: 'Nama', value: 'Kaos Oversize Basic'),
+          _InfoRow(label: 'Model', value: 'Basic Cotton 30s'),
+          _InfoRow(label: 'Seller', value: 'Konveksi Bareng'),
           _InfoRow(label: 'Jumlah Item', value: '9 item'),
-          _InfoRow(label: 'Pengiriman', value: '**** **** **** 2143'),
-          _InfoRow(label: 'Subtotal', value: '\$1,014.95', isStrong: true),
+          _InfoRow(label: 'Subtotal', value: 'Rp 1.014.000', isStrong: true),
         ],
       ),
     );
@@ -378,7 +471,10 @@ class _OrderInfoCard extends StatelessWidget {
 }
 
 class _PaymentMethodCard extends StatelessWidget {
-  const _PaymentMethodCard();
+  final _PaymentOption? selected;
+  final VoidCallback onTap;
+
+  const _PaymentMethodCard({required this.selected, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -394,55 +490,75 @@ class _PaymentMethodCard extends StatelessWidget {
             offset: Offset(0, 8),
           ),
         ],
-        border: Border.all(color: const Color(0x0FE8ECF4)),
+        border: Border.all(
+          color: selected != null ? kPurple : const Color(0x0FE8ECF4),
+        ),
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 48,
-            height: 36,
-            decoration: BoxDecoration(
-              color: kPurple,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            alignment: Alignment.center,
-            child: const Text(
-              'VISA',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 11,
-                fontWeight: FontWeight.w800,
+          const _SectionTitle(title: 'Metode Pembayaran'),
+          const SizedBox(height: 12),
+          InkWell(
+            borderRadius: BorderRadius.circular(12),
+            onTap: onTap,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF7F7FB),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: selected != null ? kPurple : const Color(0xFFDFDEDE),
+                ),
+              ),
+              child: Row(
+                children: [
+                  if (selected != null) ...[
+                    Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: selected!.color.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(selected!.icon,
+                          color: selected!.color, size: 20),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(selected!.label,
+                              style: const TextStyle(
+                                  color: Color(0xFF121111),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700)),
+                          Text(selected!.group,
+                              style: const TextStyle(
+                                  color: Color(0xFF787676),
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w500)),
+                        ],
+                      ),
+                    ),
+                  ] else ...[
+                    const Icon(Icons.payment_outlined,
+                        color: Color(0xFF9E9E9E), size: 22),
+                    const SizedBox(width: 12),
+                    const Expanded(
+                      child: Text('Pilih metode pembayaran',
+                          style: TextStyle(
+                              color: Color(0xFF9E9E9E),
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500)),
+                    ),
+                  ],
+                  const Icon(Icons.keyboard_arrow_down,
+                      color: Color(0xFF292526)),
+                ],
               ),
             ),
-          ),
-          const SizedBox(width: 12),
-          const Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Metode Pembayaran',
-                  style: TextStyle(
-                    color: Color(0xFF24252C),
-                    fontSize: 12,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-                SizedBox(height: 4),
-                Text(
-                  '**** **** **** 2143',
-                  style: TextStyle(
-                    color: Color(0xFF6B7280),
-                    fontSize: 11.5,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Icon(
-            Icons.keyboard_arrow_right_rounded,
-            color: Color(0xFF6B7280),
           ),
         ],
       ),
@@ -717,19 +833,28 @@ class _HistoryCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  item.title,
+                  item.nama,
                   style: const TextStyle(
                     color: Color(0xFF24252C),
                     fontSize: 13,
                     fontWeight: FontWeight.w900,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 2),
                 Text(
-                  item.orderId,
+                  item.model,
                   style: const TextStyle(
                     color: Color(0xFF6B7280),
                     fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  item.orderId,
+                  style: const TextStyle(
+                    color: Color(0xFF9CA3AF),
+                    fontSize: 10.5,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -738,10 +863,10 @@ class _HistoryCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        item.total,
+                        _rupiah(item.total),
                         style: const TextStyle(
-                          color: Color(0xFF24252C),
-                          fontSize: 12,
+                          color: kPurple,
+                          fontSize: 13,
                           fontWeight: FontWeight.w900,
                         ),
                       ),
@@ -768,7 +893,7 @@ class _HistoryCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  '${item.date} • ${item.method}',
+                  '${item.date} • ${item.method} • ${item.seller}',
                   style: const TextStyle(
                     color: Color(0xFF9CA3AF),
                     fontSize: 10.5,
@@ -861,18 +986,154 @@ class _BottomActionBar extends StatelessWidget {
 
 class _PaymentHistoryItem {
   final String orderId;
-  final String title;
-  final String total;
+  final String nama;
+  final String model;
+  final String seller;
+  final int total;
   final String date;
   final String method;
   final String status;
 
   const _PaymentHistoryItem({
     required this.orderId,
-    required this.title,
+    required this.nama,
+    required this.model,
+    required this.seller,
     required this.total,
     required this.date,
     required this.method,
     required this.status,
   });
+}
+
+// ── Payment picker sheet ──────────────────────────────────────────────────────
+
+class _PaymentPickerSheet extends StatelessWidget {
+  final _PaymentOption? selected;
+  final ValueChanged<_PaymentOption> onSelect;
+  final ScrollController scrollController;
+
+  const _PaymentPickerSheet({
+    required this.selected,
+    required this.onSelect,
+    required this.scrollController,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final groups = <String, List<_PaymentOption>>{};
+    for (final opt in _paymentOptions) {
+      groups.putIfAbsent(opt.group, () => []).add(opt);
+    }
+    return Column(
+      children: [
+        // Fixed handle + title
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                      color: const Color(0xFFE0E0E0),
+                      borderRadius: BorderRadius.circular(2)),
+                ),
+              ),
+              const SizedBox(height: 14),
+              const Text(
+                'Pilih Metode Pembayaran',
+                style: TextStyle(
+                    color: Color(0xFF121111),
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800),
+              ),
+              const SizedBox(height: 14),
+            ],
+          ),
+        ),
+        // Scrollable options
+        Expanded(
+          child: ListView(
+            controller: scrollController,
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+            children: [
+              for (final entry in groups.entries) ...[
+                Text(entry.key,
+                    style: const TextStyle(
+                        color: Color(0xFF787676),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600)),
+                const SizedBox(height: 8),
+                for (final opt in entry.value)
+                  _PaymentTile(
+                    option: opt,
+                    isSelected: selected?.label == opt.label,
+                    onTap: () => onSelect(opt),
+                  ),
+                const SizedBox(height: 10),
+              ],
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _PaymentTile extends StatelessWidget {
+  final _PaymentOption option;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _PaymentTile({
+    required this.option,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(10),
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFFF3E4FF) : const Color(0xFFF7F7FB),
+          borderRadius: BorderRadius.circular(10),
+          border:
+              Border.all(color: isSelected ? kPurple : const Color(0xFFEEEEEE)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 34,
+              height: 34,
+              decoration: BoxDecoration(
+                color: option.color.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(option.icon, color: option.color, size: 18),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                option.label,
+                style: TextStyle(
+                    color: isSelected ? kPurple : const Color(0xFF121111),
+                    fontSize: 13,
+                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600),
+              ),
+            ),
+            if (isSelected)
+              const Icon(Icons.check_circle_rounded, color: kPurple, size: 20),
+          ],
+        ),
+      ),
+    );
+  }
 }

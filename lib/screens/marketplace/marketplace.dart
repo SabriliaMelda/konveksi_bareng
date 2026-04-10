@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:konveksi_bareng/screens/marketplace/product_detail_screen.dart';
 
 const kPurple = Color(0xFF6B257F);
 
@@ -117,7 +118,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                     onTap: () => context.pop(),
                   ),
                   const SizedBox(width: 10),
-
                   Expanded(
                     child: _SearchPill(
                       controller: _searchC,
@@ -130,7 +130,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                     ),
                   ),
                   const SizedBox(width: 10),
-
                   _CircleIconButton(
                     icon: Icons.home_filled,
                     iconColor: kPurple,
@@ -139,7 +138,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                     },
                   ),
                   const SizedBox(width: 10),
-
                   _IconPill(
                     icon: Icons.notifications_none_rounded,
                     onTap: () {
@@ -257,8 +255,22 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                   return _ProductCard(
                     product: p,
                     onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Buka produk: ${p.title}')),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ProductDetailScreen(
+                            product: MarketplaceProduct(
+                              title: p.title,
+                              store: p.store,
+                              price: p.price,
+                              rating: p.rating,
+                              sold: p.sold,
+                              imageUrl: p.imageUrl,
+                              isPromo: p.isPromo,
+                              promoText: p.promoText,
+                            ),
+                          ),
+                        ),
                       );
                     },
                     onFav: () {
