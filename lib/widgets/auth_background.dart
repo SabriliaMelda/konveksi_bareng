@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 // ── Konveksi Bareng theme colors ──
 const Color kPurple = Color(0xFF6B257F);
@@ -97,7 +98,11 @@ class _BackButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (Navigator.canPop(context)) Navigator.pop(context);
+        if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go('/welcome');
+        }
       },
       child: Container(
         width: 38,

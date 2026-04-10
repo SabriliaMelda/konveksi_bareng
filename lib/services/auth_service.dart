@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:konveksi_bareng/config/api_config.dart';
+import 'package:konveksi_bareng/services/storage_service.dart';
 
 class AuthService {
   AuthService._();
@@ -272,7 +273,9 @@ class AuthService {
 
   // ── Check Session (untuk Session Guard) ──
 
-  static Future<int> checkSession(String token) async {
+  static Future<int> checkSession() async {
+    final token = await StorageService.getItem('auth_token');
+    if (token == null) return 401;
     try {
       final res = await _dio.get(
         '/auth/me',
@@ -284,6 +287,26 @@ class AuthService {
       return res.statusCode ?? 500;
     } on DioException catch (e) {
       return e.response?.statusCode ?? 0;
+    }
+  }
+
+  // ── Get Me (user profile) ──
+
+  static Future<Map<String, dynamic>?> getMe() async {
+    try {
+      final token = await StorageService.getItem('auth_token');
+      if (token == null) return null;
+      final res = await _dio.get(
+        '/auth/me',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+          responseType: ResponseType.plain,
+        ),
+      );
+      if (!_isOk(res.statusCode)) return null;
+      return _asMap(res.data);
+    } on DioException {
+      return null;
     }
   }
 
