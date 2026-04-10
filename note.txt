@@ -42,7 +42,7 @@ Common
 - `simple_placeholder_page.dart`: halaman placeholder sederhana untuk fitur yang belum dibuat.
 
 Finance
-- `keuangan.dart`: dashboard keuangan + menu grid ke fitur lain (sebagian label bertanda “belum dibuat”).
+- `keuangan.dart`: dashboard keuangan + menu grid ke fitur lain (sebagian label bertanda ï¿½belum dibuatï¿½).
 - `keuanganproyek.dart`: ringkasan keuangan proyek (stat, transaksi, quick action).
 - `pemasukan.dart`: daftar pemasukan dengan filter periode + input bottom sheet (dummy CRUD).
 - `pengeluaran.dart`: daftar pengeluaran dengan filter periode + input bottom sheet (dummy CRUD).
@@ -100,5 +100,5 @@ Worker
 - `jadwal_upah.dart`: jadwal pembayaran upah berbasis kalender (dummy CRUD).
 
 Catatan
-- Banyak aksi bertanda “dummy”/placeholder dan belum terhubung ke backend.
+- Banyak aksi bertanda ï¿½dummyï¿½/placeholder dan belum terhubung ke backend.
 - Detail UI spesifik (label, komponen) tertanam di masing-masing `pages/*.dart`.
