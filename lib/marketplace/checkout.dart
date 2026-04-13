@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/screens/finance/payment_screen.dart';
+import 'package:konveksi_bareng/services/payment_service.dart';
 
 const Color kPurple = Color(0xFF6B257F);
 const Color _kBg = Color(0xFFF7F7FB);
@@ -149,6 +151,59 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   int get _totalItems =>
       _products.where((p) => p.selected).fold(0, (s, p) => s + p.qty);
 
+  Future<void> _handlePay() async {
+    if (_selectedPayment == null) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Pilih metode pembayaran terlebih dahulu')));
+      return;
+    }
+    final selectedItems = _products.where((p) => p.selected).toList();
+    if (selectedItems.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Pilih minimal 1 produk')));
+      return;
+    }
+
+    // Show processing dialog
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const _ProcessingDialog(),
+    );
+
+    try {
+      final result = await PaymentService.submitOrder(
+        paymentMethod: _selectedPayment!.label,
+        totalAmount: _totalHarga,
+        items: selectedItems
+            .map((p) => OrderItem(
+                  nama: p.nama,
+                  model: p.model,
+                  seller: p.seller,
+                  harga: p.harga,
+                  qty: p.qty,
+                ))
+            .toList(),
+      );
+
+      if (!mounted) return;
+      Navigator.pop(context); // close dialog
+
+      // Navigate to payment status screen
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => PaymentScreen(order: result),
+        ),
+      );
+    } catch (_) {
+      if (!mounted) return;
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Gagal memproses pembayaran. Coba lagi.')));
+    }
+  }
+
   void _showPaymentPicker() {
     showModalBottomSheet(
       context: context,
@@ -230,17 +285,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             ),
             _PayBar(
               total: _totalHarga,
-              onPay: () {
-                if (_selectedPayment == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content:
-                          Text('Pilih metode pembayaran terlebih dahulu')));
-                  return;
-                }
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content:
-                        Text('Bayar via ${_selectedPayment!.label} (dummy)')));
-              },
+              onPay: _handlePay,
             ),
           ],
         ),
@@ -961,6 +1006,51 @@ class _PayBar extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+// ── Processing dialog ─────────────────────────────────────────────────────────
+
+class _ProcessingDialog extends StatelessWidget {
+  const _ProcessingDialog();
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(
+              width: 56,
+              height: 56,
+              child: CircularProgressIndicator(
+                color: kPurple,
+                strokeWidth: 3,
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'Memproses Pembayaran',
+              style: TextStyle(
+                  color: Color(0xFF121111),
+                  fontSize: 15,
+                  fontWeight: FontWeight.w800),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'Mohon tunggu sebentar...',
+              style: TextStyle(
+                  color: Color(0xFF787676),
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500),
+            ),
+          ],
+        ),
       ),
     );
   }

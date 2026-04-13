@@ -1,57 +1,12 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:konveksi_bareng/screens/main/home.dart';
+import 'package:konveksi_bareng/services/payment_service.dart';
 
 const Color kPurple = Color(0xFF6B257F);
 const Color kBg = Color(0xFFF7F7FB);
 
-// ── Payment options (same as checkout) ───────────────────────────────────────
-
-class _PaymentOption {
-  final String label;
-  final String group;
-  final IconData icon;
-  final Color color;
-  const _PaymentOption(
-      {required this.label,
-      required this.group,
-      required this.icon,
-      required this.color});
-}
-
-const _paymentOptions = [
-  _PaymentOption(
-      label: 'Visa',
-      group: 'Kartu Kredit',
-      icon: Icons.credit_card,
-      color: Color(0xFF1A1F71)),
-  _PaymentOption(
-      label: 'Mastercard',
-      group: 'Kartu Kredit',
-      icon: Icons.credit_card,
-      color: Color(0xFFEB001B)),
-  _PaymentOption(
-      label: 'GoPay',
-      group: 'E-Wallet',
-      icon: Icons.account_balance_wallet_outlined,
-      color: Color(0xFF00AED6)),
-  _PaymentOption(
-      label: 'DANA',
-      group: 'E-Wallet',
-      icon: Icons.account_balance_wallet_outlined,
-      color: Color(0xFF118EEA)),
-  _PaymentOption(
-      label: 'ShopeePay',
-      group: 'E-Wallet',
-      icon: Icons.account_balance_wallet_outlined,
-      color: Color(0xFFEE4D2D)),
-  _PaymentOption(
-      label: 'QRIS',
-      group: 'QRIS',
-      icon: Icons.qr_code_2_rounded,
-      color: Color(0xFF6B257F)),
-];
-
-// ── Helper ────────────────────────────────────────────────────────────────────
+// ── Helpers ───────────────────────────────────────────────────────────────────
 
 String _rupiah(int n) {
   final s = n.toString();
@@ -64,90 +19,193 @@ String _rupiah(int n) {
   return buf.toString();
 }
 
+String _fmtDate(DateTime d) {
+  const months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'Mei',
+    'Jun',
+    'Jul',
+    'Agu',
+    'Sep',
+    'Okt',
+    'Nov',
+    'Des'
+  ];
+  final h = d.hour.toString().padLeft(2, '0');
+  final m = d.minute.toString().padLeft(2, '0');
+  return '${d.day} ${months[d.month - 1]} ${d.year} • $h:$m';
+}
+
+// ── Screen ────────────────────────────────────────────────────────────────────
+
 class PaymentScreen extends StatefulWidget {
-  const PaymentScreen({super.key});
+  /// Pass null to open in standalone/history mode (no active order).
+  final OrderResult? order;
+
+  const PaymentScreen({super.key, this.order});
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
-  int _selectedFilter = 0;
-  _PaymentOption? _selectedPayment;
+  late PaymentStatus _status;
+  bool _isPolling = false;
+  bool _isRetrying = false;
 
+  // Countdown timer (24 h from order creation)
+  Timer? _countdownTimer;
+  Duration _remaining = Duration.zero;
+
+  // History filter
+  int _selectedFilter = 0;
   final List<String> _filters = const [
     'Semua',
     'Menunggu',
     'Berhasil',
-    'Gagal',
+    'Gagal'
   ];
 
-  final List<_PaymentHistoryItem> _history = [
-    _PaymentHistoryItem(
+  // Dummy history (would come from API in production)
+  final List<_HistoryItem> _history = [
+    _HistoryItem(
       orderId: 'INV-2026-001',
       nama: 'Kaos Oversize Basic',
       model: 'Basic Cotton 30s',
       seller: 'Konveksi Bareng',
       total: 1014000,
-      date: '12 Mar 2026',
+      date: '12 Mar 2026 • 10:15',
       method: 'Visa',
-      status: 'Menunggu',
+      status: PaymentStatus.pending,
     ),
-    _PaymentHistoryItem(
+    _HistoryItem(
       orderId: 'INV-2026-002',
       nama: 'Hoodie Premium Fleece',
       model: 'Premium Oversized',
       seller: 'Bareng Official',
       total: 459000,
-      date: '10 Mar 2026',
+      date: '10 Mar 2026 • 14:30',
       method: 'QRIS',
-      status: 'Berhasil',
+      status: PaymentStatus.success,
     ),
-    _PaymentHistoryItem(
+    _HistoryItem(
       orderId: 'INV-2026-003',
       nama: 'Jaket Windbreaker',
       model: 'Slim Fit Series',
       seller: 'Bareng Wear',
       total: 389000,
-      date: '08 Mar 2026',
+      date: '08 Mar 2026 • 09:05',
       method: 'GoPay',
-      status: 'Gagal',
+      status: PaymentStatus.failed,
     ),
   ];
 
-  List<_PaymentHistoryItem> get _filteredHistory {
-    final selected = _filters[_selectedFilter];
-    if (selected == 'Semua') return _history;
-    return _history.where((e) => e.status == selected).toList();
+  OrderResult? get _order => widget.order;
+
+  @override
+  void initState() {
+    super.initState();
+    _status = _order?.status ?? PaymentStatus.pending;
+    if (_order != null) {
+      _startCountdown();
+    }
   }
 
-  void _showMessage(String text) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
+  @override
+  void dispose() {
+    _countdownTimer?.cancel();
+    super.dispose();
   }
 
-  void _showPaymentPicker() {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.white,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-      builder: (_) => DraggableScrollableSheet(
-        initialChildSize: 0.55,
-        minChildSize: 0.4,
-        maxChildSize: 0.85,
-        expand: false,
-        builder: (_, scrollController) => _PaymentPickerSheet(
-          selected: _selectedPayment,
-          scrollController: scrollController,
-          onSelect: (opt) {
-            setState(() => _selectedPayment = opt);
-            Navigator.pop(context);
-          },
-        ),
-      ),
-    );
+  void _startCountdown() {
+    final deadline = _order!.createdAt.add(const Duration(hours: 24));
+    _updateRemaining(deadline);
+    _countdownTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (!mounted) return;
+      _updateRemaining(deadline);
+    });
+  }
+
+  void _updateRemaining(DateTime deadline) {
+    final diff = deadline.difference(DateTime.now());
+    setState(() => _remaining = diff.isNegative ? Duration.zero : diff);
+  }
+
+  String get _countdownText {
+    if (_remaining == Duration.zero) return '00:00:00';
+    final h = _remaining.inHours.toString().padLeft(2, '0');
+    final m = (_remaining.inMinutes % 60).toString().padLeft(2, '0');
+    final s = (_remaining.inSeconds % 60).toString().padLeft(2, '0');
+    return '$h:$m:$s';
+  }
+
+  Future<void> _checkStatus() async {
+    if (_isPolling || _order == null) return;
+    setState(() => _isPolling = true);
+    try {
+      final newStatus = await PaymentService.checkStatus(_order!.orderId);
+      if (!mounted) return;
+      setState(() {
+        _status = newStatus;
+        _order!.status = newStatus;
+      });
+      _showSnack(_statusMessage(newStatus));
+    } catch (_) {
+      if (mounted) _showSnack('Gagal mengambil status. Coba lagi.');
+    } finally {
+      if (mounted) setState(() => _isPolling = false);
+    }
+  }
+
+  Future<void> _retryPayment() async {
+    if (_isRetrying || _order == null) return;
+    setState(() => _isRetrying = true);
+    try {
+      await PaymentService.retryPayment(_order!.orderId);
+      if (!mounted) return;
+      setState(() {
+        _status = PaymentStatus.pending;
+        _order!.status = PaymentStatus.pending;
+      });
+      _showSnack('Permintaan pembayaran ulang dikirim.');
+    } catch (_) {
+      if (mounted) _showSnack('Gagal. Coba lagi.');
+    } finally {
+      if (mounted) setState(() => _isRetrying = false);
+    }
+  }
+
+  String _statusMessage(PaymentStatus s) {
+    switch (s) {
+      case PaymentStatus.pending:
+        return 'Menunggu pembayaran...';
+      case PaymentStatus.verifying:
+        return 'Sedang diverifikasi...';
+      case PaymentStatus.success:
+        return 'Pembayaran berhasil!';
+      case PaymentStatus.failed:
+        return 'Pembayaran gagal.';
+    }
+  }
+
+  void _showSnack(String msg) {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(msg)));
+  }
+
+  List<_HistoryItem> get _filteredHistory {
+    final label = _filters[_selectedFilter];
+    if (label == 'Semua') return _history;
+    final map = {
+      'Menunggu': PaymentStatus.pending,
+      'Berhasil': PaymentStatus.success,
+      'Gagal': PaymentStatus.failed,
+    };
+    return _history.where((e) => e.status == map[label]).toList();
   }
 
   @override
@@ -158,13 +216,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
         child: Column(
           children: [
             _Header(
-              onHomeTap: () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (_) => const HomeScreen()),
-                  (route) => false,
-                );
-              },
+              onHomeTap: () => Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (_) => const HomeScreen()),
+                (r) => false,
+              ),
             ),
             Expanded(
               child: SingleChildScrollView(
@@ -172,67 +228,39 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const _CurrentStatusCard(),
-                    const SizedBox(height: 16),
-                    const _OrderInfoCard(),
-                    const SizedBox(height: 16),
-                    _PaymentMethodCard(
-                      selected: _selectedPayment,
-                      onTap: _showPaymentPicker,
-                    ),
-                    const SizedBox(height: 16),
-                    const _TimelineSection(),
-                    const SizedBox(height: 18),
-                    const _SectionTitle(title: 'Riwayat Status Pembayaran'),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      height: 38,
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: _filters.length,
-                        separatorBuilder: (_, __) => const SizedBox(width: 10),
-                        itemBuilder: (context, index) {
-                          final active = _selectedFilter == index;
-                          return InkWell(
-                            borderRadius: BorderRadius.circular(999),
-                            onTap: () =>
-                                setState(() => _selectedFilter = index),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 14,
-                                vertical: 8,
-                              ),
-                              decoration: BoxDecoration(
-                                color: active ? kPurple : Colors.white,
-                                borderRadius: BorderRadius.circular(999),
-                                border: Border.all(
-                                  color: active
-                                      ? kPurple
-                                      : const Color(0xFFE8ECF4),
-                                ),
-                              ),
-                              child: Text(
-                                _filters[index],
-                                style: TextStyle(
-                                  color: active
-                                      ? Colors.white
-                                      : const Color(0xFF6B7280),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w800,
-                                ),
-                              ),
-                            ),
-                          );
-                        },
+                    // Only show active order cards when an order is passed in
+                    if (_order != null) ...[
+                      _StatusCard(
+                        status: _status,
+                        countdown: _countdownText,
+                        showCountdown: _status == PaymentStatus.pending,
                       ),
+                      const SizedBox(height: 16),
+                      _OrderInfoCard(order: _order!),
+                      const SizedBox(height: 16),
+                      _PaymentMethodCard(method: _order!.paymentMethod),
+                      const SizedBox(height: 16),
+                      _TimelineCard(status: _status, order: _order!),
+                      const SizedBox(height: 24),
+                    ],
+
+                    // History section
+                    const _SectionTitle(title: 'Riwayat Pembayaran'),
+                    const SizedBox(height: 10),
+                    _FilterChips(
+                      filters: _filters,
+                      selected: _selectedFilter,
+                      onSelect: (i) => setState(() => _selectedFilter = i),
                     ),
                     const SizedBox(height: 12),
-                    ..._filteredHistory.map(
-                      (item) => Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
-                        child: _HistoryCard(item: item),
-                      ),
-                    ),
+                    if (_filteredHistory.isEmpty)
+                      const _EmptyHistory()
+                    else
+                      for (final item in _filteredHistory)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: _HistoryCard(item: item),
+                        ),
                   ],
                 ),
               ),
@@ -240,17 +268,22 @@ class _PaymentScreenState extends State<PaymentScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: _BottomActionBar(
-        onPayNow: () => _showMessage('Lanjut ke pembayaran pesanan'),
-        onCheckStatus: () => _showMessage('Status pembayaran diperbarui'),
+      bottomNavigationBar: _BottomBar(
+        status: _status,
+        hasOrder: _order != null,
+        isPolling: _isPolling,
+        isRetrying: _isRetrying,
+        onCheckStatus: _checkStatus,
+        onRetry: _retryPayment,
       ),
     );
   }
 }
 
+// ── Header ────────────────────────────────────────────────────────────────────
+
 class _Header extends StatelessWidget {
   final VoidCallback onHomeTap;
-
   const _Header({required this.onHomeTap});
 
   @override
@@ -265,56 +298,20 @@ class _Header extends StatelessWidget {
           bottomRight: Radius.circular(24),
         ),
       ),
-      child: Column(
+      child: Row(
         children: [
-          Row(
-            children: [
-              _HeaderIcon(
-                icon: Icons.arrow_back_ios_new_rounded,
-                onTap: () => Navigator.pop(context),
-              ),
-              const SizedBox(width: 12),
-              const Expanded(
-                child: Text(
-                  'Status Pembayaran',
-                  style: TextStyle(
+          _HeaderIcon(
+              icon: Icons.arrow_back_ios_new_rounded,
+              onTap: () => Navigator.pop(context)),
+          const SizedBox(width: 12),
+          const Expanded(
+            child: Text('Status Pembayaran',
+                style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-              ),
-              _HeaderIcon(
-                icon: Icons.home_filled,
-                onTap: onHomeTap,
-              ),
-            ],
+                    fontWeight: FontWeight.w900)),
           ),
-          const SizedBox(height: 12),
-          Container(
-            height: 46,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.14),
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
-            ),
-            child: Row(
-              children: const [
-                Icon(Icons.receipt_long_rounded,
-                    color: Colors.white70, size: 20),
-                SizedBox(width: 10),
-                Text(
-                  'Lihat status, metode, dan detail pembayaran...',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          _HeaderIcon(icon: Icons.home_filled, onTap: onHomeTap),
         ],
       ),
     );
@@ -324,11 +321,7 @@ class _Header extends StatelessWidget {
 class _HeaderIcon extends StatelessWidget {
   final IconData icon;
   final VoidCallback onTap;
-
-  const _HeaderIcon({
-    required this.icon,
-    required this.onTap,
-  });
+  const _HeaderIcon({required this.icon, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -349,11 +342,20 @@ class _HeaderIcon extends StatelessWidget {
   }
 }
 
-class _CurrentStatusCard extends StatelessWidget {
-  const _CurrentStatusCard();
+// ── Status card ───────────────────────────────────────────────────────────────
+
+class _StatusCard extends StatelessWidget {
+  final PaymentStatus status;
+  final String countdown;
+  final bool showCountdown;
+  const _StatusCard(
+      {required this.status,
+      required this.countdown,
+      required this.showCountdown});
 
   @override
   Widget build(BuildContext context) {
+    final cfg = _statusConfig(status);
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
@@ -361,11 +363,9 @@ class _CurrentStatusCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(18),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x14000000),
-            blurRadius: 18,
-            offset: Offset(0, 8),
-          ),
+              color: Color(0x14000000), blurRadius: 18, offset: Offset(0, 8))
         ],
+        border: Border.all(color: cfg.borderColor),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -374,57 +374,218 @@ class _CurrentStatusCard extends StatelessWidget {
             width: 44,
             height: 44,
             decoration: BoxDecoration(
-              color: const Color(0xFFFFF4D8),
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: const Icon(
-              Icons.schedule_rounded,
-              color: Color(0xFFF59E0B),
-              size: 24,
-            ),
+                color: cfg.iconBg, borderRadius: BorderRadius.circular(14)),
+            child: Icon(cfg.icon, color: cfg.iconColor, size: 24),
           ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Menunggu Pembayaran',
-                  style: TextStyle(
-                    color: Color(0xFF24252C),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                const Text(
-                  'Pesanan kamu sudah dibuat. Silakan selesaikan pembayaran agar proses produksi atau pengiriman bisa dilanjutkan.',
-                  style: TextStyle(
-                    color: Color(0xFF6B7280),
-                    fontSize: 11.5,
-                    fontWeight: FontWeight.w700,
-                    height: 1.45,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFFF4D8),
-                    borderRadius: BorderRadius.circular(999),
-                  ),
-                  child: const Text(
-                    'Batas pembayaran: 24 jam',
+                Text(cfg.title,
                     style: TextStyle(
-                      color: Color(0xFFF59E0B),
-                      fontSize: 10.5,
-                      fontWeight: FontWeight.w800,
+                        color: cfg.iconColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w900)),
+                const SizedBox(height: 4),
+                Text(cfg.subtitle,
+                    style: const TextStyle(
+                        color: Color(0xFF6B7280),
+                        fontSize: 11.5,
+                        fontWeight: FontWeight.w600,
+                        height: 1.45)),
+                if (showCountdown) ...[
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFF4D8),
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.timer_outlined,
+                                size: 14, color: Color(0xFFF59E0B)),
+                            const SizedBox(width: 4),
+                            Text('Batas: $countdown',
+                                style: const TextStyle(
+                                    color: Color(0xFFF59E0B),
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w800)),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _StatusCfg _statusConfig(PaymentStatus s) {
+    switch (s) {
+      case PaymentStatus.pending:
+        return _StatusCfg(
+          icon: Icons.schedule_rounded,
+          iconColor: const Color(0xFFF59E0B),
+          iconBg: const Color(0xFFFFF4D8),
+          borderColor: const Color(0xFFFFE4A0),
+          title: 'Menunggu Pembayaran',
+          subtitle:
+              'Pesanan kamu sudah dibuat. Selesaikan pembayaran sebelum batas waktu.',
+        );
+      case PaymentStatus.verifying:
+        return _StatusCfg(
+          icon: Icons.sync_rounded,
+          iconColor: const Color(0xFF2563EB),
+          iconBg: const Color(0xFFEFF6FF),
+          borderColor: const Color(0xFFBFDBFE),
+          title: 'Sedang Diverifikasi',
+          subtitle: 'Pembayaran kamu sedang diproses oleh sistem.',
+        );
+      case PaymentStatus.success:
+        return _StatusCfg(
+          icon: Icons.check_circle_rounded,
+          iconColor: const Color(0xFF16A34A),
+          iconBg: const Color(0xFFEAF8EE),
+          borderColor: const Color(0xFFBBF7D0),
+          title: 'Pembayaran Berhasil',
+          subtitle: 'Terima kasih! Pesanan kamu sedang diproses.',
+        );
+      case PaymentStatus.failed:
+        return _StatusCfg(
+          icon: Icons.cancel_rounded,
+          iconColor: const Color(0xFFDC2626),
+          iconBg: const Color(0xFFFFE9E9),
+          borderColor: const Color(0xFFFECACA),
+          title: 'Pembayaran Gagal',
+          subtitle:
+              'Pembayaran tidak berhasil. Silakan coba lagi atau gunakan metode lain.',
+        );
+    }
+  }
+}
+
+class _StatusCfg {
+  final IconData icon;
+  final Color iconColor;
+  final Color iconBg;
+  final Color borderColor;
+  final String title;
+  final String subtitle;
+  const _StatusCfg(
+      {required this.icon,
+      required this.iconColor,
+      required this.iconBg,
+      required this.borderColor,
+      required this.title,
+      required this.subtitle});
+}
+
+// ── Order info card ───────────────────────────────────────────────────────────
+
+class _OrderInfoCard extends StatelessWidget {
+  final OrderResult order;
+  const _OrderInfoCard({required this.order});
+
+  @override
+  Widget build(BuildContext context) {
+    final totalItems = order.items.fold(0, (s, i) => s + i.qty);
+    return _Card(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const _SectionTitle(title: 'Detail Pesanan'),
+          const SizedBox(height: 12),
+          _InfoRow(label: 'Order ID', value: order.orderId),
+          _InfoRow(label: 'Tanggal', value: _fmtDate(order.createdAt)),
+          _InfoRow(label: 'Jumlah Item', value: '$totalItems item'),
+          const Divider(color: Color(0xFFEEEEEE), height: 20),
+          for (final item in order.items)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(item.nama,
+                            style: const TextStyle(
+                                color: Color(0xFF24252C),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700)),
+                        Text('${item.model} • ${item.seller}',
+                            style: const TextStyle(
+                                color: Color(0xFF9CA3AF),
+                                fontSize: 11,
+                                fontWeight: FontWeight.w500)),
+                      ],
                     ),
                   ),
-                ),
+                  Text('${item.qty}x ${_rupiah(item.harga)}',
+                      style: const TextStyle(
+                          color: kPurple,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700)),
+                ],
+              ),
+            ),
+          const Divider(color: Color(0xFFEEEEEE), height: 20),
+          _InfoRow(
+              label: 'Total',
+              value: _rupiah(order.totalAmount),
+              isStrong: true),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Payment method card ───────────────────────────────────────────────────────
+
+class _PaymentMethodCard extends StatelessWidget {
+  final String method;
+  const _PaymentMethodCard({required this.method});
+
+  @override
+  Widget build(BuildContext context) {
+    return _Card(
+      child: Row(
+        children: [
+          Container(
+            width: 42,
+            height: 42,
+            decoration: BoxDecoration(
+              color: const Color(0xFFF3E4FF),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Icon(Icons.payment_rounded, color: kPurple, size: 22),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Metode Pembayaran',
+                    style: TextStyle(
+                        color: Color(0xFF6B7280),
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600)),
+                const SizedBox(height: 2),
+                Text(method,
+                    style: const TextStyle(
+                        color: Color(0xFF24252C),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w800)),
               ],
             ),
           ),
@@ -434,210 +595,114 @@ class _CurrentStatusCard extends StatelessWidget {
   }
 }
 
-class _OrderInfoCard extends StatelessWidget {
-  const _OrderInfoCard();
+// ── Timeline card ─────────────────────────────────────────────────────────────
+
+class _TimelineCard extends StatelessWidget {
+  final PaymentStatus status;
+  final OrderResult order;
+  const _TimelineCard({required this.status, required this.order});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x14000000),
-            blurRadius: 18,
-            offset: Offset(0, 8),
-          ),
-        ],
-        border: Border.all(color: const Color(0x0FE8ECF4)),
+    final steps = [
+      _TimelineStep(
+        title: 'Pesanan dibuat',
+        subtitle: _fmtDate(order.createdAt),
+        state: _StepState.done,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          _SectionTitle(title: 'Detail Pesanan'),
-          SizedBox(height: 12),
-          _InfoRow(label: 'Order ID', value: 'INV-2026-001'),
-          _InfoRow(label: 'Nama', value: 'Kaos Oversize Basic'),
-          _InfoRow(label: 'Model', value: 'Basic Cotton 30s'),
-          _InfoRow(label: 'Seller', value: 'Konveksi Bareng'),
-          _InfoRow(label: 'Jumlah Item', value: '9 item'),
-          _InfoRow(label: 'Subtotal', value: 'Rp 1.014.000', isStrong: true),
-        ],
+      _TimelineStep(
+        title: 'Menunggu pembayaran',
+        subtitle: status == PaymentStatus.pending
+            ? 'Sedang menunggu...'
+            : _fmtDate(order.createdAt.add(const Duration(seconds: 5))),
+        state: status == PaymentStatus.pending
+            ? _StepState.active
+            : _StepState.done,
       ),
-    );
-  }
-}
-
-class _PaymentMethodCard extends StatelessWidget {
-  final _PaymentOption? selected;
-  final VoidCallback onTap;
-
-  const _PaymentMethodCard({required this.selected, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x14000000),
-            blurRadius: 18,
-            offset: Offset(0, 8),
-          ),
-        ],
-        border: Border.all(
-          color: selected != null ? kPurple : const Color(0x0FE8ECF4),
-        ),
+      _TimelineStep(
+        title: 'Verifikasi pembayaran',
+        subtitle: status == PaymentStatus.verifying
+            ? 'Sedang diverifikasi...'
+            : status == PaymentStatus.success || status == PaymentStatus.failed
+                ? 'Selesai diverifikasi'
+                : 'Menunggu konfirmasi',
+        state: status == PaymentStatus.verifying
+            ? _StepState.active
+            : (status == PaymentStatus.success ||
+                    status == PaymentStatus.failed)
+                ? _StepState.done
+                : _StepState.pending,
       ),
+      _TimelineStep(
+        title: status == PaymentStatus.failed
+            ? 'Pembayaran gagal'
+            : 'Pembayaran berhasil',
+        subtitle: status == PaymentStatus.success
+            ? 'Pesanan sedang diproses'
+            : status == PaymentStatus.failed
+                ? 'Silakan coba lagi'
+                : 'Akan aktif setelah verifikasi',
+        state: status == PaymentStatus.success
+            ? _StepState.done
+            : status == PaymentStatus.failed
+                ? _StepState.failed
+                : _StepState.pending,
+        isLast: true,
+      ),
+    ];
+
+    return _Card(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const _SectionTitle(title: 'Metode Pembayaran'),
+          const _SectionTitle(title: 'Progress Pembayaran'),
           const SizedBox(height: 12),
-          InkWell(
-            borderRadius: BorderRadius.circular(12),
-            onTap: onTap,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF7F7FB),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: selected != null ? kPurple : const Color(0xFFDFDEDE),
-                ),
-              ),
-              child: Row(
-                children: [
-                  if (selected != null) ...[
-                    Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        color: selected!.color.withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Icon(selected!.icon,
-                          color: selected!.color, size: 20),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(selected!.label,
-                              style: const TextStyle(
-                                  color: Color(0xFF121111),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700)),
-                          Text(selected!.group,
-                              style: const TextStyle(
-                                  color: Color(0xFF787676),
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w500)),
-                        ],
-                      ),
-                    ),
-                  ] else ...[
-                    const Icon(Icons.payment_outlined,
-                        color: Color(0xFF9E9E9E), size: 22),
-                    const SizedBox(width: 12),
-                    const Expanded(
-                      child: Text('Pilih metode pembayaran',
-                          style: TextStyle(
-                              color: Color(0xFF9E9E9E),
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500)),
-                    ),
-                  ],
-                  const Icon(Icons.keyboard_arrow_down,
-                      color: Color(0xFF292526)),
-                ],
-              ),
-            ),
-          ),
+          for (final step in steps) _TimelineItem(step: step),
         ],
       ),
     );
   }
 }
 
-class _TimelineSection extends StatelessWidget {
-  const _TimelineSection();
+enum _StepState { done, active, pending, failed }
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x14000000),
-            blurRadius: 18,
-            offset: Offset(0, 8),
-          ),
-        ],
-        border: Border.all(color: const Color(0x0FE8ECF4)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          _SectionTitle(title: 'Progress Pembayaran'),
-          SizedBox(height: 12),
-          _TimelineItem(
-            title: 'Pesanan dibuat',
-            subtitle: '12 Mar 2026 • 10:15',
-            done: true,
-          ),
-          _TimelineItem(
-            title: 'Menunggu pembayaran',
-            subtitle: '12 Mar 2026 • 10:16',
-            done: true,
-            highlighted: true,
-          ),
-          _TimelineItem(
-            title: 'Verifikasi pembayaran',
-            subtitle: 'Menunggu konfirmasi',
-            done: false,
-          ),
-          _TimelineItem(
-            title: 'Pembayaran berhasil',
-            subtitle: 'Akan aktif setelah verifikasi',
-            done: false,
-            isLast: true,
-          ),
-        ],
-      ),
-    );
-  }
+class _TimelineStep {
+  final String title;
+  final String subtitle;
+  final _StepState state;
+  final bool isLast;
+  const _TimelineStep(
+      {required this.title,
+      required this.subtitle,
+      required this.state,
+      this.isLast = false});
 }
 
 class _TimelineItem extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  final bool done;
-  final bool highlighted;
-  final bool isLast;
-
-  const _TimelineItem({
-    required this.title,
-    required this.subtitle,
-    required this.done,
-    this.highlighted = false,
-    this.isLast = false,
-  });
+  final _TimelineStep step;
+  const _TimelineItem({required this.step});
 
   @override
   Widget build(BuildContext context) {
-    final dotColor = done
-        ? (highlighted ? const Color(0xFFF59E0B) : kPurple)
-        : const Color(0xFFD1D5DB);
+    Color dotColor;
+    Widget dotChild;
+    switch (step.state) {
+      case _StepState.done:
+        dotColor = kPurple;
+        dotChild = const Icon(Icons.check, size: 11, color: Colors.white);
+        break;
+      case _StepState.active:
+        dotColor = const Color(0xFFF59E0B);
+        dotChild = const Icon(Icons.more_horiz, size: 11, color: Colors.white);
+        break;
+      case _StepState.failed:
+        dotColor = const Color(0xFFDC2626);
+        dotChild = const Icon(Icons.close, size: 11, color: Colors.white);
+        break;
+      case _StepState.pending:
+        dotColor = const Color(0xFFD1D5DB);
+        dotChild = const SizedBox.shrink();
+    }
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -645,50 +710,38 @@ class _TimelineItem extends StatelessWidget {
         Column(
           children: [
             Container(
-              width: 18,
-              height: 18,
-              decoration: BoxDecoration(
-                color: dotColor,
-                shape: BoxShape.circle,
-              ),
-              child: done
-                  ? const Icon(Icons.check, size: 12, color: Colors.white)
-                  : null,
+              width: 20,
+              height: 20,
+              decoration:
+                  BoxDecoration(color: dotColor, shape: BoxShape.circle),
+              child: Center(child: dotChild),
             ),
-            if (!isLast)
-              Container(
-                width: 2,
-                height: 34,
-                color: const Color(0xFFE5E7EB),
-              ),
+            if (!step.isLast)
+              Container(width: 2, height: 32, color: const Color(0xFFE5E7EB)),
           ],
         ),
         const SizedBox(width: 10),
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.only(top: 1),
+            padding: const EdgeInsets.only(top: 1, bottom: 4),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    color: highlighted
-                        ? const Color(0xFFF59E0B)
-                        : const Color(0xFF24252C),
-                    fontSize: 12.5,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  subtitle,
-                  style: const TextStyle(
-                    color: Color(0xFF6B7280),
-                    fontSize: 10.5,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
+                Text(step.title,
+                    style: TextStyle(
+                        color: step.state == _StepState.active
+                            ? const Color(0xFFF59E0B)
+                            : step.state == _StepState.failed
+                                ? const Color(0xFFDC2626)
+                                : const Color(0xFF24252C),
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.w800)),
+                const SizedBox(height: 2),
+                Text(step.subtitle,
+                    style: const TextStyle(
+                        color: Color(0xFF6B7280),
+                        fontSize: 10.5,
+                        fontWeight: FontWeight.w600)),
               ],
             ),
           ),
@@ -698,293 +751,9 @@ class _TimelineItem extends StatelessWidget {
   }
 }
 
-class _SectionTitle extends StatelessWidget {
-  final String title;
+// ── History ───────────────────────────────────────────────────────────────────
 
-  const _SectionTitle({required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: const TextStyle(
-        color: Color(0xFF24252C),
-        fontSize: 16,
-        fontWeight: FontWeight.w900,
-      ),
-    );
-  }
-}
-
-class _InfoRow extends StatelessWidget {
-  final String label;
-  final String value;
-  final bool isStrong;
-
-  const _InfoRow({
-    required this.label,
-    required this.value,
-    this.isStrong = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 92,
-            child: Text(
-              label,
-              style: const TextStyle(
-                color: Color(0xFF6B7280),
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Text(
-              value,
-              style: TextStyle(
-                color: const Color(0xFF24252C),
-                fontSize: isStrong ? 13 : 11.5,
-                fontWeight: isStrong ? FontWeight.w900 : FontWeight.w700,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _HistoryCard extends StatelessWidget {
-  final _PaymentHistoryItem item;
-
-  const _HistoryCard({required this.item});
-
-  Color get statusColor {
-    switch (item.status) {
-      case 'Berhasil':
-        return const Color(0xFF16A34A);
-      case 'Menunggu':
-        return const Color(0xFFF59E0B);
-      case 'Gagal':
-        return const Color(0xFFDC2626);
-      default:
-        return kPurple;
-    }
-  }
-
-  Color get statusBg {
-    switch (item.status) {
-      case 'Berhasil':
-        return const Color(0xFFEAF8EE);
-      case 'Menunggu':
-        return const Color(0xFFFFF4D8);
-      case 'Gagal':
-        return const Color(0xFFFFE9E9);
-      default:
-        return const Color(0xFFF3E4FF);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x14000000),
-            blurRadius: 18,
-            offset: Offset(0, 8),
-          ),
-        ],
-        border: Border.all(color: const Color(0x0FE8ECF4)),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 42,
-            height: 42,
-            decoration: BoxDecoration(
-              color: statusBg,
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: Icon(
-              item.status == 'Berhasil'
-                  ? Icons.check_circle_rounded
-                  : item.status == 'Menunggu'
-                      ? Icons.schedule_rounded
-                      : Icons.cancel_rounded,
-              color: statusColor,
-              size: 22,
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  item.nama,
-                  style: const TextStyle(
-                    color: Color(0xFF24252C),
-                    fontSize: 13,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  item.model,
-                  style: const TextStyle(
-                    color: Color(0xFF6B7280),
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  item.orderId,
-                  style: const TextStyle(
-                    color: Color(0xFF9CA3AF),
-                    fontSize: 10.5,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        _rupiah(item.total),
-                        style: const TextStyle(
-                          color: kPurple,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 5,
-                      ),
-                      decoration: BoxDecoration(
-                        color: statusBg,
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                      child: Text(
-                        item.status,
-                        style: TextStyle(
-                          color: statusColor,
-                          fontSize: 10.5,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  '${item.date} • ${item.method} • ${item.seller}',
-                  style: const TextStyle(
-                    color: Color(0xFF9CA3AF),
-                    fontSize: 10.5,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _BottomActionBar extends StatelessWidget {
-  final VoidCallback onPayNow;
-  final VoidCallback onCheckStatus;
-
-  const _BottomActionBar({
-    required this.onPayNow,
-    required this.onCheckStatus,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Color(0x12000000),
-            blurRadius: 18,
-            offset: Offset(0, -6),
-          ),
-        ],
-      ),
-      child: SafeArea(
-        top: false,
-        child: Row(
-          children: [
-            Expanded(
-              child: OutlinedButton(
-                onPressed: onCheckStatus,
-                style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: kPurple),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  minimumSize: const Size.fromHeight(46),
-                ),
-                child: const Text(
-                  'Cek Status',
-                  style: TextStyle(
-                    color: kPurple,
-                    fontWeight: FontWeight.w800,
-                    fontSize: 13,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: ElevatedButton(
-                onPressed: onPayNow,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: kPurple,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  minimumSize: const Size.fromHeight(46),
-                ),
-                child: const Text(
-                  'Bayar Lagi',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w800,
-                    fontSize: 13,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _PaymentHistoryItem {
+class _HistoryItem {
   final String orderId;
   final String nama;
   final String model;
@@ -992,9 +761,9 @@ class _PaymentHistoryItem {
   final int total;
   final String date;
   final String method;
-  final String status;
+  final PaymentStatus status;
 
-  const _PaymentHistoryItem({
+  const _HistoryItem({
     required this.orderId,
     required this.nama,
     required this.model,
@@ -1006,133 +775,384 @@ class _PaymentHistoryItem {
   });
 }
 
-// ── Payment picker sheet ──────────────────────────────────────────────────────
+class _HistoryCard extends StatelessWidget {
+  final _HistoryItem item;
+  const _HistoryCard({required this.item});
 
-class _PaymentPickerSheet extends StatelessWidget {
-  final _PaymentOption? selected;
-  final ValueChanged<_PaymentOption> onSelect;
-  final ScrollController scrollController;
+  Color get _statusColor {
+    switch (item.status) {
+      case PaymentStatus.success:
+        return const Color(0xFF16A34A);
+      case PaymentStatus.pending:
+      case PaymentStatus.verifying:
+        return const Color(0xFFF59E0B);
+      case PaymentStatus.failed:
+        return const Color(0xFFDC2626);
+    }
+  }
 
-  const _PaymentPickerSheet({
-    required this.selected,
-    required this.onSelect,
-    required this.scrollController,
-  });
+  Color get _statusBg {
+    switch (item.status) {
+      case PaymentStatus.success:
+        return const Color(0xFFEAF8EE);
+      case PaymentStatus.pending:
+      case PaymentStatus.verifying:
+        return const Color(0xFFFFF4D8);
+      case PaymentStatus.failed:
+        return const Color(0xFFFFE9E9);
+    }
+  }
+
+  String get _statusLabel {
+    switch (item.status) {
+      case PaymentStatus.success:
+        return 'Berhasil';
+      case PaymentStatus.pending:
+        return 'Menunggu';
+      case PaymentStatus.verifying:
+        return 'Verifikasi';
+      case PaymentStatus.failed:
+        return 'Gagal';
+    }
+  }
+
+  IconData get _statusIcon {
+    switch (item.status) {
+      case PaymentStatus.success:
+        return Icons.check_circle_rounded;
+      case PaymentStatus.pending:
+      case PaymentStatus.verifying:
+        return Icons.schedule_rounded;
+      case PaymentStatus.failed:
+        return Icons.cancel_rounded;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final groups = <String, List<_PaymentOption>>{};
-    for (final opt in _paymentOptions) {
-      groups.putIfAbsent(opt.group, () => []).add(opt);
-    }
-    return Column(
-      children: [
-        // Fixed handle + title
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                      color: const Color(0xFFE0E0E0),
-                      borderRadius: BorderRadius.circular(2)),
-                ),
-              ),
-              const SizedBox(height: 14),
-              const Text(
-                'Pilih Metode Pembayaran',
-                style: TextStyle(
-                    color: Color(0xFF121111),
-                    fontSize: 15,
-                    fontWeight: FontWeight.w800),
-              ),
-              const SizedBox(height: 14),
-            ],
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        boxShadow: const [
+          BoxShadow(
+              color: Color(0x14000000), blurRadius: 18, offset: Offset(0, 8))
+        ],
+        border: Border.all(color: const Color(0x0FE8ECF4)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 42,
+            height: 42,
+            decoration: BoxDecoration(
+                color: _statusBg, borderRadius: BorderRadius.circular(14)),
+            child: Icon(_statusIcon, color: _statusColor, size: 22),
           ),
-        ),
-        // Scrollable options
-        Expanded(
-          child: ListView(
-            controller: scrollController,
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-            children: [
-              for (final entry in groups.entries) ...[
-                Text(entry.key,
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(item.nama,
                     style: const TextStyle(
-                        color: Color(0xFF787676),
-                        fontSize: 12,
+                        color: Color(0xFF24252C),
+                        fontSize: 13,
+                        fontWeight: FontWeight.w900)),
+                const SizedBox(height: 2),
+                Text('${item.model} • ${item.seller}',
+                    style: const TextStyle(
+                        color: Color(0xFF6B7280),
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600)),
+                const SizedBox(height: 2),
+                Text(item.orderId,
+                    style: const TextStyle(
+                        color: Color(0xFF9CA3AF),
+                        fontSize: 10.5,
                         fontWeight: FontWeight.w600)),
                 const SizedBox(height: 8),
-                for (final opt in entry.value)
-                  _PaymentTile(
-                    option: opt,
-                    isSelected: selected?.label == opt.label,
-                    onTap: () => onSelect(opt),
-                  ),
-                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(_rupiah(item.total),
+                          style: const TextStyle(
+                              color: kPurple,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w900)),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                      decoration: BoxDecoration(
+                          color: _statusBg,
+                          borderRadius: BorderRadius.circular(999)),
+                      child: Text(_statusLabel,
+                          style: TextStyle(
+                              color: _statusColor,
+                              fontSize: 10.5,
+                              fontWeight: FontWeight.w800)),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 6),
+                Text('${item.date} • ${item.method}',
+                    style: const TextStyle(
+                        color: Color(0xFF9CA3AF),
+                        fontSize: 10.5,
+                        fontWeight: FontWeight.w600)),
               ],
-            ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
 
-class _PaymentTile extends StatelessWidget {
-  final _PaymentOption option;
-  final bool isSelected;
-  final VoidCallback onTap;
+class _EmptyHistory extends StatelessWidget {
+  const _EmptyHistory();
 
-  const _PaymentTile({
-    required this.option,
-    required this.isSelected,
-    required this.onTap,
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 32),
+      alignment: Alignment.center,
+      child: const Column(
+        children: [
+          Icon(Icons.receipt_long_outlined, size: 48, color: Color(0xFFD1D5DB)),
+          SizedBox(height: 12),
+          Text('Tidak ada riwayat',
+              style: TextStyle(
+                  color: Color(0xFF9CA3AF),
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600)),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Bottom bar ────────────────────────────────────────────────────────────────
+
+class _BottomBar extends StatelessWidget {
+  final PaymentStatus status;
+  final bool hasOrder;
+  final bool isPolling;
+  final bool isRetrying;
+  final VoidCallback onCheckStatus;
+  final VoidCallback onRetry;
+
+  const _BottomBar({
+    required this.status,
+    required this.hasOrder,
+    required this.isPolling,
+    required this.isRetrying,
+    required this.onCheckStatus,
+    required this.onRetry,
   });
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(10),
-      onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 8),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFFF3E4FF) : const Color(0xFFF7F7FB),
-          borderRadius: BorderRadius.circular(10),
-          border:
-              Border.all(color: isSelected ? kPurple : const Color(0xFFEEEEEE)),
-        ),
+    if (!hasOrder) return const SizedBox.shrink();
+
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+              color: Color(0x12000000), blurRadius: 18, offset: Offset(0, -6))
+        ],
+      ),
+      child: SafeArea(
+        top: false,
         child: Row(
           children: [
-            Container(
-              width: 34,
-              height: 34,
-              decoration: BoxDecoration(
-                color: option.color.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(8),
+            // Cek Status
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: isPolling ? null : onCheckStatus,
+                icon: isPolling
+                    ? const SizedBox(
+                        width: 14,
+                        height: 14,
+                        child: CircularProgressIndicator(
+                            strokeWidth: 2, color: kPurple))
+                    : const Icon(Icons.refresh_rounded, size: 16),
+                label: Text(isPolling ? 'Mengecek...' : 'Cek Status'),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: kPurple,
+                  side: const BorderSide(color: kPurple),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14)),
+                  minimumSize: const Size.fromHeight(46),
+                  textStyle: const TextStyle(
+                      fontSize: 13, fontWeight: FontWeight.w700),
+                ),
               ),
-              child: Icon(option.icon, color: option.color, size: 18),
             ),
             const SizedBox(width: 12),
+
+            // Bayar Lagi / Selesai
             Expanded(
-              child: Text(
-                option.label,
-                style: TextStyle(
-                    color: isSelected ? kPurple : const Color(0xFF121111),
-                    fontSize: 13,
-                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600),
-              ),
+              child: status == PaymentStatus.success
+                  ? ElevatedButton.icon(
+                      onPressed: () => Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (_) => const HomeScreen()),
+                        (r) => false,
+                      ),
+                      icon: const Icon(Icons.home_rounded, size: 16),
+                      label: const Text('Selesai'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF16A34A),
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14)),
+                        minimumSize: const Size.fromHeight(46),
+                        textStyle: const TextStyle(
+                            fontSize: 13, fontWeight: FontWeight.w700),
+                      ),
+                    )
+                  : ElevatedButton.icon(
+                      onPressed: isRetrying ? null : onRetry,
+                      icon: isRetrying
+                          ? const SizedBox(
+                              width: 14,
+                              height: 14,
+                              child: CircularProgressIndicator(
+                                  strokeWidth: 2, color: Colors.white))
+                          : const Icon(Icons.replay_rounded, size: 16),
+                      label: Text(isRetrying ? 'Memproses...' : 'Bayar Lagi'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: kPurple,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14)),
+                        minimumSize: const Size.fromHeight(46),
+                        textStyle: const TextStyle(
+                            fontSize: 13, fontWeight: FontWeight.w700),
+                      ),
+                    ),
             ),
-            if (isSelected)
-              const Icon(Icons.check_circle_rounded, color: kPurple, size: 20),
           ],
         ),
+      ),
+    );
+  }
+}
+
+// ── Shared small widgets ──────────────────────────────────────────────────────
+
+class _Card extends StatelessWidget {
+  final Widget child;
+  const _Card({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        boxShadow: const [
+          BoxShadow(
+              color: Color(0x14000000), blurRadius: 18, offset: Offset(0, 8))
+        ],
+        border: Border.all(color: const Color(0x0FE8ECF4)),
+      ),
+      child: child,
+    );
+  }
+}
+
+class _SectionTitle extends StatelessWidget {
+  final String title;
+  const _SectionTitle({required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(title,
+        style: const TextStyle(
+            color: Color(0xFF24252C),
+            fontSize: 15,
+            fontWeight: FontWeight.w900));
+  }
+}
+
+class _InfoRow extends StatelessWidget {
+  final String label;
+  final String value;
+  final bool isStrong;
+  const _InfoRow(
+      {required this.label, required this.value, this.isStrong = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 90,
+            child: Text(label,
+                style: const TextStyle(
+                    color: Color(0xFF6B7280),
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600)),
+          ),
+          Expanded(
+            child: Text(value,
+                style: TextStyle(
+                    color: isStrong ? kPurple : const Color(0xFF24252C),
+                    fontSize: isStrong ? 13 : 11.5,
+                    fontWeight: isStrong ? FontWeight.w900 : FontWeight.w700)),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FilterChips extends StatelessWidget {
+  final List<String> filters;
+  final int selected;
+  final ValueChanged<int> onSelect;
+  const _FilterChips(
+      {required this.filters, required this.selected, required this.onSelect});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 38,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: filters.length,
+        separatorBuilder: (_, __) => const SizedBox(width: 10),
+        itemBuilder: (_, i) {
+          final active = selected == i;
+          return InkWell(
+            borderRadius: BorderRadius.circular(999),
+            onTap: () => onSelect(i),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              decoration: BoxDecoration(
+                color: active ? kPurple : Colors.white,
+                borderRadius: BorderRadius.circular(999),
+                border: Border.all(
+                    color: active ? kPurple : const Color(0xFFE8ECF4)),
+              ),
+              child: Text(filters[i],
+                  style: TextStyle(
+                      color: active ? Colors.white : const Color(0xFF6B7280),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w800)),
+            ),
+          );
+        },
       ),
     );
   }
