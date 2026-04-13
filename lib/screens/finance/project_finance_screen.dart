@@ -1,6 +1,6 @@
 // lib/pages/keuanganproyek.dart
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/screens/main/home.dart';
+import 'package:go_router/go_router.dart';
 
 const kPurple = Color(0xFF6B257F);
 
@@ -37,7 +37,7 @@ class _ProjectFinanceScreenState extends State<ProjectFinanceScreen> {
                 children: [
                   _CircleIconButton(
                     icon: Icons.arrow_back_ios_new,
-                    onTap: () => Navigator.pop(context),
+                    onTap: () => context.pop(),
                   ),
                   const SizedBox(width: 10),
                   const Expanded(
@@ -57,11 +57,7 @@ class _ProjectFinanceScreenState extends State<ProjectFinanceScreen> {
                     icon: Icons.home_outlined,
                     iconColor: kPurple,
                     onTap: () {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (_) => const HomeScreen()),
-                        (route) => false,
-                      );
+                      context.go('/home');
                     },
                   ),
                 ],

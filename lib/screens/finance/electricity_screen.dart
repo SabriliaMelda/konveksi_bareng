@@ -1,5 +1,6 @@
 // listrik.dart
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 const Color kPurple = Color(0xFF6B257F);
 
@@ -130,7 +131,7 @@ class _ElectricityScreenState extends State<ElectricityScreen> {
                 children: [
                   InkWell(
                     borderRadius: BorderRadius.circular(32),
-                    onTap: () => Navigator.pop(context),
+                    onTap: () => context.pop(),
                     child: Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
@@ -156,7 +157,7 @@ class _ElectricityScreenState extends State<ElectricityScreen> {
                   ),
                   InkWell(
                     borderRadius: BorderRadius.circular(32),
-                    onTap: () => Navigator.pop(context),
+                    onTap: () => context.pop(),
                     child: Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
