@@ -1,24 +1,8 @@
 // home_screen.dart
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-import 'package:konveksi_bareng/screens/finance/purchase_screen.dart';
-import 'package:konveksi_bareng/screens/promotion/promotion_screen.dart';
-import 'package:konveksi_bareng/screens/finance/profit_loss_screen.dart';
-import 'package:konveksi_bareng/screens/main/settings.dart';
-import 'package:konveksi_bareng/screens/worker/wage_screen.dart';
-import 'package:konveksi_bareng/screens/main/wishlist.dart';
-import 'package:konveksi_bareng/screens/marketplace/checkout.dart';
-
-import 'package:konveksi_bareng/screens/main/profile.dart';
-import 'package:konveksi_bareng/screens/project/manage_project_screen.dart';
-import 'package:konveksi_bareng/screens/inventory/raw_material_screen.dart';
-import 'package:konveksi_bareng/screens/main/chat.dart';
-import 'package:konveksi_bareng/screens/finance/finance_screen.dart';
-import 'package:konveksi_bareng/screens/schedule/schedule_screen.dart';
-import 'package:konveksi_bareng/screens/production/pattern_screen.dart';
-import 'package:konveksi_bareng/screens/worker/worker_screen.dart';
-import 'package:konveksi_bareng/screens/auth/login.dart';
 import 'package:konveksi_bareng/providers/session_guard.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -37,11 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _sessionGuard.start(
       onExpired: () {
         if (mounted) {
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (_) => const LoginScreen()),
-            (_) => false,
-          );
+          context.go('/welcome');
         }
       },
     );
@@ -136,10 +116,7 @@ class _HeaderSection extends StatelessWidget {
               InkWell(
                 borderRadius: BorderRadius.circular(20),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const CheckoutScreen()),
-                  );
+                  context.push('/checkout');
                 },
                 child: Stack(
                   children: [
@@ -445,11 +422,14 @@ class _MenuGrid extends StatelessWidget {
     ];
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Wrap(
-        runSpacing: 16,
-        spacing: 16,
-        alignment: WrapAlignment.spaceBetween,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: GridView.count(
+        crossAxisCount: 5,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        mainAxisSpacing: 3,
+        crossAxisSpacing: 0,
+        childAspectRatio: 50 / 50,
         children: items.map((e) {
           final label = e.$1;
           final icon = e.$2;
@@ -458,66 +438,39 @@ class _MenuGrid extends StatelessWidget {
 
           if (label == 'Jadwal') {
             onTap = () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const ScheduleScreen()),
-              );
+              context.push('/schedule');
             };
           } else if (label == 'Pola') {
             onTap = () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const PatternScreen()),
-              );
+              context.push('/pattern');
             };
           } else if (label == 'Pekerja') {
             onTap = () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const WorkerScreen()),
-              );
+              context.push('/worker');
             };
           } else if (label == 'Chat') {
             onTap = () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const ChatScreen()),
-              );
+              context.push('/chat');
             };
           } else if (label == 'Beli') {
             onTap = () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const PurchaseScreen()),
-              );
+              context.push('/purchase');
             };
           } else if (label == 'Promosi') {
             onTap = () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const PromotionScreen()),
-              );
+              context.push('/promotion');
             };
           } else if (label == 'Wishlist') {
             onTap = () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const WishlistScreen()),
-              );
+              context.push('/wishlist');
             };
           } else if (label == 'Rugi Laba') {
             onTap = () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const ProfitLossScreen()),
-              );
+              context.push('/profit-loss');
             };
           } else if (label == 'Upah') {
             onTap = () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const WageScreen()),
-              );
+              context.push('/wage');
             };
           } else if (label == 'More') {
             // Optional: buka drawer saat klik More
@@ -636,29 +589,13 @@ class _FeatureGrid extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 onTap: () {
                   if (title == 'Kelola Proyek') {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const ManageProjectScreen(),
-                      ),
-                    );
+                    context.push('/manage-project');
                   } else if (title == 'Bahan Baku') {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const RawMaterialScreen(),
-                      ),
-                    );
+                    context.push('/raw-material');
                   } else if (title == 'Komunitas') {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => const ChatScreen()),
-                    );
+                    context.push('/chat');
                   } else if (title == 'Keuangan') {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => const FinanceScreen()),
-                    );
+                    context.push('/finance');
                   }
                 },
                 child: Container(
@@ -963,40 +900,28 @@ class _BottomNavBar extends StatelessWidget {
             label: 'Wishlist',
             icon: Icons.favorite_border,
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const WishlistScreen()),
-              );
+              context.push('/wishlist');
             },
           ),
           _BottomNavItem(
             label: 'Settings',
             icon: Icons.settings_outlined,
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const SettingsScreen()),
-              );
+              context.push('/settings');
             },
           ),
           _BottomNavItem(
             label: 'Chat',
             icon: Icons.chat_bubble_outline,
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const ChatScreen()),
-              );
+              context.push('/chat');
             },
           ),
           _BottomNavItem(
             label: 'Profile',
             icon: Icons.person_outline,
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const ProfileScreen()),
-              );
+              context.push('/profile');
             },
           ),
         ],
@@ -1060,9 +985,9 @@ class _AppSidebar extends StatelessWidget {
   static const Color _text = Color(0xFF111827);
   static const Color _muted = Color(0xFF6B7280);
 
-  void _go(BuildContext context, Widget page) {
-    Navigator.pop(context); // tutup drawer
-    Navigator.push(context, MaterialPageRoute(builder: (_) => page));
+  void _go(BuildContext context, String route) {
+    context.pop(); // tutup drawer
+    context.push(route);
   }
 
   @override
@@ -1096,9 +1021,10 @@ class _AppSidebar extends StatelessWidget {
                     width: 52,
                     height: 52,
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.18),
+                      color: Colors.white.withValues(alpha: 0.18),
                       borderRadius: BorderRadius.circular(18),
-                      border: Border.all(color: Colors.white.withOpacity(0.25)),
+                      border: Border.all(
+                          color: Colors.white.withValues(alpha: 0.25)),
                     ),
                     child: const Icon(
                       Icons.person,
@@ -1132,10 +1058,10 @@ class _AppSidebar extends StatelessWidget {
                                 vertical: 5,
                               ),
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.18),
+                                color: Colors.white.withValues(alpha: 0.18),
                                 borderRadius: BorderRadius.circular(999),
                                 border: Border.all(
-                                  color: Colors.white.withOpacity(0.25),
+                                  color: Colors.white.withValues(alpha: 0.25),
                                 ),
                               ),
                               child: const Text(
@@ -1161,7 +1087,7 @@ class _AppSidebar extends StatelessWidget {
 
                   // close
                   IconButton(
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () => context.pop(),
                     icon: const Icon(Icons.close_rounded, color: Colors.white),
                   ),
                 ],
@@ -1182,35 +1108,35 @@ class _AppSidebar extends StatelessWidget {
                       icon: Icons.assignment_rounded,
                       label: 'Kelola Proyek',
                       subtitle: 'Manajemen order & pekerjaan',
-                      onTap: () => _go(context, const ManageProjectScreen()),
+                      onTap: () => _go(context, '/manage-project'),
                     ),
                     _navTile(
                       context,
                       icon: Icons.inventory_2_rounded,
                       label: 'Bahan Baku',
                       subtitle: 'Stok, supplier, pemakaian',
-                      onTap: () => _go(context, const RawMaterialScreen()),
+                      onTap: () => _go(context, '/raw-material'),
                     ),
                     _navTile(
                       context,
                       icon: Icons.account_balance_wallet_outlined,
                       label: 'Keuangan',
                       subtitle: 'Cashflow & pencatatan',
-                      onTap: () => _go(context, const FinanceScreen()),
+                      onTap: () => _go(context, '/finance'),
                     ),
                     _navTile(
                       context,
                       icon: Icons.chat_bubble_outline_rounded,
                       label: 'Chat',
                       subtitle: 'Komunikasi internal',
-                      onTap: () => _go(context, const ChatScreen()),
+                      onTap: () => _go(context, '/chat'),
                     ),
                     _navTile(
                       context,
                       icon: Icons.favorite_border_rounded,
                       label: 'Wishlist',
                       subtitle: 'Simpan item favorit',
-                      onTap: () => _go(context, const WishlistScreen()),
+                      onTap: () => _go(context, '/wishlist'),
                     ),
 
                     const SizedBox(height: 14),
@@ -1224,14 +1150,14 @@ class _AppSidebar extends StatelessWidget {
                       icon: Icons.person_outline_rounded,
                       label: 'Profile',
                       subtitle: 'Data akun & bisnis',
-                      onTap: () => _go(context, const ProfileScreen()),
+                      onTap: () => _go(context, '/profile'),
                     ),
                     _navTile(
                       context,
                       icon: Icons.settings_outlined,
                       label: 'Settings',
                       subtitle: 'Preferensi aplikasi',
-                      onTap: () => _go(context, const SettingsScreen()),
+                      onTap: () => _go(context, '/settings'),
                     ),
 
                     const SizedBox(height: 14),
@@ -1276,7 +1202,7 @@ class _AppSidebar extends StatelessWidget {
                       icon: Icons.logout_rounded,
                       onTap: () {
                         // TODO: logout action (kalau sudah ada auth)
-                        Navigator.pop(context);
+                        context.pop();
                       },
                     ),
                   ),
@@ -1286,7 +1212,7 @@ class _AppSidebar extends StatelessWidget {
                       label: 'Upgrade',
                       icon: Icons.workspace_premium_rounded,
                       onTap: () {
-                        Navigator.pop(context);
+                        context.pop();
                         // TODO: arahkan ke halaman upgrade jika ada
                       },
                     ),

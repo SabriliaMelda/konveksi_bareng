@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/screens/main/home.dart'; // pastikan file home.dart kamu ada dan class-nya HomeScreen
+import 'package:go_router/go_router.dart';
+import 'package:konveksi_bareng/screens/marketplace/product_detail_screen.dart';
 
 const kPurple = Color(0xFF6B257F);
 
@@ -114,10 +115,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                   _CircleIconButton(
                     icon: Icons.arrow_back_ios_new,
                     iconColor: const Color(0xFF1E232C),
-                    onTap: () => Navigator.pop(context),
+                    onTap: () => context.pop(),
                   ),
                   const SizedBox(width: 10),
-
                   Expanded(
                     child: _SearchPill(
                       controller: _searchC,
@@ -130,20 +130,14 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                     ),
                   ),
                   const SizedBox(width: 10),
-
                   _CircleIconButton(
                     icon: Icons.home_filled,
                     iconColor: kPurple,
                     onTap: () {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (_) => const HomeScreen()),
-                        (route) => false,
-                      );
+                      context.go('/home');
                     },
                   ),
                   const SizedBox(width: 10),
-
                   _IconPill(
                     icon: Icons.notifications_none_rounded,
                     onTap: () {
@@ -261,8 +255,22 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                   return _ProductCard(
                     product: p,
                     onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Buka produk: ${p.title}')),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ProductDetailScreen(
+                            product: MarketplaceProduct(
+                              title: p.title,
+                              store: p.store,
+                              price: p.price,
+                              rating: p.rating,
+                              sold: p.sold,
+                              imageUrl: p.imageUrl,
+                              isPromo: p.isPromo,
+                              promoText: p.promoText,
+                            ),
+                          ),
+                        ),
                       );
                     },
                     onFav: () {
@@ -494,7 +502,7 @@ class _PromoBanner extends StatelessWidget {
               width: 82,
               height: 82,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.22),
+                color: Colors.white.withValues(alpha: 0.22),
                 borderRadius: BorderRadius.circular(16),
               ),
               alignment: Alignment.center,
@@ -614,7 +622,7 @@ class _ProductCard extends StatelessWidget {
                       width: 34,
                       height: 34,
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withValues(alpha: 0.9),
                         borderRadius: BorderRadius.circular(999),
                         border: Border.all(color: const Color(0xFFE8ECF4)),
                       ),

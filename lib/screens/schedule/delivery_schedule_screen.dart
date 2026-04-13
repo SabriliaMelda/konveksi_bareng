@@ -1,5 +1,6 @@
 // jadwal_kirim.dart
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 const kPurple = Color(0xFF6B257F);
 
@@ -235,7 +236,7 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
                         child: _GhostButton(
                           icon: Icons.close_rounded,
                           text: 'Batal',
-                          onTap: () => Navigator.pop(context),
+                          onTap: () => context.pop(),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -289,7 +290,7 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
                                 ..add(const Color(0xFF735BF2));
                             });
 
-                            Navigator.pop(context);
+                            context.pop();
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text(
@@ -373,7 +374,7 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
                 label: 'Tandai selesai (dummy)',
                 color: const Color(0xFF2E7D32),
                 onTap: () {
-                  Navigator.pop(context);
+                  context.pop();
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Ditandai selesai (dummy)')),
                   );
@@ -385,7 +386,7 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
                 label: 'Hapus jadwal (dummy)',
                 color: const Color(0xFFD32F2F),
                 onTap: () {
-                  Navigator.pop(context);
+                  context.pop();
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Hapus (dummy)')),
                   );
@@ -568,7 +569,7 @@ class _TopHeader extends StatelessWidget {
         children: [
           _CircleIcon(
             icon: Icons.arrow_back,
-            onTap: () => Navigator.pop(context),
+            onTap: () => context.pop(),
           ),
           Text(
             title,
@@ -582,7 +583,7 @@ class _TopHeader extends StatelessWidget {
           _CircleIcon(
             icon: Icons.home_filled,
             iconColor: kPurple,
-            onTap: () => Navigator.pop(context),
+            onTap: () => context.pop(),
           ),
         ],
       ),

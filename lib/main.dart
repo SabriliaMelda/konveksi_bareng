@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:konveksi_bareng/config/api_config.dart';
-import 'package:konveksi_bareng/screens/auth/welcome.dart';
-import 'package:konveksi_bareng/screens/main/home.dart';
-import 'package:konveksi_bareng/services/storage_service.dart';
+import 'package:konveksi_bareng/config/app_router.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
   await ApiConfig.init();
   // Dev auth bypass: when DEV_AUTH_BYPASS=true, prefill a dev token and
@@ -27,17 +26,20 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  static bool get devBypass =>
+      dotenv.env['DEV_AUTH_BYPASS']?.toUpperCase() == 'TRUE';
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Konveksi Bareng',
       theme: ThemeData(
         fontFamily: 'Poppins',
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF6B257F)),
         useMaterial3: true,
       ),
-      home: const WelcomeScreen(), // <-- diarahkan ke Welcome Page
+      routerConfig: devBypass ? devRouter : appRouter,
     );
   }
 }
@@ -45,17 +47,20 @@ class MyApp extends StatelessWidget {
 class MyAppHome extends StatelessWidget {
   const MyAppHome({super.key});
 
+  static bool get devBypass =>
+      dotenv.env['DEV_AUTH_BYPASS']?.toUpperCase() == 'TRUE';
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: 'Konveksi Bareng (Dev)',
+      title: 'Konveksi Bareng',
       theme: ThemeData(
         fontFamily: 'Poppins',
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF6B257F)),
         useMaterial3: true,
       ),
-      home: const HomeScreen(),
+      routerConfig: devBypass ? devRouter : appRouter,
     );
   }
 }

@@ -2,13 +2,11 @@ import 'dart:io' show Platform;
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter/services.dart';
 import '../../services/auth_service.dart';
 import '../../services/storage_service.dart';
 import '../../widgets/auth_background.dart';
-import '../main/home.dart';
-import 'login.dart';
-import 'security_screen.dart';
 
 const _strings = {
   'id': {
@@ -84,10 +82,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
     final email = await StorageService.getItem('pending_email');
     final mode = await StorageService.getItem('pending_mode');
     if (email == null && mounted) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const LoginScreen()),
-      );
+      context.go('/login');
       return;
     }
     setState(() {
@@ -224,10 +219,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
         await StorageService.deleteItem('pending_mode');
         if (mounted) {
           setState(() => _loading = false);
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (_) => const SecurityScreen()),
-          );
+          context.go('/security');
         }
       } else {
         final deviceInfo = await _getDeviceInfo();
@@ -253,10 +245,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
         await StorageService.deleteItem('pending_mode');
         if (mounted) {
           setState(() => _loading = false);
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (_) => const HomeScreen()),
-          );
+          context.go('/home');
         }
       }
     } catch (_) {
@@ -373,7 +362,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
               onPressed: _loading ? null : _handleResend,
               style: ElevatedButton.styleFrom(
                 backgroundColor: kPurpleButton,
-                disabledBackgroundColor: kPurpleButton.withOpacity(0.7),
+                disabledBackgroundColor: kPurpleButton.withValues(alpha: 0.7),
                 elevation: 0,
                 padding: EdgeInsets.zero,
                 shape: RoundedRectangleBorder(
@@ -399,7 +388,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF4CAF50),
                 disabledBackgroundColor:
-                    const Color(0xFF4CAF50).withOpacity(0.7),
+                    const Color(0xFF4CAF50).withValues(alpha: 0.7),
                 elevation: 0,
                 padding: EdgeInsets.zero,
                 shape: RoundedRectangleBorder(

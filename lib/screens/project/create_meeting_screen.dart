@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 const kPurple = Color(0xFF6B257F);
 const kSoftBg = Color(0xFFF8F8FA);
@@ -64,7 +65,7 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
 
   void _save() {
     // TODO: simpan data meeting (nanti bisa return data ke jadwal_buat)
-    Navigator.pop(context);
+    context.pop();
   }
 
   @override
@@ -83,7 +84,7 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
                 children: [
                   _TopCircleButton(
                     icon: Icons.close,
-                    onTap: () => Navigator.pop(context),
+                    onTap: () => context.pop(),
                   ),
                   const Expanded(
                     child: Center(
@@ -456,7 +457,7 @@ class _SwitchRow extends StatelessWidget {
               ),
             ),
           ),
-          Switch(value: value, onChanged: onChanged, activeColor: kPurple),
+          Switch(value: value, onChanged: onChanged, activeThumbColor: kPurple),
         ],
       ),
     );

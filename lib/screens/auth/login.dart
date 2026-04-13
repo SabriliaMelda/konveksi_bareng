@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../services/auth_service.dart';
 import '../../services/storage_service.dart';
 import '../../widgets/auth_background.dart';
-import 'find_account.dart';
-import 'register.dart';
-import 'verification.dart';
 
 const _strings = {
   'id': {
@@ -86,10 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
       } else {
         await StorageService.setItem('pending_email', _controller.text);
         if (mounted) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (_) => const VerificationScreen()),
-          );
+          context.go('/verification');
         }
       }
     } catch (_) {
@@ -144,11 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ? [
                     WidgetSpan(
                       child: GestureDetector(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => const RegisterScreen()),
-                        ),
+                        onTap: () => context.push('/register'),
                         child: Text(
                           t['registerPrompt']!,
                           style: const TextStyle(
@@ -205,11 +196,7 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               Expanded(
                 child: GestureDetector(
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => const FindAccountScreen()),
-                  ),
+                  onTap: () => context.push('/find-account'),
                   child: Text(
                     t['forgotEmail']!,
                     style: const TextStyle(
@@ -221,10 +208,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               GestureDetector(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const RegisterScreen()),
-                ),
+                onTap: () => context.push('/register'),
                 child: Text(
                   t['createAccount']!,
                   textAlign: TextAlign.right,
@@ -247,7 +231,7 @@ class _LoginScreenState extends State<LoginScreen> {
               onPressed: _loading ? null : _handleSubmit,
               style: ElevatedButton.styleFrom(
                 backgroundColor: kPurpleButton,
-                disabledBackgroundColor: kPurpleButton.withOpacity(0.7),
+                disabledBackgroundColor: kPurpleButton.withValues(alpha: 0.7),
                 elevation: 0,
                 padding: EdgeInsets.zero,
                 shape: RoundedRectangleBorder(

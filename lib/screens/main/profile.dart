@@ -1,6 +1,6 @@
 // profile.dart
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/screens/main/home.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -54,7 +54,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   children: [
                     _CircleIcon(
                       icon: Icons.arrow_back_ios_new,
-                      onTap: () => Navigator.pop(context),
+                      onTap: () => context.pop(),
                     ),
                     const Text(
                       'Profil',
@@ -69,11 +69,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       icon: Icons.home_filled,
                       iconColor: _purple,
                       onTap: () {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (_) => const HomeScreen()),
-                          (route) => false,
-                        );
+                        context.go('/home');
                       },
                     ),
                   ],
@@ -243,7 +239,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(18),
                             border: Border.all(
-                              color: _purple.withOpacity(0.18),
+                              color: _purple.withValues(alpha: 0.18),
                             ),
                             gradient: const LinearGradient(
                               begin: Alignment.topLeft,
@@ -479,11 +475,11 @@ class _Pill extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(999),
-          border: Border.all(color: color.withOpacity(0.18)),
+          border: Border.all(color: color.withValues(alpha: 0.18)),
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [color.withOpacity(0.14), const Color(0x00FFFFFF)],
+            colors: [color.withValues(alpha: 0.14), const Color(0x00FFFFFF)],
           ),
         ),
         child: Text(

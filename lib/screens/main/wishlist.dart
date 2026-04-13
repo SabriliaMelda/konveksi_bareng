@@ -1,6 +1,6 @@
 // lib/pages/wishlist.dart
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/screens/main/home.dart';
+import 'package:go_router/go_router.dart';
 
 const kPurple = Color(0xFF6B257F);
 
@@ -84,7 +84,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                   _CircleIconButton(
                     icon: Icons.arrow_back_ios_new,
                     iconColor: const Color(0xFF1E232C),
-                    onTap: () => Navigator.pop(context),
+                    onTap: () => context.pop(),
                   ),
                   const SizedBox(width: 10),
                   Expanded(
@@ -103,11 +103,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                     icon: Icons.home_filled,
                     iconColor: kPurple,
                     onTap: () {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (_) => const HomeScreen()),
-                        (route) => false,
-                      );
+                      context.go('/home');
                     },
                   ),
                   const SizedBox(width: 10),
@@ -177,7 +173,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                         'Wishlist kosong.\nTambahkan produk favorit kamu.',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: Colors.black.withOpacity(0.55),
+                          color: Colors.black.withValues(alpha: 0.55),
                           fontSize: 14,
                           height: 1.3,
                         ),

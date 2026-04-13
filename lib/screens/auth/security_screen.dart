@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../services/auth_service.dart';
 import '../../services/storage_service.dart';
 import '../../widgets/auth_background.dart';
-import 'login.dart';
 
 const _strings = {
   'id': {
@@ -90,10 +90,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
   Future<void> _loadEmail() async {
     final email = await StorageService.getItem('security_email');
     if (email == null && mounted) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const LoginScreen()),
-      );
+      context.go('/login');
       return;
     }
     setState(() => _email = email ?? '');
@@ -178,10 +175,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
               width: double.infinity,
               height: 42,
               child: ElevatedButton(
-                onPressed: () => Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => const LoginScreen()),
-                ),
+                onPressed: () => context.go('/login'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: kPurpleButton,
                   elevation: 0,
@@ -254,7 +248,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
               onPressed: _loading ? null : _handleSubmit,
               style: ElevatedButton.styleFrom(
                 backgroundColor: kPurpleButton,
-                disabledBackgroundColor: kPurpleButton.withOpacity(0.7),
+                disabledBackgroundColor: kPurpleButton.withValues(alpha: 0.7),
                 elevation: 0,
                 padding: EdgeInsets.zero,
                 shape: RoundedRectangleBorder(

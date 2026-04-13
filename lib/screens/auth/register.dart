@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../services/auth_service.dart';
 import '../../services/storage_service.dart';
 import '../../widgets/auth_background.dart';
-import 'login.dart';
-import 'verification.dart';
 
 const _strings = {
   'id': {
@@ -93,10 +92,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             'pending_email', _emailCtrl.text.toLowerCase().trim());
         await StorageService.setItem('pending_mode', 'register');
         if (mounted) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (_) => const VerificationScreen()),
-          );
+          context.go('/verification');
         }
         return;
       }
@@ -165,7 +161,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               onPressed: _loading ? null : _handleSubmit,
               style: ElevatedButton.styleFrom(
                 backgroundColor: kPurpleButton,
-                disabledBackgroundColor: kPurpleButton.withOpacity(0.7),
+                disabledBackgroundColor: kPurpleButton.withValues(alpha: 0.7),
                 elevation: 0,
                 padding: EdgeInsets.zero,
                 shape: RoundedRectangleBorder(
@@ -185,10 +181,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           // Footer link
           Center(
             child: GestureDetector(
-              onTap: () => Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => const LoginScreen()),
-              ),
+              onTap: () => context.go('/login'),
               child: Text.rich(
                 TextSpan(
                   text: t['alreadyHave']!,

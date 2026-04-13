@@ -1,11 +1,8 @@
 // chat.dart
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-import 'package:konveksi_bareng/screens/main/home.dart';
-import 'package:konveksi_bareng/screens/main/wishlist.dart';
-import 'package:konveksi_bareng/screens/main/settings.dart';
-import 'package:konveksi_bareng/screens/main/profile.dart';
 
 const kPurple = Color(0xFF6B257F);
 
@@ -16,10 +13,7 @@ class ChatScreen extends StatefulWidget {
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
-// NOTE: typo fix (CreateState -> createState)
-extension _FixState on ChatScreen {
-  State<ChatScreen> createState() => _ChatScreenState();
-}
+// NOTE: duplicate createState extension removed
 
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _searchC = TextEditingController();
@@ -351,7 +345,7 @@ class _HeaderGradient extends StatelessWidget {
               // Back
               _HeaderIcon(
                 icon: Icons.arrow_back_ios_new_rounded,
-                onTap: () => Navigator.pop(context),
+                onTap: () => context.pop(),
               ),
               const SizedBox(width: 10),
               const Expanded(
@@ -398,9 +392,9 @@ class _HeaderIcon extends StatelessWidget {
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.14),
+          color: Colors.white.withValues(alpha: 0.14),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.white.withOpacity(0.16)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.16)),
         ),
         child: Icon(icon, color: Colors.white, size: 20),
       ),
@@ -425,9 +419,9 @@ class _SearchPillBetter extends StatelessWidget {
       height: 46,
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.14),
+        color: Colors.white.withValues(alpha: 0.14),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withOpacity(0.16)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.16)),
       ),
       child: Row(
         children: [
@@ -805,7 +799,7 @@ class _AvatarNetwork extends StatelessWidget {
           fit: BoxFit.cover,
           errorBuilder: (_, __, ___) {
             return Container(
-              color: bg.withOpacity(0.22),
+              color: bg.withValues(alpha: 0.22),
               alignment: Alignment.center,
               child: Text(
                 initial,
@@ -947,10 +941,7 @@ class _BottomNavBar extends StatelessWidget {
             icon: Icons.home_filled,
             active: activeIndex == 0,
             onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => const HomeScreen()),
-              );
+              context.go('/home');
             },
           ),
           _NavItem(
@@ -958,10 +949,7 @@ class _BottomNavBar extends StatelessWidget {
             icon: Icons.favorite_border,
             active: activeIndex == 1,
             onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => const WishlistScreen()),
-              );
+              context.go('/wishlist');
             },
           ),
           _NavItem(
@@ -969,10 +957,7 @@ class _BottomNavBar extends StatelessWidget {
             icon: Icons.settings_outlined,
             active: activeIndex == 2,
             onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => const SettingsScreen()),
-              );
+              context.go('/settings');
             },
           ),
           _NavItem(
@@ -986,10 +971,7 @@ class _BottomNavBar extends StatelessWidget {
             icon: Icons.person_outline,
             active: activeIndex == 4,
             onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => const ProfileScreen()),
-              );
+              context.go('/profile');
             },
           ),
         ],

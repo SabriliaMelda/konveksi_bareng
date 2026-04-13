@@ -1,16 +1,8 @@
 // keuangan.dart
-import 'package:konveksi_bareng/screens/finance/operational_screen.dart';
-import 'package:konveksi_bareng/screens/finance/income_screen.dart';
-import 'package:konveksi_bareng/screens/inventory/shopping_plan_screen.dart';
-import 'package:konveksi_bareng/screens/finance/profit_loss_screen.dart';
-import 'package:konveksi_bareng/screens/worker/wage_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/screens/finance/expense_screen.dart';
-import 'package:konveksi_bareng/screens/promotion/promotion_screen.dart';
-import 'package:konveksi_bareng/screens/main/home.dart';
+import 'package:go_router/go_router.dart';
 
 // ✅ sesuaikan path sesuai struktur kamu
-import 'package:konveksi_bareng/screens/finance/project_finance_screen.dart';
 
 const kPurple = Color(0xFF6B257F);
 
@@ -55,7 +47,7 @@ class FinanceScreen extends StatelessWidget {
                     children: [
                       _HeaderIcon(
                         icon: Icons.arrow_back_ios_new_rounded,
-                        onTap: () => Navigator.pop(context),
+                        onTap: () => context.pop(),
                       ),
                       const SizedBox(width: 12),
                       const Expanded(
@@ -70,15 +62,7 @@ class FinanceScreen extends StatelessWidget {
                       ),
                       _HeaderIcon(
                         icon: Icons.home_filled,
-                        onTap: () {
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const HomeScreen(),
-                            ),
-                            (route) => false,
-                          );
-                        },
+                        onTap: () => context.go('/home'),
                       ),
                     ],
                   ),
@@ -90,9 +74,9 @@ class FinanceScreen extends StatelessWidget {
                     width: double.infinity,
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.12),
+                      color: Colors.white.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(18),
-                      border: Border.all(color: Colors.white.withOpacity(0.12)),
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,9 +133,9 @@ class FinanceScreen extends StatelessWidget {
                     width: double.infinity,
                     padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.10),
+                      color: Colors.white.withValues(alpha: 0.10),
                       borderRadius: BorderRadius.circular(18),
-                      border: Border.all(color: Colors.white.withOpacity(0.12)),
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,7 +169,7 @@ class FinanceScreen extends StatelessWidget {
                           child: LinearProgressIndicator(
                             value: progressValue,
                             minHeight: 10,
-                            backgroundColor: Colors.white.withOpacity(0.18),
+                            backgroundColor: Colors.white.withValues(alpha: 0.18),
                             valueColor: const AlwaysStoppedAnimation<Color>(
                               Color(0xFFF1FFF3),
                             ),
@@ -278,9 +262,9 @@ class _HeaderIcon extends StatelessWidget {
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.12),
+          color: Colors.white.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.white.withOpacity(0.12)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
         ),
         child: Icon(icon, color: Colors.white, size: 20),
       ),
@@ -307,9 +291,9 @@ class _MiniStat extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.10),
+        color: Colors.white.withValues(alpha: 0.10),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withOpacity(0.12)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
       ),
       child: Row(
         children: [
@@ -317,7 +301,7 @@ class _MiniStat extends StatelessWidget {
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.14),
+              color: Colors.white.withValues(alpha: 0.14),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(icon, color: Colors.white, size: 18),
@@ -417,59 +401,35 @@ class _MenuGridKeuangan extends StatelessWidget {
 
   void _handleTap(BuildContext context, String label) {
     if (label == 'Keuangan Proyek') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const ProjectFinanceScreen()),
-      );
+      context.push('/project-finance');
       return;
     }
     if (label == 'Operasional') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const OperationalScreen()),
-      );
+      context.push('/operational');
       return;
     }
     if (label == 'Pemasukan') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const IncomeScreen()),
-      );
+      context.push('/income');
       return;
     }
     if (label == 'Pengeluaran') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const ExpenseScreen()),
-      );
+      context.push('/expense');
       return;
     }
     if (label == 'Promosi') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const PromotionScreen()),
-      );
+      context.push('/promotion');
       return;
     }
     if (label == 'Rencana Belanja') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const ShoppingPlanScreen()),
-      );
+      context.push('/shopping-plan');
       return;
     }
     if (label == 'Rugi Laba') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const ProfitLossScreen()),
-      );
+      context.push('/profit-loss');
       return;
     }
     if (label == 'Upah') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const WageScreen()),
-      );
+      context.push('/wage');
       return;
     }
 

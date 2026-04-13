@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/screens/main/home.dart';
+import 'package:go_router/go_router.dart';
 
 const Color kPurple = Color(0xFF6B257F);
 const Color kBg = Color(0xFFF7F7FB);
@@ -85,11 +85,7 @@ class _SalesScreenState extends State<SalesScreen> {
           children: [
             _Header(
               onHomeTap: () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (_) => const HomeScreen()),
-                  (route) => false,
-                );
+                context.go('/home');
               },
             ),
             Expanded(
@@ -195,7 +191,7 @@ class _Header extends StatelessWidget {
             children: [
               _HeaderIcon(
                 icon: Icons.arrow_back_ios_new_rounded,
-                onTap: () => Navigator.pop(context),
+                onTap: () => context.pop(),
               ),
               const SizedBox(width: 12),
               const Expanded(
@@ -219,9 +215,9 @@ class _Header extends StatelessWidget {
             height: 46,
             padding: const EdgeInsets.symmetric(horizontal: 12),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.14),
+              color: Colors.white.withValues(alpha: 0.14),
               borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: Colors.white.withOpacity(0.12)),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
             ),
             child: Row(
               children: const [
@@ -262,9 +258,9 @@ class _HeaderIcon extends StatelessWidget {
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.12),
+          color: Colors.white.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.white.withOpacity(0.12)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
         ),
         child: Icon(icon, color: Colors.white, size: 20),
       ),

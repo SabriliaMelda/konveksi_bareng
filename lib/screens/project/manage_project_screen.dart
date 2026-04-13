@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/screens/project/project_list_screen.dart';
-import 'package:konveksi_bareng/screens/schedule/schedule_screen.dart';
-import 'package:konveksi_bareng/screens/worker/worker_screen.dart';
-import 'package:konveksi_bareng/screens/main/chat.dart';
-import 'package:konveksi_bareng/screens/production/pattern_screen.dart';
+import 'package:go_router/go_router.dart';
 
 const kPurple = Color(0xFF6B257F);
 const kLightPurple = Color(0xFFF7E1FF);
@@ -87,7 +83,7 @@ class _HeaderBar extends StatelessWidget {
         children: [
           _CircleIconButton(
             icon: Icons.arrow_back,
-            onTap: () => Navigator.pop(context),
+            onTap: () => context.pop(),
           ),
           const Text(
             'Kelola Proyek',
@@ -153,30 +149,15 @@ class _MenuGrid extends StatelessWidget {
             icon: item.$2,
             onTap: () {
               if (item.$1 == 'Daftar Project') {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const ProjectListScreen()),
-                );
+                context.push('/project-list');
               } else if (item.$1 == 'Jadwal') {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const ScheduleScreen()),
-                );
+                context.push('/schedule');
               } else if (item.$1 == 'Pekerja') {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const WorkerScreen()),
-                );
+                context.push('/worker');
               } else if (item.$1 == 'Chat') {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const ChatScreen()),
-                );
+                context.push('/chat');
               } else if (item.$1 == 'Pola') {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const PatternScreen()),
-                );
+                context.push('/pattern');
               }
             },
           ),
@@ -405,7 +386,7 @@ class _InProgressCard extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(999),
                         gradient: LinearGradient(
-                          colors: [accent, accent.withOpacity(0.6)],
+                          colors: [accent, accent.withValues(alpha: 0.6)],
                           begin: Alignment.centerLeft,
                           end: Alignment.centerRight,
                         ),
@@ -445,7 +426,7 @@ class _InProgressCard extends StatelessWidget {
               Icon(
                 Icons.schedule_rounded,
                 size: 16,
-                color: accent.withOpacity(0.9),
+                color: accent.withValues(alpha: 0.9),
               ),
               const SizedBox(width: 6),
               Text(
@@ -500,7 +481,7 @@ class _InProgressTopRow extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.75),
+            color: Colors.white.withValues(alpha: 0.75),
             borderRadius: BorderRadius.circular(999),
             border: Border.all(color: const Color(0x1A000000)),
           ),

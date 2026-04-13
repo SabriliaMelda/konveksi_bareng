@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 const kPurple = Color(0xFF6B257F);
 
@@ -85,7 +86,7 @@ class BookmarkMenuScreen extends StatelessWidget {
             _TopHeader(
               title: formatBookmarkTitle(title),
               subtitle: subtitle,
-              onBack: () => Navigator.pop(context),
+              onBack: () => context.pop(),
             ),
             Expanded(
               child: ListView.separated(
@@ -245,9 +246,9 @@ class _HeaderInfoCard extends StatelessWidget {
             width: 44,
             height: 44,
             decoration: BoxDecoration(
-              color: kPurple.withOpacity(0.10),
+              color: kPurple.withValues(alpha: 0.10),
               borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: kPurple.withOpacity(0.15)),
+              border: Border.all(color: kPurple.withValues(alpha: 0.15)),
             ),
             alignment: Alignment.center,
             child: const Icon(
@@ -291,9 +292,9 @@ class _Chip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: kPurple.withOpacity(0.12),
+        color: kPurple.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: kPurple.withOpacity(0.18)),
+        border: Border.all(color: kPurple.withValues(alpha: 0.18)),
       ),
       child: Text(
         text,
@@ -320,16 +321,11 @@ class _BookmarkTile extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       onTap: () {
         if (isFolder) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => BookmarkMenuScreen(
-                title: formatBookmarkTitle(item.title),
-                subtitle: 'Submenu',
-                items: item.children!,
-              ),
-            ),
-          );
+          context.push('/bookmark-menu', extra: {
+            'title': formatBookmarkTitle(item.title),
+            'subtitle': 'Submenu',
+            'items': item.children!,
+          });
           return;
         }
         if (item.page != null) {
@@ -360,7 +356,7 @@ class _BookmarkTile extends StatelessWidget {
               width: 6,
               height: double.infinity,
               decoration: BoxDecoration(
-                color: kPurple.withOpacity(isFolder ? 0.95 : 0.70),
+                color: kPurple.withValues(alpha: isFolder ? 0.95 : 0.70),
                 borderRadius: const BorderRadius.horizontal(
                   left: Radius.circular(16),
                 ),
@@ -373,9 +369,9 @@ class _BookmarkTile extends StatelessWidget {
               width: 38,
               height: 38,
               decoration: BoxDecoration(
-                color: kPurple.withOpacity(0.10),
+                color: kPurple.withValues(alpha: 0.10),
                 borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: kPurple.withOpacity(0.14)),
+                border: Border.all(color: kPurple.withValues(alpha: 0.14)),
               ),
               alignment: Alignment.center,
               child: Icon(item.icon, size: 20, color: kPurple),
