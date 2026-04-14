@@ -1,6 +1,6 @@
 // pola.dart
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/screens/main/home.dart';
+import 'package:go_router/go_router.dart';
 
 const kPurple = Color(0xFF6B257F);
 
@@ -74,7 +74,7 @@ class _TopHeader extends StatelessWidget {
         children: [
           _CircleIcon(
             icon: Icons.arrow_back,
-            onTap: () => Navigator.pop(context),
+            onTap: () => context.pop(),
           ),
           Text(
             title,
@@ -88,11 +88,7 @@ class _TopHeader extends StatelessWidget {
             icon: Icons.home_filled,
             iconColor: kPurple,
             onTap: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (_) => const HomeScreen()),
-                (route) => false,
-              );
+              context.go('/home');
             },
           ),
         ],
@@ -298,7 +294,7 @@ class _CreatePolaSheetState extends State<_CreatePolaSheet> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(backgroundColor: kPurple),
                     onPressed: () {
-                      Navigator.pop(context);
+                      context.pop();
                     },
                     child: const Text('Buat Pola'),
                   ),

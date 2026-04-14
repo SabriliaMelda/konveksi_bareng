@@ -1,11 +1,6 @@
 // jadwal.dart
-import 'package:konveksi_bareng/screens/schedule/shopping_schedule_screen.dart';
-import 'package:konveksi_bareng/screens/schedule/delivery_schedule_screen.dart';
-import 'package:konveksi_bareng/screens/worker/wage_schedule_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/screens/schedule/production_schedule_screen.dart';
-import 'package:konveksi_bareng/screens/project/work_order_screen.dart';
-import 'package:konveksi_bareng/screens/main/home.dart';
+import 'package:go_router/go_router.dart';
 
 const kPurple = Color(0xFF6B257F);
 
@@ -82,7 +77,7 @@ class _HeaderBar extends StatelessWidget {
         children: [
           _CircleIconButton(
             icon: Icons.arrow_back,
-            onTap: () => Navigator.pop(context),
+            onTap: () => context.pop(),
           ),
           const Text(
             'Jadwal',
@@ -96,11 +91,7 @@ class _HeaderBar extends StatelessWidget {
           _CircleIconButton(
             icon: Icons.home_filled,
             onTap: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (_) => const HomeScreen()),
-                (route) => false,
-              );
+              context.go('/home');
             },
           ),
         ],
@@ -305,43 +296,28 @@ class _JadwalMenuCard extends StatelessWidget {
       onTap: () {
         // ✅ NAVIGASI SPK
         if (item.label == 'SPK') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const WorkOrderScreen()),
-          );
+          context.push('/work-order');
           return;
         }
 
         // ✅ NAVIGASI JADWAL BUAT
         if (item.label == 'Jadwal Buat') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const ProductionScheduleScreen()),
-          );
+          context.push('/production-schedule');
           return;
         }
 
         if (item.label == 'Jadwal Belanja') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const ShoppingScheduleScreen()),
-          );
+          context.push('/shopping-schedule');
           return;
         }
 
         if (item.label == 'Jadwal Upah') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const WageScheduleScreen()),
-          );
+          context.push('/wage-schedule');
           return;
         }
 
         if (item.label == 'Jadwal Kirim') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const DeliveryScheduleScreen()),
-          );
+          context.push('/delivery-schedule');
           return;
         }
 

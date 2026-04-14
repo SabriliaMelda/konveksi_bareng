@@ -1,5 +1,6 @@
 // rencana_belanja.dart (FASHION)
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 const Color kPurple = Color(0xFF6B257F);
 
@@ -244,7 +245,7 @@ class _ShoppingPlanScreenState extends State<ShoppingPlanScreen> {
                         child: _GhostButton(
                           icon: Icons.close_rounded,
                           text: 'Batal',
-                          onTap: () => Navigator.pop(context),
+                          onTap: () => context.pop(),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -283,7 +284,7 @@ class _ShoppingPlanScreenState extends State<ShoppingPlanScreen> {
                               }
                             });
 
-                            Navigator.pop(context);
+                            context.pop();
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text('Rencana ditambahkan (dummy)'),
@@ -356,7 +357,7 @@ class _ShoppingPlanScreenState extends State<ShoppingPlanScreen> {
                 label: 'Tandai selesai (dummy)',
                 color: const Color(0xFF2E7D32),
                 onTap: () {
-                  Navigator.pop(context);
+                  context.pop();
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Ditandai selesai (dummy)')),
                   );
@@ -368,7 +369,7 @@ class _ShoppingPlanScreenState extends State<ShoppingPlanScreen> {
                 label: 'Ubah rencana (dummy)',
                 color: kPurple,
                 onTap: () {
-                  Navigator.pop(context);
+                  context.pop();
                   ScaffoldMessenger.of(
                     context,
                   ).showSnackBar(const SnackBar(content: Text('Ubah (dummy)')));
@@ -380,7 +381,7 @@ class _ShoppingPlanScreenState extends State<ShoppingPlanScreen> {
                 label: 'Hapus rencana (dummy)',
                 color: const Color(0xFFD32F2F),
                 onTap: () {
-                  Navigator.pop(context);
+                  context.pop();
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Hapus (dummy)')),
                   );
@@ -620,7 +621,7 @@ class _ShoppingPlanScreenState extends State<ShoppingPlanScreen> {
                 children: [
                   InkWell(
                     borderRadius: BorderRadius.circular(32),
-                    onTap: () => Navigator.pop(context),
+                    onTap: () => context.pop(),
                     child: Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
@@ -646,7 +647,7 @@ class _ShoppingPlanScreenState extends State<ShoppingPlanScreen> {
                   ),
                   InkWell(
                     borderRadius: BorderRadius.circular(32),
-                    onTap: () => Navigator.pop(context),
+                    onTap: () => context.pop(),
                     child: Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(

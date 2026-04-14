@@ -1,14 +1,6 @@
 // lib/pages/bahan_baku.dart
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/screens/finance/payment_screen.dart';
-import 'package:konveksi_bareng/screens/finance/sales_screen.dart';
-import 'package:konveksi_bareng/screens/main/home.dart';
-import 'package:konveksi_bareng/screens/marketplace/marketplace.dart';
-import 'package:konveksi_bareng/screens/main/wishlist.dart';
-import 'package:konveksi_bareng/screens/main/chat.dart';
-import 'package:konveksi_bareng/screens/marketplace/checkout.dart';
-import 'package:konveksi_bareng/screens/finance/purchase_screen.dart';
-import 'package:konveksi_bareng/screens/inventory/shipment_screen.dart';
+import 'package:go_router/go_router.dart';
 
 const Color kPurple = Color(0xFF6B257F);
 const Color kBg = Color(0xFFF7F7FB);
@@ -91,7 +83,7 @@ class _Header extends StatelessWidget {
             children: [
               _HeaderIcon(
                 icon: Icons.arrow_back_ios_new_rounded,
-                onTap: () => Navigator.pop(context),
+                onTap: () => context.pop(),
               ),
               const SizedBox(width: 12),
               const Expanded(
@@ -107,11 +99,7 @@ class _Header extends StatelessWidget {
               _HeaderIcon(
                 icon: Icons.home_filled,
                 onTap: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (_) => const HomeScreen()),
-                    (route) => false,
-                  );
+                  context.go('/home');
                 },
               ),
             ],
@@ -239,59 +227,35 @@ class _QuickMenuGrid extends StatelessWidget {
 
   void _goQuick(BuildContext context, String label) {
     if (label == 'Marketplace') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const MarketplaceScreen()),
-      );
+      context.push('/marketplace');
       return;
     }
     if (label == 'Wishlist') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const WishlistScreen()),
-      );
+      context.push('/wishlist');
       return;
     }
     if (label == 'Keranjang') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const CheckoutScreen()),
-      );
+      context.push('/checkout');
       return;
     }
     if (label == 'Chat') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const ChatScreen()),
-      );
+      context.push('/chat');
       return;
     }
     if (label == 'Pembelian') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const PurchaseScreen()),
-      );
+      context.push('/purchase');
       return;
     }
     if (label == 'Pengiriman') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const ShipmentScreen()),
-      );
+      context.push('/shipment');
       return;
     }
     if (label == 'Penjualan') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const SalesScreen()),
-      );
+      context.push('/sales');
       return;
     }
     if (label == 'Pembayaran') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const PaymentScreen()),
-      );
+      context.push('/payment');
       return;
     }
   }
