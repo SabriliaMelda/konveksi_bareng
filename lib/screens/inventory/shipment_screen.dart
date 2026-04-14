@@ -111,7 +111,7 @@ class _ShipmentScreenState extends State<ShipmentScreen> {
                   _CircleIconButton(
                     icon: Icons.arrow_back_ios_new,
                     iconColor: Colors.black87,
-                    onTap: () => Navigator.pop(context),
+                    onTap: () => context.pop(),
                   ),
                   const SizedBox(width: 10),
                   Expanded(
@@ -662,7 +662,7 @@ class _TrackingSheet extends StatelessWidget {
                     ),
                     InkWell(
                       borderRadius: BorderRadius.circular(12),
-                      onTap: () => Navigator.pop(context),
+                      onTap: () => context.pop(),
                       child: Container(
                         padding: EdgeInsets.all(8),
                         decoration: BoxDecoration(

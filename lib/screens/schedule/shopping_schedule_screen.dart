@@ -233,7 +233,7 @@ class _ShoppingScheduleScreenState extends State<ShoppingScheduleScreen> {
                         child: _GhostButton(
                           icon: Icons.close_rounded,
                           text: 'Batal',
-                          onTap: () => Navigator.pop(context),
+                          onTap: () => context.pop(),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -269,10 +269,9 @@ class _ShoppingScheduleScreenState extends State<ShoppingScheduleScreen> {
                                 ),
                               );
                               dots[selectedDay] =
-                                  (dots[selectedDay] ??
-                                  [Color(0xFF0095FF)]);
+                                  (dots[selectedDay] ?? [Color(0xFF0095FF)]);
                             });
-                            Navigator.pop(context);
+                            context.pop();
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text('Jadwal ditambahkan (dummy)'),
@@ -345,7 +344,7 @@ class _ShoppingScheduleScreenState extends State<ShoppingScheduleScreen> {
                 label: 'Tandai selesai (dummy)',
                 color: const Color(0xFF2E7D32),
                 onTap: () {
-                  Navigator.pop(context);
+                  context.pop();
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Ditandai selesai (dummy)')),
                   );
@@ -357,7 +356,7 @@ class _ShoppingScheduleScreenState extends State<ShoppingScheduleScreen> {
                 label: 'Hapus jadwal (dummy)',
                 color: const Color(0xFFD32F2F),
                 onTap: () {
-                  Navigator.pop(context);
+                  context.pop();
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Hapus (dummy)')),
                   );
@@ -390,7 +389,7 @@ class _ShoppingScheduleScreenState extends State<ShoppingScheduleScreen> {
             const SizedBox(height: 8),
             _TopHeader(
               title: 'Jadwal Belanja',
-              onTapBack: () => Navigator.pop(context),
+              onTapBack: () => context.pop(),
               onTapHome: () {
                 Navigator.pushAndRemoveUntil(
                   context,
@@ -501,10 +500,16 @@ class _ShoppingScheduleScreenState extends State<ShoppingScheduleScreen> {
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).appColors.card.withValues(alpha: 0.15),
+                        color: Theme.of(context)
+                            .appColors
+                            .card
+                            .withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(999),
                         border: Border.all(
-                          color: Theme.of(context).appColors.card.withValues(alpha: 0.25),
+                          color: Theme.of(context)
+                              .appColors
+                              .card
+                              .withValues(alpha: 0.25),
                         ),
                       ),
                       child: Text(
@@ -698,9 +703,8 @@ class _CalendarGrid extends StatelessWidget {
                 width: 30,
                 height: 30,
                 decoration: BoxDecoration(
-                  color: isSelected
-                      ? const Color(0xFFDBC0F2)
-                      : Colors.transparent,
+                  color:
+                      isSelected ? const Color(0xFFDBC0F2) : Colors.transparent,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 alignment: Alignment.center,
@@ -833,7 +837,8 @@ class _ScheduleCard extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: Theme.of(context).appColors.iconSurface,
                           borderRadius: BorderRadius.circular(999),
-                          border: Border.all(color: Theme.of(context).appColors.border),
+                          border: Border.all(
+                              color: Theme.of(context).appColors.border),
                         ),
                         child: Text(
                           badge,

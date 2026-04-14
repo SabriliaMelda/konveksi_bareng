@@ -30,7 +30,6 @@ class _PatternScreenState extends State<PatternScreen> {
           children: [
             const _TopHeader(title: 'Pola'),
             const SizedBox(height: 12),
-
             Expanded(
               child: Center(
                 child: Text(
@@ -75,7 +74,7 @@ class _TopHeader extends StatelessWidget {
         children: [
           _CircleIcon(
             icon: Icons.arrow_back,
-            onTap: () => Navigator.pop(context),
+            onTap: () => context.pop(),
           ),
           Text(
             title,
@@ -299,7 +298,7 @@ class _CreatePolaSheetState extends State<_CreatePolaSheet> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(backgroundColor: kPurple),
                     onPressed: () {
-                      Navigator.pop(context);
+                      context.pop();
                     },
                     child: const Text('Buat Pola'),
                   ),

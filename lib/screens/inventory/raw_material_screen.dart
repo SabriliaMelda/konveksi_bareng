@@ -1,15 +1,7 @@
 // lib/pages/bahan_baku.dart
 import 'package:flutter/material.dart';
 import 'package:konveksi_bareng/config/app_colors.dart';
-import 'package:konveksi_bareng/screens/finance/payment_screen.dart';
-import 'package:konveksi_bareng/screens/finance/sales_screen.dart';
-import 'package:konveksi_bareng/screens/main/home.dart';
-import 'package:konveksi_bareng/screens/marketplace/marketplace.dart';
-import 'package:konveksi_bareng/screens/main/wishlist.dart';
-import 'package:konveksi_bareng/screens/main/chat.dart';
-import 'package:konveksi_bareng/screens/marketplace/checkout.dart';
-import 'package:konveksi_bareng/screens/finance/purchase_screen.dart';
-import 'package:konveksi_bareng/screens/inventory/shipment_screen.dart';
+import 'package:go_router/go_router.dart';
 import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
 
 const Color kPurple = Color(0xFF6B257F);
@@ -94,7 +86,7 @@ class _Header extends StatelessWidget {
             children: [
               _HeaderIcon(
                 icon: Icons.arrow_back_ios_new_rounded,
-                onTap: () => Navigator.pop(context),
+                onTap: () => context.pop(),
               ),
               SizedBox(width: 12),
               Expanded(
