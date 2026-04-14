@@ -1,5 +1,6 @@
 // upah.dart
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:konveksi_bareng/screens/main/home.dart';
 
 const Color kPurple = Color(0xFF6B257F);
@@ -151,13 +152,13 @@ class _WageScreenState extends State<WageScreen> {
     final amountC = TextEditingController();
     int projectPick = _projectIndex;
 
-    DateTime due = DateTime.now().add(const Duration(days: 7));
+    DateTime due = DateTime.now().add(Duration(days: 7));
     _BillStatus status = _BillStatus.belumDibayar;
 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
       ),
@@ -202,24 +203,24 @@ class _WageScreenState extends State<WageScreen> {
                     label: 'Bagian / peran',
                     hint: 'Contoh: Penjahit / QC / Potong',
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   _InputField(
                     controller: noteC,
                     label: 'Catatan pekerjaan',
                     hint: 'Contoh: Jahit 20 pcs blouse',
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   _InputField(
                     controller: amountC,
                     label: 'Nominal upah',
                     hint: 'Contoh: 250000',
                     keyboardType: TextInputType.number,
                   ),
-                  const SizedBox(height: 10),
-                  const Text(
+                  SizedBox(height: 10),
+                  Text(
                     'Project',
                     style: TextStyle(
-                      color: Color(0xFF6A707C),
+                      color: Theme.of(context).appColors.muted,
                       fontSize: 12,
                       fontWeight: FontWeight.w800,
                     ),
@@ -241,16 +242,16 @@ class _WageScreenState extends State<WageScreen> {
                       );
                     }),
                   ),
-                  const SizedBox(height: 10),
-                  const Text(
+                  SizedBox(height: 10),
+                  Text(
                     'Jatuh tempo',
                     style: TextStyle(
-                      color: Color(0xFF6A707C),
+                      color: Theme.of(context).appColors.muted,
                       fontSize: 12,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6),
                   InkWell(
                     borderRadius: BorderRadius.circular(14),
                     onTap: () async {
@@ -264,11 +265,11 @@ class _WageScreenState extends State<WageScreen> {
                     },
                     child: Container(
                       height: 44,
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      padding: EdgeInsets.symmetric(horizontal: 12),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF6F7F8),
+                        color: Theme.of(context).appColors.iconSurface,
                         borderRadius: BorderRadius.circular(14),
-                        border: Border.all(color: const Color(0xFFE8ECF4)),
+                        border: Border.all(color: Theme.of(context).appColors.border),
                       ),
                       alignment: Alignment.centerLeft,
                       child: Row(
@@ -278,10 +279,10 @@ class _WageScreenState extends State<WageScreen> {
                             size: 18,
                             color: kPurple,
                           ),
-                          const SizedBox(width: 10),
+                          SizedBox(width: 10),
                           Text(
                             _fmtDate(due),
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: Color(0xFF111827),
                               fontSize: 12.5,
                               fontWeight: FontWeight.w900,
@@ -291,11 +292,11 @@ class _WageScreenState extends State<WageScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  const Text(
+                  SizedBox(height: 10),
+                  Text(
                     'Status',
                     style: TextStyle(
-                      color: Color(0xFF6A707C),
+                      color: Theme.of(context).appColors.muted,
                       fontSize: 12,
                       fontWeight: FontWeight.w800,
                     ),
@@ -377,7 +378,7 @@ class _WageScreenState extends State<WageScreen> {
                             Navigator.pop(context);
 
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
+                              SnackBar(
                                 content: Text(
                                   'Tagihan upah ditambahkan (dummy)',
                                 ),
@@ -392,10 +393,10 @@ class _WageScreenState extends State<WageScreen> {
                               border: Border.all(color: kPurple),
                             ),
                             alignment: Alignment.center,
-                            child: const Text(
+                            child: Text(
                               'Simpan',
                               style: TextStyle(
-                                color: Colors.white,
+                                color: Theme.of(context).appColors.card,
                                 fontSize: 12.5,
                                 fontWeight: FontWeight.w900,
                               ),
@@ -417,7 +418,7 @@ class _WageScreenState extends State<WageScreen> {
   void _openEditSheet(_UpahBill e) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
       ),
@@ -431,24 +432,24 @@ class _WageScreenState extends State<WageScreen> {
                 width: 44,
                 height: 5,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFE6E7EE),
+                  color: Color(0xFFE6E7EE),
                   borderRadius: BorderRadius.circular(999),
                 ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               Text(
                 e.workerName,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w900,
                   color: Color(0xFF111827),
                 ),
               ),
-              const SizedBox(height: 6),
+              SizedBox(height: 6),
               Text(
                 '${e.project} • ${_rupiah(e.amount)}',
-                style: const TextStyle(
-                  color: Color(0xFF6A707C),
+                style: TextStyle(
+                  color: Theme.of(context).appColors.muted,
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
                 ),
@@ -611,29 +612,29 @@ class _WageScreenState extends State<WageScreen> {
     final paid = _totalPaid;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.symmetric(horizontal: 16),
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.all(14),
+        padding: EdgeInsets.all(14),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
-          boxShadow: const [
+          border: Border.all(color: Theme.of(context).appColors.border),
+          boxShadow: [
             BoxShadow(
               color: Color(0x0CB3B3B3),
               blurRadius: 40,
               offset: Offset(0, 16),
             ),
           ],
-          color: Colors.white,
+          color: Theme.of(context).appColors.card,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Ringkasan • $_scopeLabel',
-              style: const TextStyle(
-                color: Color(0xFF6A707C),
+              style: TextStyle(
+                color: Theme.of(context).appColors.muted,
                 fontSize: 12,
                 fontWeight: FontWeight.w800,
               ),
@@ -650,26 +651,26 @@ class _WageScreenState extends State<WageScreen> {
                     sub: '$_countUnpaid item',
                   ),
                 ),
-                const SizedBox(width: 10),
+                SizedBox(width: 10),
                 Expanded(
                   child: _MiniStat(
                     label: 'Lunas',
                     value: _rupiah(paid),
-                    valueColor: const Color(0xFF2E7D32),
+                    valueColor: Color(0xFF2E7D32),
                     icon: Icons.check_circle_rounded,
                     sub: '$_countPaid item',
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(12),
+              padding: EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: const Color(0xFFF6F7F8),
+                color: Theme.of(context).appColors.iconSurface,
                 borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: const Color(0xFFE8ECF4)),
+                border: Border.all(color: Theme.of(context).appColors.border),
               ),
               child: Row(
                 children: [
@@ -701,11 +702,11 @@ class _WageScreenState extends State<WageScreen> {
   Widget _buildList() {
     final data = _activeList;
     if (data.isEmpty) {
-      return const Center(
+      return Center(
         child: Text(
           'Tidak ada tagihan sesuai filter.',
           style: TextStyle(
-            color: Color(0xFF6A707C),
+            color: Theme.of(context).appColors.muted,
             fontSize: 12.5,
             fontWeight: FontWeight.w700,
           ),
@@ -714,20 +715,20 @@ class _WageScreenState extends State<WageScreen> {
     }
 
     return ListView.separated(
-      padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
+      padding: EdgeInsets.fromLTRB(16, 10, 16, 16),
       itemCount: data.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 10),
+      separatorBuilder: (_, __) => SizedBox(height: 10),
       itemBuilder: (context, i) {
         final e = data[i];
         final badge = _statusToBadge(e.status);
 
         final card = Container(
-          padding: const EdgeInsets.all(14),
+          padding: EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).appColors.card,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: const Color(0xFFE8ECF4)),
-            boxShadow: const [
+            border: Border.all(color: Theme.of(context).appColors.border),
+            boxShadow: [
               BoxShadow(
                 color: Color(0x0CB3B3B3),
                 blurRadius: 40,
@@ -741,13 +742,13 @@ class _WageScreenState extends State<WageScreen> {
                 width: 44,
                 height: 44,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF6F7F8),
+                  color: Theme.of(context).appColors.iconSurface,
                   borderRadius: BorderRadius.circular(14),
                 ),
                 alignment: Alignment.center,
-                child: const Icon(Icons.work_outline, color: kPurple, size: 20),
+                child: Icon(Icons.work_outline, color: kPurple, size: 20),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -759,24 +760,24 @@ class _WageScreenState extends State<WageScreen> {
                             e.workerName,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              color: Color(0xFF1E232C),
+                            style: TextStyle(
+                              color: Theme.of(context).appColors.ink,
                               fontSize: 13,
                               fontWeight: FontWeight.w900,
                             ),
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        SizedBox(width: 8),
                         _Badge(text: badge.text, color: badge.color),
                       ],
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4),
                     Text(
                       '${e.role} • ${e.project}',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: Color(0xFF6A707C),
+                      style: TextStyle(
+                        color: Theme.of(context).appColors.muted,
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                       ),
@@ -824,20 +825,20 @@ class _WageScreenState extends State<WageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
       floatingActionButton: FloatingActionButton(
         backgroundColor: kPurple,
-        foregroundColor: Colors.white,
+        foregroundColor: Theme.of(context).appColors.card,
         elevation: 3,
         onPressed: _openAddSheet,
-        child: const Icon(Icons.add_rounded, size: 26),
+        child: Icon(Icons.add_rounded, size: 26),
       ),
       body: SafeArea(
         child: Column(
           children: [
             // ===== HEADER =====
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+              padding: EdgeInsets.fromLTRB(16, 12, 16, 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -845,25 +846,25 @@ class _WageScreenState extends State<WageScreen> {
                     borderRadius: BorderRadius.circular(32),
                     onTap: () => Navigator.pop(context),
                     child: Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(32),
-                        border: Border.all(color: const Color(0xFFDFDEDE)),
-                        color: Colors.white,
+                        border: Border.all(color: Theme.of(context).appColors.border),
+                        color: Theme.of(context).appColors.card,
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.arrow_back_ios_new,
                         size: 18,
-                        color: Colors.black87,
+                        color: Theme.of(context).appColors.ink,
                       ),
                     ),
                   ),
-                  const Text(
+                  Text(
                     'Upah',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF121111),
+                      color: Theme.of(context).appColors.ink,
                       height: 1.4,
                     ),
                   ),
@@ -872,16 +873,16 @@ class _WageScreenState extends State<WageScreen> {
                     onTap: () {
                       Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (_) => const HomeScreen()),
+                        MaterialPageRoute(builder: (_) => HomeScreen()),
                         (route) => false,
                       );
                     },
                     child: Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(32),
-                        border: Border.all(color: const Color(0xFFDFDEDE)),
-                        color: Colors.white,
+                        border: Border.all(color: Theme.of(context).appColors.border),
+                        color: Theme.of(context).appColors.card,
                       ),
                       child: const Icon(
                         Icons.home_filled,
@@ -1032,11 +1033,11 @@ class _MiniStat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFFF6F7F8),
+        color: Theme.of(context).appColors.iconSurface,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFE8ECF4)),
+        border: Border.all(color: Theme.of(context).appColors.border),
       ),
       child: Row(
         children: [
@@ -1044,22 +1045,22 @@ class _MiniStat extends StatelessWidget {
             width: 34,
             height: 34,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).appColors.card,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: const Color(0xFFE8ECF4)),
+              border: Border.all(color: Theme.of(context).appColors.border),
             ),
             alignment: Alignment.center,
             child: Icon(icon, size: 18, color: valueColor),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   label,
-                  style: const TextStyle(
-                    color: Color(0xFF6A707C),
+                  style: TextStyle(
+                    color: Theme.of(context).appColors.muted,
                     fontSize: 11.5,
                     fontWeight: FontWeight.w700,
                   ),
@@ -1101,11 +1102,11 @@ class _Badge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: const Color(0xFFF6F7F8),
+        color: Theme.of(context).appColors.iconSurface,
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: const Color(0xFFE8ECF4)),
+        border: Border.all(color: Theme.of(context).appColors.border),
       ),
       child: Text(
         text,
@@ -1139,11 +1140,11 @@ class _SheetAction extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
-          color: Colors.white,
+          border: Border.all(color: Theme.of(context).appColors.border),
+          color: Theme.of(context).appColors.card,
         ),
         child: Row(
           children: [
@@ -1190,9 +1191,9 @@ class _GhostButton extends StatelessWidget {
       child: Container(
         height: 44,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).appColors.card,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
+          border: Border.all(color: Theme.of(context).appColors.border),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -1234,25 +1235,25 @@ class _InputField extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(
-            color: Color(0xFF6A707C),
+          style: TextStyle(
+            color: Theme.of(context).appColors.muted,
             fontSize: 12,
             fontWeight: FontWeight.w800,
           ),
         ),
-        const SizedBox(height: 6),
+        SizedBox(height: 6),
         TextField(
           controller: controller,
           keyboardType: keyboardType,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: const TextStyle(
+            hintStyle: TextStyle(
               color: Color(0xFF9AA4B2),
               fontSize: 12,
               fontWeight: FontWeight.w600,
             ),
             filled: true,
-            fillColor: const Color(0xFFF6F7F8),
+            fillColor: Theme.of(context).appColors.iconSurface,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 12,
               vertical: 12,

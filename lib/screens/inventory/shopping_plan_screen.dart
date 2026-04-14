@@ -1,5 +1,7 @@
 // rencana_belanja.dart (FASHION)
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
+import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
 
 const Color kPurple = Color(0xFF6B257F);
 
@@ -113,12 +115,12 @@ class _ShoppingPlanScreenState extends State<ShoppingPlanScreen> {
     final qtyC = TextEditingController(text: '1');
     final priceC = TextEditingController();
 
-    DateTime due = DateTime.now().add(const Duration(days: 7));
+    DateTime due = DateTime.now().add(Duration(days: 7));
 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
       ),
@@ -176,7 +178,7 @@ class _ShoppingPlanScreenState extends State<ShoppingPlanScreen> {
                           keyboardType: TextInputType.number,
                         ),
                       ),
-                      const SizedBox(width: 10),
+                      SizedBox(width: 10),
                       Expanded(
                         child: _InputField(
                           controller: priceC,
@@ -187,16 +189,16 @@ class _ShoppingPlanScreenState extends State<ShoppingPlanScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
-                  const Text(
+                  SizedBox(height: 10),
+                  Text(
                     'Target tanggal beli',
                     style: TextStyle(
-                      color: Color(0xFF6A707C),
+                      color: Theme.of(context).appColors.muted,
                       fontSize: 12,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6),
                   InkWell(
                     borderRadius: BorderRadius.circular(14),
                     onTap: () async {
@@ -210,11 +212,11 @@ class _ShoppingPlanScreenState extends State<ShoppingPlanScreen> {
                     },
                     child: Container(
                       height: 44,
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      padding: EdgeInsets.symmetric(horizontal: 12),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF6F7F8),
+                        color: Theme.of(context).appColors.iconSurface,
                         borderRadius: BorderRadius.circular(14),
-                        border: Border.all(color: const Color(0xFFE8ECF4)),
+                        border: Border.all(color: Theme.of(context).appColors.border),
                       ),
                       alignment: Alignment.centerLeft,
                       child: Row(
@@ -285,7 +287,7 @@ class _ShoppingPlanScreenState extends State<ShoppingPlanScreen> {
 
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
+                              SnackBar(
                                 content: Text('Rencana ditambahkan (dummy)'),
                               ),
                             );
@@ -298,10 +300,10 @@ class _ShoppingPlanScreenState extends State<ShoppingPlanScreen> {
                               border: Border.all(color: kPurple),
                             ),
                             alignment: Alignment.center,
-                            child: const Text(
+                            child: Text(
                               'Simpan',
                               style: TextStyle(
-                                color: Colors.white,
+                                color: Theme.of(context).appColors.card,
                                 fontSize: 12.5,
                                 fontWeight: FontWeight.w900,
                               ),
@@ -323,7 +325,7 @@ class _ShoppingPlanScreenState extends State<ShoppingPlanScreen> {
   void _openItemAction(_PlanItem item) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
       ),
@@ -420,21 +422,21 @@ class _ShoppingPlanScreenState extends State<ShoppingPlanScreen> {
 
   Widget _buildSummary() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.symmetric(horizontal: 16),
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.all(14),
+        padding: EdgeInsets.all(14),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
-          boxShadow: const [
+          border: Border.all(color: Theme.of(context).appColors.border),
+          boxShadow: [
             BoxShadow(
               color: Color(0x0CB3B3B3),
               blurRadius: 40,
               offset: Offset(0, 16),
             ),
           ],
-          color: Colors.white,
+          color: Theme.of(context).appColors.card,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -443,8 +445,8 @@ class _ShoppingPlanScreenState extends State<ShoppingPlanScreen> {
               _tab == _PlanTab.marketplace
                   ? 'Ringkasan rencana (Marketplace)'
                   : 'Ringkasan rencana (Lainnya)',
-              style: const TextStyle(
-                color: Color(0xFF6A707C),
+              style: TextStyle(
+                color: Theme.of(context).appColors.muted,
                 fontSize: 12,
                 fontWeight: FontWeight.w800,
               ),
@@ -480,11 +482,11 @@ class _ShoppingPlanScreenState extends State<ShoppingPlanScreen> {
   Widget _buildList() {
     final data = _activeList;
     if (data.isEmpty) {
-      return const Center(
+      return Center(
         child: Text(
           'Belum ada rencana.',
           style: TextStyle(
-            color: Color(0xFF6A707C),
+            color: Theme.of(context).appColors.muted,
             fontSize: 12.5,
             fontWeight: FontWeight.w700,
           ),
@@ -493,21 +495,21 @@ class _ShoppingPlanScreenState extends State<ShoppingPlanScreen> {
     }
 
     return ListView.separated(
-      padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
+      padding: EdgeInsets.fromLTRB(16, 10, 16, 16),
       itemCount: data.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 10),
+      separatorBuilder: (_, __) => SizedBox(height: 10),
       itemBuilder: (context, i) {
         final item = data[i];
         return InkWell(
           borderRadius: BorderRadius.circular(16),
           onTap: () => _openItemAction(item),
           child: Container(
-            padding: const EdgeInsets.all(14),
+            padding: EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).appColors.card,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0xFFE8ECF4)),
-              boxShadow: const [
+              border: Border.all(color: Theme.of(context).appColors.border),
+              boxShadow: [
                 BoxShadow(
                   color: Color(0x0CB3B3B3),
                   blurRadius: 40,
@@ -521,7 +523,7 @@ class _ShoppingPlanScreenState extends State<ShoppingPlanScreen> {
                   width: 44,
                   height: 44,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF6F7F8),
+                    color: Theme.of(context).appColors.iconSurface,
                     borderRadius: BorderRadius.circular(14),
                   ),
                   alignment: Alignment.center,
@@ -533,7 +535,7 @@ class _ShoppingPlanScreenState extends State<ShoppingPlanScreen> {
                     size: 20,
                   ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -542,19 +544,19 @@ class _ShoppingPlanScreenState extends State<ShoppingPlanScreen> {
                         item.title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: Color(0xFF1E232C),
+                        style: TextStyle(
+                          color: Theme.of(context).appColors.ink,
                           fontSize: 13,
                           fontWeight: FontWeight.w900,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4),
                       Text(
                         item.note,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: Color(0xFF6A707C),
+                        style: TextStyle(
+                          color: Theme.of(context).appColors.muted,
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
                         ),
@@ -579,7 +581,7 @@ class _ShoppingPlanScreenState extends State<ShoppingPlanScreen> {
                     const SizedBox(height: 8),
                     Text(
                       _rupiah(item.estPrice * item.qty),
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Color(0xFF111827),
                         fontSize: 12.5,
                         fontWeight: FontWeight.w900,
@@ -598,23 +600,24 @@ class _ShoppingPlanScreenState extends State<ShoppingPlanScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
 
       // ✅ plus icon bawah (untuk tambah rencana)
       floatingActionButton: FloatingActionButton(
         backgroundColor: kPurple,
-        foregroundColor: Colors.white,
+        foregroundColor: Theme.of(context).appColors.card,
         elevation: 3,
         onPressed: _openAddSheet,
-        child: const Icon(Icons.add_rounded, size: 26),
+        child: Icon(Icons.add_rounded, size: 26),
       ),
+      bottomNavigationBar: AppBottomNav(activeIndex: 0),
 
       body: SafeArea(
         child: Column(
           children: [
             // ===== HEADER =====
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+              padding: EdgeInsets.fromLTRB(16, 12, 16, 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -622,25 +625,25 @@ class _ShoppingPlanScreenState extends State<ShoppingPlanScreen> {
                     borderRadius: BorderRadius.circular(32),
                     onTap: () => Navigator.pop(context),
                     child: Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(32),
-                        border: Border.all(color: const Color(0xFFDFDEDE)),
-                        color: Colors.white,
+                        border: Border.all(color: Theme.of(context).appColors.border),
+                        color: Theme.of(context).appColors.card,
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.arrow_back_ios_new,
                         size: 18,
-                        color: Colors.black87,
+                        color: Theme.of(context).appColors.ink,
                       ),
                     ),
                   ),
-                  const Text(
+                  Text(
                     'Rencana Belanja',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF121111),
+                      color: Theme.of(context).appColors.ink,
                       height: 1.4,
                     ),
                   ),
@@ -648,11 +651,11 @@ class _ShoppingPlanScreenState extends State<ShoppingPlanScreen> {
                     borderRadius: BorderRadius.circular(32),
                     onTap: () => Navigator.pop(context),
                     child: Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(32),
-                        border: Border.all(color: const Color(0xFFDFDEDE)),
-                        color: Colors.white,
+                        border: Border.all(color: Theme.of(context).appColors.border),
+                        color: Theme.of(context).appColors.card,
                       ),
                       child: const Icon(
                         Icons.home_filled,
@@ -740,19 +743,19 @@ class _MiniStat extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.all(10),
+        padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: const Color(0xFFF6F7F8),
+          color: Theme.of(context).appColors.iconSurface,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
+          border: Border.all(color: Theme.of(context).appColors.border),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               label,
-              style: const TextStyle(
-                color: Color(0xFF6A707C),
+              style: TextStyle(
+                color: Theme.of(context).appColors.muted,
                 fontSize: 11.5,
                 fontWeight: FontWeight.w700,
               ),
@@ -785,24 +788,24 @@ class _StatusBadge extends StatelessWidget {
     switch (status) {
       case _PlanStatus.draft:
         text = 'Draft';
-        color = const Color(0xFF6A707C);
+        color = Color(0xFF6A707C);
         break;
       case _PlanStatus.onTrack:
         text = 'On Track';
-        color = const Color(0xFF2E7D32);
+        color = Color(0xFF2E7D32);
         break;
       case _PlanStatus.overdue:
         text = 'Overdue';
-        color = const Color(0xFFD32F2F);
+        color = Color(0xFFD32F2F);
         break;
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: const Color(0xFFF6F7F8),
+        color: Theme.of(context).appColors.iconSurface,
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: const Color(0xFFE8ECF4)),
+        border: Border.all(color: Theme.of(context).appColors.border),
       ),
       child: Text(
         text,
@@ -835,9 +838,9 @@ class _GhostButton extends StatelessWidget {
       child: Container(
         height: 44,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).appColors.card,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
+          border: Border.all(color: Theme.of(context).appColors.border),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -879,11 +882,11 @@ class _SheetAction extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
-          color: Colors.white,
+          border: Border.all(color: Theme.of(context).appColors.border),
+          color: Theme.of(context).appColors.card,
         ),
         child: Row(
           children: [
@@ -931,25 +934,25 @@ class _InputField extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(
-            color: Color(0xFF6A707C),
+          style: TextStyle(
+            color: Theme.of(context).appColors.muted,
             fontSize: 12,
             fontWeight: FontWeight.w800,
           ),
         ),
-        const SizedBox(height: 6),
+        SizedBox(height: 6),
         TextField(
           controller: controller,
           keyboardType: keyboardType,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: const TextStyle(
+            hintStyle: TextStyle(
               color: Color(0xFF9AA4B2),
               fontSize: 12,
               fontWeight: FontWeight.w600,
             ),
             filled: true,
-            fillColor: const Color(0xFFF6F7F8),
+            fillColor: Theme.of(context).appColors.iconSurface,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 12,
               vertical: 12,

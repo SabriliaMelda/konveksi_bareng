@@ -1,5 +1,6 @@
 // spk.dart
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:konveksi_bareng/screens/main/home.dart';
 
 const kPurple = Color(0xFF6B257F);
@@ -56,7 +57,7 @@ class _WorkOrderScreenState extends State<WorkOrderScreen> {
     }).toList();
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
 
       floatingActionButton: FloatingActionButton(
         backgroundColor: kPurple,
@@ -160,7 +161,7 @@ class _TopHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18).copyWith(top: 10),
+      padding: EdgeInsets.symmetric(horizontal: 18).copyWith(top: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -170,8 +171,8 @@ class _TopHeader extends StatelessWidget {
           ),
           Text(
             title,
-            style: const TextStyle(
-              color: Color(0xFF121111),
+            style: TextStyle(
+              color: Theme.of(context).appColors.ink,
               fontSize: 16,
               fontWeight: FontWeight.w600,
               height: 1.4,
@@ -183,7 +184,7 @@ class _TopHeader extends StatelessWidget {
             onTap: () {
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (_) => const HomeScreen()),
+                MaterialPageRoute(builder: (_) => HomeScreen()),
                 (route) => false,
               );
             },
@@ -211,8 +212,8 @@ class _CircleIcon extends StatelessWidget {
         height: 40,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(32),
-          border: Border.all(color: const Color(0xFFDFDEDE)),
-          color: Colors.white,
+          border: Border.all(color: Theme.of(context).appColors.border),
+          color: Theme.of(context).appColors.card,
         ),
         alignment: Alignment.center,
         child: Icon(icon, size: 20, color: iconColor ?? Colors.black87),
@@ -241,16 +242,16 @@ class _SearchBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 46,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8F8FA),
+        color: Color(0xFFF8F8FA),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFE8ECF4)),
+        border: Border.all(color: Theme.of(context).appColors.border),
       ),
       child: Row(
         children: [
-          const Icon(Icons.search, size: 20, color: Color(0xFF8F9BB3)),
-          const SizedBox(width: 8),
+          Icon(Icons.search, size: 20, color: Color(0xFF8F9BB3)),
+          SizedBox(width: 8),
           Expanded(
             child: TextField(
               controller: controller,
@@ -258,13 +259,13 @@ class _SearchBox extends StatelessWidget {
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: hintText,
-                hintStyle: const TextStyle(
+                hintStyle: TextStyle(
                   color: Color(0xFF8F9BB3),
                   fontSize: 13,
                 ),
               ),
-              style: const TextStyle(
-                color: Color(0xFF111111),
+              style: TextStyle(
+                color: Theme.of(context).appColors.ink,
                 fontSize: 13,
               ),
             ),
@@ -302,11 +303,11 @@ class _SpkCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(14),
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
         decoration: BoxDecoration(
-          color: const Color(0xFFF8F8FA),
+          color: Color(0xFFF8F8FA),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
+          border: Border.all(color: Theme.of(context).appColors.border),
         ),
         child: Row(
           children: [
@@ -314,18 +315,18 @@ class _SpkCard extends StatelessWidget {
               width: 42,
               height: 42,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).appColors.card,
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: const Color(0xFFE8ECF4)),
+                border: Border.all(color: Theme.of(context).appColors.border),
               ),
               alignment: Alignment.center,
-              child: const Icon(
+              child: Icon(
                 Icons.description_outlined,
                 color: kPurple,
                 size: 22,
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -334,8 +335,8 @@ class _SpkCard extends StatelessWidget {
                     '${spk.nomor} • ${spk.judul}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Color(0xFF111111),
+                    style: TextStyle(
+                      color: Theme.of(context).appColors.ink,
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                     ),
@@ -392,21 +393,21 @@ class _SpkCard extends StatelessWidget {
 
     switch (s) {
       case _SpkStatus.pending:
-        bg = const Color(0xFFFFF1E6);
-        fg = const Color(0xFFB85C00);
+        bg = Color(0xFFFFF1E6);
+        fg = Color(0xFFB85C00);
         break;
       case _SpkStatus.proses:
-        bg = const Color(0xFFEAF1FF);
-        fg = const Color(0xFF2F5FD0);
+        bg = Color(0xFFEAF1FF);
+        fg = Color(0xFF2F5FD0);
         break;
       case _SpkStatus.selesai:
-        bg = const Color(0xFFE9FFF1);
-        fg = const Color(0xFF1D7A3A);
+        bg = Color(0xFFE9FFF1);
+        fg = Color(0xFF1D7A3A);
         break;
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: bg,
         borderRadius: BorderRadius.circular(999),
@@ -455,16 +456,16 @@ class _CreateSpkSheetState extends State<_CreateSpkSheet> {
 
     return Container(
       padding: EdgeInsets.only(bottom: bottomInset),
-      decoration: const BoxDecoration(color: Colors.transparent),
+      decoration: BoxDecoration(color: Colors.transparent),
       child: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
+        decoration: BoxDecoration(
+          color: Theme.of(context).appColors.card,
           borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
         ),
         child: SafeArea(
           top: false,
           child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(18, 10, 18, 18),
+            padding: EdgeInsets.fromLTRB(18, 10, 18, 18),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -473,17 +474,17 @@ class _CreateSpkSheetState extends State<_CreateSpkSheet> {
                     width: 44,
                     height: 5,
                     decoration: BoxDecoration(
-                      color: const Color(0xFFE6E6E6),
+                      color: Color(0xFFE6E6E6),
                       borderRadius: BorderRadius.circular(100),
                     ),
                   ),
                 ),
-                const SizedBox(height: 14),
+                SizedBox(height: 14),
 
-                const Text(
+                Text(
                   'Buat SPK',
                   style: TextStyle(
-                    color: Color(0xFF111111),
+                    color: Theme.of(context).appColors.ink,
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
                   ),
@@ -530,15 +531,15 @@ class _CreateSpkSheetState extends State<_CreateSpkSheet> {
                     onPressed: () {
                       Navigator.pop(context);
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
+                        SnackBar(
                           content: Text('SPK berhasil dibuat (placeholder)'),
                         ),
                       );
                     },
-                    child: const Text(
+                    child: Text(
                       'Simpan',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Theme.of(context).appColors.card,
                         fontSize: 14,
                         fontWeight: FontWeight.w800,
                       ),
@@ -562,8 +563,8 @@ class _InputLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: const TextStyle(
-        color: Colors.black,
+      style: TextStyle(
+        color: Theme.of(context).appColors.ink,
         fontSize: 12,
         fontWeight: FontWeight.w700,
       ),
@@ -581,11 +582,11 @@ class _TextFieldBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 44,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).appColors.card,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: const Color(0xFFDFDEDE)),
+        border: Border.all(color: Theme.of(context).appColors.border),
       ),
       alignment: Alignment.center,
       child: TextField(
@@ -593,13 +594,13 @@ class _TextFieldBox extends StatelessWidget {
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: hint,
-          hintStyle: const TextStyle(
+          hintStyle: TextStyle(
             color: Color(0xFF8F9BB3),
             fontSize: 12,
           ),
         ),
-        style: const TextStyle(
-          color: Color(0xFF111111),
+        style: TextStyle(
+          color: Theme.of(context).appColors.ink,
           fontSize: 12,
           fontWeight: FontWeight.w600,
         ),
@@ -618,18 +619,18 @@ class _StatusDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 44,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).appColors.card,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: const Color(0xFFDFDEDE)),
+        border: Border.all(color: Theme.of(context).appColors.border),
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<_SpkStatus>(
           value: value,
           isExpanded: true,
-          icon: const Icon(Icons.keyboard_arrow_down_rounded),
-          items: const [
+          icon: Icon(Icons.keyboard_arrow_down_rounded),
+          items: [
             DropdownMenuItem(
               value: _SpkStatus.pending,
               child: Text('Menunggu'),
@@ -640,8 +641,8 @@ class _StatusDropdown extends StatelessWidget {
           onChanged: (v) {
             if (v != null) onChanged(v);
           },
-          style: const TextStyle(
-            color: Color(0xFF111111),
+          style: TextStyle(
+            color: Theme.of(context).appColors.ink,
             fontSize: 12,
             fontWeight: FontWeight.w600,
           ),

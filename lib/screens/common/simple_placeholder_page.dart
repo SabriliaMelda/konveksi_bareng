@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 
 class SimplePlaceholderPage extends StatelessWidget {
   final String title;
 
-  const SimplePlaceholderPage({super.key, required this.title});
+  SimplePlaceholderPage({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F7FB),
+      backgroundColor: Theme.of(context).appColors.bg,
       appBar: AppBar(
         title: Text(title),
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).appColors.card,
         foregroundColor: Colors.black87,
         elevation: 0.6,
       ),

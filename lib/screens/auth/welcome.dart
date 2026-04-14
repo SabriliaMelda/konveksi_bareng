@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
 class WelcomeApp extends StatelessWidget {
@@ -65,7 +66,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       body: Container(
         width: screenWidth,
         height: screenHeight,
-        color: Colors.white,
+        color: Theme.of(context).appColors.card,
         child: Stack(
           children: [
             // Image slider
@@ -119,14 +120,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   width: screenWidth - 44,
                   height: 56,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF6B257F),
+                    color: Color(0xFF6B257F),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   alignment: Alignment.center,
-                  child: const Text(
+                  child: Text(
                     'Login',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Theme.of(context).appColors.card,
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
                     ),
@@ -147,15 +148,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
-                      color: const Color(0xFF6B257F),
+                      color: Color(0xFF6B257F),
                       width: 1,
                     ),
                   ),
                   alignment: Alignment.center,
-                  child: const Text(
+                  child: Text(
                     'Register',
                     style: TextStyle(
-                      color: Color(0xFF1E232C),
+                      color: Theme.of(context).appColors.ink,
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
                     ),

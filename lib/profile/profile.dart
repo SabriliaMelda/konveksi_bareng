@@ -1,5 +1,6 @@
 // profile.dart
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:konveksi_bareng/screens/main/home.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -71,7 +72,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       onTap: () {
                         Navigator.pushAndRemoveUntil(
                           context,
-                          MaterialPageRoute(builder: (_) => const HomeScreen()),
+                          MaterialPageRoute(builder: (_) => HomeScreen()),
                           (route) => false,
                         );
                       },
@@ -245,12 +246,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             border: Border.all(
                               color: _purple.withValues(alpha: 0.18),
                             ),
-                            gradient: const LinearGradient(
+                            gradient: LinearGradient(
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                               colors: [_purple, _purple2],
                             ),
-                            boxShadow: const [
+                            boxShadow: [
                               BoxShadow(
                                 color: Color(0x1A6B257F),
                                 blurRadius: 18,
@@ -258,10 +259,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ],
                           ),
-                          child: const Text(
+                          child: Text(
                             'Simpan',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Theme.of(context).appColors.card,
                               fontSize: 12.5,
                               fontWeight: FontWeight.w900,
                             ),
@@ -406,8 +407,8 @@ class _CircleIcon extends StatelessWidget {
         height: 40,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(999),
-          border: Border.all(color: const Color(0x220F172A)),
-          color: Colors.white,
+          border: Border.all(color: Color(0x220F172A)),
+          color: Theme.of(context).appColors.card,
         ),
         alignment: Alignment.center,
         child: Icon(

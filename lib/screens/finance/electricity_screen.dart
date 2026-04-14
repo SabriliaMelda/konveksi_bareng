@@ -1,5 +1,6 @@
 // listrik.dart
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 
 const Color kPurple = Color(0xFF6B257F);
 
@@ -118,13 +119,13 @@ class _ElectricityScreenState extends State<ElectricityScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
       body: SafeArea(
         child: Column(
           children: [
             // ===== HEADER =====
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+              padding: EdgeInsets.fromLTRB(16, 12, 16, 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -132,25 +133,25 @@ class _ElectricityScreenState extends State<ElectricityScreen> {
                     borderRadius: BorderRadius.circular(32),
                     onTap: () => Navigator.pop(context),
                     child: Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(32),
-                        border: Border.all(color: const Color(0xFFDFDEDE)),
-                        color: Colors.white,
+                        border: Border.all(color: Theme.of(context).appColors.border),
+                        color: Theme.of(context).appColors.card,
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.arrow_back_ios_new,
                         size: 18,
-                        color: Colors.black87,
+                        color: Theme.of(context).appColors.ink,
                       ),
                     ),
                   ),
-                  const Text(
+                  Text(
                     'Listrik',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF121111),
+                      color: Theme.of(context).appColors.ink,
                       height: 1.4,
                     ),
                   ),
@@ -158,11 +159,11 @@ class _ElectricityScreenState extends State<ElectricityScreen> {
                     borderRadius: BorderRadius.circular(32),
                     onTap: () => Navigator.pop(context),
                     child: Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(32),
-                        border: Border.all(color: const Color(0xFFDFDEDE)),
-                        color: Colors.white,
+                        border: Border.all(color: Theme.of(context).appColors.border),
+                        color: Theme.of(context).appColors.card,
                       ),
                       child: const Icon(
                         Icons.home_filled,
@@ -207,7 +208,7 @@ class _ElectricityScreenState extends State<ElectricityScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
 
                   // ===== TAGIHAN (CURRENT) =====
                   _InfoCard(
@@ -221,8 +222,8 @@ class _ElectricityScreenState extends State<ElectricityScreen> {
                             Expanded(
                               child: Text(
                                 _currentBill.periodLabel,
-                                style: const TextStyle(
-                                  color: Color(0xFF6A707C),
+                                style: TextStyle(
+                                  color: Theme.of(context).appColors.muted,
                                   fontSize: 12,
                                   fontWeight: FontWeight.w800,
                                 ),
@@ -349,7 +350,7 @@ class _ElectricityScreenState extends State<ElectricityScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
 
                   // ===== GRAFIK PENGELUARAN LISTRIK =====
                   _InfoCard(
@@ -365,11 +366,11 @@ class _ElectricityScreenState extends State<ElectricityScreen> {
                             values: _last12.map((e) => e.amount).toList(),
                           ),
                         ),
-                        const SizedBox(height: 10),
-                        const Text(
+                        SizedBox(height: 10),
+                        Text(
                           'Catatan: grafik masih dummy (tanpa API).',
                           style: TextStyle(
-                            color: Color(0xFF6A707C),
+                            color: Theme.of(context).appColors.muted,
                             fontSize: 11.5,
                             fontWeight: FontWeight.w700,
                           ),
@@ -415,18 +416,18 @@ class _InfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(14),
+      padding: EdgeInsets.all(14),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE8ECF4)),
-        boxShadow: const [
+        border: Border.all(color: Theme.of(context).appColors.border),
+        boxShadow: [
           BoxShadow(
             color: Color(0x0CB3B3B3),
             blurRadius: 40,
             offset: Offset(0, 16),
           ),
         ],
-        color: Colors.white,
+        color: Theme.of(context).appColors.card,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -434,11 +435,11 @@ class _InfoCard extends StatelessWidget {
           Row(
             children: [
               Icon(icon, color: kPurple, size: 18),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Text(
                 title,
-                style: const TextStyle(
-                  color: Color(0xFF6A707C),
+                style: TextStyle(
+                  color: Theme.of(context).appColors.muted,
                   fontSize: 12,
                   fontWeight: FontWeight.w800,
                 ),
@@ -472,9 +473,9 @@ class _GhostButton extends StatelessWidget {
       child: Container(
         height: 44,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).appColors.card,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
+          border: Border.all(color: Theme.of(context).appColors.border),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -505,19 +506,19 @@ class _MiniStat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFFF6F7F8),
+        color: Theme.of(context).appColors.iconSurface,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFE8ECF4)),
+        border: Border.all(color: Theme.of(context).appColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             label,
-            style: const TextStyle(
-              color: Color(0xFF6A707C),
+            style: TextStyle(
+              color: Theme.of(context).appColors.muted,
               fontSize: 11.5,
               fontWeight: FontWeight.w700,
             ),
@@ -549,11 +550,11 @@ class _RowItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).appColors.card,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFE8ECF4)),
+        border: Border.all(color: Theme.of(context).appColors.border),
       ),
       child: Row(
         children: [
@@ -561,7 +562,7 @@ class _RowItem extends StatelessWidget {
             flex: 32,
             child: Text(
               left,
-              style: const TextStyle(
+              style: TextStyle(
                 color: Color(0xFF111827),
                 fontSize: 12.5,
                 fontWeight: FontWeight.w900,
@@ -574,8 +575,8 @@ class _RowItem extends StatelessWidget {
               mid,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: Color(0xFF6A707C),
+              style: TextStyle(
+                color: Theme.of(context).appColors.muted,
                 fontSize: 11.5,
                 fontWeight: FontWeight.w700,
               ),

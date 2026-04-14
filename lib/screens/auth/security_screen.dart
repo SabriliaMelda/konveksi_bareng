@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import '../../services/auth_service.dart';
 import '../../services/storage_service.dart';
@@ -148,14 +149,14 @@ class _SecurityScreenState extends State<SecurityScreen> {
             Container(
               width: 64,
               height: 64,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: Color(0xFF10B981),
                 shape: BoxShape.circle,
               ),
-              child: const Center(
+              child: Center(
                 child: Text('\u2713',
                     style: TextStyle(
-                        color: Colors.white,
+                        color: Theme.of(context).appColors.card,
                         fontSize: 28,
                         fontWeight: FontWeight.w700)),
               ),
@@ -166,11 +167,11 @@ class _SecurityScreenState extends State<SecurityScreen> {
                     fontSize: 24,
                     fontWeight: FontWeight.w800,
                     color: kPurple)),
-            const SizedBox(height: 4),
+            SizedBox(height: 4),
             Text(t['successSubtitle'] as String,
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12, color: kPurpleLight)),
-            const SizedBox(height: 24),
+                style: TextStyle(fontSize: 12, color: kPurpleLight)),
+            SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
               height: 42,
@@ -183,8 +184,8 @@ class _SecurityScreenState extends State<SecurityScreen> {
                       borderRadius: BorderRadius.circular(8)),
                 ),
                 child: Text(t['goToLogin'] as String,
-                    style: const TextStyle(
-                        color: Colors.white,
+                    style: TextStyle(
+                        color: Theme.of(context).appColors.card,
                         fontSize: 14,
                         fontWeight: FontWeight.w700)),
               ),
@@ -258,8 +259,8 @@ class _SecurityScreenState extends State<SecurityScreen> {
                 _loading
                     ? t['saving'] as String
                     : t['confirm'] as String,
-                style: const TextStyle(
-                    color: Colors.white,
+                style: TextStyle(
+                    color: Theme.of(context).appColors.card,
                     fontSize: 14,
                     fontWeight: FontWeight.w700),
               ),
@@ -284,9 +285,9 @@ class _SecurityScreenState extends State<SecurityScreen> {
 
   Widget _buildLabel(String text) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 6, top: 14),
+      padding: EdgeInsets.only(bottom: 6, top: 14),
       child: Text(text,
-          style: const TextStyle(
+          style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
               color: kPurple)),
@@ -296,21 +297,21 @@ class _SecurityScreenState extends State<SecurityScreen> {
   Widget _buildInput(TextEditingController controller) {
     return Container(
       height: 42,
-      padding: const EdgeInsets.symmetric(horizontal: 14),
+      padding: EdgeInsets.symmetric(horizontal: 14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).appColors.card,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: const Color(0xFFBEB6C2), width: 1),
+        border: Border.all(color: Color(0xFFBEB6C2), width: 1),
       ),
       alignment: Alignment.center,
       child: TextField(
         controller: controller,
         onChanged: (_) => setState(() => _error = ''),
-        style: const TextStyle(
-            color: Color(0xFF2A2A2A),
+        style: TextStyle(
+            color: Theme.of(context).appColors.ink,
             fontSize: 13,
             fontWeight: FontWeight.w500),
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
           border: InputBorder.none,
           isDense: true,
         ),
@@ -324,19 +325,19 @@ class _SecurityScreenState extends State<SecurityScreen> {
   }) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 14),
+      padding: EdgeInsets.symmetric(horizontal: 14),
       decoration: BoxDecoration(
-        border: Border.all(color: const Color(0xFFBEB6C2), width: 1),
+        border: Border.all(color: Color(0xFFBEB6C2), width: 1),
         borderRadius: BorderRadius.circular(8),
-        color: Colors.white,
+        color: Theme.of(context).appColors.card,
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<int>(
           value: value,
           isExpanded: true,
-          style: const TextStyle(
+          style: TextStyle(
               fontSize: 12,
-              color: Color(0xFF2A2A2A)),
+              color: Theme.of(context).appColors.ink),
           items: List.generate(
             questions.length,
             (i) => DropdownMenuItem(value: i, child: Text(questions[i])),

@@ -1,17 +1,32 @@
-// lib/providers/theme_provider.dart
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeProvider extends ChangeNotifier {
+  static const _key = 'dark_mode';
+
   bool _darkMode = false;
 
   bool get darkMode => _darkMode;
 
-  void setDarkMode(bool value) {
-    _darkMode = value;
+  ThemeProvider() {
+    _load();
+  }
+
+  Future<void> _load() async {
+    final prefs = await SharedPreferences.getInstance();
+    _darkMode = prefs.getBool(_key) ?? false;
     notifyListeners();
   }
 
-  // ===== Theme tokens =====
+  Future<void> setDarkMode(bool value) async {
+    _darkMode = value;
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_key, value);
+  }
+
+  // ── Theme tokens (used by screens that still read ThemeProvider directly) ──
+
   Color get bg => _darkMode ? const Color(0xFF0F172A) : const Color(0xFFF7F7FB);
 
   Color get ink =>

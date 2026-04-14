@@ -1,6 +1,7 @@
 // chat.dart
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
 const kPurple = Color(0xFF6B257F);
@@ -143,7 +144,7 @@ class _ChatScreenState extends State<ChatScreen> {
     }).toList();
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F7FB),
+      backgroundColor: Theme.of(context).appColors.bg,
       bottomNavigationBar: const _BottomNavBar(activeIndex: 3),
       body: SafeArea(
         child: Column(
@@ -194,14 +195,14 @@ class _ChatScreenState extends State<ChatScreen> {
                       );
                     },
                     child: Container(
-                      padding: const EdgeInsets.symmetric(
+                      padding: EdgeInsets.symmetric(
                         horizontal: 12,
                         vertical: 10,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Theme.of(context).appColors.card,
                         borderRadius: BorderRadius.circular(14),
-                        border: Border.all(color: const Color(0xFFE8ECF4)),
+                        border: Border.all(color: Theme.of(context).appColors.border),
                         boxShadow: const [
                           BoxShadow(
                             color: Color(0x0D000000),
@@ -346,12 +347,12 @@ class _HeaderGradient extends StatelessWidget {
                 icon: Icons.arrow_back_ios_new_rounded,
                 onTap: () => context.pop(),
               ),
-              const SizedBox(width: 10),
-              const Expanded(
+              SizedBox(width: 10),
+              Expanded(
                 child: Text(
                   'Chat',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Theme.of(context).appColors.card,
                     fontSize: 18,
                     fontWeight: FontWeight.w900,
                   ),
@@ -391,11 +392,11 @@ class _HeaderIcon extends StatelessWidget {
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.14),
+          color: Theme.of(context).appColors.card.withValues(alpha: 0.14),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.16)),
+          border: Border.all(color: Theme.of(context).appColors.card.withValues(alpha: 0.16)),
         ),
-        child: Icon(icon, color: Colors.white, size: 20),
+        child: Icon(icon, color: Theme.of(context).appColors.card, size: 20),
       ),
     );
   }
@@ -416,21 +417,21 @@ class _SearchPillBetter extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 46,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.14),
+        color: Theme.of(context).appColors.card.withValues(alpha: 0.14),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.16)),
+        border: Border.all(color: Theme.of(context).appColors.card.withValues(alpha: 0.16)),
       ),
       child: Row(
         children: [
-          const Icon(Icons.search, size: 20, color: Colors.white70),
-          const SizedBox(width: 10),
+          Icon(Icons.search, size: 20, color: Colors.white70),
+          SizedBox(width: 10),
           Expanded(
             child: TextField(
               controller: controller,
               onChanged: onChanged,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: 'Search chat / group...',
                 hintStyle: TextStyle(
@@ -439,8 +440,8 @@ class _SearchPillBetter extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              style: const TextStyle(
-                color: Colors.white,
+              style: TextStyle(
+                color: Theme.of(context).appColors.card,
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
               ),
@@ -483,11 +484,11 @@ class _SegmentedChips extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 46,
-      padding: const EdgeInsets.all(6),
+      padding: EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).appColors.card,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE8ECF4)),
+        border: Border.all(color: Theme.of(context).appColors.border),
         boxShadow: const [
           BoxShadow(
             color: Color(0x0D000000),
@@ -636,9 +637,9 @@ class _SwipeChatRow extends StatelessWidget {
         borderRadius: BorderRadius.circular(18),
         onTap: onOpen,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          padding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).appColors.card,
             borderRadius: BorderRadius.circular(18),
             border: Border.all(
               color: item.selected
@@ -670,25 +671,25 @@ class _SwipeChatRow extends StatelessWidget {
                             item.name,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: Color(0xFF111827),
                               fontSize: 14,
                               fontWeight: FontWeight.w900,
                             ),
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        SizedBox(width: 8),
                         Text(
                           item.time,
-                          style: const TextStyle(
-                            color: Color(0xFF6B7280),
+                          style: TextStyle(
+                            color: Theme.of(context).appColors.muted,
                             fontSize: 11,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 6),
+                    SizedBox(height: 6),
                     Row(
                       children: [
                         Expanded(
@@ -696,8 +697,8 @@ class _SwipeChatRow extends StatelessWidget {
                             item.message,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              color: Color(0xFF4B5563),
+                            style: TextStyle(
+                              color: Theme.of(context).appColors.muted,
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
                             ),
@@ -738,7 +739,7 @@ class _SwipeBg extends StatelessWidget {
         color: color,
         borderRadius: BorderRadius.circular(18),
       ),
-      child: Icon(icon, color: const Color(0xFF6B6B6B), size: 22),
+      child: Icon(icon, color: Color(0xFF6B6B6B), size: 22),
     );
   }
 }
@@ -750,15 +751,15 @@ class _UnreadBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: kPurple,
         borderRadius: BorderRadius.circular(999),
       ),
       child: Text(
         '$count',
-        style: const TextStyle(
-          color: Colors.white,
+        style: TextStyle(
+          color: Theme.of(context).appColors.card,
           fontSize: 11,
           fontWeight: FontWeight.w900,
         ),
@@ -831,11 +832,11 @@ class _GroupRow extends StatelessWidget {
       borderRadius: BorderRadius.circular(18),
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).appColors.card,
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
+          border: Border.all(color: Theme.of(context).appColors.border),
           boxShadow: const [
             BoxShadow(
               color: Color(0x0D000000),
@@ -867,31 +868,31 @@ class _GroupRow extends StatelessWidget {
                           group.name,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Color(0xFF111827),
                             fontSize: 14,
                             fontWeight: FontWeight.w900,
                           ),
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8),
                       Text(
                         group.time,
-                        style: const TextStyle(
-                          color: Color(0xFF6B7280),
+                        style: TextStyle(
+                          color: Theme.of(context).appColors.muted,
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6),
                   Text(
                     group.lastMessage,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Color(0xFF4B5563),
+                    style: TextStyle(
+                      color: Theme.of(context).appColors.muted,
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                     ),
@@ -928,8 +929,8 @@ class _BottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 72,
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      decoration: BoxDecoration(
+        color: Theme.of(context).appColors.card,
         border: Border(top: BorderSide(color: Color(0xFFE8ECF4))),
       ),
       child: Row(

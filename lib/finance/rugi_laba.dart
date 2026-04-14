@@ -1,5 +1,6 @@
 // rugi_laba.dart
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:konveksi_bareng/screens/main/home.dart';
 
 const Color kPurple = Color(0xFF6B257F);
@@ -159,7 +160,7 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
       ),
@@ -198,24 +199,24 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
                     label: 'Judul transaksi',
                     hint: 'Contoh: Penjualan Outer / Beli kain / Upah jahit',
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   _InputField(
                     controller: noteC,
                     label: 'Catatan',
                     hint: 'Contoh: order #, vendor, batch',
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   _InputField(
                     controller: amountC,
                     label: 'Nominal',
                     hint: 'Contoh: 250000',
                     keyboardType: TextInputType.number,
                   ),
-                  const SizedBox(height: 10),
-                  const Text(
+                  SizedBox(height: 10),
+                  Text(
                     'Jenis',
                     style: TextStyle(
-                      color: Color(0xFF6A707C),
+                      color: Theme.of(context).appColors.muted,
                       fontSize: 12,
                       fontWeight: FontWeight.w800,
                     ),
@@ -292,7 +293,7 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
 
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
+                              SnackBar(
                                 content: Text('Transaksi ditambahkan (dummy)'),
                               ),
                             );
@@ -305,10 +306,10 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
                               border: Border.all(color: kPurple),
                             ),
                             alignment: Alignment.center,
-                            child: const Text(
+                            child: Text(
                               'Simpan',
                               style: TextStyle(
-                                color: Colors.white,
+                                color: Theme.of(context).appColors.card,
                                 fontSize: 12.5,
                                 fontWeight: FontWeight.w900,
                               ),
@@ -330,7 +331,7 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
   void _openItemSheet(_RlTxn e) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
       ),
@@ -345,24 +346,24 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
                 width: 44,
                 height: 5,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFE6E7EE),
+                  color: Color(0xFFE6E7EE),
                   borderRadius: BorderRadius.circular(999),
                 ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               Text(
                 e.title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w900,
                   color: Color(0xFF111827),
                 ),
               ),
-              const SizedBox(height: 6),
+              SizedBox(height: 6),
               Text(
                 '${_fmtDate(e.date)} • ${isIn ? "Pemasukan" : "Pengeluaran"}',
-                style: const TextStyle(
-                  color: Color(0xFF6A707C),
+                style: TextStyle(
+                  color: Theme.of(context).appColors.muted,
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
                 ),
@@ -439,29 +440,29 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
     final isProfit = profit >= 0;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.symmetric(horizontal: 16),
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.all(14),
+        padding: EdgeInsets.all(14),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
-          boxShadow: const [
+          border: Border.all(color: Theme.of(context).appColors.border),
+          boxShadow: [
             BoxShadow(
               color: Color(0x0CB3B3B3),
               blurRadius: 40,
               offset: Offset(0, 16),
             ),
           ],
-          color: Colors.white,
+          color: Theme.of(context).appColors.card,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Ringkasan • $_scopeLabel',
-              style: const TextStyle(
-                color: Color(0xFF6A707C),
+              style: TextStyle(
+                color: Theme.of(context).appColors.muted,
                 fontSize: 12,
                 fontWeight: FontWeight.w800,
               ),
@@ -473,29 +474,29 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
                   child: _MiniStat(
                     label: 'Pemasukan',
                     value: _rupiah(_totalIncome),
-                    valueColor: const Color(0xFF2E7D32),
+                    valueColor: Color(0xFF2E7D32),
                     icon: Icons.arrow_downward_rounded,
                   ),
                 ),
-                const SizedBox(width: 10),
+                SizedBox(width: 10),
                 Expanded(
                   child: _MiniStat(
                     label: 'Pengeluaran',
                     value: _rupiah(_totalExpense),
-                    valueColor: const Color(0xFFD32F2F),
+                    valueColor: Color(0xFFD32F2F),
                     icon: Icons.arrow_upward_rounded,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(12),
+              padding: EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: const Color(0xFFF6F7F8),
+                color: Theme.of(context).appColors.iconSurface,
                 borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: const Color(0xFFE8ECF4)),
+                border: Border.all(color: Theme.of(context).appColors.border),
               ),
               child: Row(
                 children: [
@@ -503,9 +504,9 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
                     width: 36,
                     height: 36,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Theme.of(context).appColors.card,
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: const Color(0xFFE8ECF4)),
+                      border: Border.all(color: Theme.of(context).appColors.border),
                     ),
                     alignment: Alignment.center,
                     child: Icon(
@@ -513,17 +514,17 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
                           ? Icons.trending_up_rounded
                           : Icons.trending_down_rounded,
                       color: isProfit
-                          ? const Color(0xFF2E7D32)
-                          : const Color(0xFFD32F2F),
+                          ? Color(0xFF2E7D32)
+                          : Color(0xFFD32F2F),
                       size: 20,
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  SizedBox(width: 10),
                   Expanded(
                     child: Text(
                       isProfit ? 'Laba Bersih' : 'Rugi Bersih',
-                      style: const TextStyle(
-                        color: Color(0xFF6A707C),
+                      style: TextStyle(
+                        color: Theme.of(context).appColors.muted,
                         fontSize: 12,
                         fontWeight: FontWeight.w800,
                       ),
@@ -551,11 +552,11 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
   Widget _buildList() {
     final data = _activeList;
     if (data.isEmpty) {
-      return const Center(
+      return Center(
         child: Text(
           'Belum ada data transaksi.',
           style: TextStyle(
-            color: Color(0xFF6A707C),
+            color: Theme.of(context).appColors.muted,
             fontSize: 12.5,
             fontWeight: FontWeight.w700,
           ),
@@ -564,9 +565,9 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
     }
 
     return ListView.separated(
-      padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
+      padding: EdgeInsets.fromLTRB(16, 10, 16, 16),
       itemCount: data.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 10),
+      separatorBuilder: (_, __) => SizedBox(height: 10),
       itemBuilder: (context, i) {
         final e = data[i];
         final isIn = e.type == _RlType.pemasukan;
@@ -575,12 +576,12 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
           borderRadius: BorderRadius.circular(16),
           onTap: () => _openItemSheet(e),
           child: Container(
-            padding: const EdgeInsets.all(14),
+            padding: EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).appColors.card,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0xFFE8ECF4)),
-              boxShadow: const [
+              border: Border.all(color: Theme.of(context).appColors.border),
+              boxShadow: [
                 BoxShadow(
                   color: Color(0x0CB3B3B3),
                   blurRadius: 40,
@@ -594,7 +595,7 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
                   width: 44,
                   height: 44,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF6F7F8),
+                    color: Theme.of(context).appColors.iconSurface,
                     borderRadius: BorderRadius.circular(14),
                   ),
                   alignment: Alignment.center,
@@ -603,12 +604,12 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
                         ? Icons.arrow_downward_rounded
                         : Icons.arrow_upward_rounded,
                     color: isIn
-                        ? const Color(0xFF2E7D32)
-                        : const Color(0xFFD32F2F),
+                        ? Color(0xFF2E7D32)
+                        : Color(0xFFD32F2F),
                     size: 20,
                   ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -617,19 +618,19 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
                         e.title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: Color(0xFF1E232C),
+                        style: TextStyle(
+                          color: Theme.of(context).appColors.ink,
                           fontSize: 13,
                           fontWeight: FontWeight.w900,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4),
                       Text(
                         e.note,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: Color(0xFF6A707C),
+                        style: TextStyle(
+                          color: Theme.of(context).appColors.muted,
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
                         ),
@@ -651,8 +652,8 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
                   (isIn ? '+ ' : '- ') + _rupiah(e.amount),
                   style: TextStyle(
                     color: isIn
-                        ? const Color(0xFF2E7D32)
-                        : const Color(0xFFD32F2F),
+                        ? Color(0xFF2E7D32)
+                        : Color(0xFFD32F2F),
                     fontSize: 12.5,
                     fontWeight: FontWeight.w900,
                   ),
@@ -668,15 +669,15 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
 
       // ✅ plus icon bawah (tambah transaksi)
       floatingActionButton: FloatingActionButton(
         backgroundColor: kPurple,
-        foregroundColor: Colors.white,
+        foregroundColor: Theme.of(context).appColors.card,
         elevation: 3,
         onPressed: _openAddSheet,
-        child: const Icon(Icons.add_rounded, size: 26),
+        child: Icon(Icons.add_rounded, size: 26),
       ),
 
       body: SafeArea(
@@ -684,7 +685,7 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
           children: [
             // ===== HEADER =====
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+              padding: EdgeInsets.fromLTRB(16, 12, 16, 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -692,25 +693,25 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
                     borderRadius: BorderRadius.circular(32),
                     onTap: () => Navigator.pop(context),
                     child: Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(32),
-                        border: Border.all(color: const Color(0xFFDFDEDE)),
-                        color: Colors.white,
+                        border: Border.all(color: Theme.of(context).appColors.border),
+                        color: Theme.of(context).appColors.card,
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.arrow_back_ios_new,
                         size: 18,
-                        color: Colors.black87,
+                        color: Theme.of(context).appColors.ink,
                       ),
                     ),
                   ),
-                  const Text(
+                  Text(
                     'Rugi Laba',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF121111),
+                      color: Theme.of(context).appColors.ink,
                       height: 1.4,
                     ),
                   ),
@@ -719,16 +720,16 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
                     onTap: () {
                       Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (_) => const HomeScreen()),
+                        MaterialPageRoute(builder: (_) => HomeScreen()),
                         (route) => false,
                       );
                     },
                     child: Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(32),
-                        border: Border.all(color: const Color(0xFFDFDEDE)),
-                        color: Colors.white,
+                        border: Border.all(color: Theme.of(context).appColors.border),
+                        color: Theme.of(context).appColors.card,
                       ),
                       child: const Icon(
                         Icons.home_filled,
@@ -821,11 +822,11 @@ class _MiniStat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFFF6F7F8),
+        color: Theme.of(context).appColors.iconSurface,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFE8ECF4)),
+        border: Border.all(color: Theme.of(context).appColors.border),
       ),
       child: Row(
         children: [
@@ -833,22 +834,22 @@ class _MiniStat extends StatelessWidget {
             width: 34,
             height: 34,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).appColors.card,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: const Color(0xFFE8ECF4)),
+              border: Border.all(color: Theme.of(context).appColors.border),
             ),
             alignment: Alignment.center,
             child: Icon(icon, size: 18, color: valueColor),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   label,
-                  style: const TextStyle(
-                    color: Color(0xFF6A707C),
+                  style: TextStyle(
+                    color: Theme.of(context).appColors.muted,
                     fontSize: 11.5,
                     fontWeight: FontWeight.w700,
                   ),
@@ -892,9 +893,9 @@ class _GhostButton extends StatelessWidget {
       child: Container(
         height: 44,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).appColors.card,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
+          border: Border.all(color: Theme.of(context).appColors.border),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -936,11 +937,11 @@ class _SheetAction extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
-          color: Colors.white,
+          border: Border.all(color: Theme.of(context).appColors.border),
+          color: Theme.of(context).appColors.card,
         ),
         child: Row(
           children: [
@@ -1025,25 +1026,25 @@ class _InputField extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(
-            color: Color(0xFF6A707C),
+          style: TextStyle(
+            color: Theme.of(context).appColors.muted,
             fontSize: 12,
             fontWeight: FontWeight.w800,
           ),
         ),
-        const SizedBox(height: 6),
+        SizedBox(height: 6),
         TextField(
           controller: controller,
           keyboardType: keyboardType,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: const TextStyle(
+            hintStyle: TextStyle(
               color: Color(0xFF9AA4B2),
               fontSize: 12,
               fontWeight: FontWeight.w600,
             ),
             filled: true,
-            fillColor: const Color(0xFFF6F7F8),
+            fillColor: Theme.of(context).appColors.iconSurface,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 12,
               vertical: 12,

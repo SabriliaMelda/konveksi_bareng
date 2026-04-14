@@ -1,5 +1,6 @@
 // lib/pages/pembelian.dart
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:konveksi_bareng/screens/main/home.dart';
 
 const kPurple = Color(0xFF6B257F);
@@ -93,7 +94,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
     }).toList();
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
       body: SafeArea(
         child: Column(
           children: [
@@ -128,7 +129,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                     onTap: () {
                       Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (_) => const HomeScreen()),
+                        MaterialPageRoute(builder: (_) => HomeScreen()),
                         (route) => false,
                       );
                     },
@@ -137,18 +138,18 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
               ),
             ),
 
-            const SizedBox(height: 14),
+            SizedBox(height: 14),
 
             // ===== TITLE + ACTION =====
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     child: Text(
                       'Pembelian',
                       style: TextStyle(
-                        color: Color(0xFF1E232C),
+                        color: Theme.of(context).appColors.ink,
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
                       ),
@@ -391,15 +392,15 @@ class _SearchPill extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 44,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: const Color(0xFFF0F0F0),
+        color: Color(0xFFF0F0F0),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
         children: [
-          const Icon(Icons.search, size: 20, color: Color(0xFF010101)),
-          const SizedBox(width: 8),
+          Icon(Icons.search, size: 20, color: Color(0xFF010101)),
+          SizedBox(width: 8),
           Expanded(
             child: TextField(
               controller: controller,
@@ -407,8 +408,8 @@ class _SearchPill extends StatelessWidget {
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: hint,
-                hintStyle: const TextStyle(
-                  color: Color(0xFF6A707C),
+                hintStyle: TextStyle(
+                  color: Theme.of(context).appColors.muted,
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                 ),
@@ -509,11 +510,11 @@ class _OrderCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(12),
+        padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).appColors.card,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
+          border: Border.all(color: Theme.of(context).appColors.border),
           boxShadow: const [
             BoxShadow(
               color: Color(0x0CB3B3B3),
@@ -536,7 +537,7 @@ class _OrderCard extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                 ),
-                const SizedBox(width: 10),
+                SizedBox(width: 10),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -548,8 +549,8 @@ class _OrderCard extends StatelessWidget {
                               item.title,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                color: Color(0xFF1E232C),
+                              style: TextStyle(
+                                color: Theme.of(context).appColors.ink,
                                 fontSize: 13.5,
                                 fontWeight: FontWeight.w800,
                               ),
@@ -579,33 +580,33 @@ class _OrderCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 6),
+                      SizedBox(height: 6),
                       Text(
                         item.store,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: Color(0xFF6A707C),
+                        style: TextStyle(
+                          color: Theme.of(context).appColors.muted,
                           fontSize: 11.5,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8),
                       Row(
                         children: [
                           Text(
                             _rupiah(item.total),
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: kPurple,
                               fontSize: 12.5,
                               fontWeight: FontWeight.w900,
                             ),
                           ),
-                          const SizedBox(width: 10),
+                          SizedBox(width: 10),
                           Text(
                             _dateText(item.date),
-                            style: const TextStyle(
-                              color: Color(0xFF6A707C),
+                            style: TextStyle(
+                              color: Theme.of(context).appColors.muted,
                               fontSize: 11.5,
                               fontWeight: FontWeight.w600,
                             ),
@@ -716,35 +717,35 @@ class _EmptyState extends StatelessWidget {
                 borderRadius: BorderRadius.circular(18),
               ),
               alignment: Alignment.center,
-              child: const Icon(
+              child: Icon(
                 Icons.shopping_bag_outlined,
                 color: kPurple,
                 size: 30,
               ),
             ),
-            const SizedBox(height: 14),
+            SizedBox(height: 14),
             Text(
               msg,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Color(0xFF6A707C),
+              style: TextStyle(
+                color: Theme.of(context).appColors.muted,
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
                 height: 1.35,
               ),
             ),
-            const SizedBox(height: 14),
+            SizedBox(height: 14),
             InkWell(
               borderRadius: BorderRadius.circular(12),
               onTap: onReset,
               child: Container(
-                padding: const EdgeInsets.symmetric(
+                padding: EdgeInsets.symmetric(
                   horizontal: 14,
                   vertical: 10,
                 ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: const Color(0xFFE8ECF4)),
+                  border: Border.all(color: Theme.of(context).appColors.border),
                 ),
                 child: const Text(
                   'Reset',

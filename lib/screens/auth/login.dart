@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import '../../services/auth_service.dart';
 import '../../services/storage_service.dart';
@@ -142,7 +143,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         onTap: () => context.push('/register'),
                         child: Text(
                           t['registerPrompt']!,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Color(0xFF2563EB),
                             fontWeight: FontWeight.w600,
                             decoration: TextDecoration.underline,
@@ -158,11 +159,11 @@ class _LoginScreenState extends State<LoginScreen> {
           // Input
           Container(
             height: 46,
-            padding: const EdgeInsets.symmetric(horizontal: 14),
+            padding: EdgeInsets.symmetric(horizontal: 14),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).appColors.card,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: const Color(0xFFBEB6C2), width: 1),
+              border: Border.all(color: Color(0xFFBEB6C2), width: 1),
             ),
             alignment: Alignment.center,
             child: TextField(
@@ -172,8 +173,8 @@ class _LoginScreenState extends State<LoginScreen> {
               onSubmitted: (_) {
                 if (!_loading) _handleSubmit();
               },
-              style: const TextStyle(
-                color: Color(0xFF2A2A2A),
+              style: TextStyle(
+                color: Theme.of(context).appColors.ink,
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
               ),
@@ -221,7 +222,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
 
           // Submit button
           SizedBox(
@@ -239,8 +240,8 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               child: Text(
                 _loading ? t['processing']! : t['next']!,
-                style: const TextStyle(
-                  color: Colors.white,
+                style: TextStyle(
+                  color: Theme.of(context).appColors.card,
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                 ),

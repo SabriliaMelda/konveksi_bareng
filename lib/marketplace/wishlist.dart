@@ -1,5 +1,6 @@
 // lib/pages/wishlist.dart
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:konveksi_bareng/screens/main/home.dart';
 
 const kPurple = Color(0xFF6B257F);
@@ -70,20 +71,20 @@ class _WishlistScreenState extends State<WishlistScreen> {
     }).toList();
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
       body: SafeArea(
         child: Column(
           children: [
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
 
             // ===== TOP ROW: back + search + home + notif + avatar =====
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
                   _CircleIconButton(
                     icon: Icons.arrow_back_ios_new,
-                    iconColor: const Color(0xFF1E232C),
+                    iconColor: Theme.of(context).appColors.ink,
                     onTap: () => Navigator.pop(context),
                   ),
                   const SizedBox(width: 10),
@@ -105,7 +106,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                     onTap: () {
                       Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (_) => const HomeScreen()),
+                        MaterialPageRoute(builder: (_) => HomeScreen()),
                         (route) => false,
                       );
                     },
@@ -119,7 +120,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                       );
                     },
                   ),
-                  const SizedBox(width: 10),
+                  SizedBox(width: 10),
                   const _AvatarCircle(
                     url: 'https://picsum.photos/seed/me/120/120',
                   ),
@@ -127,37 +128,37 @@ class _WishlistScreenState extends State<WishlistScreen> {
               ),
             ),
 
-            const SizedBox(height: 14),
+            SizedBox(height: 14),
 
             // ===== TITLE + count =====
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     child: Text(
                       'Wishlist',
                       style: TextStyle(
-                        color: Color(0xFF1E232C),
+                        color: Theme.of(context).appColors.ink,
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
                       ),
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(
+                    padding: EdgeInsets.symmetric(
                       horizontal: 10,
                       vertical: 6,
                     ),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF6F7F8),
+                      color: Theme.of(context).appColors.iconSurface,
                       borderRadius: BorderRadius.circular(999),
-                      border: Border.all(color: const Color(0xFFE8ECF4)),
+                      border: Border.all(color: Theme.of(context).appColors.border),
                     ),
                     child: Text(
                       '${filtered.length} item',
-                      style: const TextStyle(
-                        color: Color(0xFF6A707C),
+                      style: TextStyle(
+                        color: Theme.of(context).appColors.muted,
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
                       ),
@@ -275,9 +276,9 @@ class _CircleIconButton extends StatelessWidget {
         height: 44,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).appColors.card,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
+          border: Border.all(color: Theme.of(context).appColors.border),
         ),
         child: Icon(icon, size: 20, color: iconColor),
       ),
@@ -361,10 +362,10 @@ class _IconPill extends StatelessWidget {
         height: 44,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: const Color(0xFFF0F0F0),
+          color: Color(0xFFF0F0F0),
           borderRadius: BorderRadius.circular(16),
         ),
-        child: Icon(icon, size: 22, color: const Color(0xFF010101)),
+        child: Icon(icon, size: 22, color: Theme.of(context).appColors.ink),
       ),
     );
   }
@@ -417,11 +418,11 @@ class _WishCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       onTap: onOpen,
       child: Container(
-        padding: const EdgeInsets.all(12),
+        padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).appColors.card,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
+          border: Border.all(color: Theme.of(context).appColors.border),
           boxShadow: const [
             BoxShadow(
               color: Color(0x0CB3B3B3),
@@ -442,7 +443,7 @@ class _WishCard extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -454,8 +455,8 @@ class _WishCard extends StatelessWidget {
                           item.title,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            color: Color(0xFF1E232C),
+                          style: TextStyle(
+                            color: Theme.of(context).appColors.ink,
                             fontSize: 14,
                             fontWeight: FontWeight.w800,
                             height: 1.2,
@@ -470,11 +471,11 @@ class _WishCard extends StatelessWidget {
                           height: 34,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                            color: const Color(0xFFF6F7F8),
+                            color: Theme.of(context).appColors.iconSurface,
                             borderRadius: BorderRadius.circular(999),
-                            border: Border.all(color: const Color(0xFFE8ECF4)),
+                            border: Border.all(color: Theme.of(context).appColors.border),
                           ),
-                          child: const Icon(
+                          child: Icon(
                             Icons.delete_outline,
                             size: 18,
                             color: kPurple,
@@ -483,42 +484,42 @@ class _WishCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6),
                   Text(
                     item.store,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Color(0xFF6A707C),
+                    style: TextStyle(
+                      color: Theme.of(context).appColors.muted,
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6),
                   Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.star_rounded,
                         size: 18,
                         color: Color(0xFFFFC107),
                       ),
-                      const SizedBox(width: 4),
+                      SizedBox(width: 4),
                       Text(
                         item.rating.toStringAsFixed(1),
-                        style: const TextStyle(
-                          color: Color(0xFF1E232C),
+                        style: TextStyle(
+                          color: Theme.of(context).appColors.ink,
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      const SizedBox(width: 10),
+                      SizedBox(width: 10),
                       Expanded(
                         child: Text(
                           item.variant,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            color: Color(0xFF6A707C),
+                          style: TextStyle(
+                            color: Theme.of(context).appColors.muted,
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                           ),
@@ -526,32 +527,32 @@ class _WishCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   Row(
                     children: [
                       Text(
                         _rupiah(item.price),
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: kPurple,
                           fontSize: 14,
                           fontWeight: FontWeight.w900,
                         ),
                       ),
-                      const Spacer(),
+                      Spacer(),
                       Container(
-                        padding: const EdgeInsets.symmetric(
+                        padding: EdgeInsets.symmetric(
                           horizontal: 10,
                           vertical: 6,
                         ),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFF6F7F8),
+                          color: Theme.of(context).appColors.iconSurface,
                           borderRadius: BorderRadius.circular(999),
-                          border: Border.all(color: const Color(0xFFE8ECF4)),
+                          border: Border.all(color: Theme.of(context).appColors.border),
                         ),
                         child: Text(
                           'Stok ${item.stock}',
-                          style: const TextStyle(
-                            color: Color(0xFF6A707C),
+                          style: TextStyle(
+                            color: Theme.of(context).appColors.muted,
                             fontSize: 11.5,
                             fontWeight: FontWeight.w700,
                           ),
@@ -559,7 +560,7 @@ class _WishCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   SizedBox(
                     width: double.infinity,
                     height: 42,
@@ -572,10 +573,10 @@ class _WishCard extends StatelessWidget {
                         elevation: 0,
                       ),
                       onPressed: onAddToCart,
-                      child: const Text(
+                      child: Text(
                         'Tambah ke Keranjang',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Theme.of(context).appColors.card,
                           fontSize: 13,
                           fontWeight: FontWeight.w800,
                         ),
