@@ -1,5 +1,14 @@
 // lib/pages/bahan_baku.dart
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/screens/finance/payment_screen.dart';
+import 'package:konveksi_bareng/screens/finance/sales_screen.dart';
+import 'package:konveksi_bareng/screens/inventory/shipment_screen.dart';
+import 'package:konveksi_bareng/screens/finance/purchase_screen.dart';
+import 'package:konveksi_bareng/screens/main/chat.dart';
+import 'package:konveksi_bareng/screens/marketplace/checkout.dart';
+import 'package:konveksi_bareng/screens/main/wishlist.dart';
+import 'package:konveksi_bareng/screens/marketplace/marketplace.dart';
+import 'package:konveksi_bareng/screens/main/home.dart';
 import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
