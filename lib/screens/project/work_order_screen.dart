@@ -58,19 +58,16 @@ class _WorkOrderScreenState extends State<WorkOrderScreen> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).appColors.card,
-
       floatingActionButton: FloatingActionButton(
         backgroundColor: kPurple,
         onPressed: () => _openCreateSpkSheet(context),
         child: const Icon(Icons.add, size: 26),
       ),
-
       body: SafeArea(
         child: Column(
           children: [
             const _TopHeader(title: 'SPK'),
             const SizedBox(height: 12),
-
             Padding(
               padding: const EdgeInsets.fromLTRB(18, 0, 18, 12),
               child: _SearchBox(
@@ -83,7 +80,6 @@ class _WorkOrderScreenState extends State<WorkOrderScreen> {
                 hintText: 'Cari SPK (nomor/judul/mitra)...',
               ),
             ),
-
             Expanded(
               child: filtered.isEmpty
                   ? Center(
@@ -476,7 +472,6 @@ class _CreateSpkSheetState extends State<_CreateSpkSheet> {
                   ),
                 ),
                 SizedBox(height: 14),
-
                 Text(
                   'Buat SPK',
                   style: TextStyle(
@@ -486,11 +481,9 @@ class _CreateSpkSheetState extends State<_CreateSpkSheet> {
                   ),
                 ),
                 const SizedBox(height: 10),
-
                 _InputLabel('Nomor SPK'),
                 const SizedBox(height: 6),
                 _TextFieldBox(controller: _nomorC, hint: 'Contoh: SPK-004'),
-
                 const SizedBox(height: 12),
                 _InputLabel('Judul Pekerjaan'),
                 const SizedBox(height: 6),
@@ -498,12 +491,10 @@ class _CreateSpkSheetState extends State<_CreateSpkSheet> {
                   controller: _judulC,
                   hint: 'Contoh: Pembuatan Kaos',
                 ),
-
                 const SizedBox(height: 12),
                 _InputLabel('Mitra/ Konveksi'),
                 const SizedBox(height: 6),
                 _TextFieldBox(controller: _mitraC, hint: 'Contoh: Konveksi A'),
-
                 const SizedBox(height: 12),
                 _InputLabel('Status'),
                 const SizedBox(height: 6),
@@ -511,7 +502,6 @@ class _CreateSpkSheetState extends State<_CreateSpkSheet> {
                   value: _status,
                   onChanged: (v) => setState(() => _status = v),
                 ),
-
                 const SizedBox(height: 16),
                 SizedBox(
                   width: double.infinity,

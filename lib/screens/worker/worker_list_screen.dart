@@ -59,7 +59,6 @@ class _WorkerListScreenState extends State<WorkerListScreen> {
           children: [
             const _TopHeader(title: 'Daftar pekerja'),
             const SizedBox(height: 10),
-
             Padding(
               padding: const EdgeInsets.fromLTRB(18, 0, 18, 12),
               child: _SearchBox(
@@ -71,7 +70,6 @@ class _WorkerListScreenState extends State<WorkerListScreen> {
                 },
               ),
             ),
-
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.fromLTRB(18, 0, 18, 18),
@@ -92,7 +90,6 @@ class _WorkerListScreenState extends State<WorkerListScreen> {
                       ),
                     ),
                   ),
-
                   if (bookmarked.isNotEmpty) ...[
                     const SizedBox(height: 8),
                     const _SectionLabel(text: '★ Bookmark'),

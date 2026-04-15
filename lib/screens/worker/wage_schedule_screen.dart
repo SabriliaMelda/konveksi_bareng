@@ -89,8 +89,7 @@ class _WageScheduleScreenState extends State<WageScheduleScreen> {
     return 'Rp $buf';
   }
 
-  List<_UpahSchedule> get _activeSchedules =>
-      schedulesByDay[selectedDay] ?? [];
+  List<_UpahSchedule> get _activeSchedules => schedulesByDay[selectedDay] ?? [];
 
   void _openAddSheet() {
     final titleC = TextEditingController(text: 'Bayar Upah');
@@ -397,7 +396,6 @@ class _WageScheduleScreenState extends State<WageScheduleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).appColors.card,
-
       floatingActionButton: FloatingActionButton(
         backgroundColor: kPurple,
         foregroundColor: Theme.of(context).appColors.card,
@@ -405,7 +403,6 @@ class _WageScheduleScreenState extends State<WageScheduleScreen> {
         onPressed: _openAddSheet,
         child: const Icon(Icons.add_rounded, size: 26),
       ),
-
       body: SafeArea(
         child: Column(
           children: [
@@ -709,9 +706,8 @@ class _CalendarGrid extends StatelessWidget {
                 width: 30,
                 height: 30,
                 decoration: BoxDecoration(
-                  color: isSelected
-                      ? const Color(0xFFDBC0F2)
-                      : Colors.transparent,
+                  color:
+                      isSelected ? const Color(0xFFDBC0F2) : Colors.transparent,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 alignment: Alignment.center,
@@ -893,7 +889,8 @@ class _ScheduleCardUpah extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: Theme.of(context).appColors.iconSurface,
                           borderRadius: BorderRadius.circular(999),
-                          border: Border.all(color: Theme.of(context).appColors.border),
+                          border: Border.all(
+                              color: Theme.of(context).appColors.border),
                         ),
                         child: Text(
                           _statusText,

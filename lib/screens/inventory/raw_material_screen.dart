@@ -145,7 +145,8 @@ class _HeaderIcon extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).appColors.card.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Theme.of(context).appColors.card.withValues(alpha: 0.12)),
+          border: Border.all(
+              color: Theme.of(context).appColors.card.withValues(alpha: 0.12)),
         ),
         child: Icon(icon, color: Theme.of(context).appColors.card, size: 20),
       ),
@@ -168,7 +169,8 @@ class _SearchBar extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).appColors.card.withValues(alpha: 0.14),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Theme.of(context).appColors.card.withValues(alpha: 0.12)),
+          border: Border.all(
+              color: Theme.of(context).appColors.card.withValues(alpha: 0.12)),
         ),
         child: Row(
           children: const [
@@ -722,7 +724,18 @@ class _ProductCard extends StatelessWidget {
                       borderRadius: BorderRadius.vertical(
                         top: Radius.circular(18),
                       ),
-                      child: Image.asset(product.image, fit: BoxFit.cover),
+                      child: Image.asset(
+                        product.image,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Container(
+                          color: const Color(0xFFE0E0E0),
+                          child: const Icon(
+                            Icons.broken_image_outlined,
+                            color: Color(0xFF9E9E9E),
+                            size: 36,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                   Positioned(
@@ -734,7 +747,10 @@ class _ProductCard extends StatelessWidget {
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).appColors.card.withValues(alpha: 0.92),
+                        color: Theme.of(context)
+                            .appColors
+                            .card
+                            .withValues(alpha: 0.92),
                         borderRadius: BorderRadius.circular(999),
                       ),
                       child: Row(
@@ -761,7 +777,10 @@ class _ProductCard extends StatelessWidget {
                       width: 34,
                       height: 34,
                       decoration: BoxDecoration(
-                        color: Theme.of(context).appColors.card.withValues(alpha: 0.92),
+                        color: Theme.of(context)
+                            .appColors
+                            .card
+                            .withValues(alpha: 0.92),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: const Icon(

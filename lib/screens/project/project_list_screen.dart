@@ -135,7 +135,10 @@ class _ProjectListScreenState extends State<ProjectListScreen> {
                       color: Color(0xFF50047D),
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                          color: Theme.of(context).appColors.card.withValues(alpha: 0.12)),
+                          color: Theme.of(context)
+                              .appColors
+                              .card
+                              .withValues(alpha: 0.12)),
                     ),
                     child: Row(
                       children: [
@@ -248,7 +251,10 @@ class _FilterChips extends StatelessWidget {
                     : Colors.white.withValues(alpha: 0.14),
                 borderRadius: BorderRadius.circular(999),
                 border: Border.all(
-                  color: Theme.of(context).appColors.card.withValues(alpha: active ? 0.0 : 0.18),
+                  color: Theme.of(context)
+                      .appColors
+                      .card
+                      .withValues(alpha: active ? 0.0 : 0.18),
                 ),
               ),
               child: Text(
@@ -285,7 +291,8 @@ class _HeaderIcon extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).appColors.card.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Theme.of(context).appColors.card.withValues(alpha: 0.12)),
+          border: Border.all(
+              color: Theme.of(context).appColors.card.withValues(alpha: 0.12)),
         ),
         child: Icon(icon, color: Theme.of(context).appColors.card, size: 20),
       ),
@@ -404,7 +411,10 @@ class _ProjectCard extends StatelessWidget {
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).appColors.card.withValues(alpha: 0.92),
+                        color: Theme.of(context)
+                            .appColors
+                            .card
+                            .withValues(alpha: 0.92),
                         borderRadius: BorderRadius.circular(999),
                       ),
                       child: Text(

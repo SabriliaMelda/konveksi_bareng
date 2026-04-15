@@ -335,7 +335,8 @@ class _HeaderIcon extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).appColors.card.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Theme.of(context).appColors.card.withValues(alpha: 0.12)),
+          border: Border.all(
+              color: Theme.of(context).appColors.card.withValues(alpha: 0.12)),
         ),
         child: Icon(icon, color: Theme.of(context).appColors.card, size: 20),
       ),
@@ -690,15 +691,18 @@ class _TimelineItem extends StatelessWidget {
     switch (step.state) {
       case _StepState.done:
         dotColor = kPurple;
-        dotChild = Icon(Icons.check, size: 11, color: Theme.of(context).appColors.card);
+        dotChild = Icon(Icons.check,
+            size: 11, color: Theme.of(context).appColors.card);
         break;
       case _StepState.active:
         dotColor = Color(0xFFF59E0B);
-        dotChild = Icon(Icons.more_horiz, size: 11, color: Theme.of(context).appColors.card);
+        dotChild = Icon(Icons.more_horiz,
+            size: 11, color: Theme.of(context).appColors.card);
         break;
       case _StepState.failed:
         dotColor = Color(0xFFDC2626);
-        dotChild = Icon(Icons.close, size: 11, color: Theme.of(context).appColors.card);
+        dotChild = Icon(Icons.close,
+            size: 11, color: Theme.of(context).appColors.card);
         break;
       case _StepState.pending:
         dotColor = const Color(0xFFD1D5DB);
@@ -990,8 +994,8 @@ class _BottomBar extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14)),
                   minimumSize: const Size.fromHeight(46),
-                  textStyle: TextStyle(
-                      fontSize: 13, fontWeight: FontWeight.w700),
+                  textStyle:
+                      TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
                 ),
               ),
             ),
@@ -1025,7 +1029,8 @@ class _BottomBar extends StatelessWidget {
                               width: 14,
                               height: 14,
                               child: CircularProgressIndicator(
-                                  strokeWidth: 2, color: Theme.of(context).appColors.card))
+                                  strokeWidth: 2,
+                                  color: Theme.of(context).appColors.card))
                           : Icon(Icons.replay_rounded, size: 16),
                       label: Text(isRetrying ? 'Memproses...' : 'Bayar Lagi'),
                       style: ElevatedButton.styleFrom(

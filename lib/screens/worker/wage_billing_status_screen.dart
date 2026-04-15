@@ -48,7 +48,6 @@ class _WageBillingStatusScreenState extends State<WageBillingStatusScreen> {
           children: [
             const _TopHeader(title: 'Status tagihan upah'),
             const SizedBox(height: 10),
-
             Padding(
               padding: const EdgeInsets.fromLTRB(18, 0, 18, 12),
               child: _SearchBox(
@@ -60,7 +59,6 @@ class _WageBillingStatusScreenState extends State<WageBillingStatusScreen> {
                 },
               ),
             ),
-
             Expanded(
               child: ListView.separated(
                 padding: const EdgeInsets.fromLTRB(18, 0, 18, 18),
@@ -270,7 +268,6 @@ class _BookmarkListTile extends StatelessWidget {
               child: Icon(icon, color: kPurple, size: 20),
             ),
             SizedBox(width: 12),
-
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -299,7 +296,6 @@ class _BookmarkListTile extends StatelessWidget {
                 ],
               ),
             ),
-
             const Icon(Icons.chevron_right, color: Color(0xFF8F9BB3)),
           ],
         ),

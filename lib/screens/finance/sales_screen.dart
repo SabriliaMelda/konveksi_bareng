@@ -218,7 +218,9 @@ class _Header extends StatelessWidget {
             decoration: BoxDecoration(
               color: Theme.of(context).appColors.card.withValues(alpha: 0.14),
               borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: Theme.of(context).appColors.card.withValues(alpha: 0.12)),
+              border: Border.all(
+                  color:
+                      Theme.of(context).appColors.card.withValues(alpha: 0.12)),
             ),
             child: Row(
               children: const [
@@ -261,7 +263,8 @@ class _HeaderIcon extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).appColors.card.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Theme.of(context).appColors.card.withValues(alpha: 0.12)),
+          border: Border.all(
+              color: Theme.of(context).appColors.card.withValues(alpha: 0.12)),
         ),
         child: Icon(icon, color: Theme.of(context).appColors.card, size: 20),
       ),
@@ -519,9 +522,7 @@ class _SaleCard extends StatelessWidget {
   }
 
   Color get sourceBg {
-    return item.source == 'Marketplace'
-        ? Color(0xFFEAF2FF)
-        : Color(0xFFFFEFE5);
+    return item.source == 'Marketplace' ? Color(0xFFEAF2FF) : Color(0xFFFFEFE5);
   }
 
   IconData get sourceIcon {

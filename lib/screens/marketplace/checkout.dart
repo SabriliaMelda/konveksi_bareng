@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:konveksi_bareng/config/app_colors.dart';
-import 'package:konveksi_bareng/screens/finance/payment_screen.dart';
+import 'package:konveksi_bareng/finance/pembelian.dart';
 import 'package:konveksi_bareng/services/payment_service.dart';
 import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
 
@@ -191,18 +191,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       if (!mounted) return;
       Navigator.pop(context); // close dialog
 
-      // Navigate to payment status screen
+      // Navigate to purchase/payment status screen
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) => PaymentScreen(order: result),
+          builder: (_) => PurchaseScreen(order: result),
         ),
       );
     } catch (_) {
       if (!mounted) return;
       Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Gagal memproses pembayaran. Coba lagi.')));
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Gagal memproses pembayaran. Coba lagi.')));
     }
   }
 
@@ -263,11 +263,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       const SizedBox(height: 6),
                     ],
                     const Divider(color: Color(0xFFEEEEEE)),
-                    const SizedBox(height: 16),
-
-                    // Flash deal
-                    const _FlashDealSection(),
-                    const SizedBox(height: 20),
                     const Divider(color: Color(0xFFEEEEEE)),
                     const SizedBox(height: 16),
 
@@ -417,7 +412,8 @@ class _CartTile extends StatelessWidget {
                 ),
               ),
               child: p.selected
-                  ? Icon(Icons.check, size: 14, color: Theme.of(context).appColors.card)
+                  ? Icon(Icons.check,
+                      size: 14, color: Theme.of(context).appColors.card)
                   : null,
             ),
           ),
@@ -516,181 +512,6 @@ class _QtyBtn extends StatelessWidget {
   }
 }
 
-// ── Flash deal ────────────────────────────────────────────────────────────────
-
-class _FlashDealSection extends StatelessWidget {
-  const _FlashDealSection();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Text('Flash Deal',
-                style: TextStyle(
-                    color: Theme.of(context).appColors.ink,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700)),
-            const SizedBox(width: 8),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(
-                  color: const Color(0x1FEB6383),
-                  borderRadius: BorderRadius.circular(20)),
-              child: const Text('10:20:35',
-                  style: TextStyle(
-                      color: Color(0xFFEB6383),
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700)),
-            ),
-            const Spacer(),
-            const Text('Lihat Semua',
-                style: TextStyle(
-                    color: kPurple, fontSize: 12, fontWeight: FontWeight.w700)),
-          ],
-        ),
-        const SizedBox(height: 12),
-        SizedBox(
-          height: 210,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: const [
-              _FlashCard(
-                imagePath: 'assets/images/nike.jpg',
-                nama: 'Sportswear Club',
-                model: 'Nike Sports T-Shirt',
-                harga: 548000,
-                hargaCoret: 600000,
-                rating: 4.8,
-              ),
-              SizedBox(width: 14),
-              _FlashCard(
-                imagePath: 'assets/images/adidas.jpg',
-                nama: 'Originals Trefoil',
-                model: 'Adidas Sports T-Shirt',
-                harga: 691000,
-                hargaCoret: 769000,
-                rating: 4.8,
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _FlashCard extends StatelessWidget {
-  final String imagePath;
-  final String nama;
-  final String model;
-  final int harga;
-  final int hargaCoret;
-  final double rating;
-
-  const _FlashCard({
-    required this.imagePath,
-    required this.nama,
-    required this.model,
-    required this.harga,
-    required this.hargaCoret,
-    required this.rating,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 160,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            height: 120,
-            decoration: BoxDecoration(
-                color: Theme.of(context).appColors.iconSurface,
-                borderRadius: BorderRadius.circular(14)),
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(14),
-                    child: Image.asset(imagePath, fit: BoxFit.cover),
-                  ),
-                ),
-                Positioned(
-                  right: 8,
-                  top: 8,
-                  child: Container(
-                    width: 26,
-                    height: 26,
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).appColors.card,
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Icon(Icons.favorite_border,
-                        size: 14, color: kPurple),
-                  ),
-                ),
-                Positioned(
-                  left: 8,
-                  bottom: 8,
-                  child: Row(
-                    children: [
-                      Icon(Icons.star, size: 14, color: Colors.amber),
-                      SizedBox(width: 3),
-                      Text(rating.toString(),
-                          style: TextStyle(
-                              color: Theme.of(context).appColors.card,
-                              fontSize: 11,
-                              fontWeight: FontWeight.w700)),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  right: 8,
-                  bottom: 8,
-                  child: Container(
-                    width: 28,
-                    height: 28,
-                    decoration: BoxDecoration(
-                        color: kPurple,
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Icon(Icons.add_shopping_cart,
-                        size: 14, color: Theme.of(context).appColors.card),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(nama,
-              style:
-                  const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
-          Text(model,
-              style: const TextStyle(fontSize: 11, color: Color(0xFF7A7E86))),
-          const SizedBox(height: 4),
-          Row(
-            children: [
-              Text(_rupiah(harga),
-                  style: const TextStyle(
-                      color: kPurple,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w800)),
-              const SizedBox(width: 6),
-              Text(_rupiah(hargaCoret),
-                  style: const TextStyle(
-                      color: Color(0xFF7A7E86),
-                      fontSize: 11,
-                      decoration: TextDecoration.lineThrough)),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 // ── Payment section ───────────────────────────────────────────────────────────
 
 class _PaymentSection extends StatelessWidget {
@@ -763,7 +584,8 @@ class _PaymentSection extends StatelessWidget {
                             fontWeight: FontWeight.w500)),
                   ),
                 ],
-                Icon(Icons.keyboard_arrow_down, color: Theme.of(context).appColors.ink),
+                Icon(Icons.keyboard_arrow_down,
+                    color: Theme.of(context).appColors.ink),
               ],
             ),
           ),

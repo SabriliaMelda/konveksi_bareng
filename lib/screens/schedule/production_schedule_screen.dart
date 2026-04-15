@@ -9,7 +9,8 @@ class ProductionScheduleScreen extends StatefulWidget {
   const ProductionScheduleScreen({super.key});
 
   @override
-  State<ProductionScheduleScreen> createState() => _ProductionScheduleScreenState();
+  State<ProductionScheduleScreen> createState() =>
+      _ProductionScheduleScreenState();
 }
 
 class _ProductionScheduleScreenState extends State<ProductionScheduleScreen> {
@@ -378,9 +379,8 @@ class _CalendarGrid extends StatelessWidget {
                 width: 30,
                 height: 30,
                 decoration: BoxDecoration(
-                  color: isSelected
-                      ? const Color(0xFFDBC0F2)
-                      : Colors.transparent,
+                  color:
+                      isSelected ? const Color(0xFFDBC0F2) : Colors.transparent,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 alignment: Alignment.center,
@@ -621,7 +621,8 @@ class _FloatingActionGroup extends StatelessWidget {
                 ),
               ],
             ),
-            child: Icon(Icons.add, size: 28, color: Theme.of(context).appColors.card),
+            child: Icon(Icons.add,
+                size: 28, color: Theme.of(context).appColors.card),
           ),
         ),
       ],
