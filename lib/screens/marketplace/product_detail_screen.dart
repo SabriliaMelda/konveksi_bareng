@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
+import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
 
 const _kPurple = Color(0xFF6B257F);
 const _kPurpleLight = Color(0xFFF3E4FF);
@@ -81,6 +83,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: _kBg,
+      bottomNavigationBar: AppBottomNav(activeIndex: 0),
       body: Stack(
         children: [
           CustomScrollView(
@@ -122,7 +125,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     return SliverAppBar(
       expandedHeight: 320,
       pinned: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
       leading: _CircleBtn(
         icon: Icons.arrow_back_ios_new_rounded,
         onTap: () => Navigator.pop(context),
@@ -168,14 +171,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 bottom: 16,
                 child: Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: _kPurple,
                     borderRadius: BorderRadius.circular(999),
                   ),
                   child: Text(p.promoText!,
-                      style: const TextStyle(
-                          color: Colors.white,
+                      style: TextStyle(
+                          color: Theme.of(context).appColors.card,
                           fontSize: 12,
                           fontWeight: FontWeight.w800)),
                 ),
@@ -188,36 +191,36 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   Widget _buildPriceRow() {
     return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
+      color: Theme.of(context).appColors.card,
+      padding: EdgeInsets.fromLTRB(16, 16, 16, 14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(_rupiah(p.price),
-              style: const TextStyle(
+              style: TextStyle(
                   color: _kPurple, fontSize: 24, fontWeight: FontWeight.w900)),
-          const SizedBox(height: 6),
+          SizedBox(height: 6),
           Text(p.title,
-              style: const TextStyle(
-                  color: Color(0xFF1E232C),
+              style: TextStyle(
+                  color: Theme.of(context).appColors.ink,
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
                   height: 1.3)),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           Row(
             children: [
-              const Icon(Icons.star_rounded,
+              Icon(Icons.star_rounded,
                   size: 18, color: Color(0xFFFFC107)),
-              const SizedBox(width: 4),
+              SizedBox(width: 4),
               Text(p.rating.toStringAsFixed(1),
-                  style: const TextStyle(
-                      color: Color(0xFF1E232C),
+                  style: TextStyle(
+                      color: Theme.of(context).appColors.ink,
                       fontSize: 13,
                       fontWeight: FontWeight.w700)),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Text('• ${p.sold} terjual',
-                  style: const TextStyle(
-                      color: Color(0xFF6A707C),
+                  style: TextStyle(
+                      color: Theme.of(context).appColors.muted,
                       fontSize: 13,
                       fontWeight: FontWeight.w600)),
               const Spacer(),
@@ -234,8 +237,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   p.stock > 0 ? 'Stok: ${p.stock}' : 'Habis',
                   style: TextStyle(
                     color: p.stock > 0
-                        ? const Color(0xFF2E7D32)
-                        : const Color(0xFFD32F2F),
+                        ? Color(0xFF2E7D32)
+                        : Color(0xFFD32F2F),
                     fontSize: 11.5,
                     fontWeight: FontWeight.w700,
                   ),
@@ -250,8 +253,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   Widget _buildStoreRow() {
     return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      color: Theme.of(context).appColors.card,
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       child: Row(
         children: [
           Container(
@@ -261,23 +264,23 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               color: _kPurpleLight,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Icon(Icons.storefront_outlined,
+            child: Icon(Icons.storefront_outlined,
                 color: _kPurple, size: 22),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(p.store,
-                    style: const TextStyle(
-                        color: Color(0xFF1E232C),
+                    style: TextStyle(
+                        color: Theme.of(context).appColors.ink,
                         fontSize: 14,
                         fontWeight: FontWeight.w800)),
-                const SizedBox(height: 2),
-                const Text('Toko Resmi • Pengiriman Cepat',
+                SizedBox(height: 2),
+                Text('Toko Resmi • Pengiriman Cepat',
                     style: TextStyle(
-                        color: Color(0xFF6A707C),
+                        color: Theme.of(context).appColors.muted,
                         fontSize: 12,
                         fontWeight: FontWeight.w500)),
               ],
@@ -287,14 +290,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             onPressed: () => _snack('Kunjungi toko (dummy)'),
             style: OutlinedButton.styleFrom(
               foregroundColor: _kPurple,
-              side: const BorderSide(color: _kPurple),
+              side: BorderSide(color: _kPurple),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               textStyle:
-                  const TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+                  TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
             ),
-            child: const Text('Kunjungi'),
+            child: Text('Kunjungi'),
           ),
         ],
       ),
@@ -303,14 +306,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   Widget _buildColorPicker() {
     return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.fromLTRB(16, 14, 16, 4),
+      color: Theme.of(context).appColors.card,
+      padding: EdgeInsets.fromLTRB(16, 14, 16, 4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Warna',
+          Text('Warna',
               style: TextStyle(
-                  color: Color(0xFF1E232C),
+                  color: Theme.of(context).appColors.ink,
                   fontSize: 14,
                   fontWeight: FontWeight.w800)),
           const SizedBox(height: 12),
@@ -336,7 +339,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             BoxShadow(
                               color: p.colors[i].withValues(alpha: 0.4),
                               blurRadius: 8,
-                              offset: const Offset(0, 3),
+                              offset: Offset(0, 3),
                             )
                           ]
                         : null,
@@ -352,16 +355,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   Widget _buildSizePicker() {
     return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.fromLTRB(16, 4, 16, 14),
+      color: Theme.of(context).appColors.card,
+      padding: EdgeInsets.fromLTRB(16, 4, 16, 14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const Text('Ukuran',
+              Text('Ukuran',
                   style: TextStyle(
-                      color: Color(0xFF1E232C),
+                      color: Theme.of(context).appColors.ink,
                       fontSize: 14,
                       fontWeight: FontWeight.w800)),
               const Spacer(),
@@ -398,7 +401,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                   child: Text(s,
                       style: TextStyle(
-                          color: sel ? Colors.white : const Color(0xFF1E232C),
+                          color: sel ? Colors.white : Color(0xFF1E232C),
                           fontSize: 13,
                           fontWeight: FontWeight.w700)),
                 ),
@@ -417,20 +420,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             'Tersedia dalam berbagai ukuran dan warna. '
             'Cocok untuk berbagai kesempatan.';
     return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+      color: Theme.of(context).appColors.card,
+      padding: EdgeInsets.fromLTRB(16, 14, 16, 14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Deskripsi Produk',
+          Text('Deskripsi Produk',
               style: TextStyle(
-                  color: Color(0xFF1E232C),
+                  color: Theme.of(context).appColors.ink,
                   fontSize: 14,
                   fontWeight: FontWeight.w800)),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           Text(desc,
-              style: const TextStyle(
-                  color: Color(0xFF6A707C),
+              style: TextStyle(
+                  color: Theme.of(context).appColors.muted,
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
                   height: 1.6)),
@@ -441,7 +444,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   Widget _buildStats() {
     return Container(
-      color: Colors.white,
+      color: Theme.of(context).appColors.card,
       padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
       child: Row(
         children: [
@@ -457,12 +460,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               value: '${p.sold}'),
           _StatItem(
               icon: Icons.inventory_2_outlined,
-              iconColor: const Color(0xFF2E7D32),
+              iconColor: Color(0xFF2E7D32),
               label: 'Stok',
               value: '${p.stock}'),
           _StatItem(
               icon: Icons.local_shipping_outlined,
-              iconColor: const Color(0xFF1565C0),
+              iconColor: Color(0xFF1565C0),
               label: 'Kirim',
               value: 'Cepat'),
         ],
@@ -472,9 +475,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   Widget _buildBottomBar() {
     return Container(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      padding: EdgeInsets.fromLTRB(16, 12, 16, 20),
+      decoration: BoxDecoration(
+        color: Theme.of(context).appColors.card,
         border: Border(top: BorderSide(color: Color(0xFFE8ECF4))),
         boxShadow: [
           BoxShadow(
@@ -487,7 +490,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           Container(
             height: 44,
             decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xFFE8ECF4)),
+              border: Border.all(color: Theme.of(context).appColors.border),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
@@ -502,10 +505,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   width: 36,
                   child: Text('$_qty',
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w800,
-                          color: Color(0xFF1E232C))),
+                          color: Theme.of(context).appColors.ink)),
                 ),
                 _QtyBtn(
                     icon: Icons.add,
@@ -532,13 +535,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 side: const BorderSide(color: _kPurple),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12)),
-                padding: const EdgeInsets.symmetric(vertical: 12),
+                padding: EdgeInsets.symmetric(vertical: 12),
                 textStyle:
-                    const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                    TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
               ),
             ),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 10),
           Expanded(
             child: ElevatedButton(
               onPressed: () {
@@ -550,7 +553,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: _kPurple,
-                foregroundColor: Colors.white,
+                foregroundColor: Theme.of(context).appColors.card,
                 elevation: 0,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12)),
@@ -572,7 +575,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 class _Gap extends StatelessWidget {
   const _Gap();
   @override
-  Widget build(BuildContext context) => const SizedBox(height: 8);
+  Widget build(BuildContext context) => SizedBox(height: 8);
 }
 
 class _CircleBtn extends StatelessWidget {
@@ -584,7 +587,7 @@ class _CircleBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(6),
+      padding: EdgeInsets.all(6),
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
         onTap: onTap,
@@ -592,7 +595,7 @@ class _CircleBtn extends StatelessWidget {
           width: 38,
           height: 38,
           decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.9),
+            color: Theme.of(context).appColors.card.withValues(alpha: 0.9),
             shape: BoxShape.circle,
             boxShadow: const [
               BoxShadow(
@@ -624,16 +627,16 @@ class _StatItem extends StatelessWidget {
       child: Column(
         children: [
           Icon(icon, color: iconColor, size: 22),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Text(value,
-              style: const TextStyle(
-                  color: Color(0xFF1E232C),
+              style: TextStyle(
+                  color: Theme.of(context).appColors.ink,
                   fontSize: 13,
                   fontWeight: FontWeight.w800)),
-          const SizedBox(height: 2),
+          SizedBox(height: 2),
           Text(label,
-              style: const TextStyle(
-                  color: Color(0xFF6A707C),
+              style: TextStyle(
+                  color: Theme.of(context).appColors.muted,
                   fontSize: 11,
                   fontWeight: FontWeight.w500)),
         ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:konveksi_bareng/screens/worker/worker_list_screen.dart';
 import 'package:konveksi_bareng/screens/worker/wage_billing_status_screen.dart';
 import 'package:konveksi_bareng/screens/main/chat.dart';
@@ -7,28 +8,28 @@ import 'package:konveksi_bareng/screens/main/home.dart';
 const kPurple = Color(0xFF6B257F);
 
 class WorkerScreen extends StatelessWidget {
-  const WorkerScreen({super.key});
+  WorkerScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
       body: SafeArea(
         child: Column(
           children: [
             const _TopHeader(title: 'Pekerja'),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
 
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(18, 6, 18, 18),
+                padding: EdgeInsets.fromLTRB(18, 6, 18, 18),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Menu Pekerja',
                       style: TextStyle(
-                        color: Color(0xFF111111),
+                        color: Theme.of(context).appColors.ink,
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                       ),
@@ -42,7 +43,7 @@ class WorkerScreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => const WorkerListScreen(),
+                            builder: (_) => WorkerListScreen(),
                           ),
                         );
                       },
@@ -56,7 +57,7 @@ class WorkerScreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => const WageBillingStatusScreen(),
+                            builder: (_) => WageBillingStatusScreen(),
                           ),
                         );
                       },
@@ -69,7 +70,7 @@ class WorkerScreen extends StatelessWidget {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => const ChatScreen()),
+                          MaterialPageRoute(builder: (_) => ChatScreen()),
                         );
                       },
                     ),
@@ -95,7 +96,7 @@ class _TopHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18).copyWith(top: 10),
+      padding: EdgeInsets.symmetric(horizontal: 18).copyWith(top: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -105,8 +106,8 @@ class _TopHeader extends StatelessWidget {
           ),
           Text(
             title,
-            style: const TextStyle(
-              color: Color(0xFF121111),
+            style: TextStyle(
+              color: Theme.of(context).appColors.ink,
               fontSize: 16,
               fontWeight: FontWeight.w600,
               height: 1.4,
@@ -118,7 +119,7 @@ class _TopHeader extends StatelessWidget {
             onTap: () {
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (_) => const HomeScreen()),
+                MaterialPageRoute(builder: (_) => HomeScreen()),
                 (route) => false,
               );
             },
@@ -146,8 +147,8 @@ class _CircleIcon extends StatelessWidget {
         height: 40,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(32),
-          border: Border.all(color: const Color(0xFFDFDEDE)),
-          color: Colors.white,
+          border: Border.all(color: Theme.of(context).appColors.border),
+          color: Theme.of(context).appColors.card,
         ),
         alignment: Alignment.center,
         child: Icon(icon, size: 20, color: iconColor ?? Colors.black87),
@@ -176,11 +177,11 @@ class _BookmarkMenuCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(14),
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
         decoration: BoxDecoration(
-          color: const Color(0xFFF8F8FA),
+          color: Color(0xFFF8F8FA),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
+          border: Border.all(color: Theme.of(context).appColors.border),
         ),
         child: Row(
           children: [
@@ -188,20 +189,20 @@ class _BookmarkMenuCard extends StatelessWidget {
               width: 38,
               height: 38,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).appColors.card,
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: const Color(0xFFE8ECF4)),
+                border: Border.all(color: Theme.of(context).appColors.border),
               ),
               alignment: Alignment.center,
               child: Icon(icon, color: kPurple, size: 20),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
 
             Expanded(
               child: Text(
                 title,
-                style: const TextStyle(
-                  color: Color(0xFF111111),
+                style: TextStyle(
+                  color: Theme.of(context).appColors.ink,
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                 ),

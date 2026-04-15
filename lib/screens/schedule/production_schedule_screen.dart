@@ -1,5 +1,6 @@
 // jadwal_buat.dart
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
 const kPurple = Color(0xFF6B257F);
@@ -8,7 +9,8 @@ class ProductionScheduleScreen extends StatefulWidget {
   const ProductionScheduleScreen({super.key});
 
   @override
-  State<ProductionScheduleScreen> createState() => _ProductionScheduleScreenState();
+  State<ProductionScheduleScreen> createState() =>
+      _ProductionScheduleScreenState();
 }
 
 class _ProductionScheduleScreenState extends State<ProductionScheduleScreen> {
@@ -54,7 +56,7 @@ class _ProductionScheduleScreenState extends State<ProductionScheduleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
 
       body: SafeArea(
         child: Column(
@@ -221,15 +223,15 @@ class _TopHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _CircleIcon(icon: Icons.arrow_back, onTap: onTapBack),
           Text(
             title,
-            style: const TextStyle(
-              color: Color(0xFF121111),
+            style: TextStyle(
+              color: Theme.of(context).appColors.ink,
               fontSize: 16,
               fontWeight: FontWeight.w600,
               height: 1.4,
@@ -263,8 +265,8 @@ class _CircleIcon extends StatelessWidget {
         height: 40,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(32),
-          border: Border.all(color: const Color(0xFFDFDEDE)),
-          color: Colors.white,
+          border: Border.all(color: Theme.of(context).appColors.border),
+          color: Theme.of(context).appColors.card,
           boxShadow: const [
             BoxShadow(
               color: Color(0x0C1C252C),
@@ -377,9 +379,8 @@ class _CalendarGrid extends StatelessWidget {
                 width: 30,
                 height: 30,
                 decoration: BoxDecoration(
-                  color: isSelected
-                      ? const Color(0xFFDBC0F2)
-                      : Colors.transparent,
+                  color:
+                      isSelected ? const Color(0xFFDBC0F2) : Colors.transparent,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 alignment: Alignment.center,
@@ -477,7 +478,7 @@ class _ScheduleCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).appColors.card,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: item.borderColor, width: 1),
         boxShadow: const [
@@ -528,41 +529,41 @@ class _ScheduleCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   Text(
                     item.title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Color(0xFF1B1B1B),
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                       height: 1.2,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Text(
                     item.desc,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Color(0xFF575A66),
+                    style: TextStyle(
+                      color: Theme.of(context).appColors.muted,
                       fontSize: 12,
                       height: 1.4,
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.location_on_outlined,
                         size: 18,
-                        color: Color(0xFF575A66),
+                        color: Theme.of(context).appColors.muted,
                       ),
-                      const SizedBox(width: 6),
+                      SizedBox(width: 6),
                       Expanded(
                         child: Text(
                           item.location,
-                          style: const TextStyle(
-                            color: Color(0xFF575A66),
+                          style: TextStyle(
+                            color: Theme.of(context).appColors.muted,
                             fontSize: 12,
                           ),
                         ),
@@ -601,7 +602,7 @@ class _FloatingActionGroup extends StatelessWidget {
         _MiniFab(icon: Icons.event_note, onTap: onTapCalendar),
         const SizedBox(width: 12),
         _MiniFab(icon: Icons.work_outline, onTap: onTapMiddle),
-        const SizedBox(width: 12),
+        SizedBox(width: 12),
 
         // PLUS (kotak ungu seperti screenshot)
         GestureDetector(
@@ -612,7 +613,7 @@ class _FloatingActionGroup extends StatelessWidget {
             decoration: BoxDecoration(
               color: kPurple,
               borderRadius: BorderRadius.circular(14),
-              boxShadow: const [
+              boxShadow: [
                 BoxShadow(
                   color: Color(0x22000000),
                   blurRadius: 12,
@@ -620,7 +621,8 @@ class _FloatingActionGroup extends StatelessWidget {
                 ),
               ],
             ),
-            child: const Icon(Icons.add, size: 28, color: Colors.white),
+            child: Icon(Icons.add,
+                size: 28, color: Theme.of(context).appColors.card),
           ),
         ),
       ],
@@ -641,8 +643,8 @@ class _MiniFab extends StatelessWidget {
       child: Container(
         width: 44,
         height: 44,
-        decoration: const BoxDecoration(
-          color: Colors.white,
+        decoration: BoxDecoration(
+          color: Theme.of(context).appColors.card,
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(

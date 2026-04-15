@@ -1,13 +1,15 @@
 // keuangan.dart
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
+import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
 
 // ✅ sesuaikan path sesuai struktur kamu
 
 const kPurple = Color(0xFF6B257F);
 
 class FinanceScreen extends StatelessWidget {
-  const FinanceScreen({super.key});
+  FinanceScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,8 @@ class FinanceScreen extends StatelessWidget {
     const totalPiutang = 'Rp 5.120.000';
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F7FB),
+      backgroundColor: Theme.of(context).appColors.bg,
+      bottomNavigationBar: AppBottomNav(activeIndex: 0),
       body: SafeArea(
         child: Column(
           children: [
@@ -49,12 +52,12 @@ class FinanceScreen extends StatelessWidget {
                         icon: Icons.arrow_back_ios_new_rounded,
                         onTap: () => context.pop(),
                       ),
-                      const SizedBox(width: 12),
-                      const Expanded(
+                      SizedBox(width: 12),
+                      Expanded(
                         child: Text(
                           'Keuangan',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Theme.of(context).appColors.card,
                             fontSize: 18,
                             fontWeight: FontWeight.w900,
                           ),
@@ -67,21 +70,28 @@ class FinanceScreen extends StatelessWidget {
                     ],
                   ),
 
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
 
                   // balance card (di dalam header)
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.all(16),
+                    padding: EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.12),
+                      color: Theme.of(context)
+                          .appColors
+                          .card
+                          .withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(18),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+                      border: Border.all(
+                          color: Theme.of(context)
+                              .appColors
+                              .card
+                              .withValues(alpha: 0.12)),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           'Total Balance',
                           style: TextStyle(
                             color: Colors.white70,
@@ -89,18 +99,17 @@ class FinanceScreen extends StatelessWidget {
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                        const SizedBox(height: 6),
-                        const Text(
+                        SizedBox(height: 6),
+                        Text(
                           totalBalance,
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Theme.of(context).appColors.card,
                             fontSize: 26,
                             fontWeight: FontWeight.w900,
                             height: 1.0,
                           ),
                         ),
                         const SizedBox(height: 14),
-
                         Row(
                           children: const [
                             Expanded(
@@ -126,22 +135,29 @@ class FinanceScreen extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(height: 14),
+                  SizedBox(height: 14),
 
                   // target progress + hutang/piutang
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+                    padding: EdgeInsets.fromLTRB(16, 14, 16, 14),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.10),
+                      color: Theme.of(context)
+                          .appColors
+                          .card
+                          .withValues(alpha: 0.10),
                       borderRadius: BorderRadius.circular(18),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+                      border: Border.all(
+                          color: Theme.of(context)
+                              .appColors
+                              .card
+                              .withValues(alpha: 0.12)),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
-                          children: const [
+                          children: [
                             Text(
                               'Target Bulanan',
                               style: TextStyle(
@@ -154,14 +170,14 @@ class FinanceScreen extends StatelessWidget {
                             Text(
                               target,
                               style: TextStyle(
-                                color: Colors.white,
+                                color: Theme.of(context).appColors.card,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w900,
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10),
 
                         // progress bar
                         ClipRRect(
@@ -169,18 +185,21 @@ class FinanceScreen extends StatelessWidget {
                           child: LinearProgressIndicator(
                             value: progressValue,
                             minHeight: 10,
-                            backgroundColor: Colors.white.withValues(alpha: 0.18),
-                            valueColor: const AlwaysStoppedAnimation<Color>(
+                            backgroundColor: Theme.of(context)
+                                .appColors
+                                .card
+                                .withValues(alpha: 0.18),
+                            valueColor: AlwaysStoppedAnimation<Color>(
                               Color(0xFFF1FFF3),
                             ),
                           ),
                         ),
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10),
 
                         Text(
                           '${(progressValue * 100).round()}% dari target, lanjutkan.',
-                          style: const TextStyle(
-                            color: Colors.white,
+                          style: TextStyle(
+                            color: Theme.of(context).appColors.card,
                             fontSize: 13,
                             fontWeight: FontWeight.w700,
                           ),
@@ -220,14 +239,14 @@ class FinanceScreen extends StatelessWidget {
             // ================= BODY =================
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 18),
+                padding: EdgeInsets.fromLTRB(16, 16, 16, 18),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     Text(
                       'Menu Keuangan',
                       style: TextStyle(
-                        color: Color(0xFF24252C),
+                        color: Theme.of(context).appColors.ink,
                         fontSize: 16,
                         fontWeight: FontWeight.w900,
                       ),
@@ -262,11 +281,12 @@ class _HeaderIcon extends StatelessWidget {
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.12),
+          color: Theme.of(context).appColors.card.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+          border: Border.all(
+              color: Theme.of(context).appColors.card.withValues(alpha: 0.12)),
         ),
-        child: Icon(icon, color: Colors.white, size: 20),
+        child: Icon(icon, color: Theme.of(context).appColors.card, size: 20),
       ),
     );
   }
@@ -289,11 +309,12 @@ class _MiniStat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.10),
+        color: Theme.of(context).appColors.card.withValues(alpha: 0.10),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+        border: Border.all(
+            color: Theme.of(context).appColors.card.withValues(alpha: 0.12)),
       ),
       child: Row(
         children: [
@@ -301,10 +322,11 @@ class _MiniStat extends StatelessWidget {
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.14),
+              color: Theme.of(context).appColors.card.withValues(alpha: 0.14),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(icon, color: Colors.white, size: 18),
+            child:
+                Icon(icon, color: Theme.of(context).appColors.card, size: 18),
           ),
           const SizedBox(width: 10),
           Expanded(
@@ -473,9 +495,9 @@ class _FinanceCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(18),
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(14),
+        padding: EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).appColors.card,
           borderRadius: BorderRadius.circular(18),
           boxShadow: const [
             BoxShadow(
@@ -492,12 +514,12 @@ class _FinanceCard extends StatelessWidget {
               width: 44,
               height: 44,
               decoration: BoxDecoration(
-                color: const Color(0xFFF3E4FF),
+                color: Color(0xFFF3E4FF),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Icon(item.icon, color: kPurple, size: 22),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -507,19 +529,19 @@ class _FinanceCard extends StatelessWidget {
                     item.label,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Color(0xFF24252C),
+                    style: TextStyle(
+                      color: Theme.of(context).appColors.ink,
                       fontSize: 14,
                       fontWeight: FontWeight.w900,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Text(
                     item.desc,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Color(0xFF6B7280),
+                    style: TextStyle(
+                      color: Theme.of(context).appColors.muted,
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                     ),

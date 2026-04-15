@@ -3,6 +3,7 @@ import 'package:konveksi_bareng/screens/schedule/shopping_schedule_screen.dart';
 import 'package:konveksi_bareng/screens/schedule/delivery_schedule_screen.dart';
 import 'package:konveksi_bareng/screens/worker/wage_schedule_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:konveksi_bareng/screens/schedule/production_schedule_screen.dart';
 import 'package:konveksi_bareng/screens/project/work_order_screen.dart';
 import 'package:konveksi_bareng/screens/main/home.dart';
@@ -19,7 +20,7 @@ class ScheduleScreen extends StatefulWidget {
 class _ScheduleScreenState extends State<ScheduleScreen> {
   int _selectedIndex = 3; // default: Thu 07 (sesuai desain)
 
-  final List<_DayItem> _days = const [
+  final List<_DayItem> _days = [
     _DayItem(label: 'Mon', date: '02'),
     _DayItem(label: 'Tue', date: '03'),
     _DayItem(label: 'Wed', date: '04'),
@@ -32,7 +33,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
       body: SafeArea(
         child: Column(
           children: [
@@ -74,7 +75,7 @@ class _HeaderBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(
+      padding: EdgeInsets.symmetric(
         horizontal: 24,
       ).copyWith(top: 12, bottom: 8),
       child: Row(
@@ -84,10 +85,10 @@ class _HeaderBar extends StatelessWidget {
             icon: Icons.arrow_back,
             onTap: () => Navigator.pop(context),
           ),
-          const Text(
+          Text(
             'Jadwal',
             style: TextStyle(
-              color: Color(0xFF121111),
+              color: Theme.of(context).appColors.ink,
               fontSize: 16,
               fontWeight: FontWeight.w600,
               height: 1.4,
@@ -98,7 +99,7 @@ class _HeaderBar extends StatelessWidget {
             onTap: () {
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (_) => const HomeScreen()),
+                MaterialPageRoute(builder: (_) => HomeScreen()),
                 (route) => false,
               );
             },
@@ -120,11 +121,11 @@ class _CircleIconButton extends StatelessWidget {
       borderRadius: BorderRadius.circular(32),
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(8),
+        padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(32),
-          border: Border.all(color: const Color(0xFFDFDEDE)),
-          color: Colors.white,
+          border: Border.all(color: Theme.of(context).appColors.border),
+          color: Theme.of(context).appColors.card,
         ),
         child: Icon(
           icon,
@@ -307,7 +308,7 @@ class _JadwalMenuCard extends StatelessWidget {
         if (item.label == 'SPK') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => const WorkOrderScreen()),
+            MaterialPageRoute(builder: (_) => WorkOrderScreen()),
           );
           return;
         }
@@ -316,7 +317,7 @@ class _JadwalMenuCard extends StatelessWidget {
         if (item.label == 'Jadwal Buat') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => const ProductionScheduleScreen()),
+            MaterialPageRoute(builder: (_) => ProductionScheduleScreen()),
           );
           return;
         }
@@ -324,7 +325,7 @@ class _JadwalMenuCard extends StatelessWidget {
         if (item.label == 'Jadwal Belanja') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => const ShoppingScheduleScreen()),
+            MaterialPageRoute(builder: (_) => ShoppingScheduleScreen()),
           );
           return;
         }
@@ -332,7 +333,7 @@ class _JadwalMenuCard extends StatelessWidget {
         if (item.label == 'Jadwal Upah') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => const WageScheduleScreen()),
+            MaterialPageRoute(builder: (_) => WageScheduleScreen()),
           );
           return;
         }
@@ -340,7 +341,7 @@ class _JadwalMenuCard extends StatelessWidget {
         if (item.label == 'Jadwal Kirim') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => const DeliveryScheduleScreen()),
+            MaterialPageRoute(builder: (_) => DeliveryScheduleScreen()),
           );
           return;
         }
@@ -350,7 +351,7 @@ class _JadwalMenuCard extends StatelessWidget {
       child: Container(
         height: 86,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).appColors.card,
           borderRadius: BorderRadius.circular(16),
           boxShadow: const [
             BoxShadow(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/screens/finance/payment_screen.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
+import 'package:konveksi_bareng/finance/pembelian.dart';
 import 'package:konveksi_bareng/services/payment_service.dart';
+import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
 
 const Color kPurple = Color(0xFF6B257F);
 const Color _kBg = Color(0xFFF7F7FB);
@@ -189,25 +191,25 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       if (!mounted) return;
       Navigator.pop(context); // close dialog
 
-      // Navigate to payment status screen
+      // Navigate to purchase/payment status screen
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) => PaymentScreen(order: result),
+          builder: (_) => PurchaseScreen(order: result),
         ),
       );
     } catch (_) {
       if (!mounted) return;
       Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Gagal memproses pembayaran. Coba lagi.')));
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Gagal memproses pembayaran. Coba lagi.')));
     }
   }
 
   void _showPaymentPicker() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
@@ -232,6 +234,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: _kBg,
+      bottomNavigationBar: AppBottomNav(activeIndex: 0),
       body: SafeArea(
         child: Column(
           children: [
@@ -260,11 +263,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       const SizedBox(height: 6),
                     ],
                     const Divider(color: Color(0xFFEEEEEE)),
-                    const SizedBox(height: 16),
-
-                    // Flash deal
-                    const _FlashDealSection(),
-                    const SizedBox(height: 20),
                     const Divider(color: Color(0xFFEEEEEE)),
                     const SizedBox(height: 16),
 
@@ -302,17 +300,17 @@ class _AppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+      padding: EdgeInsets.fromLTRB(16, 12, 16, 8),
       child: Row(
         children: [
           _RoundBtn(
               icon: Icons.arrow_back_ios_new,
               onTap: () => Navigator.pop(context)),
-          const Expanded(
+          Expanded(
             child: Text('Checkout',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    color: Color(0xFF121111),
+                    color: Theme.of(context).appColors.ink,
                     fontSize: 16,
                     fontWeight: FontWeight.w700)),
           ),
@@ -334,13 +332,13 @@ class _RoundBtn extends StatelessWidget {
       borderRadius: BorderRadius.circular(32),
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(8),
+        padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(32),
-          border: Border.all(color: const Color(0xFFDFDEDE)),
-          color: Colors.white,
+          border: Border.all(color: Theme.of(context).appColors.border),
+          color: Theme.of(context).appColors.card,
         ),
-        child: Icon(icon, size: 18, color: const Color(0xFF121111)),
+        child: Icon(icon, size: 18, color: Theme.of(context).appColors.ink),
       ),
     );
   }
@@ -362,12 +360,12 @@ class _SellerHeader extends StatelessWidget {
           decoration: BoxDecoration(
               color: kPurple, borderRadius: BorderRadius.circular(2)),
         ),
-        const SizedBox(width: 8),
-        const Icon(Icons.storefront_outlined, size: 16, color: kPurple),
-        const SizedBox(width: 6),
+        SizedBox(width: 8),
+        Icon(Icons.storefront_outlined, size: 16, color: kPurple),
+        SizedBox(width: 6),
         Text(name,
-            style: const TextStyle(
-                color: Color(0xFF1E232C),
+            style: TextStyle(
+                color: Theme.of(context).appColors.ink,
                 fontSize: 14,
                 fontWeight: FontWeight.w800)),
       ],
@@ -390,11 +388,11 @@ class _CartTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = product;
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).appColors.card,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFEEEEEE)),
+        border: Border.all(color: Theme.of(context).appColors.divider),
       ),
       child: Row(
         children: [
@@ -402,19 +400,20 @@ class _CartTile extends StatelessWidget {
           GestureDetector(
             onTap: onToggle,
             child: AnimatedContainer(
-              duration: const Duration(milliseconds: 150),
+              duration: Duration(milliseconds: 150),
               width: 22,
               height: 22,
               decoration: BoxDecoration(
                 color: p.selected ? kPurple : Colors.white,
                 borderRadius: BorderRadius.circular(6),
                 border: Border.all(
-                  color: p.selected ? kPurple : const Color(0xFFDFDEDE),
+                  color: p.selected ? kPurple : Color(0xFFDFDEDE),
                   width: 1.5,
                 ),
               ),
               child: p.selected
-                  ? const Icon(Icons.check, size: 14, color: Colors.white)
+                  ? Icon(Icons.check,
+                      size: 14, color: Theme.of(context).appColors.card)
                   : null,
             ),
           ),
@@ -431,13 +430,13 @@ class _CartTile extends StatelessWidget {
               errorBuilder: (_, __, ___) => Container(
                 width: 64,
                 height: 64,
-                color: const Color(0xFFF3E4FF),
-                child: const Icon(Icons.image_not_supported_outlined,
+                color: Color(0xFFF3E4FF),
+                child: Icon(Icons.image_not_supported_outlined,
                     color: kPurple, size: 24),
               ),
             ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
 
           // Info
           Expanded(
@@ -445,8 +444,8 @@ class _CartTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(p.nama,
-                    style: const TextStyle(
-                        color: Color(0xFF121111),
+                    style: TextStyle(
+                        color: Theme.of(context).appColors.ink,
                         fontSize: 13,
                         fontWeight: FontWeight.w700)),
                 const SizedBox(height: 2),
@@ -457,7 +456,7 @@ class _CartTile extends StatelessWidget {
                         fontWeight: FontWeight.w500)),
                 const SizedBox(height: 6),
                 Text(_rupiah(p.harga),
-                    style: const TextStyle(
+                    style: TextStyle(
                         color: kPurple,
                         fontSize: 13,
                         fontWeight: FontWeight.w800)),
@@ -473,10 +472,10 @@ class _CartTile extends StatelessWidget {
                   onTap: () {
                     if (p.qty > 1) onQtyChange(p.qty - 1);
                   }),
-              const SizedBox(width: 10),
+              SizedBox(width: 10),
               Text('${p.qty}',
-                  style: const TextStyle(
-                      color: Color(0xFF292526),
+                  style: TextStyle(
+                      color: Theme.of(context).appColors.ink,
                       fontSize: 14,
                       fontWeight: FontWeight.w700)),
               const SizedBox(width: 10),
@@ -504,185 +503,10 @@ class _QtyBtn extends StatelessWidget {
         height: 26,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(32),
-          border: Border.all(color: const Color(0xFFDFDEDE)),
-          color: Colors.white,
+          border: Border.all(color: Theme.of(context).appColors.border),
+          color: Theme.of(context).appColors.card,
         ),
-        child: Icon(icon, size: 14, color: const Color(0xFF292526)),
-      ),
-    );
-  }
-}
-
-// ── Flash deal ────────────────────────────────────────────────────────────────
-
-class _FlashDealSection extends StatelessWidget {
-  const _FlashDealSection();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            const Text('Flash Deal',
-                style: TextStyle(
-                    color: Color(0xFF121111),
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700)),
-            const SizedBox(width: 8),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(
-                  color: const Color(0x1FEB6383),
-                  borderRadius: BorderRadius.circular(20)),
-              child: const Text('10:20:35',
-                  style: TextStyle(
-                      color: Color(0xFFEB6383),
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700)),
-            ),
-            const Spacer(),
-            const Text('Lihat Semua',
-                style: TextStyle(
-                    color: kPurple, fontSize: 12, fontWeight: FontWeight.w700)),
-          ],
-        ),
-        const SizedBox(height: 12),
-        SizedBox(
-          height: 210,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: const [
-              _FlashCard(
-                imagePath: 'assets/images/nike.jpg',
-                nama: 'Sportswear Club',
-                model: 'Nike Sports T-Shirt',
-                harga: 548000,
-                hargaCoret: 600000,
-                rating: 4.8,
-              ),
-              SizedBox(width: 14),
-              _FlashCard(
-                imagePath: 'assets/images/adidas.jpg',
-                nama: 'Originals Trefoil',
-                model: 'Adidas Sports T-Shirt',
-                harga: 691000,
-                hargaCoret: 769000,
-                rating: 4.8,
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _FlashCard extends StatelessWidget {
-  final String imagePath;
-  final String nama;
-  final String model;
-  final int harga;
-  final int hargaCoret;
-  final double rating;
-
-  const _FlashCard({
-    required this.imagePath,
-    required this.nama,
-    required this.model,
-    required this.harga,
-    required this.hargaCoret,
-    required this.rating,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 160,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            height: 120,
-            decoration: BoxDecoration(
-                color: const Color(0xFFF6F4F0),
-                borderRadius: BorderRadius.circular(14)),
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(14),
-                    child: Image.asset(imagePath, fit: BoxFit.cover),
-                  ),
-                ),
-                Positioned(
-                  right: 8,
-                  top: 8,
-                  child: Container(
-                    width: 26,
-                    height: 26,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20)),
-                    child: const Icon(Icons.favorite_border,
-                        size: 14, color: kPurple),
-                  ),
-                ),
-                Positioned(
-                  left: 8,
-                  bottom: 8,
-                  child: Row(
-                    children: [
-                      const Icon(Icons.star, size: 14, color: Colors.amber),
-                      const SizedBox(width: 3),
-                      Text(rating.toString(),
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 11,
-                              fontWeight: FontWeight.w700)),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  right: 8,
-                  bottom: 8,
-                  child: Container(
-                    width: 28,
-                    height: 28,
-                    decoration: BoxDecoration(
-                        color: kPurple,
-                        borderRadius: BorderRadius.circular(20)),
-                    child: const Icon(Icons.add_shopping_cart,
-                        size: 14, color: Colors.white),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(nama,
-              style:
-                  const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
-          Text(model,
-              style: const TextStyle(fontSize: 11, color: Color(0xFF7A7E86))),
-          const SizedBox(height: 4),
-          Row(
-            children: [
-              Text(_rupiah(harga),
-                  style: const TextStyle(
-                      color: kPurple,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w800)),
-              const SizedBox(width: 6),
-              Text(_rupiah(hargaCoret),
-                  style: const TextStyle(
-                      color: Color(0xFF7A7E86),
-                      fontSize: 11,
-                      decoration: TextDecoration.lineThrough)),
-            ],
-          ),
-        ],
+        child: Icon(icon, size: 14, color: Theme.of(context).appColors.ink),
       ),
     );
   }
@@ -700,19 +524,19 @@ class _PaymentSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Metode Pembayaran',
+        Text('Metode Pembayaran',
             style: TextStyle(
-                color: Color(0xFF121111),
+                color: Theme.of(context).appColors.ink,
                 fontSize: 14,
                 fontWeight: FontWeight.w700)),
-        const SizedBox(height: 10),
+        SizedBox(height: 10),
         InkWell(
           borderRadius: BorderRadius.circular(12),
           onTap: onTap,
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+            padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).appColors.card,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
                   color: selected != null ? kPurple : const Color(0xFFDFDEDE)),
@@ -730,18 +554,18 @@ class _PaymentSection extends StatelessWidget {
                     child:
                         Icon(selected!.icon, color: selected!.color, size: 20),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(selected!.label,
-                            style: const TextStyle(
-                                color: Color(0xFF121111),
+                            style: TextStyle(
+                                color: Theme.of(context).appColors.ink,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w700)),
                         Text(selected!.group,
-                            style: const TextStyle(
+                            style: TextStyle(
                                 color: Color(0xFF787676),
                                 fontSize: 11,
                                 fontWeight: FontWeight.w500)),
@@ -749,10 +573,10 @@ class _PaymentSection extends StatelessWidget {
                     ),
                   ),
                 ] else ...[
-                  const Icon(Icons.payment_outlined,
+                  Icon(Icons.payment_outlined,
                       color: Color(0xFF9E9E9E), size: 22),
-                  const SizedBox(width: 12),
-                  const Expanded(
+                  SizedBox(width: 12),
+                  Expanded(
                     child: Text('Pilih metode pembayaran',
                         style: TextStyle(
                             color: Color(0xFF9E9E9E),
@@ -760,7 +584,8 @@ class _PaymentSection extends StatelessWidget {
                             fontWeight: FontWeight.w500)),
                   ),
                 ],
-                const Icon(Icons.keyboard_arrow_down, color: Color(0xFF292526)),
+                Icon(Icons.keyboard_arrow_down,
+                    color: Theme.of(context).appColors.ink),
               ],
             ),
           ),
@@ -789,7 +614,7 @@ class _PaymentPickerSheet extends StatelessWidget {
       children: [
         // Fixed handle + title
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
+          padding: EdgeInsets.fromLTRB(16, 14, 16, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -798,14 +623,14 @@ class _PaymentPickerSheet extends StatelessWidget {
                   width: 40,
                   height: 4,
                   decoration: BoxDecoration(
-                      color: const Color(0xFFE0E0E0),
+                      color: Color(0xFFE0E0E0),
                       borderRadius: BorderRadius.circular(2)),
                 ),
               ),
-              const SizedBox(height: 14),
-              const Text('Pilih Metode Pembayaran',
+              SizedBox(height: 14),
+              Text('Pilih Metode Pembayaran',
                   style: TextStyle(
-                      color: Color(0xFF121111),
+                      color: Theme.of(context).appColors.ink,
                       fontSize: 15,
                       fontWeight: FontWeight.w800)),
               const SizedBox(height: 14),
@@ -906,9 +731,9 @@ class _SummarySection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Ringkasan Pesanan',
+        Text('Ringkasan Pesanan',
             style: TextStyle(
-                color: Color(0xFF121111),
+                color: Theme.of(context).appColors.ink,
                 fontSize: 14,
                 fontWeight: FontWeight.w700)),
         const SizedBox(height: 12),
@@ -943,7 +768,7 @@ class _SummaryRow extends StatelessWidget {
             style: const TextStyle(color: Color(0xFF787676), fontSize: 13)),
         Text(value,
             style: TextStyle(
-                color: bold ? kPurple : const Color(0xFF121111),
+                color: bold ? kPurple : Color(0xFF121111),
                 fontSize: bold ? 15 : 13,
                 fontWeight: bold ? FontWeight.w800 : FontWeight.w600)),
       ],
@@ -961,9 +786,9 @@ class _PayBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      padding: EdgeInsets.fromLTRB(16, 12, 16, 16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).appColors.card,
         border: Border(top: BorderSide(color: Color(0xFFEEEEEE))),
       ),
       child: Row(
@@ -979,13 +804,13 @@ class _PayBar extends StatelessWidget {
                       fontWeight: FontWeight.w500)),
               const SizedBox(height: 2),
               Text(_rupiah(total),
-                  style: const TextStyle(
+                  style: TextStyle(
                       color: kPurple,
                       fontSize: 16,
                       fontWeight: FontWeight.w900)),
             ],
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: 16),
           Expanded(
             child: SizedBox(
               height: 50,
@@ -997,9 +822,9 @@ class _PayBar extends StatelessWidget {
                   elevation: 0,
                 ),
                 onPressed: onPay,
-                child: const Text('Bayar Sekarang',
+                child: Text('Bayar Sekarang',
                     style: TextStyle(
-                        color: Colors.white,
+                        color: Theme.of(context).appColors.card,
                         fontSize: 14,
                         fontWeight: FontWeight.w700)),
               ),
@@ -1021,11 +846,11 @@ class _ProcessingDialog extends StatelessWidget {
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 32),
+        padding: EdgeInsets.symmetric(horizontal: 28, vertical: 32),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const SizedBox(
+            SizedBox(
               width: 56,
               height: 56,
               child: CircularProgressIndicator(
@@ -1033,11 +858,11 @@ class _ProcessingDialog extends StatelessWidget {
                 strokeWidth: 3,
               ),
             ),
-            const SizedBox(height: 20),
-            const Text(
+            SizedBox(height: 20),
+            Text(
               'Memproses Pembayaran',
               style: TextStyle(
-                  color: Color(0xFF121111),
+                  color: Theme.of(context).appColors.ink,
                   fontSize: 15,
                   fontWeight: FontWeight.w800),
             ),

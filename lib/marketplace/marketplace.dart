@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:konveksi_bareng/screens/main/home.dart'; // pastikan file home.dart kamu ada dan class-nya HomeScreen
 
 const kPurple = Color(0xFF6B257F);
@@ -100,20 +101,20 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
     }).toList();
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
       body: SafeArea(
         child: Column(
           children: [
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
 
             // ===== TOP ROW: back + search + home + notif + avatar =====
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
                   _CircleIconButton(
                     icon: Icons.arrow_back_ios_new,
-                    iconColor: const Color(0xFF1E232C),
+                    iconColor: Theme.of(context).appColors.ink,
                     onTap: () => Navigator.pop(context),
                   ),
                   const SizedBox(width: 10),
@@ -137,7 +138,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                     onTap: () {
                       Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (_) => const HomeScreen()),
+                        MaterialPageRoute(builder: (_) => HomeScreen()),
                         (route) => false,
                       );
                     },
@@ -152,7 +153,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                       );
                     },
                   ),
-                  const SizedBox(width: 10),
+                  SizedBox(width: 10),
                   const _AvatarCircle(
                     url: 'https://picsum.photos/seed/me/120/120',
                   ),
@@ -160,18 +161,18 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
               ),
             ),
 
-            const SizedBox(height: 14),
+            SizedBox(height: 14),
 
             // ===== TITLE + Action =====
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     child: Text(
                       'Marketplace',
                       style: TextStyle(
-                        color: Color(0xFF1E232C),
+                        color: Theme.of(context).appColors.ink,
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
                       ),
@@ -330,9 +331,9 @@ class _CircleIconButton extends StatelessWidget {
         height: 44,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).appColors.card,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
+          border: Border.all(color: Theme.of(context).appColors.border),
         ),
         child: Icon(icon, size: 20, color: iconColor),
       ),
@@ -416,10 +417,10 @@ class _IconPill extends StatelessWidget {
         height: 44,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: const Color(0xFFF0F0F0),
+          color: Color(0xFFF0F0F0),
           borderRadius: BorderRadius.circular(16),
         ),
-        child: Icon(icon, size: 22, color: const Color(0xFF010101)),
+        child: Icon(icon, size: 22, color: Theme.of(context).appColors.ink),
       ),
     );
   }
@@ -453,10 +454,10 @@ class _PromoBanner extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: 110,
-        padding: const EdgeInsets.all(14),
+        padding: EdgeInsets.all(14),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          gradient: const LinearGradient(
+          gradient: LinearGradient(
             begin: Alignment(0.05, 0.10),
             end: Alignment(1.27, 1.27),
             colors: [Color(0xFF9F82AD), Color(0x3FEBD4F3)],
@@ -468,11 +469,11 @@ class _PromoBanner extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   Text(
                     'Promo Mingguan',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Theme.of(context).appColors.card,
                       fontSize: 16,
                       fontWeight: FontWeight.w800,
                     ),
@@ -481,7 +482,7 @@ class _PromoBanner extends StatelessWidget {
                   Text(
                     'Diskon sampai 30% + gratis ongkir.\nCek produk pilihan hari ini.',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Theme.of(context).appColors.card,
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
                       height: 1.3,
@@ -494,13 +495,13 @@ class _PromoBanner extends StatelessWidget {
               width: 82,
               height: 82,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.22),
+                color: Theme.of(context).appColors.card.withValues(alpha: 0.22),
                 borderRadius: BorderRadius.circular(16),
               ),
               alignment: Alignment.center,
-              child: const Icon(
+              child: Icon(
                 Icons.local_offer_outlined,
-                color: Colors.white,
+                color: Theme.of(context).appColors.card,
                 size: 34,
               ),
             ),
@@ -576,9 +577,9 @@ class _ProductCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).appColors.card,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
+          border: Border.all(color: Theme.of(context).appColors.border),
           boxShadow: const [
             BoxShadow(
               color: Color(0x0CB3B3B3),
@@ -594,7 +595,7 @@ class _ProductCard extends StatelessWidget {
             Stack(
               children: [
                 ClipRRect(
-                  borderRadius: const BorderRadius.vertical(
+                  borderRadius: BorderRadius.vertical(
                     top: Radius.circular(16),
                   ),
                   child: Image.network(
@@ -614,9 +615,9 @@ class _ProductCard extends StatelessWidget {
                       width: 34,
                       height: 34,
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.9),
+                        color: Theme.of(context).appColors.card.withValues(alpha: 0.9),
                         borderRadius: BorderRadius.circular(999),
-                        border: Border.all(color: const Color(0xFFE8ECF4)),
+                        border: Border.all(color: Theme.of(context).appColors.border),
                       ),
                       alignment: Alignment.center,
                       child: const Icon(
@@ -632,7 +633,7 @@ class _ProductCard extends StatelessWidget {
                     left: 10,
                     top: 10,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(
+                      padding: EdgeInsets.symmetric(
                         horizontal: 10,
                         vertical: 6,
                       ),
@@ -642,8 +643,8 @@ class _ProductCard extends StatelessWidget {
                       ),
                       child: Text(
                         product.promoText!,
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: Theme.of(context).appColors.card,
                           fontSize: 10.5,
                           fontWeight: FontWeight.w800,
                         ),
@@ -655,7 +656,7 @@ class _ProductCard extends StatelessWidget {
 
             // content
             Padding(
-              padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+              padding: EdgeInsets.fromLTRB(12, 10, 12, 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -663,20 +664,20 @@ class _ProductCard extends StatelessWidget {
                     product.title,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Color(0xFF1E232C),
+                    style: TextStyle(
+                      color: Theme.of(context).appColors.ink,
                       fontSize: 13,
                       fontWeight: FontWeight.w800,
                       height: 1.2,
                     ),
                   ),
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6),
                   Text(
                     product.store,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Color(0xFF6A707C),
+                    style: TextStyle(
+                      color: Theme.of(context).appColors.muted,
                       fontSize: 11.5,
                       fontWeight: FontWeight.w600,
                     ),
@@ -684,37 +685,37 @@ class _ProductCard extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     _rupiah(product.price),
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: kPurple,
                       fontSize: 13,
                       fontWeight: FontWeight.w900,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.star_rounded,
                         size: 18,
                         color: Color(0xFFFFC107),
                       ),
-                      const SizedBox(width: 4),
+                      SizedBox(width: 4),
                       Text(
                         product.rating.toStringAsFixed(1),
-                        style: const TextStyle(
-                          color: Color(0xFF1E232C),
+                        style: TextStyle(
+                          color: Theme.of(context).appColors.ink,
                           fontSize: 11.5,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8),
                       Expanded(
                         child: Text(
                           '• ${product.sold} terjual',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            color: Color(0xFF6A707C),
+                          style: TextStyle(
+                            color: Theme.of(context).appColors.muted,
                             fontSize: 11.5,
                             fontWeight: FontWeight.w600,
                           ),

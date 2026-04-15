@@ -1,5 +1,6 @@
 // lib/pages/pengiriman.dart
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:konveksi_bareng/screens/main/home.dart';
 
 const kPurple = Color(0xFF6B257F);
@@ -94,7 +95,7 @@ class _ShipmentScreenState extends State<ShipmentScreen> {
     }).toList();
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
       body: SafeArea(
         child: Column(
           children: [
@@ -129,7 +130,7 @@ class _ShipmentScreenState extends State<ShipmentScreen> {
                     onTap: () {
                       Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (_) => const HomeScreen()),
+                        MaterialPageRoute(builder: (_) => HomeScreen()),
                         (route) => false,
                       );
                     },
@@ -138,17 +139,17 @@ class _ShipmentScreenState extends State<ShipmentScreen> {
               ),
             ),
 
-            const SizedBox(height: 14),
+            SizedBox(height: 14),
 
             // ===== TITLE =====
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'Pengiriman',
                   style: TextStyle(
-                    color: Color(0xFF1E232C),
+                    color: Theme.of(context).appColors.ink,
                     fontSize: 22,
                     fontWeight: FontWeight.w800,
                   ),
@@ -339,15 +340,15 @@ class _SearchPill extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 44,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: const Color(0xFFF0F0F0),
+        color: Color(0xFFF0F0F0),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
         children: [
-          const Icon(Icons.search, size: 20, color: Color(0xFF010101)),
-          const SizedBox(width: 8),
+          Icon(Icons.search, size: 20, color: Color(0xFF010101)),
+          SizedBox(width: 8),
           Expanded(
             child: TextField(
               controller: controller,
@@ -355,8 +356,8 @@ class _SearchPill extends StatelessWidget {
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: hint,
-                hintStyle: const TextStyle(
-                  color: Color(0xFF6A707C),
+                hintStyle: TextStyle(
+                  color: Theme.of(context).appColors.muted,
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                 ),
@@ -436,11 +437,11 @@ class _ShipmentCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(12),
+        padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).appColors.card,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
+          border: Border.all(color: Theme.of(context).appColors.border),
           boxShadow: const [
             BoxShadow(
               color: Color(0x0CB3B3B3),
@@ -463,7 +464,7 @@ class _ShipmentCard extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                 ),
-                const SizedBox(width: 10),
+                SizedBox(width: 10),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -475,8 +476,8 @@ class _ShipmentCard extends StatelessWidget {
                               item.title,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                color: Color(0xFF1E232C),
+                              style: TextStyle(
+                                color: Theme.of(context).appColors.ink,
                                 fontSize: 13.5,
                                 fontWeight: FontWeight.w800,
                               ),
@@ -506,22 +507,22 @@ class _ShipmentCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 6),
+                      SizedBox(height: 6),
                       Text(
                         item.store,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: Color(0xFF6A707C),
+                        style: TextStyle(
+                          color: Theme.of(context).appColors.muted,
                           fontSize: 11.5,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8),
                       Text(
                         item.etaText,
-                        style: const TextStyle(
-                          color: Color(0xFF6A707C),
+                        style: TextStyle(
+                          color: Theme.of(context).appColors.muted,
                           fontSize: 11.5,
                           fontWeight: FontWeight.w600,
                         ),
@@ -531,51 +532,51 @@ class _ShipmentCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
 
             // Resi row
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               decoration: BoxDecoration(
-                color: const Color(0xFFF6F7F8),
+                color: Theme.of(context).appColors.iconSurface,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFFE8ECF4)),
+                border: Border.all(color: Theme.of(context).appColors.border),
               ),
               child: Row(
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.local_shipping_outlined,
                     size: 18,
                     color: kPurple,
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       '${item.courier} ${item.service} • ${item.resi}',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: Color(0xFF1E232C),
+                      style: TextStyle(
+                        color: Theme.of(context).appColors.ink,
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   InkWell(
                     borderRadius: BorderRadius.circular(10),
                     onTap: onCopyResi,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(
+                      padding: EdgeInsets.symmetric(
                         horizontal: 10,
                         vertical: 8,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Theme.of(context).appColors.card,
                         borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: const Color(0xFFE8ECF4)),
+                        border: Border.all(color: Theme.of(context).appColors.border),
                       ),
-                      child: const Text(
+                      child: Text(
                         'Salin',
                         style: TextStyle(
                           color: kPurple,
@@ -589,17 +590,17 @@ class _ShipmentCard extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
 
             Row(
-              children: const [
-                Icon(Icons.info_outline, size: 16, color: Color(0xFF6A707C)),
+              children: [
+                Icon(Icons.info_outline, size: 16, color: Theme.of(context).appColors.muted),
                 SizedBox(width: 6),
                 Expanded(
                   child: Text(
                     'Ketuk kartu untuk melihat tracking.',
                     style: TextStyle(
-                      color: Color(0xFF6A707C),
+                      color: Theme.of(context).appColors.muted,
                       fontSize: 11.5,
                       fontWeight: FontWeight.w600,
                     ),
@@ -623,8 +624,8 @@ class _TrackingSheet extends StatelessWidget {
     return Container(
       color: Colors.transparent,
       child: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
+        decoration: BoxDecoration(
+          color: Theme.of(context).appColors.card,
           borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
         ),
         child: SafeArea(
@@ -639,19 +640,19 @@ class _TrackingSheet extends StatelessWidget {
                     width: 44,
                     height: 5,
                     decoration: BoxDecoration(
-                      color: const Color(0xFFE6E6E6),
+                      color: Color(0xFFE6E6E6),
                       borderRadius: BorderRadius.circular(100),
                     ),
                   ),
                 ),
-                const SizedBox(height: 14),
+                SizedBox(height: 14),
                 Row(
                   children: [
                     Expanded(
                       child: Text(
                         'Tracking',
-                        style: const TextStyle(
-                          color: Color(0xFF1E232C),
+                        style: TextStyle(
+                          color: Theme.of(context).appColors.ink,
                           fontSize: 16,
                           fontWeight: FontWeight.w900,
                         ),
@@ -661,17 +662,17 @@ class _TrackingSheet extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                       onTap: () => Navigator.pop(context),
                       child: Container(
-                        padding: const EdgeInsets.all(8),
+                        padding: EdgeInsets.all(8),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: const Color(0xFFE8ECF4)),
+                          border: Border.all(color: Theme.of(context).appColors.border),
                         ),
-                        child: const Icon(Icons.close, size: 18),
+                        child: Icon(Icons.close, size: 18),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
 
                 _InfoTile(
                   title: item.title,
@@ -680,12 +681,12 @@ class _TrackingSheet extends StatelessWidget {
                   statusColor: item.statusColor,
                 ),
 
-                const SizedBox(height: 14),
+                SizedBox(height: 14),
 
-                const Text(
+                Text(
                   'Riwayat Pengiriman',
                   style: TextStyle(
-                    color: Color(0xFF1E232C),
+                    color: Theme.of(context).appColors.ink,
                     fontSize: 13.5,
                     fontWeight: FontWeight.w900,
                   ),
@@ -718,11 +719,11 @@ class _InfoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).appColors.card,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE8ECF4)),
+        border: Border.all(color: Theme.of(context).appColors.border),
         boxShadow: const [
           BoxShadow(
             color: Color(0x0CB3B3B3),
@@ -741,13 +742,13 @@ class _InfoTile extends StatelessWidget {
               borderRadius: BorderRadius.circular(14),
             ),
             alignment: Alignment.center,
-            child: const Icon(
+            child: Icon(
               Icons.local_shipping_outlined,
               color: kPurple,
               size: 22,
             ),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -756,19 +757,19 @@ class _InfoTile extends StatelessWidget {
                   title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: Color(0xFF1E232C),
+                  style: TextStyle(
+                    color: Theme.of(context).appColors.ink,
                     fontSize: 13.5,
                     fontWeight: FontWeight.w900,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   subtitle,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: Color(0xFF6A707C),
+                  style: TextStyle(
+                    color: Theme.of(context).appColors.muted,
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                   ),
@@ -824,9 +825,9 @@ class _Timeline extends StatelessWidget {
                   Container(
                     width: 10,
                     height: 10,
-                    margin: const EdgeInsets.only(top: 2),
+                    margin: EdgeInsets.only(top: 2),
                     decoration: BoxDecoration(
-                      color: isFirst ? kPurple : const Color(0xFFCBD5E1),
+                      color: isFirst ? kPurple : Color(0xFFCBD5E1),
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -834,24 +835,24 @@ class _Timeline extends StatelessWidget {
                     Container(
                       width: 2,
                       height: 44,
-                      margin: const EdgeInsets.only(top: 2),
+                      margin: EdgeInsets.only(top: 2),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFE8ECF4),
+                        color: Theme.of(context).appColors.border,
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                 ],
               ),
             ),
-            const SizedBox(width: 10),
+            SizedBox(width: 10),
             Expanded(
               child: Container(
-                margin: const EdgeInsets.only(bottom: 12),
-                padding: const EdgeInsets.all(12),
+                margin: EdgeInsets.only(bottom: 12),
+                padding: EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF6F7F8),
+                  color: Theme.of(context).appColors.iconSurface,
                   borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: const Color(0xFFE8ECF4)),
+                  border: Border.all(color: Theme.of(context).appColors.border),
                 ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -862,17 +863,17 @@ class _Timeline extends StatelessWidget {
                         children: [
                           Text(
                             e.title,
-                            style: const TextStyle(
-                              color: Color(0xFF1E232C),
+                            style: TextStyle(
+                              color: Theme.of(context).appColors.ink,
                               fontSize: 12.5,
                               fontWeight: FontWeight.w900,
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          SizedBox(height: 4),
                           Text(
                             e.location,
-                            style: const TextStyle(
-                              color: Color(0xFF6A707C),
+                            style: TextStyle(
+                              color: Theme.of(context).appColors.muted,
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                             ),
@@ -880,11 +881,11 @@ class _Timeline extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    SizedBox(width: 10),
                     Text(
                       e.time,
-                      style: const TextStyle(
-                        color: Color(0xFF6A707C),
+                      style: TextStyle(
+                        color: Theme.of(context).appColors.muted,
                         fontSize: 12,
                         fontWeight: FontWeight.w800,
                       ),
@@ -926,35 +927,35 @@ class _EmptyState extends StatelessWidget {
                 borderRadius: BorderRadius.circular(18),
               ),
               alignment: Alignment.center,
-              child: const Icon(
+              child: Icon(
                 Icons.local_shipping_outlined,
                 color: kPurple,
                 size: 30,
               ),
             ),
-            const SizedBox(height: 14),
+            SizedBox(height: 14),
             Text(
               msg,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Color(0xFF6A707C),
+              style: TextStyle(
+                color: Theme.of(context).appColors.muted,
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
                 height: 1.35,
               ),
             ),
-            const SizedBox(height: 14),
+            SizedBox(height: 14),
             InkWell(
               borderRadius: BorderRadius.circular(12),
               onTap: onReset,
               child: Container(
-                padding: const EdgeInsets.symmetric(
+                padding: EdgeInsets.symmetric(
                   horizontal: 14,
                   vertical: 10,
                 ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: const Color(0xFFE8ECF4)),
+                  border: Border.all(color: Theme.of(context).appColors.border),
                 ),
                 child: const Text(
                   'Reset',

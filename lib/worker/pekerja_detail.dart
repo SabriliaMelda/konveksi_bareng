@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:konveksi_bareng/screens/project/project_detail_screen.dart';
 
 const kPurple = Color(0xFF6B257F);
@@ -9,7 +10,7 @@ class WorkerDetailScreen extends StatelessWidget {
   final String? avatarAsset;
   final List<String> projects;
 
-  const WorkerDetailScreen({
+  WorkerDetailScreen({
     super.key,
     required this.nama,
     required this.role,
@@ -20,23 +21,23 @@ class WorkerDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F7FB),
+      backgroundColor: Theme.of(context).appColors.bg,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).appColors.card,
         foregroundColor: Colors.black87,
         elevation: 0.6,
         title: Text(nama),
       ),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 14, 16, 18),
+        padding: EdgeInsets.fromLTRB(16, 14, 16, 18),
         children: [
           _ProfileCard(nama: nama, role: role, avatarAsset: avatarAsset),
-          const SizedBox(height: 14),
+          SizedBox(height: 14),
 
-          const Text(
+          Text(
             'Sedang mengerjakan',
             style: TextStyle(
-              color: Color(0xFF24252C),
+              color: Theme.of(context).appColors.ink,
               fontSize: 14,
               fontWeight: FontWeight.w900,
             ),
@@ -81,11 +82,11 @@ class _ProfileCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).appColors.card,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE8ECF4)),
+        border: Border.all(color: Theme.of(context).appColors.border),
         boxShadow: const [
           BoxShadow(
             color: Color(0x14000000),
@@ -97,26 +98,26 @@ class _ProfileCard extends StatelessWidget {
       child: Row(
         children: [
           _Avatar(asset: avatarAsset, name: nama),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   nama,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w900,
-                    color: Color(0xFF111111),
+                    color: Theme.of(context).appColors.ink,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   role,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
-                    color: Color(0xFF6B7280),
+                    color: Theme.of(context).appColors.muted,
                   ),
                 ),
               ],
@@ -160,11 +161,11 @@ class _ProjectTile extends StatelessWidget {
       borderRadius: BorderRadius.circular(14),
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).appColors.card,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
+          border: Border.all(color: Theme.of(context).appColors.border),
         ),
         child: Row(
           children: [
@@ -172,23 +173,23 @@ class _ProjectTile extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: const Color(0xFFF3E4FF),
+                color: Color(0xFFF3E4FF),
                 borderRadius: BorderRadius.circular(10),
               ),
               alignment: Alignment.center,
-              child: const Icon(Icons.folder_outlined, color: kPurple),
+              child: Icon(Icons.folder_outlined, color: kPurple),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w800,
-                      color: Color(0xFF111111),
+                      color: Theme.of(context).appColors.ink,
                     ),
                   ),
                   const SizedBox(height: 2),

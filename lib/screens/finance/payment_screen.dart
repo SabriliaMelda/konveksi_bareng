@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:konveksi_bareng/screens/main/home.dart';
 import 'package:konveksi_bareng/services/payment_service.dart';
 
@@ -218,7 +219,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             _Header(
               onHomeTap: () => Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (_) => const HomeScreen()),
+                MaterialPageRoute(builder: (_) => HomeScreen()),
                 (r) => false,
               ),
             ),
@@ -290,8 +291,8 @@ class _Header extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-      decoration: const BoxDecoration(
+      padding: EdgeInsets.fromLTRB(16, 12, 16, 16),
+      decoration: BoxDecoration(
         color: kPurple,
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(24),
@@ -303,11 +304,11 @@ class _Header extends StatelessWidget {
           _HeaderIcon(
               icon: Icons.arrow_back_ios_new_rounded,
               onTap: () => Navigator.pop(context)),
-          const SizedBox(width: 12),
-          const Expanded(
+          SizedBox(width: 12),
+          Expanded(
             child: Text('Status Pembayaran',
                 style: TextStyle(
-                    color: Colors.white,
+                    color: Theme.of(context).appColors.card,
                     fontSize: 18,
                     fontWeight: FontWeight.w900)),
           ),
@@ -332,11 +333,11 @@ class _HeaderIcon extends StatelessWidget {
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.12),
+          color: Theme.of(context).appColors.card.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+          border: Border.all(color: Theme.of(context).appColors.card.withValues(alpha: 0.12)),
         ),
-        child: Icon(icon, color: Colors.white, size: 20),
+        child: Icon(icon, color: Theme.of(context).appColors.card, size: 20),
       ),
     );
   }
@@ -357,9 +358,9 @@ class _StatusCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final cfg = _statusConfig(status);
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).appColors.card,
         borderRadius: BorderRadius.circular(18),
         boxShadow: const [
           BoxShadow(
@@ -377,7 +378,7 @@ class _StatusCard extends StatelessWidget {
                 color: cfg.iconBg, borderRadius: BorderRadius.circular(14)),
             child: Icon(cfg.icon, color: cfg.iconColor, size: 24),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -387,10 +388,10 @@ class _StatusCard extends StatelessWidget {
                         color: cfg.iconColor,
                         fontSize: 14,
                         fontWeight: FontWeight.w900)),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(cfg.subtitle,
-                    style: const TextStyle(
-                        color: Color(0xFF6B7280),
+                    style: TextStyle(
+                        color: Theme.of(context).appColors.muted,
                         fontSize: 11.5,
                         fontWeight: FontWeight.w600,
                         height: 1.45)),
@@ -504,14 +505,14 @@ class _OrderInfoCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const _SectionTitle(title: 'Detail Pesanan'),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           _InfoRow(label: 'Order ID', value: order.orderId),
           _InfoRow(label: 'Tanggal', value: _fmtDate(order.createdAt)),
           _InfoRow(label: 'Jumlah Item', value: '$totalItems item'),
-          const Divider(color: Color(0xFFEEEEEE), height: 20),
+          Divider(color: Color(0xFFEEEEEE), height: 20),
           for (final item in order.items)
             Padding(
-              padding: const EdgeInsets.only(bottom: 8),
+              padding: EdgeInsets.only(bottom: 8),
               child: Row(
                 children: [
                   Expanded(
@@ -519,8 +520,8 @@ class _OrderInfoCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(item.nama,
-                            style: const TextStyle(
-                                color: Color(0xFF24252C),
+                            style: TextStyle(
+                                color: Theme.of(context).appColors.ink,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w700)),
                         Text('${item.model} • ${item.seller}',
@@ -565,25 +566,25 @@ class _PaymentMethodCard extends StatelessWidget {
             width: 42,
             height: 42,
             decoration: BoxDecoration(
-              color: const Color(0xFFF3E4FF),
+              color: Color(0xFFF3E4FF),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Icon(Icons.payment_rounded, color: kPurple, size: 22),
+            child: Icon(Icons.payment_rounded, color: kPurple, size: 22),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Metode Pembayaran',
+                Text('Metode Pembayaran',
                     style: TextStyle(
-                        color: Color(0xFF6B7280),
+                        color: Theme.of(context).appColors.muted,
                         fontSize: 11,
                         fontWeight: FontWeight.w600)),
-                const SizedBox(height: 2),
+                SizedBox(height: 2),
                 Text(method,
-                    style: const TextStyle(
-                        color: Color(0xFF24252C),
+                    style: TextStyle(
+                        color: Theme.of(context).appColors.ink,
                         fontSize: 14,
                         fontWeight: FontWeight.w800)),
               ],
@@ -689,15 +690,15 @@ class _TimelineItem extends StatelessWidget {
     switch (step.state) {
       case _StepState.done:
         dotColor = kPurple;
-        dotChild = const Icon(Icons.check, size: 11, color: Colors.white);
+        dotChild = Icon(Icons.check, size: 11, color: Theme.of(context).appColors.card);
         break;
       case _StepState.active:
-        dotColor = const Color(0xFFF59E0B);
-        dotChild = const Icon(Icons.more_horiz, size: 11, color: Colors.white);
+        dotColor = Color(0xFFF59E0B);
+        dotChild = Icon(Icons.more_horiz, size: 11, color: Theme.of(context).appColors.card);
         break;
       case _StepState.failed:
-        dotColor = const Color(0xFFDC2626);
-        dotChild = const Icon(Icons.close, size: 11, color: Colors.white);
+        dotColor = Color(0xFFDC2626);
+        dotChild = Icon(Icons.close, size: 11, color: Theme.of(context).appColors.card);
         break;
       case _StepState.pending:
         dotColor = const Color(0xFFD1D5DB);
@@ -720,26 +721,26 @@ class _TimelineItem extends StatelessWidget {
               Container(width: 2, height: 32, color: const Color(0xFFE5E7EB)),
           ],
         ),
-        const SizedBox(width: 10),
+        SizedBox(width: 10),
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.only(top: 1, bottom: 4),
+            padding: EdgeInsets.only(top: 1, bottom: 4),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(step.title,
                     style: TextStyle(
                         color: step.state == _StepState.active
-                            ? const Color(0xFFF59E0B)
+                            ? Color(0xFFF59E0B)
                             : step.state == _StepState.failed
-                                ? const Color(0xFFDC2626)
-                                : const Color(0xFF24252C),
+                                ? Color(0xFFDC2626)
+                                : Color(0xFF24252C),
                         fontSize: 12.5,
                         fontWeight: FontWeight.w800)),
-                const SizedBox(height: 2),
+                SizedBox(height: 2),
                 Text(step.subtitle,
-                    style: const TextStyle(
-                        color: Color(0xFF6B7280),
+                    style: TextStyle(
+                        color: Theme.of(context).appColors.muted,
                         fontSize: 10.5,
                         fontWeight: FontWeight.w600)),
               ],
@@ -831,15 +832,15 @@ class _HistoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).appColors.card,
         borderRadius: BorderRadius.circular(18),
         boxShadow: const [
           BoxShadow(
               color: Color(0x14000000), blurRadius: 18, offset: Offset(0, 8))
         ],
-        border: Border.all(color: const Color(0x0FE8ECF4)),
+        border: Border.all(color: Color(0x0FE8ECF4)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -851,20 +852,20 @@ class _HistoryCard extends StatelessWidget {
                 color: _statusBg, borderRadius: BorderRadius.circular(14)),
             child: Icon(_statusIcon, color: _statusColor, size: 22),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(item.nama,
-                    style: const TextStyle(
-                        color: Color(0xFF24252C),
+                    style: TextStyle(
+                        color: Theme.of(context).appColors.ink,
                         fontSize: 13,
                         fontWeight: FontWeight.w900)),
-                const SizedBox(height: 2),
+                SizedBox(height: 2),
                 Text('${item.model} • ${item.seller}',
-                    style: const TextStyle(
-                        color: Color(0xFF6B7280),
+                    style: TextStyle(
+                        color: Theme.of(context).appColors.muted,
                         fontSize: 11,
                         fontWeight: FontWeight.w600)),
                 const SizedBox(height: 2),
@@ -956,12 +957,12 @@ class _BottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!hasOrder) return const SizedBox.shrink();
+    if (!hasOrder) return SizedBox.shrink();
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      padding: EdgeInsets.fromLTRB(16, 12, 16, 16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).appColors.card,
         boxShadow: [
           BoxShadow(
               color: Color(0x12000000), blurRadius: 18, offset: Offset(0, -6))
@@ -989,12 +990,12 @@ class _BottomBar extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14)),
                   minimumSize: const Size.fromHeight(46),
-                  textStyle: const TextStyle(
+                  textStyle: TextStyle(
                       fontSize: 13, fontWeight: FontWeight.w700),
                 ),
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
 
             // Bayar Lagi / Selesai
             Expanded(
@@ -1002,34 +1003,34 @@ class _BottomBar extends StatelessWidget {
                   ? ElevatedButton.icon(
                       onPressed: () => Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (_) => const HomeScreen()),
+                        MaterialPageRoute(builder: (_) => HomeScreen()),
                         (r) => false,
                       ),
-                      icon: const Icon(Icons.home_rounded, size: 16),
-                      label: const Text('Selesai'),
+                      icon: Icon(Icons.home_rounded, size: 16),
+                      label: Text('Selesai'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF16A34A),
-                        foregroundColor: Colors.white,
+                        backgroundColor: Color(0xFF16A34A),
+                        foregroundColor: Theme.of(context).appColors.card,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14)),
-                        minimumSize: const Size.fromHeight(46),
-                        textStyle: const TextStyle(
+                        minimumSize: Size.fromHeight(46),
+                        textStyle: TextStyle(
                             fontSize: 13, fontWeight: FontWeight.w700),
                       ),
                     )
                   : ElevatedButton.icon(
                       onPressed: isRetrying ? null : onRetry,
                       icon: isRetrying
-                          ? const SizedBox(
+                          ? SizedBox(
                               width: 14,
                               height: 14,
                               child: CircularProgressIndicator(
-                                  strokeWidth: 2, color: Colors.white))
-                          : const Icon(Icons.replay_rounded, size: 16),
+                                  strokeWidth: 2, color: Theme.of(context).appColors.card))
+                          : Icon(Icons.replay_rounded, size: 16),
                       label: Text(isRetrying ? 'Memproses...' : 'Bayar Lagi'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: kPurple,
-                        foregroundColor: Colors.white,
+                        foregroundColor: Theme.of(context).appColors.card,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14)),
                         minimumSize: const Size.fromHeight(46),
@@ -1054,15 +1055,15 @@ class _Card extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).appColors.card,
         borderRadius: BorderRadius.circular(18),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
               color: Color(0x14000000), blurRadius: 18, offset: Offset(0, 8))
         ],
-        border: Border.all(color: const Color(0x0FE8ECF4)),
+        border: Border.all(color: Color(0x0FE8ECF4)),
       ),
       child: child,
     );
@@ -1076,8 +1077,8 @@ class _SectionTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(title,
-        style: const TextStyle(
-            color: Color(0xFF24252C),
+        style: TextStyle(
+            color: Theme.of(context).appColors.ink,
             fontSize: 15,
             fontWeight: FontWeight.w900));
   }
@@ -1093,14 +1094,14 @@ class _InfoRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+      padding: EdgeInsets.only(bottom: 8),
       child: Row(
         children: [
           SizedBox(
             width: 90,
             child: Text(label,
-                style: const TextStyle(
-                    color: Color(0xFF6B7280),
+                style: TextStyle(
+                    color: Theme.of(context).appColors.muted,
                     fontSize: 11,
                     fontWeight: FontWeight.w600)),
           ),

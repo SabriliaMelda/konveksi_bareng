@@ -1,5 +1,6 @@
 // operasional.dart
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:konveksi_bareng/screens/finance/electricity_screen.dart';
 import 'package:konveksi_bareng/screens/main/home.dart';
 
@@ -94,7 +95,7 @@ class _OperationalScreenState extends State<OperationalScreen> {
   void _openEditSheet(_OpTxn e) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
       ),
@@ -141,7 +142,7 @@ class _OperationalScreenState extends State<OperationalScreen> {
                 onTap: () {
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Hapus (dummy)')),
+                    SnackBar(content: Text('Hapus (dummy)')),
                   );
                 },
               ),
@@ -161,7 +162,7 @@ class _OperationalScreenState extends State<OperationalScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
       ),
@@ -257,7 +258,7 @@ class _OperationalScreenState extends State<OperationalScreen> {
 
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
+                          SnackBar(
                             content: Text('Pengeluaran ditambahkan (dummy)'),
                           ),
                         );
@@ -270,10 +271,10 @@ class _OperationalScreenState extends State<OperationalScreen> {
                           border: Border.all(color: kPurple),
                         ),
                         alignment: Alignment.center,
-                        child: const Text(
+                        child: Text(
                           'Simpan',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Theme.of(context).appColors.card,
                             fontSize: 12.5,
                             fontWeight: FontWeight.w900,
                           ),
@@ -319,7 +320,7 @@ class _OperationalScreenState extends State<OperationalScreen> {
                 setState(() => _tab = _OpTab.listrik);
                 await Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const ElectricityScreen()),
+                  MaterialPageRoute(builder: (_) => ElectricityScreen()),
                 );
                 if (mounted) setState(() => _tab = _OpTab.input);
               },
@@ -333,16 +334,16 @@ class _OperationalScreenState extends State<OperationalScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
 
       // ✅ ICON PLUS DI KANAN BAWAH
       floatingActionButton: _tab == _OpTab.input
           ? FloatingActionButton(
               backgroundColor: kPurple,
-              foregroundColor: Colors.white,
+              foregroundColor: Theme.of(context).appColors.card,
               elevation: 3,
               onPressed: _openAddSheet,
-              child: const Icon(Icons.add_rounded, size: 26),
+              child: Icon(Icons.add_rounded, size: 26),
             )
           : null,
 
@@ -351,7 +352,7 @@ class _OperationalScreenState extends State<OperationalScreen> {
           children: [
             // ===== HEADER =====
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+              padding: EdgeInsets.fromLTRB(16, 12, 16, 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -359,25 +360,25 @@ class _OperationalScreenState extends State<OperationalScreen> {
                     borderRadius: BorderRadius.circular(32),
                     onTap: () => Navigator.pop(context),
                     child: Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(32),
-                        border: Border.all(color: const Color(0xFFDFDEDE)),
-                        color: Colors.white,
+                        border: Border.all(color: Theme.of(context).appColors.border),
+                        color: Theme.of(context).appColors.card,
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.arrow_back_ios_new,
                         size: 18,
-                        color: Colors.black87,
+                        color: Theme.of(context).appColors.ink,
                       ),
                     ),
                   ),
-                  const Text(
+                  Text(
                     'Operasional',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF121111),
+                      color: Theme.of(context).appColors.ink,
                       height: 1.4,
                     ),
                   ),
@@ -386,16 +387,16 @@ class _OperationalScreenState extends State<OperationalScreen> {
                     onTap: () {
                       Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (_) => const HomeScreen()),
+                        MaterialPageRoute(builder: (_) => HomeScreen()),
                         (route) => false,
                       );
                     },
                     child: Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(32),
-                        border: Border.all(color: const Color(0xFFDFDEDE)),
-                        color: Colors.white,
+                        border: Border.all(color: Theme.of(context).appColors.border),
+                        color: Theme.of(context).appColors.card,
                       ),
                       child: const Icon(
                         Icons.home_filled,
@@ -433,33 +434,33 @@ class _OperationalScreenState extends State<OperationalScreen> {
   // ================== INPUT MODE ==================
   Widget _buildInputMode() {
     return Column(
-      key: const ValueKey('input_mode'),
+      key: ValueKey('input_mode'),
       children: [
         // ===== SUMMARY CARD =====
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: 16),
           child: Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(14),
+            padding: EdgeInsets.all(14),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0xFFE8ECF4)),
-              boxShadow: const [
+              border: Border.all(color: Theme.of(context).appColors.border),
+              boxShadow: [
                 BoxShadow(
                   color: Color(0x0CB3B3B3),
                   blurRadius: 40,
                   offset: Offset(0, 16),
                 ),
               ],
-              color: Colors.white,
+              color: Theme.of(context).appColors.card,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Total Operasional',
                   style: TextStyle(
-                    color: Color(0xFF6A707C),
+                    color: Theme.of(context).appColors.muted,
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
                   ),
@@ -513,7 +514,7 @@ class _OperationalScreenState extends State<OperationalScreen> {
                             initialDateRange:
                                 _customRange ??
                                 DateTimeRange(
-                                  start: now.subtract(const Duration(days: 7)),
+                                  start: now.subtract(Duration(days: 7)),
                                   end: now,
                                 ),
                           );
@@ -529,11 +530,11 @@ class _OperationalScreenState extends State<OperationalScreen> {
                   ],
                 ),
                 if (_period == _Period.custom && _customRange != null) ...[
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   Text(
                     '${_fmtDate(_customRange!.start)} - ${_fmtDate(_customRange!.end)}',
-                    style: const TextStyle(
-                      color: Color(0xFF1E232C),
+                    style: TextStyle(
+                      color: Theme.of(context).appColors.ink,
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
                     ),
@@ -578,24 +579,24 @@ class _OperationalScreenState extends State<OperationalScreen> {
           ),
         ),
 
-        const SizedBox(height: 10),
+        SizedBox(height: 10),
 
         // ===== LIST =====
         Expanded(
           child: ListView.separated(
-            padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
+            padding: EdgeInsets.fromLTRB(16, 10, 16, 16),
             itemCount: _items.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 10),
+            separatorBuilder: (_, __) => SizedBox(height: 10),
             itemBuilder: (context, i) {
               final e = _items[i];
               final isOut = e.type == _OpType.pengeluaran;
               return Container(
-                padding: const EdgeInsets.all(14),
+                padding: EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).appColors.card,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: const Color(0xFFE8ECF4)),
-                  boxShadow: const [
+                  border: Border.all(color: Theme.of(context).appColors.border),
+                  boxShadow: [
                     BoxShadow(
                       color: Color(0x0CB3B3B3),
                       blurRadius: 40,
@@ -609,7 +610,7 @@ class _OperationalScreenState extends State<OperationalScreen> {
                       width: 44,
                       height: 44,
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF6F7F8),
+                        color: Theme.of(context).appColors.iconSurface,
                         borderRadius: BorderRadius.circular(14),
                       ),
                       alignment: Alignment.center,
@@ -618,12 +619,12 @@ class _OperationalScreenState extends State<OperationalScreen> {
                             ? Icons.arrow_upward_rounded
                             : Icons.arrow_downward_rounded,
                         color: isOut
-                            ? const Color(0xFFD32F2F)
-                            : const Color(0xFF2E7D32),
+                            ? Color(0xFFD32F2F)
+                            : Color(0xFF2E7D32),
                         size: 20,
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -632,19 +633,19 @@ class _OperationalScreenState extends State<OperationalScreen> {
                             e.title,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              color: Color(0xFF1E232C),
+                            style: TextStyle(
+                              color: Theme.of(context).appColors.ink,
                               fontSize: 13,
                               fontWeight: FontWeight.w900,
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          SizedBox(height: 4),
                           Text(
                             e.note,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              color: Color(0xFF6A707C),
+                            style: TextStyle(
+                              color: Theme.of(context).appColors.muted,
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                             ),
@@ -683,53 +684,53 @@ class _OperationalScreenState extends State<OperationalScreen> {
   // ================== EDIT MODE ==================
   Widget _buildEditMode() {
     return Column(
-      key: const ValueKey('edit_mode'),
+      key: ValueKey('edit_mode'),
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: 16),
           child: Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(14),
+            padding: EdgeInsets.all(14),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0xFFE8ECF4)),
-              boxShadow: const [
+              border: Border.all(color: Theme.of(context).appColors.border),
+              boxShadow: [
                 BoxShadow(
                   color: Color(0x0CB3B3B3),
                   blurRadius: 40,
                   offset: Offset(0, 16),
                 ),
               ],
-              color: Colors.white,
+              color: Theme.of(context).appColors.card,
             ),
-            child: const Text(
+            child: Text(
               'Mode Edit aktif. Tap item untuk opsi edit/hapus.',
               style: TextStyle(
-                color: Color(0xFF6A707C),
+                color: Theme.of(context).appColors.muted,
                 fontSize: 12.5,
                 fontWeight: FontWeight.w800,
               ),
             ),
           ),
         ),
-        const SizedBox(height: 10),
+        SizedBox(height: 10),
         Expanded(
           child: ListView.separated(
-            padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
+            padding: EdgeInsets.fromLTRB(16, 10, 16, 16),
             itemCount: _items.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 10),
+            separatorBuilder: (_, __) => SizedBox(height: 10),
             itemBuilder: (context, i) {
               final e = _items[i];
               return InkWell(
                 borderRadius: BorderRadius.circular(16),
                 onTap: () => _openEditSheet(e),
                 child: Container(
-                  padding: const EdgeInsets.all(14),
+                  padding: EdgeInsets.all(14),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).appColors.card,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: const Color(0xFFE8ECF4)),
-                    boxShadow: const [
+                    border: Border.all(color: Theme.of(context).appColors.border),
+                    boxShadow: [
                       BoxShadow(
                         color: Color(0x0CB3B3B3),
                         blurRadius: 40,
@@ -743,17 +744,17 @@ class _OperationalScreenState extends State<OperationalScreen> {
                         width: 44,
                         height: 44,
                         decoration: BoxDecoration(
-                          color: const Color(0xFFF6F7F8),
+                          color: Theme.of(context).appColors.iconSurface,
                           borderRadius: BorderRadius.circular(14),
                         ),
                         alignment: Alignment.center,
-                        child: const Icon(
+                        child: Icon(
                           Icons.edit_outlined,
                           color: kPurple,
                           size: 20,
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      SizedBox(width: 12),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -762,19 +763,19 @@ class _OperationalScreenState extends State<OperationalScreen> {
                               e.title,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                color: Color(0xFF1E232C),
+                              style: TextStyle(
+                                color: Theme.of(context).appColors.ink,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w900,
                               ),
                             ),
-                            const SizedBox(height: 4),
+                            SizedBox(height: 4),
                             Text(
                               e.note,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                color: Color(0xFF6A707C),
+                              style: TextStyle(
+                                color: Theme.of(context).appColors.muted,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -831,9 +832,9 @@ class _GhostButton extends StatelessWidget {
       child: Container(
         height: 44,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).appColors.card,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
+          border: Border.all(color: Theme.of(context).appColors.border),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -953,11 +954,11 @@ class _SheetAction extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
-          color: Colors.white,
+          border: Border.all(color: Theme.of(context).appColors.border),
+          color: Theme.of(context).appColors.card,
         ),
         child: Row(
           children: [
@@ -1005,25 +1006,25 @@ class _InputField extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(
-            color: Color(0xFF6A707C),
+          style: TextStyle(
+            color: Theme.of(context).appColors.muted,
             fontSize: 12,
             fontWeight: FontWeight.w800,
           ),
         ),
-        const SizedBox(height: 6),
+        SizedBox(height: 6),
         TextField(
           controller: controller,
           keyboardType: keyboardType,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: const TextStyle(
+            hintStyle: TextStyle(
               color: Color(0xFF9AA4B2),
               fontSize: 12,
               fontWeight: FontWeight.w600,
             ),
             filled: true,
-            fillColor: const Color(0xFFF6F7F8),
+            fillColor: Theme.of(context).appColors.iconSurface,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 12,
               vertical: 12,

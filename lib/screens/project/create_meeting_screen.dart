@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
 const kPurple = Color(0xFF6B257F);
@@ -71,7 +72,7 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
 
       body: SafeArea(
         child: Column(
@@ -111,10 +112,10 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
                         ),
                       ),
                       onPressed: _save,
-                      child: const Text(
+                      child: Text(
                         'Save',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Theme.of(context).appColors.card,
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                           height: 1.6,
@@ -284,9 +285,9 @@ class _TopCircleButton extends StatelessWidget {
       borderRadius: BorderRadius.circular(30),
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: const BoxDecoration(
-          color: Colors.white,
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Theme.of(context).appColors.card,
           shape: BoxShape.circle,
         ),
         child: Icon(icon, color: const Color(0xFF1B1B1B), size: 22),

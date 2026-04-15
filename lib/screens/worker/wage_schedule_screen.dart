@@ -1,5 +1,6 @@
 // jadwal_upah.dart
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
 const kPurple = Color(0xFF6B257F);
@@ -88,8 +89,7 @@ class _WageScheduleScreenState extends State<WageScheduleScreen> {
     return 'Rp $buf';
   }
 
-  List<_UpahSchedule> get _activeSchedules =>
-      schedulesByDay[selectedDay] ?? const [];
+  List<_UpahSchedule> get _activeSchedules => schedulesByDay[selectedDay] ?? [];
 
   void _openAddSheet() {
     final titleC = TextEditingController(text: 'Bayar Upah');
@@ -105,7 +105,7 @@ class _WageScheduleScreenState extends State<WageScheduleScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
       ),
@@ -169,23 +169,23 @@ class _WageScheduleScreenState extends State<WageScheduleScreen> {
                     hint: 'Contoh: 250000',
                     keyboardType: TextInputType.number,
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   _InputField(
                     controller: locC,
                     label: 'Lokasi',
                     hint: 'Contoh: Workshop',
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   _InputField(
                     controller: timeC,
                     label: 'Jam',
                     hint: 'Contoh: 10:00 - 10:30',
                   ),
-                  const SizedBox(height: 10),
-                  const Text(
+                  SizedBox(height: 10),
+                  Text(
                     'Status',
                     style: TextStyle(
-                      color: Color(0xFF6A707C),
+                      color: Theme.of(context).appColors.muted,
                       fontSize: 12,
                       fontWeight: FontWeight.w800,
                     ),
@@ -285,7 +285,7 @@ class _WageScheduleScreenState extends State<WageScheduleScreen> {
 
                             context.pop();
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
+                              SnackBar(
                                 content: Text(
                                   'Jadwal upah ditambahkan (dummy)',
                                 ),
@@ -300,10 +300,10 @@ class _WageScheduleScreenState extends State<WageScheduleScreen> {
                               border: Border.all(color: kPurple),
                             ),
                             alignment: Alignment.center,
-                            child: const Text(
+                            child: Text(
                               'Simpan',
                               style: TextStyle(
-                                color: Colors.white,
+                                color: Theme.of(context).appColors.card,
                                 fontSize: 12.5,
                                 fontWeight: FontWeight.w900,
                               ),
@@ -325,7 +325,7 @@ class _WageScheduleScreenState extends State<WageScheduleScreen> {
   void _openItemAction(_UpahSchedule item) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
       ),
@@ -339,24 +339,24 @@ class _WageScheduleScreenState extends State<WageScheduleScreen> {
                 width: 44,
                 height: 5,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFE6E7EE),
+                  color: Color(0xFFE6E7EE),
                   borderRadius: BorderRadius.circular(999),
                 ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               Text(
                 item.title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w900,
                   color: Color(0xFF111827),
                 ),
               ),
-              const SizedBox(height: 6),
+              SizedBox(height: 6),
               Text(
                 '${item.worker} • ${item.project} • ${_rupiah(item.amount)}',
-                style: const TextStyle(
-                  color: Color(0xFF6A707C),
+                style: TextStyle(
+                  color: Theme.of(context).appColors.muted,
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
                 ),
@@ -377,11 +377,11 @@ class _WageScheduleScreenState extends State<WageScheduleScreen> {
               _SheetAction(
                 icon: Icons.delete_outline_rounded,
                 label: 'Hapus jadwal (dummy)',
-                color: const Color(0xFFD32F2F),
+                color: Color(0xFFD32F2F),
                 onTap: () {
                   context.pop();
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Hapus (dummy)')),
+                    SnackBar(content: Text('Hapus (dummy)')),
                   );
                 },
               ),
@@ -395,16 +395,14 @@ class _WageScheduleScreenState extends State<WageScheduleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-
+      backgroundColor: Theme.of(context).appColors.card,
       floatingActionButton: FloatingActionButton(
         backgroundColor: kPurple,
-        foregroundColor: Colors.white,
+        foregroundColor: Theme.of(context).appColors.card,
         elevation: 3,
         onPressed: _openAddSheet,
         child: const Icon(Icons.add_rounded, size: 26),
       ),
-
       body: SafeArea(
         child: Column(
           children: [
@@ -490,10 +488,10 @@ class _WageScheduleScreenState extends State<WageScheduleScreen> {
               child: Row(
                 children: [
                   const _SmallDot(),
-                  const SizedBox(width: 10),
+                  SizedBox(width: 10),
                   Text(
                     _fmtDateBar(selectedDay),
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Color(0xFFECECEC),
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
@@ -506,20 +504,20 @@ class _WageScheduleScreenState extends State<WageScheduleScreen> {
             // list
             Expanded(
               child: Container(
-                padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
+                padding: EdgeInsets.fromLTRB(16, 14, 16, 0),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).appColors.card,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20),
                   ),
                 ),
                 child: _activeSchedules.isEmpty
-                    ? const Center(
+                    ? Center(
                         child: Text(
                           'Belum ada jadwal upah pada tanggal ini.',
                           style: TextStyle(
-                            color: Color(0xFF6A707C),
+                            color: Theme.of(context).appColors.muted,
                             fontSize: 12.5,
                             fontWeight: FontWeight.w700,
                           ),
@@ -560,7 +558,7 @@ class _TopHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18).copyWith(top: 10),
+      padding: EdgeInsets.symmetric(horizontal: 18).copyWith(top: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -570,8 +568,8 @@ class _TopHeader extends StatelessWidget {
           ),
           Text(
             title,
-            style: const TextStyle(
-              color: Color(0xFF121111),
+            style: TextStyle(
+              color: Theme.of(context).appColors.ink,
               fontSize: 16,
               fontWeight: FontWeight.w600,
               height: 1.4,
@@ -605,8 +603,8 @@ class _CircleIcon extends StatelessWidget {
         height: 40,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(32),
-          border: Border.all(color: const Color(0xFFDFDEDE)),
-          color: Colors.white,
+          border: Border.all(color: Theme.of(context).appColors.border),
+          color: Theme.of(context).appColors.card,
         ),
         alignment: Alignment.center,
         child: Icon(icon, size: 20, color: iconColor ?? Colors.black87),
@@ -708,9 +706,8 @@ class _CalendarGrid extends StatelessWidget {
                 width: 30,
                 height: 30,
                 decoration: BoxDecoration(
-                  color: isSelected
-                      ? const Color(0xFFDBC0F2)
-                      : Colors.transparent,
+                  color:
+                      isSelected ? const Color(0xFFDBC0F2) : Colors.transparent,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 alignment: Alignment.center,
@@ -839,9 +836,9 @@ class _ScheduleCardUpah extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       // ✅ FIX: jangan kunci height, biar adaptif & tidak overflow
-      constraints: const BoxConstraints(minHeight: 128),
+      constraints: BoxConstraints(minHeight: 128),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).appColors.card,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: item.borderColor, width: 1),
         boxShadow: const [
@@ -870,29 +867,30 @@ class _ScheduleCardUpah extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.access_time,
                         size: 16,
                         color: Color(0xE59A9A9A),
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8),
                       Text(
                         item.time,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Color(0xE59A9A9A),
                           fontSize: 12,
                         ),
                       ),
-                      const Spacer(),
+                      Spacer(),
                       Container(
-                        padding: const EdgeInsets.symmetric(
+                        padding: EdgeInsets.symmetric(
                           horizontal: 10,
                           vertical: 6,
                         ),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFF6F7F8),
+                          color: Theme.of(context).appColors.iconSurface,
                           borderRadius: BorderRadius.circular(999),
-                          border: Border.all(color: const Color(0xFFE8ECF4)),
+                          border: Border.all(
+                              color: Theme.of(context).appColors.border),
                         ),
                         child: Text(
                           _statusText,
@@ -905,54 +903,54 @@ class _ScheduleCardUpah extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   Text(
                     item.title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Color(0xFF1B1B1B),
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                       height: 1.2,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Text(
                     '${item.worker} • ${item.project} • ${rupiah(item.amount)}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Color(0xFF575A66),
+                    style: TextStyle(
+                      color: Theme.of(context).appColors.muted,
                       fontSize: 12,
                       height: 1.4,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Text(
                     item.desc,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Color(0xFF575A66),
+                    style: TextStyle(
+                      color: Theme.of(context).appColors.muted,
                       fontSize: 12,
                       height: 1.35,
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.location_on_outlined,
                         size: 18,
-                        color: Color(0xFF575A66),
+                        color: Theme.of(context).appColors.muted,
                       ),
-                      const SizedBox(width: 6),
+                      SizedBox(width: 6),
                       Expanded(
                         child: Text(
                           item.location,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            color: Color(0xFF575A66),
+                          style: TextStyle(
+                            color: Theme.of(context).appColors.muted,
                             fontSize: 12,
                           ),
                         ),
@@ -997,11 +995,11 @@ class _SheetAction extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
-          color: Colors.white,
+          border: Border.all(color: Theme.of(context).appColors.border),
+          color: Theme.of(context).appColors.card,
         ),
         child: Row(
           children: [
@@ -1048,9 +1046,9 @@ class _GhostButton extends StatelessWidget {
       child: Container(
         height: 44,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).appColors.card,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
+          border: Border.all(color: Theme.of(context).appColors.border),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -1129,25 +1127,25 @@ class _InputField extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(
-            color: Color(0xFF6A707C),
+          style: TextStyle(
+            color: Theme.of(context).appColors.muted,
             fontSize: 12,
             fontWeight: FontWeight.w800,
           ),
         ),
-        const SizedBox(height: 6),
+        SizedBox(height: 6),
         TextField(
           controller: controller,
           keyboardType: keyboardType,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: const TextStyle(
+            hintStyle: TextStyle(
               color: Color(0xFF9AA4B2),
               fontSize: 12,
               fontWeight: FontWeight.w600,
             ),
             filled: true,
-            fillColor: const Color(0xFFF6F7F8),
+            fillColor: Theme.of(context).appColors.iconSurface,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 12,
               vertical: 12,

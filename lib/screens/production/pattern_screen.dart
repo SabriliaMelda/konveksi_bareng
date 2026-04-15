@@ -1,11 +1,13 @@
 // pola.dart
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:konveksi_bareng/screens/main/home.dart';
 
 const kPurple = Color(0xFF6B257F);
 
 class PatternScreen extends StatefulWidget {
-  const PatternScreen({super.key});
+  PatternScreen({super.key});
 
   @override
   State<PatternScreen> createState() => _PatternScreenState();
@@ -15,7 +17,7 @@ class _PatternScreenState extends State<PatternScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
 
       // ===== tombol plus (+) =====
       floatingActionButton: FloatingActionButton(
@@ -29,7 +31,6 @@ class _PatternScreenState extends State<PatternScreen> {
           children: [
             const _TopHeader(title: 'Pola'),
             const SizedBox(height: 12),
-
             Expanded(
               child: Center(
                 child: Text(
@@ -68,18 +69,18 @@ class _TopHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18).copyWith(top: 10),
+      padding: EdgeInsets.symmetric(horizontal: 18).copyWith(top: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _CircleIcon(
             icon: Icons.arrow_back,
-            onTap: () => Navigator.pop(context),
+            onTap: () => context.pop(),
           ),
           Text(
             title,
-            style: const TextStyle(
-              color: Color(0xFF121111),
+            style: TextStyle(
+              color: Theme.of(context).appColors.ink,
               fontSize: 16,
               fontWeight: FontWeight.w600,
             ),
@@ -90,7 +91,7 @@ class _TopHeader extends StatelessWidget {
             onTap: () {
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (_) => const HomeScreen()),
+                MaterialPageRoute(builder: (_) => HomeScreen()),
                 (route) => false,
               );
             },
@@ -118,8 +119,8 @@ class _CircleIcon extends StatelessWidget {
         height: 40,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(32),
-          border: Border.all(color: const Color(0xFFDFDEDE)),
-          color: Colors.white,
+          border: Border.all(color: Theme.of(context).appColors.border),
+          color: Theme.of(context).appColors.card,
         ),
         alignment: Alignment.center,
         child: Icon(icon, size: 20, color: iconColor ?? Colors.black87),
@@ -160,8 +161,8 @@ class _CreatePolaSheetState extends State<_CreatePolaSheet> {
     return Padding(
       padding: EdgeInsets.only(bottom: bottomInset),
       child: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
+        decoration: BoxDecoration(
+          color: Theme.of(context).appColors.card,
           borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
         ),
         child: SafeArea(
@@ -298,7 +299,7 @@ class _CreatePolaSheetState extends State<_CreatePolaSheet> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(backgroundColor: kPurple),
                     onPressed: () {
-                      Navigator.pop(context);
+                      context.pop();
                     },
                     child: const Text('Buat Pola'),
                   ),
@@ -332,10 +333,10 @@ class _DropdownField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 44,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: const Color(0xFFDFDEDE)),
+        border: Border.all(color: Theme.of(context).appColors.border),
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
@@ -370,7 +371,7 @@ class _QtyStepper extends StatelessWidget {
       height: 36,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: const Color(0xFFDFDEDE)),
+        border: Border.all(color: Theme.of(context).appColors.border),
       ),
       child: Row(
         children: [

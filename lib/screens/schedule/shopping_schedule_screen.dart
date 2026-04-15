@@ -1,5 +1,7 @@
 // jadwal_belanja.dart
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:konveksi_bareng/screens/main/home.dart';
 
 const kPurple = Color(0xFF6B257F);
@@ -106,7 +108,7 @@ class _ShoppingScheduleScreenState extends State<ShoppingScheduleScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
       ),
@@ -151,23 +153,23 @@ class _ShoppingScheduleScreenState extends State<ShoppingScheduleScreen> {
                     label: 'Waktu',
                     hint: 'Contoh: 10:00 - 12:00',
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   _InputField(
                     controller: locC,
                     label: 'Lokasi',
                     hint: 'Contoh: Pasar Baru / Marketplace',
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   _InputField(
                     controller: descC,
                     label: 'Catatan',
                     hint: 'Contoh: bandingkan 2 toko',
                   ),
-                  const SizedBox(height: 10),
-                  const Text(
+                  SizedBox(height: 10),
+                  Text(
                     'Kategori',
                     style: TextStyle(
-                      color: Color(0xFF6A707C),
+                      color: Theme.of(context).appColors.muted,
                       fontSize: 12,
                       fontWeight: FontWeight.w800,
                     ),
@@ -232,7 +234,7 @@ class _ShoppingScheduleScreenState extends State<ShoppingScheduleScreen> {
                         child: _GhostButton(
                           icon: Icons.close_rounded,
                           text: 'Batal',
-                          onTap: () => Navigator.pop(context),
+                          onTap: () => context.pop(),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -268,12 +270,11 @@ class _ShoppingScheduleScreenState extends State<ShoppingScheduleScreen> {
                                 ),
                               );
                               dots[selectedDay] =
-                                  (dots[selectedDay] ??
-                                  [const Color(0xFF0095FF)]);
+                                  (dots[selectedDay] ?? [Color(0xFF0095FF)]);
                             });
-                            Navigator.pop(context);
+                            context.pop();
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
+                              SnackBar(
                                 content: Text('Jadwal ditambahkan (dummy)'),
                               ),
                             );
@@ -286,10 +287,10 @@ class _ShoppingScheduleScreenState extends State<ShoppingScheduleScreen> {
                               border: Border.all(color: kPurple),
                             ),
                             alignment: Alignment.center,
-                            child: const Text(
+                            child: Text(
                               'Simpan',
                               style: TextStyle(
-                                color: Colors.white,
+                                color: Theme.of(context).appColors.card,
                                 fontSize: 12.5,
                                 fontWeight: FontWeight.w900,
                               ),
@@ -311,7 +312,7 @@ class _ShoppingScheduleScreenState extends State<ShoppingScheduleScreen> {
   void _openItemAction(_BelanjaSchedule e) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
       ),
@@ -344,7 +345,7 @@ class _ShoppingScheduleScreenState extends State<ShoppingScheduleScreen> {
                 label: 'Tandai selesai (dummy)',
                 color: const Color(0xFF2E7D32),
                 onTap: () {
-                  Navigator.pop(context);
+                  context.pop();
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Ditandai selesai (dummy)')),
                   );
@@ -356,9 +357,9 @@ class _ShoppingScheduleScreenState extends State<ShoppingScheduleScreen> {
                 label: 'Hapus jadwal (dummy)',
                 color: const Color(0xFFD32F2F),
                 onTap: () {
-                  Navigator.pop(context);
+                  context.pop();
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Hapus (dummy)')),
+                    SnackBar(content: Text('Hapus (dummy)')),
                   );
                 },
               ),
@@ -376,10 +377,10 @@ class _ShoppingScheduleScreenState extends State<ShoppingScheduleScreen> {
   Widget build(BuildContext context) {
     final now = DateTime.now();
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
       floatingActionButton: FloatingActionButton(
         backgroundColor: kPurple,
-        foregroundColor: Colors.white,
+        foregroundColor: Theme.of(context).appColors.card,
         onPressed: _openAddSheet,
         child: const Icon(Icons.add_rounded, size: 28),
       ),
@@ -389,11 +390,11 @@ class _ShoppingScheduleScreenState extends State<ShoppingScheduleScreen> {
             const SizedBox(height: 8),
             _TopHeader(
               title: 'Jadwal Belanja',
-              onTapBack: () => Navigator.pop(context),
+              onTapBack: () => context.pop(),
               onTapHome: () {
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (_) => const HomeScreen()),
+                  MaterialPageRoute(builder: (_) => HomeScreen()),
                   (route) => false,
                 );
               },
@@ -483,11 +484,11 @@ class _ShoppingScheduleScreenState extends State<ShoppingScheduleScreen> {
                 child: Row(
                   children: [
                     const _SmallDot(),
-                    const SizedBox(width: 10),
+                    SizedBox(width: 10),
                     Expanded(
                       child: Text(
                         _dateLabel(),
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Color(0xFFECECEC),
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
@@ -495,21 +496,27 @@ class _ShoppingScheduleScreenState extends State<ShoppingScheduleScreen> {
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(
+                      padding: EdgeInsets.symmetric(
                         horizontal: 10,
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.15),
+                        color: Theme.of(context)
+                            .appColors
+                            .card
+                            .withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(999),
                         border: Border.all(
-                          color: Colors.white.withValues(alpha: 0.25),
+                          color: Theme.of(context)
+                              .appColors
+                              .card
+                              .withValues(alpha: 0.25),
                         ),
                       ),
                       child: Text(
                         '${_activeSchedules.length} item',
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: Theme.of(context).appColors.card,
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
                         ),
@@ -520,16 +527,16 @@ class _ShoppingScheduleScreenState extends State<ShoppingScheduleScreen> {
               ),
             ),
 
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
 
             // LIST
             Expanded(
               child: _activeSchedules.isEmpty
-                  ? const Center(
+                  ? Center(
                       child: Text(
                         'Belum ada jadwal belanja pada tanggal ini.',
                         style: TextStyle(
-                          color: Color(0xFF6A707C),
+                          color: Theme.of(context).appColors.muted,
                           fontSize: 12.5,
                           fontWeight: FontWeight.w700,
                         ),
@@ -582,15 +589,15 @@ class _TopHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _CircleIcon(icon: Icons.arrow_back, onTap: onTapBack),
           Text(
             title,
-            style: const TextStyle(
-              color: Color(0xFF121111),
+            style: TextStyle(
+              color: Theme.of(context).appColors.ink,
               fontSize: 16,
               fontWeight: FontWeight.w600,
               height: 1.4,
@@ -624,8 +631,8 @@ class _CircleIcon extends StatelessWidget {
         height: 40,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(32),
-          border: Border.all(color: const Color(0xFFDFDEDE)),
-          color: Colors.white,
+          border: Border.all(color: Theme.of(context).appColors.border),
+          color: Theme.of(context).appColors.card,
           boxShadow: const [
             BoxShadow(
               color: Color(0x0C1C252C),
@@ -697,9 +704,8 @@ class _CalendarGrid extends StatelessWidget {
                 width: 30,
                 height: 30,
                 decoration: BoxDecoration(
-                  color: isSelected
-                      ? const Color(0xFFDBC0F2)
-                      : Colors.transparent,
+                  color:
+                      isSelected ? const Color(0xFFDBC0F2) : Colors.transparent,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 alignment: Alignment.center,
@@ -780,7 +786,7 @@ class _ScheduleCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).appColors.card,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: borderColor, width: 1),
         boxShadow: const [
@@ -810,29 +816,30 @@ class _ScheduleCard extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.access_time,
                         size: 16,
                         color: Color(0xFF9A9A9A),
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8),
                       Text(
                         time,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Color(0xFF9A9A9A),
                           fontSize: 12,
                         ),
                       ),
-                      const Spacer(),
+                      Spacer(),
                       Container(
-                        padding: const EdgeInsets.symmetric(
+                        padding: EdgeInsets.symmetric(
                           horizontal: 10,
                           vertical: 6,
                         ),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFF6F7F8),
+                          color: Theme.of(context).appColors.iconSurface,
                           borderRadius: BorderRadius.circular(999),
-                          border: Border.all(color: const Color(0xFFE8ECF4)),
+                          border: Border.all(
+                              color: Theme.of(context).appColors.border),
                         ),
                         child: Text(
                           badge,
@@ -845,41 +852,41 @@ class _ScheduleCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   Text(
                     title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Color(0xFF1B1B1B),
                       fontSize: 15.5,
                       fontWeight: FontWeight.w700,
                       height: 1.2,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Text(
                     desc,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Color(0xFF575A66),
+                    style: TextStyle(
+                      color: Theme.of(context).appColors.muted,
                       fontSize: 12,
                       height: 1.4,
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.location_on_outlined,
                         size: 18,
-                        color: Color(0xFF575A66),
+                        color: Theme.of(context).appColors.muted,
                       ),
-                      const SizedBox(width: 6),
+                      SizedBox(width: 6),
                       Expanded(
                         child: Text(
                           location,
-                          style: const TextStyle(
-                            color: Color(0xFF575A66),
+                          style: TextStyle(
+                            color: Theme.of(context).appColors.muted,
                             fontSize: 12,
                           ),
                         ),
@@ -916,25 +923,25 @@ class _InputField extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(
-            color: Color(0xFF6A707C),
+          style: TextStyle(
+            color: Theme.of(context).appColors.muted,
             fontSize: 12,
             fontWeight: FontWeight.w800,
           ),
         ),
-        const SizedBox(height: 6),
+        SizedBox(height: 6),
         TextField(
           controller: controller,
           keyboardType: keyboardType,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: const TextStyle(
+            hintStyle: TextStyle(
               color: Color(0xFF9AA4B2),
               fontSize: 12,
               fontWeight: FontWeight.w600,
             ),
             filled: true,
-            fillColor: const Color(0xFFF6F7F8),
+            fillColor: Theme.of(context).appColors.iconSurface,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 12,
               vertical: 12,
@@ -1014,9 +1021,9 @@ class _GhostButton extends StatelessWidget {
       child: Container(
         height: 44,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).appColors.card,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
+          border: Border.all(color: Theme.of(context).appColors.border),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -1058,11 +1065,11 @@ class _SheetAction extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
-          color: Colors.white,
+          border: Border.all(color: Theme.of(context).appColors.border),
+          color: Theme.of(context).appColors.card,
         ),
         child: Row(
           children: [

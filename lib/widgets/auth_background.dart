@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 
 // ── Konveksi Bareng theme colors ──
 const Color kPurple = Color(0xFF6B257F);
@@ -11,7 +12,7 @@ class AuthBackground extends StatelessWidget {
   final Widget child;
   final bool showBackButton;
 
-  const AuthBackground({
+  AuthBackground({
     super.key,
     required this.child,
     this.showBackButton = true,
@@ -25,7 +26,7 @@ class AuthBackground extends StatelessWidget {
     final cardWidth = size.width < 380 ? size.width * 0.85 : 340.0;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F3F8),
+      backgroundColor: Theme.of(context).appColors.bg,
       body: Stack(
         children: [
           // Pattern background
@@ -64,9 +65,9 @@ class AuthBackground extends StatelessWidget {
                     ),
                     child: Container(
                       width: cardWidth,
-                      padding: const EdgeInsets.fromLTRB(22, 18, 22, 14),
+                      padding: EdgeInsets.fromLTRB(22, 18, 22, 14),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFFDFDFD),
+                        color: Theme.of(context).appColors.card,
                         border: Border.all(
                           color: const Color(0xFFD7D7D7),
                           width: 1,
@@ -241,13 +242,13 @@ class LanguageDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
       onSelected: onChanged,
-      offset: const Offset(0, -80),
+      offset: Offset(0, -80),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Container(
         height: 28,
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+        padding: EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).appColors.card,
           borderRadius: BorderRadius.circular(4),
           border: Border.all(color: kPurpleBorder, width: 1),
         ),

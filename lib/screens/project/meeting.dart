@@ -1,5 +1,6 @@
 // meeting.dart
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
 const kPurple = Color(0xFF6B257F);
@@ -53,7 +54,7 @@ class _MeetingScreenState extends State<MeetingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
 
       // ====== FLOATING PLUS (ungu) ======
       floatingActionButton: FloatingActionButton(
@@ -74,7 +75,7 @@ class _MeetingScreenState extends State<MeetingScreen> {
           children: [
             // ===== TOP HEADER =====
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 10, 20, 6),
+              padding: EdgeInsets.fromLTRB(20, 10, 20, 6),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -82,10 +83,10 @@ class _MeetingScreenState extends State<MeetingScreen> {
                     icon: Icons.arrow_back,
                     onTap: () => context.pop(),
                   ),
-                  const Text(
+                  Text(
                     'Jadwal Buat',
                     style: TextStyle(
-                      color: Color(0xFF121111),
+                      color: Theme.of(context).appColors.ink,
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       height: 1.4,
@@ -102,14 +103,14 @@ class _MeetingScreenState extends State<MeetingScreen> {
 
             // ===== TITLE ROW: "Jan 2024" + filter/search =====
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 10, 20, 6),
+              padding: EdgeInsets.fromLTRB(20, 10, 20, 6),
               child: Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     child: Text(
                       'Jan 2024',
                       style: TextStyle(
-                        color: Color(0xFF333333),
+                        color: Theme.of(context).appColors.ink,
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
                         height: 1.6,
@@ -136,11 +137,11 @@ class _MeetingScreenState extends State<MeetingScreen> {
             // ===== LIST =====
             Expanded(
               child: ListView(
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 110),
+                padding: EdgeInsets.fromLTRB(20, 10, 20, 110),
                 children: [
                   // Due header
                   RichText(
-                    text: const TextSpan(
+                    text: TextSpan(
                       children: [
                         TextSpan(
                           text: 'Due (2). ',
@@ -154,7 +155,7 @@ class _MeetingScreenState extends State<MeetingScreen> {
                         TextSpan(
                           text: 'Today, Thursday 05',
                           style: TextStyle(
-                            color: Color(0xFF575A66),
+                            color: Theme.of(context).appColors.muted,
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
                             height: 1.2,
@@ -172,11 +173,11 @@ class _MeetingScreenState extends State<MeetingScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6),
 
                   // Upcoming header
                   RichText(
-                    text: const TextSpan(
+                    text: TextSpan(
                       children: [
                         TextSpan(
                           text: 'Upcoming (3). ',
@@ -190,7 +191,7 @@ class _MeetingScreenState extends State<MeetingScreen> {
                         TextSpan(
                           text: 'Friday ',
                           style: TextStyle(
-                            color: Color(0xFF575A66),
+                            color: Theme.of(context).appColors.muted,
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
                             height: 1.4,
@@ -199,7 +200,7 @@ class _MeetingScreenState extends State<MeetingScreen> {
                         TextSpan(
                           text: '06',
                           style: TextStyle(
-                            color: Color(0xFF575A66),
+                            color: Theme.of(context).appColors.muted,
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
                             height: 1.2,
@@ -246,8 +247,8 @@ class _CircleBtn extends StatelessWidget {
         height: 40,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(32),
-          border: Border.all(color: const Color(0xFFDFDEDE)),
-          color: Colors.white,
+          border: Border.all(color: Theme.of(context).appColors.border),
+          color: Theme.of(context).appColors.card,
         ),
         alignment: Alignment.center,
         child: Icon(icon, size: 20, color: iconColor ?? Colors.black87),
@@ -273,13 +274,13 @@ class _SquareIcon extends StatelessWidget {
       borderRadius: BorderRadius.circular(8),
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(8),
+        padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           border: Border.all(color: borderColor, width: 1),
-          color: Colors.white,
+          color: Theme.of(context).appColors.card,
         ),
-        child: Icon(icon, size: 18, color: const Color(0xFF333333)),
+        child: Icon(icon, size: 18, color: Theme.of(context).appColors.ink),
       ),
     );
   }
@@ -310,7 +311,7 @@ class _MeetingCard extends StatelessWidget {
     return Container(
       height: 129,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).appColors.card,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: item.color, width: 1),
         boxShadow: const [
@@ -349,56 +350,56 @@ class _MeetingCard extends StatelessWidget {
                       const SizedBox(width: 8),
                       Text(
                         item.time,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Color(0xE59A9A9A),
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
                           height: 1.4,
                         ),
                       ),
-                      const Spacer(),
-                      const Icon(
+                      Spacer(),
+                      Icon(
                         Icons.more_vert,
                         size: 18,
                         color: Color(0xFFD8DEF3),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   Text(
                     item.title,
-                    style: const TextStyle(
-                      color: Colors.black,
+                    style: TextStyle(
+                      color: Theme.of(context).appColors.ink,
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                       height: 1.2,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Text(
                     item.desc,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Color(0xFF575A66),
+                    style: TextStyle(
+                      color: Theme.of(context).appColors.muted,
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
                       height: 1.4,
                     ),
                   ),
-                  const Spacer(),
+                  Spacer(),
                   Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.location_on_outlined,
                         size: 18,
-                        color: Color(0xFF575A66),
+                        color: Theme.of(context).appColors.muted,
                       ),
-                      const SizedBox(width: 6),
+                      SizedBox(width: 6),
                       Text(
                         item.location,
-                        style: const TextStyle(
-                          color: Color(0xFF575A66),
+                        style: TextStyle(
+                          color: Theme.of(context).appColors.muted,
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
                           height: 1.4,
@@ -426,12 +427,12 @@ class _MeetingsBottomBar extends StatelessWidget {
       elevation: 0,
       child: Container(
         height: 76,
-        margin: const EdgeInsets.fromLTRB(18, 0, 18, 14),
-        padding: const EdgeInsets.symmetric(horizontal: 18),
+        margin: EdgeInsets.fromLTRB(18, 0, 18, 14),
+        padding: EdgeInsets.symmetric(horizontal: 18),
         decoration: BoxDecoration(
-          color: const Color(0xFFF8F8FA),
+          color: Color(0xFFF8F8FA),
           borderRadius: BorderRadius.circular(22),
-          boxShadow: const [
+          boxShadow: [
             BoxShadow(
               color: Color(0x14000000),
               blurRadius: 20,
@@ -446,20 +447,20 @@ class _MeetingsBottomBar extends StatelessWidget {
               height: 34,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                color: Colors.white,
+                color: Theme.of(context).appColors.card,
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.calendar_month_outlined,
-                color: Color(0xFF111111),
+                color: Theme.of(context).appColors.ink,
               ),
             ),
-            const SizedBox(width: 18),
-            const Icon(Icons.cases_outlined, color: Color(0xFF111111)),
-            const SizedBox(width: 10),
-            const Text(
+            SizedBox(width: 18),
+            Icon(Icons.cases_outlined, color: Theme.of(context).appColors.ink),
+            SizedBox(width: 10),
+            Text(
               'Meetings',
               style: TextStyle(
-                color: Color(0xFF111111),
+                color: Theme.of(context).appColors.ink,
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
                 height: 1,

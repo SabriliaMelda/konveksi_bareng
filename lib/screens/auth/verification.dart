@@ -2,6 +2,7 @@ import 'dart:io' show Platform;
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/services.dart';
 import '../../services/auth_service.dart';
@@ -322,15 +323,15 @@ class _VerificationScreenState extends State<VerificationScreen> {
                     textAlign: TextAlign.center,
                     keyboardType: TextInputType.number,
                     maxLength: 1,
-                    style: const TextStyle(
-                        color: Color(0xFF2A2A2A),
+                    style: TextStyle(
+                        color: Theme.of(context).appColors.ink,
                         fontSize: 20,
                         fontWeight: FontWeight.w700),
                     decoration: InputDecoration(
                       counterText: '',
                       contentPadding: EdgeInsets.zero,
                       filled: true,
-                      fillColor: Colors.white,
+                      fillColor: Theme.of(context).appColors.card,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(4),
                         borderSide: const BorderSide(
@@ -352,7 +353,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
               );
             }),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
 
           // Resend button
           SizedBox(
@@ -370,14 +371,14 @@ class _VerificationScreenState extends State<VerificationScreen> {
               ),
               child: Text(
                 _loading ? t['processing']! : t['resend']!,
-                style: const TextStyle(
-                    color: Colors.white,
+                style: TextStyle(
+                    color: Theme.of(context).appColors.card,
                     fontSize: 14,
                     fontWeight: FontWeight.w700),
               ),
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
 
           // Verify button
           SizedBox(
@@ -386,9 +387,9 @@ class _VerificationScreenState extends State<VerificationScreen> {
             child: ElevatedButton(
               onPressed: _loading ? null : _handleVerify,
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF4CAF50),
+                backgroundColor: Color(0xFF4CAF50),
                 disabledBackgroundColor:
-                    const Color(0xFF4CAF50).withValues(alpha: 0.7),
+                    Color(0xFF4CAF50).withValues(alpha: 0.7),
                 elevation: 0,
                 padding: EdgeInsets.zero,
                 shape: RoundedRectangleBorder(
@@ -396,8 +397,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
               ),
               child: Text(
                 t['verify']!,
-                style: const TextStyle(
-                    color: Colors.white,
+                style: TextStyle(
+                    color: Theme.of(context).appColors.card,
                     fontSize: 14,
                     fontWeight: FontWeight.w700),
               ),

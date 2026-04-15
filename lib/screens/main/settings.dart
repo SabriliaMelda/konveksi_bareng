@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:konveksi_bareng/config/app_theme.dart';
 import 'package:konveksi_bareng/providers/theme_provider.dart';
+import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -44,7 +45,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     // ===== Theme tokens from ThemeProvider =====
     final bool isDark = tp.darkMode;
-    const purple = AppColors.purple;
+    const purple = Color(0xFF6B257F);
 
     final bg = tp.bg;
     final ink = tp.ink;
@@ -80,6 +81,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     return Scaffold(
       backgroundColor: bg,
+      bottomNavigationBar: AppBottomNav(activeIndex: 2),
       body: Stack(
         children: [
           _GradientBackdropPurple(isDark: isDark), // ✅ ikut dark
