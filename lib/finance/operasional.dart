@@ -194,7 +194,6 @@ class _OperationalScreenState extends State<OperationalScreen> {
                 ),
               ),
               const SizedBox(height: 12),
-
               _InputField(
                 controller: titleC,
                 label: 'Judul',
@@ -214,7 +213,6 @@ class _OperationalScreenState extends State<OperationalScreen> {
                 keyboardType: TextInputType.number,
               ),
               const SizedBox(height: 14),
-
               Row(
                 children: [
                   Expanded(
@@ -363,7 +361,8 @@ class _OperationalScreenState extends State<OperationalScreen> {
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(32),
-                        border: Border.all(color: Theme.of(context).appColors.border),
+                        border: Border.all(
+                            color: Theme.of(context).appColors.border),
                         color: Theme.of(context).appColors.card,
                       ),
                       child: Icon(
@@ -395,7 +394,8 @@ class _OperationalScreenState extends State<OperationalScreen> {
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(32),
-                        border: Border.all(color: Theme.of(context).appColors.border),
+                        border: Border.all(
+                            color: Theme.of(context).appColors.border),
                         color: Theme.of(context).appColors.card,
                       ),
                       child: const Icon(
@@ -420,9 +420,8 @@ class _OperationalScreenState extends State<OperationalScreen> {
             Expanded(
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 180),
-                child: _tab == _OpTab.edit
-                    ? _buildEditMode()
-                    : _buildInputMode(),
+                child:
+                    _tab == _OpTab.edit ? _buildEditMode() : _buildInputMode(),
               ),
             ),
           ],
@@ -511,8 +510,7 @@ class _OperationalScreenState extends State<OperationalScreen> {
                             context: context,
                             firstDate: DateTime(now.year - 2),
                             lastDate: DateTime(now.year + 2),
-                            initialDateRange:
-                                _customRange ??
+                            initialDateRange: _customRange ??
                                 DateTimeRange(
                                   start: now.subtract(Duration(days: 7)),
                                   end: now,
@@ -618,9 +616,7 @@ class _OperationalScreenState extends State<OperationalScreen> {
                         isOut
                             ? Icons.arrow_upward_rounded
                             : Icons.arrow_downward_rounded,
-                        color: isOut
-                            ? Color(0xFFD32F2F)
-                            : Color(0xFF2E7D32),
+                        color: isOut ? Color(0xFFD32F2F) : Color(0xFF2E7D32),
                         size: 20,
                       ),
                     ),
@@ -729,7 +725,8 @@ class _OperationalScreenState extends State<OperationalScreen> {
                   decoration: BoxDecoration(
                     color: Theme.of(context).appColors.card,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Theme.of(context).appColors.border),
+                    border:
+                        Border.all(color: Theme.of(context).appColors.border),
                     boxShadow: [
                       BoxShadow(
                         color: Color(0x0CB3B3B3),
@@ -1051,7 +1048,10 @@ class _InputField extends StatelessWidget {
 //
 // ================== MODELS ==================
 //
-enum _OpType { pemasukan, pengeluaran }
+enum _OpType {
+  _pemasukan, // ignore: unused_field
+  pengeluaran
+}
 
 enum _Period { harian, mingguan, bulanan, custom }
 

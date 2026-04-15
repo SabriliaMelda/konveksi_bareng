@@ -91,9 +91,16 @@ class FinanceScreen extends StatelessWidget {
                     width: double.infinity,
                     padding: EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).appColors.card.withValues(alpha: 0.12),
+                      color: Theme.of(context)
+                          .appColors
+                          .card
+                          .withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(18),
-                      border: Border.all(color: Theme.of(context).appColors.card.withValues(alpha: 0.12)),
+                      border: Border.all(
+                          color: Theme.of(context)
+                              .appColors
+                              .card
+                              .withValues(alpha: 0.12)),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,7 +124,6 @@ class FinanceScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 14),
-
                         Row(
                           children: const [
                             Expanded(
@@ -150,9 +156,16 @@ class FinanceScreen extends StatelessWidget {
                     width: double.infinity,
                     padding: EdgeInsets.fromLTRB(16, 14, 16, 14),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).appColors.card.withValues(alpha: 0.10),
+                      color: Theme.of(context)
+                          .appColors
+                          .card
+                          .withValues(alpha: 0.10),
                       borderRadius: BorderRadius.circular(18),
-                      border: Border.all(color: Theme.of(context).appColors.card.withValues(alpha: 0.12)),
+                      border: Border.all(
+                          color: Theme.of(context)
+                              .appColors
+                              .card
+                              .withValues(alpha: 0.12)),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -186,7 +199,10 @@ class FinanceScreen extends StatelessWidget {
                           child: LinearProgressIndicator(
                             value: progressValue,
                             minHeight: 10,
-                            backgroundColor: Theme.of(context).appColors.card.withValues(alpha: 0.18),
+                            backgroundColor: Theme.of(context)
+                                .appColors
+                                .card
+                                .withValues(alpha: 0.18),
                             valueColor: AlwaysStoppedAnimation<Color>(
                               Color(0xFFF1FFF3),
                             ),
@@ -281,7 +297,8 @@ class _HeaderIcon extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).appColors.card.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Theme.of(context).appColors.card.withValues(alpha: 0.12)),
+          border: Border.all(
+              color: Theme.of(context).appColors.card.withValues(alpha: 0.12)),
         ),
         child: Icon(icon, color: Theme.of(context).appColors.card, size: 20),
       ),
@@ -310,7 +327,8 @@ class _MiniStat extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).appColors.card.withValues(alpha: 0.10),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Theme.of(context).appColors.card.withValues(alpha: 0.12)),
+        border: Border.all(
+            color: Theme.of(context).appColors.card.withValues(alpha: 0.12)),
       ),
       child: Row(
         children: [
@@ -321,7 +339,8 @@ class _MiniStat extends StatelessWidget {
               color: Theme.of(context).appColors.card.withValues(alpha: 0.14),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(icon, color: Theme.of(context).appColors.card, size: 18),
+            child:
+                Icon(icon, color: Theme.of(context).appColors.card, size: 18),
           ),
           const SizedBox(width: 10),
           Expanded(
@@ -371,7 +390,7 @@ class _FinanceMenu {
 
 // ===== GRID MENU (2 KOLOM CARD) =====
 class _MenuGridKeuangan extends StatelessWidget {
-  const _MenuGridKeuangan({super.key});
+  const _MenuGridKeuangan();
 
   static const menus = [
     _FinanceMenu(

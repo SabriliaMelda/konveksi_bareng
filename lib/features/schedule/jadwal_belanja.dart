@@ -268,8 +268,7 @@ class _ShoppingScheduleScreenState extends State<ShoppingScheduleScreen> {
                                   tag: tag,
                                 ),
                               );
-                              dots[selectedDay] =
-                                  (dots[selectedDay] ??
+                              dots[selectedDay] = (dots[selectedDay] ??
                                   [const Color(0xFF0095FF)]);
                             });
                             Navigator.pop(context);
@@ -698,9 +697,8 @@ class _CalendarGrid extends StatelessWidget {
                 width: 30,
                 height: 30,
                 decoration: BoxDecoration(
-                  color: isSelected
-                      ? const Color(0xFFDBC0F2)
-                      : Colors.transparent,
+                  color:
+                      isSelected ? const Color(0xFFDBC0F2) : Colors.transparent,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 alignment: Alignment.center,
@@ -901,13 +899,11 @@ class _InputField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
   final String hint;
-  final TextInputType keyboardType;
 
   const _InputField({
     required this.controller,
     required this.label,
     required this.hint,
-    this.keyboardType = TextInputType.text,
   });
 
   @override
@@ -926,7 +922,6 @@ class _InputField extends StatelessWidget {
         const SizedBox(height: 6),
         TextField(
           controller: controller,
-          keyboardType: keyboardType,
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: const TextStyle(

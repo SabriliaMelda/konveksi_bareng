@@ -15,7 +15,7 @@ class _CartProduct {
   final int harga;
   final String imagePath;
   int qty;
-  bool selected;
+  bool selected = true;
 
   _CartProduct({
     required this.nama,
@@ -24,7 +24,6 @@ class _CartProduct {
     required this.harga,
     required this.imagePath,
     this.qty = 1,
-    this.selected = true,
   });
 }
 

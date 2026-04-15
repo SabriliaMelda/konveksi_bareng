@@ -183,7 +183,7 @@ class _HeaderSection extends StatelessWidget {
 // ================== PROMO SECTION (CARD SIMPLE) ==================
 //
 class _PromoSection extends StatefulWidget {
-  const _PromoSection({super.key});
+  const _PromoSection();
 
   @override
   State<_PromoSection> createState() => _PromoSectionState();
@@ -303,7 +303,6 @@ class _PromoCard extends StatelessWidget {
   final String imagePath;
 
   const _PromoCard({
-    super.key,
     required this.title,
     required this.subtitle,
     required this.imagePath,
@@ -843,7 +842,7 @@ class _ProductCard extends StatelessWidget {
 }
 
 class _SeeAllCard extends StatelessWidget {
-  const _SeeAllCard({super.key});
+  const _SeeAllCard();
 
   @override
   Widget build(BuildContext context) {

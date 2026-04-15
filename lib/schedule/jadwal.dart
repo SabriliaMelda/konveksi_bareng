@@ -153,7 +153,6 @@ class _DaySelector extends StatelessWidget {
   final ValueChanged<int> onSelected;
 
   const _DaySelector({
-    super.key,
     required this.days,
     required this.selectedIndex,
     required this.onSelected,
@@ -297,7 +296,7 @@ class _JadwalMenuItem {
 class _JadwalMenuCard extends StatelessWidget {
   final _JadwalMenuItem item;
 
-  const _JadwalMenuCard({super.key, required this.item});
+  const _JadwalMenuCard({required this.item});
 
   @override
   Widget build(BuildContext context) {

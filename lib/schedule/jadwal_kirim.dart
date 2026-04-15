@@ -127,7 +127,6 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
                     ),
                   ),
                   const SizedBox(height: 12),
-
                   _InputField(
                     controller: titleC,
                     label: 'Judul',
@@ -170,7 +169,6 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
                     hint: 'Contoh: 2 box blouse + invoice',
                   ),
                   SizedBox(height: 10),
-
                   Text(
                     'Status',
                     style: TextStyle(
@@ -180,7 +178,6 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
                     ),
                   ),
                   const SizedBox(height: 6),
-
                   Row(
                     children: [
                       Expanded(
@@ -228,7 +225,6 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
                       const Expanded(child: SizedBox()),
                     ],
                   ),
-
                   const SizedBox(height: 14),
                   Row(
                     children: [
@@ -403,7 +399,6 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).appColors.card,
-
       floatingActionButton: FloatingActionButton(
         backgroundColor: kPurple,
         foregroundColor: Theme.of(context).appColors.card,
@@ -411,7 +406,6 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
         onPressed: _openAddSheet,
         child: const Icon(Icons.add_rounded, size: 26),
       ),
-
       body: SafeArea(
         child: Column(
           children: [
@@ -711,9 +705,8 @@ class _CalendarGrid extends StatelessWidget {
                 width: 30,
                 height: 30,
                 decoration: BoxDecoration(
-                  color: isSelected
-                      ? const Color(0xFFDBC0F2)
-                      : Colors.transparent,
+                  color:
+                      isSelected ? const Color(0xFFDBC0F2) : Colors.transparent,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 alignment: Alignment.center,
@@ -896,7 +889,8 @@ class _ScheduleCardKirim extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: Theme.of(context).appColors.iconSurface,
                           borderRadius: BorderRadius.circular(999),
-                          border: Border.all(color: Theme.of(context).appColors.border),
+                          border: Border.all(
+                              color: Theme.of(context).appColors.border),
                         ),
                         child: Text(
                           _statusText,
@@ -1117,13 +1111,11 @@ class _InputField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
   final String hint;
-  final TextInputType keyboardType;
 
   const _InputField({
     required this.controller,
     required this.label,
     required this.hint,
-    this.keyboardType = TextInputType.text,
   });
 
   @override
@@ -1142,7 +1134,6 @@ class _InputField extends StatelessWidget {
         SizedBox(height: 6),
         TextField(
           controller: controller,
-          keyboardType: keyboardType,
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: TextStyle(

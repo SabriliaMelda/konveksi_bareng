@@ -907,13 +907,11 @@ class _InputField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
   final String hint;
-  final TextInputType keyboardType;
 
   const _InputField({
     required this.controller,
     required this.label,
     required this.hint,
-    this.keyboardType = TextInputType.text,
   });
 
   @override
@@ -932,7 +930,6 @@ class _InputField extends StatelessWidget {
         SizedBox(height: 6),
         TextField(
           controller: controller,
-          keyboardType: keyboardType,
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: TextStyle(

@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:konveksi_bareng/config/app_theme.dart';
 import 'package:konveksi_bareng/providers/theme_provider.dart';
 import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
 
