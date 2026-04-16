@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:konveksi_bareng/providers/session_guard.dart';
-import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -42,7 +41,6 @@ class _HomeScreenState extends State<HomeScreen> {
       // ✅ SIDEBAR (DRAWER)
       drawer: _AppSidebar(),
 
-      bottomNavigationBar: AppBottomNav(activeIndex: 0),
       body: SafeArea(
         child: Column(
           children: [

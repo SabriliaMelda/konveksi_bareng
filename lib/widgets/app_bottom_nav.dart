@@ -55,7 +55,7 @@ class AppBottomNav extends StatelessWidget {
             activeColor: activeColor,
             inactiveColor: inactiveColor,
             onTap: () {
-              if (activeIndex != 1) context.push('/wishlist');
+              if (activeIndex != 1) context.go('/wishlist');
             },
           ),
           _NavItem(
@@ -66,7 +66,7 @@ class AppBottomNav extends StatelessWidget {
             activeColor: activeColor,
             inactiveColor: inactiveColor,
             onTap: () {
-              if (activeIndex != 2) context.push('/settings');
+              if (activeIndex != 2) context.go('/settings');
             },
           ),
           _NavItem(
@@ -77,7 +77,7 @@ class AppBottomNav extends StatelessWidget {
             activeColor: activeColor,
             inactiveColor: inactiveColor,
             onTap: () {
-              if (activeIndex != 3) context.push('/chat');
+              if (activeIndex != 3) context.go('/chat');
             },
           ),
           _NavItem(
@@ -88,7 +88,7 @@ class AppBottomNav extends StatelessWidget {
             activeColor: activeColor,
             inactiveColor: inactiveColor,
             onTap: () {
-              if (activeIndex != 4) context.push('/profile');
+              if (activeIndex != 4) context.go('/profile');
             },
           ),
         ],

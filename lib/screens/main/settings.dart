@@ -2,9 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:konveksi_bareng/config/app_theme.dart';
 import 'package:konveksi_bareng/providers/theme_provider.dart';
-import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -81,7 +79,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     return Scaffold(
       backgroundColor: bg,
-      bottomNavigationBar: AppBottomNav(activeIndex: 2),
       body: Stack(
         children: [
           _GradientBackdropPurple(isDark: isDark), // ✅ ikut dark

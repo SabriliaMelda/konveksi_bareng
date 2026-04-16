@@ -70,7 +70,12 @@ import '../screens/promotion/promotion_screen.dart';
 // ── Common ──
 import '../screens/common/simple_placeholder_page.dart';
 
+// ── Shell ──
+import '../widgets/main_shell.dart';
+
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> _shellNavigatorKey =
+    GlobalKey<NavigatorState>();
 
 Page<void> _fadePage(Widget child, GoRouterState state) {
   return CustomTransitionPage<void>(
@@ -97,11 +102,8 @@ final GoRouter appRouter = GoRouter(
   routes: [
     // ── Auth routes ──
     GoRoute(
-        path: '/welcome',
-        pageBuilder: (_, s) => _fadePage(WelcomeScreen(), s)),
-    GoRoute(
-        path: '/login',
-        pageBuilder: (_, s) => _fadePage(LoginScreen(), s)),
+        path: '/welcome', pageBuilder: (_, s) => _fadePage(WelcomeScreen(), s)),
+    GoRoute(path: '/login', pageBuilder: (_, s) => _fadePage(LoginScreen(), s)),
     GoRoute(
         path: '/register',
         pageBuilder: (_, s) => _fadePage(RegisterScreen(), s)),
@@ -112,49 +114,48 @@ final GoRouter appRouter = GoRouter(
         path: '/find-account',
         pageBuilder: (_, s) => _fadePage(FindAccountScreen(), s)),
     GoRoute(
-        path: '/account',
-        pageBuilder: (_, s) => _fadePage(AccountScreen(), s)),
+        path: '/account', pageBuilder: (_, s) => _fadePage(AccountScreen(), s)),
     GoRoute(
         path: '/security',
         pageBuilder: (_, s) => _fadePage(SecurityScreen(), s)),
 
-    // ── Main routes ──
-    GoRoute(
-        path: '/home', pageBuilder: (_, s) => _fadePage(HomeScreen(), s)),
-    GoRoute(
-        path: '/settings',
-        pageBuilder: (_, s) => _fadePage(SettingsScreen(), s)),
-    GoRoute(
-        path: '/profile',
-        pageBuilder: (_, s) => _fadePage(ProfileScreen(), s)),
-    GoRoute(
-        path: '/wishlist',
-        pageBuilder: (_, s) => _fadePage(WishlistScreen(), s)),
-    GoRoute(
-        path: '/chat', pageBuilder: (_, s) => _fadePage(ChatScreen(), s)),
+    // ── Main routes (persistent shell with bottom nav) ──
+    ShellRoute(
+      navigatorKey: _shellNavigatorKey,
+      builder: (context, state, child) => MainShell(child: child),
+      routes: [
+        GoRoute(
+            path: '/home', pageBuilder: (_, s) => _fadePage(HomeScreen(), s)),
+        GoRoute(
+            path: '/wishlist',
+            pageBuilder: (_, s) => _fadePage(WishlistScreen(), s)),
+        GoRoute(
+            path: '/settings',
+            pageBuilder: (_, s) => _fadePage(SettingsScreen(), s)),
+        GoRoute(
+            path: '/chat', pageBuilder: (_, s) => _fadePage(ChatScreen(), s)),
+        GoRoute(
+            path: '/profile',
+            pageBuilder: (_, s) => _fadePage(ProfileScreen(), s)),
+      ],
+    ),
 
     // ── Finance routes ──
     GoRoute(
-        path: '/finance',
-        pageBuilder: (_, s) => _fadePage(FinanceScreen(), s)),
+        path: '/finance', pageBuilder: (_, s) => _fadePage(FinanceScreen(), s)),
     GoRoute(
         path: '/profit-loss',
         pageBuilder: (_, s) => _fadePage(ProfitLossScreen(), s)),
     GoRoute(
         path: '/purchase',
         pageBuilder: (_, s) => _fadePage(PurchaseScreen(), s)),
+    GoRoute(path: '/sales', pageBuilder: (_, s) => _fadePage(SalesScreen(), s)),
     GoRoute(
-        path: '/sales',
-        pageBuilder: (_, s) => _fadePage(SalesScreen(), s)),
+        path: '/payment', pageBuilder: (_, s) => _fadePage(PaymentScreen(), s)),
     GoRoute(
-        path: '/payment',
-        pageBuilder: (_, s) => _fadePage(PaymentScreen(), s)),
+        path: '/income', pageBuilder: (_, s) => _fadePage(IncomeScreen(), s)),
     GoRoute(
-        path: '/income',
-        pageBuilder: (_, s) => _fadePage(IncomeScreen(), s)),
-    GoRoute(
-        path: '/expense',
-        pageBuilder: (_, s) => _fadePage(ExpenseScreen(), s)),
+        path: '/expense', pageBuilder: (_, s) => _fadePage(ExpenseScreen(), s)),
     GoRoute(
         path: '/operational',
         pageBuilder: (_, s) => _fadePage(OperationalScreen(), s)),
@@ -189,16 +190,14 @@ final GoRouter appRouter = GoRouter(
         path: '/work-order',
         pageBuilder: (_, s) => _fadePage(WorkOrderScreen(), s)),
     GoRoute(
-        path: '/meeting',
-        pageBuilder: (_, s) => _fadePage(MeetingScreen(), s)),
+        path: '/meeting', pageBuilder: (_, s) => _fadePage(MeetingScreen(), s)),
     GoRoute(
         path: '/create-meeting',
         pageBuilder: (_, s) => _fadePage(CreateMeetingScreen(), s)),
 
     // ── Worker routes ──
     GoRoute(
-        path: '/worker',
-        pageBuilder: (_, s) => _fadePage(WorkerScreen(), s)),
+        path: '/worker', pageBuilder: (_, s) => _fadePage(WorkerScreen(), s)),
     GoRoute(
         path: '/worker-list',
         pageBuilder: (_, s) => _fadePage(WorkerListScreen(), s)),
@@ -217,8 +216,7 @@ final GoRouter appRouter = GoRouter(
         );
       },
     ),
-    GoRoute(
-        path: '/wage', pageBuilder: (_, s) => _fadePage(WageScreen(), s)),
+    GoRoute(path: '/wage', pageBuilder: (_, s) => _fadePage(WageScreen(), s)),
     GoRoute(
         path: '/wage-schedule',
         pageBuilder: (_, s) => _fadePage(WageScheduleScreen(), s)),
@@ -253,8 +251,7 @@ final GoRouter appRouter = GoRouter(
 
     // ── Production ──
     GoRoute(
-        path: '/pattern',
-        pageBuilder: (_, s) => _fadePage(PatternScreen(), s)),
+        path: '/pattern', pageBuilder: (_, s) => _fadePage(PatternScreen(), s)),
 
     // ── Marketplace ──
     GoRoute(

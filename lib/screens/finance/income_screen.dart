@@ -372,7 +372,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
         child: const Icon(Icons.add_rounded, size: 26),
       )
           : null,
-      bottomNavigationBar: AppBottomNav(activeIndex: 0),
+      bottomNavigationBar: AppBottomNav(activeIndex: -1),
 
       body: SafeArea(
         child: Column(

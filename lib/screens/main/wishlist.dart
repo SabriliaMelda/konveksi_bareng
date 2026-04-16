@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
-import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
 
 const kPurple = Color(0xFF6B257F);
 
@@ -73,7 +72,6 @@ class _WishlistScreenState extends State<WishlistScreen> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).appColors.card,
-      bottomNavigationBar: AppBottomNav(activeIndex: 1),
       body: SafeArea(
         child: Column(
           children: [
@@ -151,7 +149,8 @@ class _WishlistScreenState extends State<WishlistScreen> {
                     decoration: BoxDecoration(
                       color: Theme.of(context).appColors.iconSurface,
                       borderRadius: BorderRadius.circular(999),
-                      border: Border.all(color: Theme.of(context).appColors.border),
+                      border:
+                          Border.all(color: Theme.of(context).appColors.border),
                     ),
                     child: Text(
                       '${filtered.length} item',
@@ -471,7 +470,8 @@ class _WishCard extends StatelessWidget {
                           decoration: BoxDecoration(
                             color: Theme.of(context).appColors.iconSurface,
                             borderRadius: BorderRadius.circular(999),
-                            border: Border.all(color: Theme.of(context).appColors.border),
+                            border: Border.all(
+                                color: Theme.of(context).appColors.border),
                           ),
                           child: Icon(
                             Icons.delete_outline,
@@ -545,7 +545,8 @@ class _WishCard extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: Theme.of(context).appColors.iconSurface,
                           borderRadius: BorderRadius.circular(999),
-                          border: Border.all(color: Theme.of(context).appColors.border),
+                          border: Border.all(
+                              color: Theme.of(context).appColors.border),
                         ),
                         child: Text(
                           'Stok ${item.stock}',

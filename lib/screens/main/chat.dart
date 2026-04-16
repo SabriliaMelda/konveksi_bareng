@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
-import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
 
 const kPurple = Color(0xFF6B257F);
 
@@ -146,7 +145,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).appColors.bg,
-      bottomNavigationBar: AppBottomNav(activeIndex: 3),
       body: SafeArea(
         child: Column(
           children: [
@@ -203,7 +201,8 @@ class _ChatScreenState extends State<ChatScreen> {
                       decoration: BoxDecoration(
                         color: Theme.of(context).appColors.card,
                         borderRadius: BorderRadius.circular(14),
-                        border: Border.all(color: Theme.of(context).appColors.border),
+                        border: Border.all(
+                            color: Theme.of(context).appColors.border),
                         boxShadow: const [
                           BoxShadow(
                             color: Color(0x0D000000),
@@ -395,7 +394,8 @@ class _HeaderIcon extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).appColors.card.withValues(alpha: 0.14),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Theme.of(context).appColors.card.withValues(alpha: 0.16)),
+          border: Border.all(
+              color: Theme.of(context).appColors.card.withValues(alpha: 0.16)),
         ),
         child: Icon(icon, color: Theme.of(context).appColors.card, size: 20),
       ),
@@ -422,7 +422,8 @@ class _SearchPillBetter extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).appColors.card.withValues(alpha: 0.14),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Theme.of(context).appColors.card.withValues(alpha: 0.16)),
+        border: Border.all(
+            color: Theme.of(context).appColors.card.withValues(alpha: 0.16)),
       ),
       child: Row(
         children: [

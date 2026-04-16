@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
-import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -43,7 +42,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF7FAFF),
-      bottomNavigationBar: AppBottomNav(activeIndex: 4),
       body: Stack(
         children: [
           const _GradientBackdropPurple(),
