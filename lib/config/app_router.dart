@@ -28,6 +28,7 @@ import '../screens/finance/expense_screen.dart';
 import '../screens/finance/operational_screen.dart';
 import '../screens/finance/electricity_screen.dart';
 import '../screens/finance/project_finance_screen.dart';
+import '../services/payment_service.dart';
 
 // ── Project ──
 import '../screens/project/manage_project_screen.dart';
@@ -148,7 +149,8 @@ final GoRouter appRouter = GoRouter(
         pageBuilder: (_, s) => _fadePage(ProfitLossScreen(), s)),
     GoRoute(
         path: '/purchase',
-        pageBuilder: (_, s) => _fadePage(PurchaseScreen(), s)),
+        pageBuilder: (_, s) =>
+            _fadePage(PurchaseScreen(order: s.extra as OrderResult?), s)),
     GoRoute(path: '/sales', pageBuilder: (_, s) => _fadePage(SalesScreen(), s)),
     GoRoute(
         path: '/payment', pageBuilder: (_, s) => _fadePage(PaymentScreen(), s)),

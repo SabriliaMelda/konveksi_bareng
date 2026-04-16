@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:konveksi_bareng/config/app_colors.dart';
-import 'package:konveksi_bareng/finance/pembelian.dart';
 import 'package:konveksi_bareng/services/payment_service.dart';
 import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
 
@@ -192,12 +192,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       Navigator.pop(context); // close dialog
 
       // Navigate to purchase/payment status screen
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => PurchaseScreen(order: result),
-        ),
-      );
+      context.push('/purchase', extra: result);
     } catch (_) {
       if (!mounted) return;
       Navigator.pop(context);
