@@ -18,6 +18,7 @@ final ThemeData lightTheme = ThemeData(
   scaffoldBackgroundColor: const Color(0xFFF7F7FB),
   cardColor: Colors.white,
   dividerColor: const Color(0xFFE8ECF4),
+  // Keep system bars transparent for edge-to-edge
   appBarTheme: const AppBarTheme(
     backgroundColor: Colors.white,
     foregroundColor: Color(0xFF0F172A),

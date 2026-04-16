@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
+import 'package:konveksi_bareng/screens/main/chat_conversation_screen.dart';
 
 const kPurple = Color(0xFF6B257F);
 
@@ -183,15 +184,18 @@ class _ChatScreenState extends State<ChatScreen> {
                   InkWell(
                     borderRadius: BorderRadius.circular(12),
                     onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            _showChats
-                                ? 'New message (dummy)'
-                                : 'Create group (dummy)',
+                      if (_showChats) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => const ChatConversationScreen(
+                            contactName: 'Pesan Baru',
                           ),
-                        ),
-                      );
+                        ));
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text('Buat group (placeholder)')),
+                        );
+                      }
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(
@@ -263,11 +267,12 @@ class _ChatScreenState extends State<ChatScreen> {
                         return _SwipeChatRow(
                           item: item,
                           onOpen: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Buka chat: ${item.name}'),
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (_) => ChatConversationScreen(
+                                contactName: item.name,
+                                avatarUrl: item.avatarUrl,
                               ),
-                            );
+                            ));
                           },
                           onArchive: () {
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -291,9 +296,13 @@ class _ChatScreenState extends State<ChatScreen> {
                         return _GroupRow(
                           group: g,
                           onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Buka group: ${g.name}')),
-                            );
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (_) => ChatConversationScreen(
+                                contactName: g.name,
+                                isGroup: true,
+                                memberCount: g.members,
+                              ),
+                            ));
                           },
                         );
                       },
