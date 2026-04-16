@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import '../../services/auth_service.dart';
 import '../../services/storage_service.dart';
@@ -146,8 +147,8 @@ class _AccountScreenState extends State<AccountScreen> {
   @override
   Widget build(BuildContext context) {
     if (_dataLoading) {
-      return const AuthBackground(
-        child: Center(child: CircularProgressIndicator()),
+      return AuthBackground(
+        child: const Center(child: CircularProgressIndicator()),
       );
     }
 
@@ -159,26 +160,26 @@ class _AccountScreenState extends State<AccountScreen> {
             alignment: Alignment.centerLeft,
             child: AuthLogo(),
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: 14),
 
           // Title
           Text(t['title']!,
-              style: const TextStyle(
+              style: TextStyle(
                   fontSize: 20, fontWeight: FontWeight.w800, color: kPurple)),
-          const SizedBox(height: 18),
+          SizedBox(height: 18),
 
           // Avatar
           Container(
             width: 82,
             height: 82,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               color: kPurpleButton,
               shape: BoxShape.circle,
             ),
-            child: const Icon(
+            child: Icon(
               Icons.person_rounded,
               size: 56,
-              color: Colors.white,
+              color: Theme.of(context).appColors.card,
             ),
           ),
           const SizedBox(height: 10),
@@ -189,8 +190,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   fontSize: 12.5, fontWeight: FontWeight.w700, color: kPurple)),
           const SizedBox(height: 2),
           Text(_userEmail,
-              style: const TextStyle(
-                  fontSize: 12, color: kPurpleLight)),
+              style: const TextStyle(fontSize: 12, color: kPurpleLight)),
           const SizedBox(height: 20),
 
           // Security questions section
@@ -199,8 +199,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   fontSize: 16, fontWeight: FontWeight.w700, color: kPurple)),
           const SizedBox(height: 4),
           Text(t['securitySubtitle']!,
-              style: const TextStyle(
-                  fontSize: 12, color: kPurpleLight)),
+              style: const TextStyle(fontSize: 12, color: kPurpleLight)),
           const SizedBox(height: 16),
 
           // Error
@@ -215,8 +214,8 @@ class _AccountScreenState extends State<AccountScreen> {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(_error,
-                  style: const TextStyle(
-                      color: Color(0xFFB91C1C), fontSize: 13)),
+                  style:
+                      const TextStyle(color: Color(0xFFB91C1C), fontSize: 13)),
             ),
 
           // Question 1
@@ -234,7 +233,7 @@ class _AccountScreenState extends State<AccountScreen> {
               _questions[1]['question'] as String? ?? '',
               _answer2Ctrl,
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
           ],
 
           // Verify button
@@ -245,7 +244,7 @@ class _AccountScreenState extends State<AccountScreen> {
               onPressed: _loading ? null : _handleVerify,
               style: ElevatedButton.styleFrom(
                 backgroundColor: kPurpleButton,
-                disabledBackgroundColor: kPurpleButton.withOpacity(0.7),
+                disabledBackgroundColor: kPurpleButton.withValues(alpha: 0.7),
                 elevation: 0,
                 padding: EdgeInsets.zero,
                 shape: RoundedRectangleBorder(
@@ -253,8 +252,8 @@ class _AccountScreenState extends State<AccountScreen> {
               ),
               child: Text(
                 _loading ? t['verifying']! : t['verify']!,
-                style: const TextStyle(
-                    color: Colors.white,
+                style: TextStyle(
+                    color: Theme.of(context).appColors.card,
                     fontSize: 13,
                     fontWeight: FontWeight.w700),
               ),
@@ -301,34 +300,35 @@ class _AccountScreenState extends State<AccountScreen> {
     );
   }
 
-  Widget _buildQuestionBlock(String question, TextEditingController controller) {
+  Widget _buildQuestionBlock(
+      String question, TextEditingController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(question,
-            style: const TextStyle(
+            style: TextStyle(
                 fontSize: 13, fontWeight: FontWeight.w600, color: kPurple)),
-        const SizedBox(height: 6),
+        SizedBox(height: 6),
         Text(t['answer']!,
-            style: const TextStyle(
+            style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
                 color: kPurpleLight)),
-        const SizedBox(height: 4),
+        SizedBox(height: 4),
         Container(
           height: 46,
-          padding: const EdgeInsets.symmetric(horizontal: 14),
+          padding: EdgeInsets.symmetric(horizontal: 14),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).appColors.card,
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: const Color(0xFFBEB6C2), width: 1),
+            border: Border.all(color: Color(0xFFBEB6C2), width: 1),
           ),
           alignment: Alignment.center,
           child: TextField(
             controller: controller,
             onChanged: (_) => setState(() => _error = ''),
-            style: const TextStyle(
-                color: Color(0xFF2A2A2A),
+            style: TextStyle(
+                color: Theme.of(context).appColors.ink,
                 fontSize: 13,
                 fontWeight: FontWeight.w500),
             decoration: const InputDecoration(

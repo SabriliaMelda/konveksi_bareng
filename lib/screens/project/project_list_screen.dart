@@ -1,6 +1,8 @@
 // daftar_project.dart
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
+import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
 
 const kPurple = Color(0xFF6B257F);
 
@@ -68,7 +70,8 @@ class _ProjectListScreenState extends State<ProjectListScreen> {
     final projects = _filtered;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
+      bottomNavigationBar: AppBottomNav(activeIndex: -1),
 
       // FAB tetap
       floatingActionButton: FloatingActionButton(
@@ -76,7 +79,7 @@ class _ProjectListScreenState extends State<ProjectListScreen> {
         onPressed: () {
           // TODO: tambah project
         },
-        child: const Icon(Icons.add, color: Colors.white),
+        child: Icon(Icons.add, color: Theme.of(context).appColors.card),
       ),
 
       body: SafeArea(
@@ -102,12 +105,12 @@ class _ProjectListScreenState extends State<ProjectListScreen> {
                         icon: Icons.arrow_back_ios_new_rounded,
                         onTap: () => context.pop(),
                       ),
-                      const SizedBox(width: 12),
-                      const Expanded(
+                      SizedBox(width: 12),
+                      Expanded(
                         child: Text(
                           'Daftar Project',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Theme.of(context).appColors.card,
                             fontSize: 18,
                             fontWeight: FontWeight.w800,
                           ),
@@ -122,35 +125,39 @@ class _ProjectListScreenState extends State<ProjectListScreen> {
                     ],
                   ),
 
-                  const SizedBox(height: 14),
+                  SizedBox(height: 14),
 
                   // search
                   Container(
                     height: 44,
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    padding: EdgeInsets.symmetric(horizontal: 12),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF50047D),
+                      color: Color(0xFF50047D),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withOpacity(0.12)),
+                      border: Border.all(
+                          color: Theme.of(context)
+                              .appColors
+                              .card
+                              .withValues(alpha: 0.12)),
                     ),
                     child: Row(
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.search,
                           color: Colors.white70,
                           size: 20,
                         ),
-                        const SizedBox(width: 8),
+                        SizedBox(width: 8),
                         Expanded(
                           child: TextField(
                             controller: _searchC,
                             onChanged: (_) => setState(() {}),
-                            style: const TextStyle(
-                              color: Colors.white,
+                            style: TextStyle(
+                              color: Theme.of(context).appColors.card,
                               fontWeight: FontWeight.w600,
                               fontSize: 13,
                             ),
-                            cursorColor: Colors.white,
+                            cursorColor: Theme.of(context).appColors.card,
                             decoration: const InputDecoration(
                               border: InputBorder.none,
                               hintText: 'Cari project...',
@@ -230,19 +237,24 @@ class _FilterChips extends StatelessWidget {
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: items.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 8),
+        separatorBuilder: (_, __) => SizedBox(width: 8),
         itemBuilder: (context, i) {
           final active = i == currentIndex;
           return InkWell(
             borderRadius: BorderRadius.circular(999),
             onTap: () => onChange(i),
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
-                color: active ? Colors.white : Colors.white.withOpacity(0.14),
+                color: active
+                    ? Colors.white
+                    : Colors.white.withValues(alpha: 0.14),
                 borderRadius: BorderRadius.circular(999),
                 border: Border.all(
-                  color: Colors.white.withOpacity(active ? 0.0 : 0.18),
+                  color: Theme.of(context)
+                      .appColors
+                      .card
+                      .withValues(alpha: active ? 0.0 : 0.18),
                 ),
               ),
               child: Text(
@@ -277,11 +289,12 @@ class _HeaderIcon extends StatelessWidget {
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.12),
+          color: Theme.of(context).appColors.card.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.white.withOpacity(0.12)),
+          border: Border.all(
+              color: Theme.of(context).appColors.card.withValues(alpha: 0.12)),
         ),
-        child: Icon(icon, color: Colors.white, size: 20),
+        child: Icon(icon, color: Theme.of(context).appColors.card, size: 20),
       ),
     );
   }
@@ -316,7 +329,7 @@ class _ProjectCard extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).appColors.card,
           borderRadius: BorderRadius.circular(18),
           boxShadow: const [
             BoxShadow(
@@ -354,8 +367,8 @@ class _ProjectCard extends StatelessWidget {
                         ),
                         gradient: LinearGradient(
                           colors: [
-                            Colors.black.withOpacity(0.0),
-                            Colors.black.withOpacity(0.45),
+                            Colors.black.withValues(alpha: 0.0),
+                            Colors.black.withValues(alpha: 0.45),
                           ],
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
@@ -369,18 +382,18 @@ class _ProjectCard extends StatelessWidget {
                     left: 10,
                     top: 10,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(
+                      padding: EdgeInsets.symmetric(
                         horizontal: 10,
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: statusColor.withOpacity(0.95),
+                        color: statusColor.withValues(alpha: 0.95),
                         borderRadius: BorderRadius.circular(999),
                       ),
                       child: Text(
                         project.status,
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: Theme.of(context).appColors.card,
                           fontSize: 11,
                           fontWeight: FontWeight.w800,
                         ),
@@ -393,17 +406,20 @@ class _ProjectCard extends StatelessWidget {
                     right: 10,
                     top: 10,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(
+                      padding: EdgeInsets.symmetric(
                         horizontal: 10,
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.92),
+                        color: Theme.of(context)
+                            .appColors
+                            .card
+                            .withValues(alpha: 0.92),
                         borderRadius: BorderRadius.circular(999),
                       ),
                       child: Text(
                         '$progressPercent%',
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: kPurple,
                           fontSize: 11,
                           fontWeight: FontWeight.w900,
@@ -421,8 +437,8 @@ class _ProjectCard extends StatelessWidget {
                       project.title,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: TextStyle(
+                        color: Theme.of(context).appColors.card,
                         fontSize: 14,
                         fontWeight: FontWeight.w900,
                         height: 1.1,
@@ -435,25 +451,25 @@ class _ProjectCard extends StatelessWidget {
 
             // ===== info bawah
             Padding(
-              padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
+              padding: EdgeInsets.fromLTRB(12, 10, 12, 12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     project.client,
-                    style: const TextStyle(
-                      color: Color(0xFF6B7280),
+                    style: TextStyle(
+                      color: Theme.of(context).appColors.muted,
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6),
 
                   // ✅ NILAI PROJECT
                   Text(
                     _formatRupiah(project.nilaiProject),
-                    style: const TextStyle(
-                      color: Colors.black,
+                    style: TextStyle(
+                      color: Theme.of(context).appColors.ink,
                       fontSize: 13,
                       fontWeight: FontWeight.w900,
                     ),
@@ -476,7 +492,7 @@ class _ProjectCard extends StatelessWidget {
                           gradient: LinearGradient(
                             colors: [
                               statusColor,
-                              statusColor.withOpacity(0.65),
+                              statusColor.withValues(alpha: 0.65),
                             ],
                             begin: Alignment.centerLeft,
                             end: Alignment.centerRight,
@@ -486,7 +502,7 @@ class _ProjectCard extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
 
                   // deadline row
                   Row(
@@ -496,12 +512,12 @@ class _ProjectCard extends StatelessWidget {
                         size: 16,
                         color: statusColor,
                       ),
-                      const SizedBox(width: 6),
+                      SizedBox(width: 6),
                       Expanded(
                         child: Text(
                           project.deadline,
-                          style: const TextStyle(
-                            color: Color(0xFF6B7280),
+                          style: TextStyle(
+                            color: Theme.of(context).appColors.muted,
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
                           ),

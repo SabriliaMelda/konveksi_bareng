@@ -1,5 +1,6 @@
 // status_tagihan_upah.dart
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
 const kPurple = Color(0xFF6B257F);
@@ -41,13 +42,12 @@ class _WageBillingStatusScreenState extends State<WageBillingStatusScreen> {
     }).toList();
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
       body: SafeArea(
         child: Column(
           children: [
             const _TopHeader(title: 'Status tagihan upah'),
             const SizedBox(height: 10),
-
             Padding(
               padding: const EdgeInsets.fromLTRB(18, 0, 18, 12),
               child: _SearchBox(
@@ -59,7 +59,6 @@ class _WageBillingStatusScreenState extends State<WageBillingStatusScreen> {
                 },
               ),
             ),
-
             Expanded(
               child: ListView.separated(
                 padding: const EdgeInsets.fromLTRB(18, 0, 18, 18),
@@ -111,7 +110,7 @@ class _TopHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18).copyWith(top: 10),
+      padding: EdgeInsets.symmetric(horizontal: 18).copyWith(top: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -121,8 +120,8 @@ class _TopHeader extends StatelessWidget {
           ),
           Text(
             title,
-            style: const TextStyle(
-              color: Color(0xFF121111),
+            style: TextStyle(
+              color: Theme.of(context).appColors.ink,
               fontSize: 16,
               fontWeight: FontWeight.w600,
               height: 1.4,
@@ -156,8 +155,8 @@ class _CircleIcon extends StatelessWidget {
         height: 40,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(32),
-          border: Border.all(color: const Color(0xFFDFDEDE)),
-          color: Colors.white,
+          border: Border.all(color: Theme.of(context).appColors.border),
+          color: Theme.of(context).appColors.card,
         ),
         alignment: Alignment.center,
         child: Icon(icon, size: 20, color: iconColor ?? Colors.black87),
@@ -184,21 +183,21 @@ class _SearchBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 46,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8F8FA),
+        color: Color(0xFFF8F8FA),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFE8ECF4)),
+        border: Border.all(color: Theme.of(context).appColors.border),
       ),
       child: Row(
         children: [
-          const Icon(Icons.search, size: 20, color: Color(0xFF8F9BB3)),
-          const SizedBox(width: 8),
+          Icon(Icons.search, size: 20, color: Color(0xFF8F9BB3)),
+          SizedBox(width: 8),
           Expanded(
             child: TextField(
               controller: controller,
               onChanged: onChanged,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: 'Cari tagihan...',
                 hintStyle: TextStyle(
@@ -206,8 +205,8 @@ class _SearchBox extends StatelessWidget {
                   fontSize: 14,
                 ),
               ),
-              style: const TextStyle(
-                color: Color(0xFF111111),
+              style: TextStyle(
+                color: Theme.of(context).appColors.ink,
                 fontSize: 14,
               ),
             ),
@@ -249,11 +248,11 @@ class _BookmarkListTile extends StatelessWidget {
       borderRadius: BorderRadius.circular(14),
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
         decoration: BoxDecoration(
-          color: const Color(0xFFF8F8FA),
+          color: Color(0xFFF8F8FA),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
+          border: Border.all(color: Theme.of(context).appColors.border),
         ),
         child: Row(
           children: [
@@ -261,15 +260,14 @@ class _BookmarkListTile extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).appColors.card,
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: const Color(0xFFE8ECF4)),
+                border: Border.all(color: Theme.of(context).appColors.border),
               ),
               alignment: Alignment.center,
               child: Icon(icon, color: kPurple, size: 20),
             ),
-            const SizedBox(width: 12),
-
+            SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -278,8 +276,8 @@ class _BookmarkListTile extends StatelessWidget {
                     title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Color(0xFF111111),
+                    style: TextStyle(
+                      color: Theme.of(context).appColors.ink,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                     ),
@@ -298,7 +296,6 @@ class _BookmarkListTile extends StatelessWidget {
                 ],
               ),
             ),
-
             const Icon(Icons.chevron_right, color: Color(0xFF8F9BB3)),
           ],
         ),

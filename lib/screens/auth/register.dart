@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import '../../services/auth_service.dart';
 import '../../services/storage_service.dart';
@@ -151,7 +152,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           // Email
           _buildField(t['labelEmail']!, _emailCtrl, 'you@example.com',
               TextInputType.emailAddress),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
 
           // Submit
           SizedBox(
@@ -161,7 +162,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               onPressed: _loading ? null : _handleSubmit,
               style: ElevatedButton.styleFrom(
                 backgroundColor: kPurpleButton,
-                disabledBackgroundColor: kPurpleButton.withOpacity(0.7),
+                disabledBackgroundColor: kPurpleButton.withValues(alpha: 0.7),
                 elevation: 0,
                 padding: EdgeInsets.zero,
                 shape: RoundedRectangleBorder(
@@ -169,8 +170,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               child: Text(
                 _loading ? t['creating']! : t['create']!,
-                style: const TextStyle(
-                    color: Colors.white,
+                style: TextStyle(
+                    color: Theme.of(context).appColors.card,
                     fontSize: 13,
                     fontWeight: FontWeight.w700),
               ),
@@ -225,18 +226,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label,
-            style: const TextStyle(
+            style: TextStyle(
                 color: kPurple,
                 fontSize: 12,
                 fontWeight: FontWeight.w600)),
-        const SizedBox(height: 6),
+        SizedBox(height: 6),
         Container(
           height: 36,
-          padding: const EdgeInsets.symmetric(horizontal: 12),
+          padding: EdgeInsets.symmetric(horizontal: 12),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).appColors.card,
             borderRadius: BorderRadius.circular(6),
-            border: Border.all(color: const Color(0xFFBEB6C2), width: 1),
+            border: Border.all(color: Color(0xFFBEB6C2), width: 1),
           ),
           alignment: Alignment.center,
           child: TextField(
@@ -250,8 +251,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     setState(() => _error = '');
                   }
                 : (_) => setState(() => _error = ''),
-            style: const TextStyle(
-                color: Color(0xFF2A2A2A),
+            style: TextStyle(
+                color: Theme.of(context).appColors.ink,
                 fontSize: 12,
                 fontWeight: FontWeight.w500),
             decoration: InputDecoration(

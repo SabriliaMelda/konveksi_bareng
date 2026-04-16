@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
 const kPurple = Color(0xFF6B257F);
@@ -69,7 +70,7 @@ class BookmarkMenuScreen extends StatelessWidget {
   final String? subtitle;
   final List<BookmarkItem> items;
 
-  const BookmarkMenuScreen({
+  BookmarkMenuScreen({
     super.key,
     required this.title,
     required this.items,
@@ -79,7 +80,7 @@ class BookmarkMenuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F7FB),
+      backgroundColor: Theme.of(context).appColors.bg,
       body: SafeArea(
         child: Column(
           children: [
@@ -147,9 +148,9 @@ class _TopHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      padding: EdgeInsets.fromLTRB(16, 12, 16, 14),
+      decoration: BoxDecoration(
+        color: Theme.of(context).appColors.card,
         border: Border(bottom: BorderSide(color: Color(0xFFE8ECF4))),
       ),
       child: Column(
@@ -160,14 +161,14 @@ class _TopHeader extends StatelessWidget {
                 icon: Icons.arrow_back_ios_new_rounded,
                 onTap: onBack,
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Expanded(
                 child: Text(
                   title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: Color(0xFF121111),
+                  style: TextStyle(
+                    color: Theme.of(context).appColors.ink,
                     fontSize: 18,
                     fontWeight: FontWeight.w900,
                     height: 1.1,
@@ -209,11 +210,11 @@ class _HeaderIcon extends StatelessWidget {
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-          color: const Color(0xFFF3F4F6),
+          color: Color(0xFFF3F4F6),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
+          border: Border.all(color: Theme.of(context).appColors.border),
         ),
-        child: Icon(icon, color: const Color(0xFF111111), size: 20),
+        child: Icon(icon, color: Theme.of(context).appColors.ink, size: 20),
       ),
     );
   }
@@ -227,11 +228,11 @@ class _HeaderInfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+      padding: EdgeInsets.fromLTRB(14, 12, 14, 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).appColors.card,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE8ECF4)),
+        border: Border.all(color: Theme.of(context).appColors.border),
         boxShadow: const [
           BoxShadow(
             color: Color(0x14000000),
@@ -246,9 +247,9 @@ class _HeaderInfoCard extends StatelessWidget {
             width: 44,
             height: 44,
             decoration: BoxDecoration(
-              color: kPurple.withOpacity(0.10),
+              color: kPurple.withValues(alpha: 0.10),
               borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: kPurple.withOpacity(0.15)),
+              border: Border.all(color: kPurple.withValues(alpha: 0.15)),
             ),
             alignment: Alignment.center,
             child: const Icon(
@@ -292,9 +293,9 @@ class _Chip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: kPurple.withOpacity(0.12),
+        color: kPurple.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: kPurple.withOpacity(0.18)),
+        border: Border.all(color: kPurple.withValues(alpha: 0.18)),
       ),
       child: Text(
         text,
@@ -338,9 +339,9 @@ class _BookmarkTile extends StatelessWidget {
       child: Container(
         height: 56,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).appColors.card,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
+          border: Border.all(color: Theme.of(context).appColors.border),
           boxShadow: const [
             BoxShadow(
               color: Color(0x10000000),
@@ -356,7 +357,7 @@ class _BookmarkTile extends StatelessWidget {
               width: 6,
               height: double.infinity,
               decoration: BoxDecoration(
-                color: kPurple.withOpacity(isFolder ? 0.95 : 0.70),
+                color: kPurple.withValues(alpha: isFolder ? 0.95 : 0.70),
                 borderRadius: const BorderRadius.horizontal(
                   left: Radius.circular(16),
                 ),
@@ -369,23 +370,23 @@ class _BookmarkTile extends StatelessWidget {
               width: 38,
               height: 38,
               decoration: BoxDecoration(
-                color: kPurple.withOpacity(0.10),
+                color: kPurple.withValues(alpha: 0.10),
                 borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: kPurple.withOpacity(0.14)),
+                border: Border.all(color: kPurple.withValues(alpha: 0.14)),
               ),
               alignment: Alignment.center,
               child: Icon(item.icon, size: 20, color: kPurple),
             ),
 
-            const SizedBox(width: 10),
+            SizedBox(width: 10),
 
             Expanded(
               child: Text(
                 formatBookmarkTitle(item.title),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  color: Color(0xFF121111),
+                style: TextStyle(
+                  color: Theme.of(context).appColors.ink,
                   fontSize: 13,
                   fontWeight: FontWeight.w800,
                 ),
