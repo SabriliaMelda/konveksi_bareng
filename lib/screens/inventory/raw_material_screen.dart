@@ -226,7 +226,7 @@ class _QuickMenuGrid extends StatelessWidget {
             crossAxisCount: 4,
             mainAxisSpacing: 12,
             crossAxisSpacing: 12,
-            childAspectRatio: 0.88,
+            mainAxisExtent: 90,
           ),
           itemBuilder: (context, i) {
             final it = items[i];

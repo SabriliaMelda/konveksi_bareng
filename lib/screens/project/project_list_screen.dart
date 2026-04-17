@@ -203,10 +203,10 @@ class _ProjectListScreenState extends State<ProjectListScreen> {
                 child: GridView.builder(
                   itemCount: projects.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, // 2 kolom agar card lebih lebar & enak
+                    crossAxisCount: 2,
                     mainAxisSpacing: 14,
                     crossAxisSpacing: 14,
-                    childAspectRatio: 0.88,
+                    mainAxisExtent: 260,
                   ),
                   itemBuilder: (context, index) {
                     final p = projects[index];

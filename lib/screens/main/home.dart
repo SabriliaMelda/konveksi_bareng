@@ -248,7 +248,7 @@ class _PromoSectionState extends State<_PromoSection> {
         children: [
           // ====== CAROUSEL ======
           SizedBox(
-            height: 160,
+            height: 170,
             child: PageView.builder(
               controller: _pageController,
               itemCount: promos.length,
@@ -310,13 +310,12 @@ class _PromoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 150,
       decoration: BoxDecoration(
         color: Theme.of(context).appColors.card,
         borderRadius: BorderRadius.circular(24),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x14000000), // shadow lembut
+            color: Color(0x14000000),
             blurRadius: 20,
             offset: Offset(0, 6),
           ),
@@ -432,7 +431,7 @@ class _MenuGrid extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         mainAxisSpacing: 3,
         crossAxisSpacing: 0,
-        childAspectRatio: 50 / 50,
+        childAspectRatio: 50 / 62,
         children: items.map((e) {
           final label = e.$1;
           final icon = e.$2;
@@ -581,7 +580,7 @@ class _FeatureGrid extends StatelessWidget {
               crossAxisCount: 2,
               mainAxisSpacing: 16,
               crossAxisSpacing: 16,
-              childAspectRatio: 1.05,
+              childAspectRatio: 1.1,
             ),
             itemBuilder: (context, index) {
               final item = features[index];
@@ -606,12 +605,13 @@ class _FeatureGrid extends StatelessWidget {
                     color: Theme.of(context).appColors.iconSurface,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  padding: EdgeInsets.all(16),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(icon, size: 90, color: Color(0xFF6B257F)),
-                      SizedBox(height: 12),
+                      Icon(icon, size: 72, color: Color(0xFF6B257F)),
+                      SizedBox(height: 8),
                       Text(
                         title,
                         textAlign: TextAlign.center,
