@@ -32,9 +32,6 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  static bool get devBypass =>
-      dotenv.env['DEV_AUTH_BYPASS']?.toUpperCase() == 'TRUE';
-
   @override
   Widget build(BuildContext context) {
     final isDark = context.watch<ThemeProvider>().darkMode;
@@ -45,7 +42,7 @@ class MyApp extends StatelessWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
-      routerConfig: devBypass ? devRouter : appRouter,
+      routerConfig: appRouter,
     );
   }
 }

@@ -292,9 +292,3 @@ final GoRouter appRouter = GoRouter(
     ),
   ],
 );
-
-/// Same routes as [appRouter] but starts at /home — used when DEV_AUTH_BYPASS=TRUE.
-final GoRouter devRouter = GoRouter(
-  initialLocation: '/home',
-  routes: appRouter.configuration.routes,
-);
