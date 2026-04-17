@@ -83,7 +83,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: _kBg,
-      bottomNavigationBar: AppBottomNav(activeIndex: 0),
+      bottomNavigationBar: AppBottomNav(activeIndex: -1),
       body: Stack(
         children: [
           CustomScrollView(

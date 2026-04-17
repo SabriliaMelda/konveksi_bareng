@@ -71,7 +71,7 @@ class _ProjectListScreenState extends State<ProjectListScreen> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).appColors.card,
-      bottomNavigationBar: AppBottomNav(activeIndex: 0),
+      bottomNavigationBar: AppBottomNav(activeIndex: -1),
 
       // FAB tetap
       floatingActionButton: FloatingActionButton(

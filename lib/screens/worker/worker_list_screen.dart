@@ -53,7 +53,7 @@ class _WorkerListScreenState extends State<WorkerListScreen> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).appColors.card,
-      bottomNavigationBar: AppBottomNav(activeIndex: 0),
+      bottomNavigationBar: AppBottomNav(activeIndex: -1),
       body: SafeArea(
         child: Column(
           children: [

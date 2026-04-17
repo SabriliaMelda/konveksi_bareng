@@ -834,7 +834,7 @@ class _WageScreenState extends State<WageScreen> {
         onPressed: _openAddSheet,
         child: Icon(Icons.add_rounded, size: 26),
       ),
-      bottomNavigationBar: AppBottomNav(activeIndex: 0),
+      bottomNavigationBar: AppBottomNav(activeIndex: -1),
       body: SafeArea(
         child: Column(
           children: [

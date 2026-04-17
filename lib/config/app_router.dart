@@ -70,7 +70,12 @@ import '../screens/promotion/promotion_screen.dart';
 // ── Common ──
 import '../screens/common/simple_placeholder_page.dart';
 
+// ── Shell ──
+import '../widgets/main_shell.dart';
+
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> _shellNavigatorKey =
+    GlobalKey<NavigatorState>();
 
 Page<void> _fadePage(Widget child, GoRouterState state) {
   return CustomTransitionPage<void>(
@@ -114,17 +119,26 @@ final GoRouter appRouter = GoRouter(
         path: '/security',
         pageBuilder: (_, s) => _fadePage(SecurityScreen(), s)),
 
-    // ── Main routes ──
-    GoRoute(path: '/home', pageBuilder: (_, s) => _fadePage(HomeScreen(), s)),
-    GoRoute(
-        path: '/settings',
-        pageBuilder: (_, s) => _fadePage(SettingsScreen(), s)),
-    GoRoute(
-        path: '/profile', pageBuilder: (_, s) => _fadePage(ProfileScreen(), s)),
-    GoRoute(
-        path: '/wishlist',
-        pageBuilder: (_, s) => _fadePage(WishlistScreen(), s)),
-    GoRoute(path: '/chat', pageBuilder: (_, s) => _fadePage(ChatScreen(), s)),
+    // ── Main routes (persistent shell with bottom nav) ──
+    ShellRoute(
+      navigatorKey: _shellNavigatorKey,
+      builder: (context, state, child) => MainShell(child: child),
+      routes: [
+        GoRoute(
+            path: '/home', pageBuilder: (_, s) => _fadePage(HomeScreen(), s)),
+        GoRoute(
+            path: '/wishlist',
+            pageBuilder: (_, s) => _fadePage(WishlistScreen(), s)),
+        GoRoute(
+            path: '/settings',
+            pageBuilder: (_, s) => _fadePage(SettingsScreen(), s)),
+        GoRoute(
+            path: '/chat', pageBuilder: (_, s) => _fadePage(ChatScreen(), s)),
+        GoRoute(
+            path: '/profile',
+            pageBuilder: (_, s) => _fadePage(ProfileScreen(), s)),
+      ],
+    ),
 
     // ── Finance routes ──
     GoRoute(
