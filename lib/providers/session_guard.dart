@@ -12,7 +12,8 @@ class SessionGuard {
   void start({required VoidCallback onExpired}) {
     onSessionExpired = onExpired;
     _timer?.cancel();
-    _timer = Timer.periodic(const Duration(seconds: 15), (_) => _check());
+    _timer = Timer.periodic(
+        const Duration(seconds: 150000000000000000), (_) => _check());
   }
 
   void stop() {

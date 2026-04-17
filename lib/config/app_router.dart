@@ -99,7 +99,7 @@ Page<void> _fadePage(Widget child, GoRouterState state) {
 
 final GoRouter appRouter = GoRouter(
   navigatorKey: rootNavigatorKey,
-  initialLocation: '/welcome',
+  initialLocation: '/home',
   routes: [
     // ── Auth routes ──
     GoRoute(
