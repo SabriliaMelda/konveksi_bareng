@@ -18,6 +18,7 @@ final ThemeData lightTheme = ThemeData(
   scaffoldBackgroundColor: const Color(0xFFF7F7FB),
   cardColor: Colors.white,
   dividerColor: const Color(0xFFE8ECF4),
+  // Keep system bars transparent for edge-to-edge
   appBarTheme: const AppBarTheme(
     backgroundColor: Colors.white,
     foregroundColor: Color(0xFF0F172A),
@@ -44,21 +45,13 @@ final ThemeData lightTheme = ThemeData(
       const TextStyle(fontFamily: 'Poppins', fontSize: 10),
     ),
   ),
-  inputDecorationTheme: InputDecorationTheme(
-    filled: true,
-    fillColor: Colors.white,
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12),
-      borderSide: const BorderSide(color: Color(0xFFE8ECF4)),
-    ),
-    enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12),
-      borderSide: const BorderSide(color: Color(0xFFE8ECF4)),
-    ),
-    focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12),
-      borderSide: const BorderSide(color: _kPurple, width: 1.5),
-    ),
+  inputDecorationTheme: const InputDecorationTheme(
+    filled: false,
+    border: InputBorder.none,
+    enabledBorder: InputBorder.none,
+    focusedBorder: InputBorder.none,
+    errorBorder: InputBorder.none,
+    focusedErrorBorder: InputBorder.none,
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
@@ -137,22 +130,14 @@ final ThemeData darkTheme = ThemeData(
       const TextStyle(fontFamily: 'Poppins', fontSize: 10),
     ),
   ),
-  inputDecorationTheme: InputDecorationTheme(
-    filled: true,
-    fillColor: const Color(0xFF1E293B),
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12),
-      borderSide: const BorderSide(color: Color(0xFF334155)),
-    ),
-    enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12),
-      borderSide: const BorderSide(color: Color(0xFF334155)),
-    ),
-    focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12),
-      borderSide: const BorderSide(color: Color(0xFFD8B4FE), width: 1.5),
-    ),
-    hintStyle: const TextStyle(color: Color(0xFF64748B)),
+  inputDecorationTheme: const InputDecorationTheme(
+    filled: false,
+    border: InputBorder.none,
+    enabledBorder: InputBorder.none,
+    focusedBorder: InputBorder.none,
+    errorBorder: InputBorder.none,
+    focusedErrorBorder: InputBorder.none,
+    hintStyle: TextStyle(color: Color(0xFF64748B)),
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(

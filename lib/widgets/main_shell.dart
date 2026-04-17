@@ -22,6 +22,9 @@ class MainShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Let the body extend behind the bottom nav bar — the nav bar itself
+      // adds a SizedBox for the system navigation bar inset.
+      extendBody: true,
       bottomNavigationBar: AppBottomNav(activeIndex: _activeIndex(context)),
       body: child,
     );

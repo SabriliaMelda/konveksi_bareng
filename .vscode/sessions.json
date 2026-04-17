@@ -1,0 +1,88 @@
+{
+    "$schema": "https://cdn.statically.io/gh/nguyenngoclongdev/cdn/main/schema/v11/terminal-keeper.json",
+    "theme": "tribe",
+    "active": "Manop",
+    "activateOnStartup": true,
+    "keepExistingTerminals": false,
+    "sessions": {
+        "default": [
+            {
+                "name": "hello",
+                "autoExecuteCommands": true,
+                "icon": "person",
+                "color": "terminal.ansiGreen",
+                "commands": [
+                    "echo hello"
+                ]
+            },
+            [
+                {
+                    "name": "docker:ros",
+                    "commands": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "docker:k8s",
+                    "commands": [
+                        ""
+                    ]
+                }
+            ],
+            [
+                {
+                    "name": "docker:nats",
+                    "commands": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "docker:fleet",
+                    "commands": [
+                        ""
+                    ]
+                }
+            ]
+        ],
+        "Manop": [
+            {
+                "name": "Selamat datang, Manop!",
+                "autoExecuteCommands": true,
+                "icon": "person",
+                "color": "terminal.ansiWhite",
+                "commands": [
+                    ""
+                ]
+            },
+            [
+                {
+                    "name": "flutter:frontend",
+                    "commands": [
+                        "flutter run"
+                    ],
+                    "cwd": "konveksi_bareng",
+                    "color": "terminal.ansiBrightRed",
+                    "icon": "code"
+                },
+                {
+                    "name": "golang:backend:sso",
+                    "commands": [
+                        "go run cmd/main.go"
+                    ],
+                    "cwd": "../konveksi_bareng_be",
+                    "color": "terminal.ansiBrightRed",
+                    "icon": "code"
+                },
+                {
+                    "name": "golang:backend:konveksi",
+                    "commands": [
+                        "go run cmd/main.go"
+                    ],
+                    "cwd": "../sso_dash_be",
+                    "color": "terminal.ansiBrightRed",
+                    "icon": "code"
+                }
+            ]
+        ]
+    }
+}

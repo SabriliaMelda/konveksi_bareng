@@ -9,7 +9,7 @@ const _kPurple = Color(0xFF6B257F);
 class AppBottomNav extends StatelessWidget {
   final int activeIndex;
 
-  AppBottomNav({super.key, required this.activeIndex});
+  const AppBottomNav({super.key, required this.activeIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +20,10 @@ class AppBottomNav extends StatelessWidget {
     final inactiveColor =
         isDark ? const Color(0xFF64748B) : const Color(0xFFC9CBCE);
 
+    // bottomInset covers the Android gesture/button nav bar height
+    final bottomInset = MediaQuery.of(context).padding.bottom;
+
     return Container(
-      height: 72,
       decoration: BoxDecoration(
         color: bg,
         border: Border(top: BorderSide(color: border)),
@@ -33,64 +35,74 @@ class AppBottomNav extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          _NavItem(
-            label: 'Home',
-            icon: Icons.home_outlined,
-            activeIcon: Icons.home_filled,
-            active: activeIndex == 0,
-            activeColor: activeColor,
-            inactiveColor: inactiveColor,
-            onTap: () {
-              if (activeIndex != 0) context.go('/home');
-            },
+          SizedBox(
+            height: 62,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _NavItem(
+                  label: 'Home',
+                  icon: Icons.home_outlined,
+                  activeIcon: Icons.home_filled,
+                  active: activeIndex == 0,
+                  activeColor: activeColor,
+                  inactiveColor: inactiveColor,
+                  onTap: () {
+                    if (activeIndex != 0) context.go('/home');
+                  },
+                ),
+                _NavItem(
+                  label: 'Wishlist',
+                  icon: Icons.favorite_border,
+                  activeIcon: Icons.favorite,
+                  active: activeIndex == 1,
+                  activeColor: activeColor,
+                  inactiveColor: inactiveColor,
+                  onTap: () {
+                    if (activeIndex != 1) context.go('/wishlist');
+                  },
+                ),
+                _NavItem(
+                  label: 'Settings',
+                  icon: Icons.settings_outlined,
+                  activeIcon: Icons.settings,
+                  active: activeIndex == 2,
+                  activeColor: activeColor,
+                  inactiveColor: inactiveColor,
+                  onTap: () {
+                    if (activeIndex != 2) context.go('/settings');
+                  },
+                ),
+                _NavItem(
+                  label: 'Chat',
+                  icon: Icons.chat_bubble_outline,
+                  activeIcon: Icons.chat_bubble,
+                  active: activeIndex == 3,
+                  activeColor: activeColor,
+                  inactiveColor: inactiveColor,
+                  onTap: () {
+                    if (activeIndex != 3) context.go('/chat');
+                  },
+                ),
+                _NavItem(
+                  label: 'Profile',
+                  icon: Icons.person_outline,
+                  activeIcon: Icons.person,
+                  active: activeIndex == 4,
+                  activeColor: activeColor,
+                  inactiveColor: inactiveColor,
+                  onTap: () {
+                    if (activeIndex != 4) context.go('/profile');
+                  },
+                ),
+              ],
+            ),
           ),
-          _NavItem(
-            label: 'Wishlist',
-            icon: Icons.favorite_border,
-            activeIcon: Icons.favorite,
-            active: activeIndex == 1,
-            activeColor: activeColor,
-            inactiveColor: inactiveColor,
-            onTap: () {
-              if (activeIndex != 1) context.go('/wishlist');
-            },
-          ),
-          _NavItem(
-            label: 'Settings',
-            icon: Icons.settings_outlined,
-            activeIcon: Icons.settings,
-            active: activeIndex == 2,
-            activeColor: activeColor,
-            inactiveColor: inactiveColor,
-            onTap: () {
-              if (activeIndex != 2) context.go('/settings');
-            },
-          ),
-          _NavItem(
-            label: 'Chat',
-            icon: Icons.chat_bubble_outline,
-            activeIcon: Icons.chat_bubble,
-            active: activeIndex == 3,
-            activeColor: activeColor,
-            inactiveColor: inactiveColor,
-            onTap: () {
-              if (activeIndex != 3) context.go('/chat');
-            },
-          ),
-          _NavItem(
-            label: 'Profile',
-            icon: Icons.person_outline,
-            activeIcon: Icons.person,
-            active: activeIndex == 4,
-            activeColor: activeColor,
-            inactiveColor: inactiveColor,
-            onTap: () {
-              if (activeIndex != 4) context.go('/profile');
-            },
-          ),
+          // Absorb the system navigation bar inset so our bar sits above it
+          SizedBox(height: bottomInset),
         ],
       ),
     );

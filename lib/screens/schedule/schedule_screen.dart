@@ -164,7 +164,7 @@ class _DaySelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 100,
+      height: 110,
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         scrollDirection: Axis.horizontal,
@@ -351,7 +351,6 @@ class _JadwalMenuCard extends StatelessWidget {
         // TODO: menu lain nanti
       },
       child: Container(
-        height: 86,
         decoration: BoxDecoration(
           color: Theme.of(context).appColors.card,
           borderRadius: BorderRadius.circular(16),
@@ -363,8 +362,10 @@ class _JadwalMenuCard extends StatelessWidget {
             ),
           ],
         ),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Icon(item.icon, size: 26, color: kPurple),
             const SizedBox(height: 8),
@@ -373,10 +374,13 @@ class _JadwalMenuCard extends StatelessWidget {
               child: Text(
                 item.label,
                 textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   color: Color(0xFF393333),
-                  fontSize: 12,
+                  fontSize: 11,
                   fontWeight: FontWeight.w600,
+                  height: 1.3,
                 ),
               ),
             ),

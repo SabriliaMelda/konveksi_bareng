@@ -363,7 +363,7 @@ class _CalendarGrid extends StatelessWidget {
         crossAxisCount: 7,
         mainAxisSpacing: 10,
         crossAxisSpacing: 6,
-        childAspectRatio: 1.15,
+        childAspectRatio: 0.95,
       ),
       itemBuilder: (context, index) {
         final cell = days[index];

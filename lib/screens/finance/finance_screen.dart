@@ -470,7 +470,7 @@ class _MenuGridKeuangan extends StatelessWidget {
         crossAxisCount: 2,
         mainAxisSpacing: 14,
         crossAxisSpacing: 14,
-        childAspectRatio: 1.55,
+        mainAxisExtent: 76,
       ),
       itemBuilder: (context, index) {
         final item = menus[index];

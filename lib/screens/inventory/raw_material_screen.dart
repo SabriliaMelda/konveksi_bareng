@@ -1,6 +1,5 @@
 // lib/pages/bahan_baku.dart
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/screens/finance/payment_screen.dart';
 import 'package:konveksi_bareng/screens/finance/sales_screen.dart';
 import 'package:konveksi_bareng/screens/inventory/shipment_screen.dart';
 import 'package:konveksi_bareng/screens/finance/purchase_screen.dart';
@@ -205,7 +204,6 @@ class _QuickMenuGrid extends StatelessWidget {
       const _QuickItem('Pembelian', Icons.local_offer_outlined),
       const _QuickItem('Pengiriman', Icons.local_shipping_outlined),
       const _QuickItem('Penjualan', Icons.point_of_sale_outlined),
-      const _QuickItem('Pembayaran', Icons.payment_outlined),
     ];
 
     return Column(
@@ -228,7 +226,7 @@ class _QuickMenuGrid extends StatelessWidget {
             crossAxisCount: 4,
             mainAxisSpacing: 12,
             crossAxisSpacing: 12,
-            childAspectRatio: 0.88,
+            mainAxisExtent: 90,
           ),
           itemBuilder: (context, i) {
             final it = items[i];
@@ -290,13 +288,6 @@ class _QuickMenuGrid extends StatelessWidget {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (_) => SalesScreen()),
-      );
-      return;
-    }
-    if (label == 'Pembayaran') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => PaymentScreen()),
       );
       return;
     }
