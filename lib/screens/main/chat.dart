@@ -8,7 +8,9 @@ import 'package:konveksi_bareng/screens/main/chat_conversation_screen.dart';
 const kPurple = Color(0xFF6B257F);
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+  final String? prevRoute;
+
+  const ChatScreen({super.key, this.prevRoute});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -18,9 +20,11 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _searchC = TextEditingController();
+  final FocusNode _searchFocus = FocusNode();
 
   // true = Chats, false = Groups
   bool _showChats = true;
+  bool _isSearching = false;
 
   String _query = '';
 
@@ -49,7 +53,6 @@ class _ChatScreenState extends State<ChatScreen> {
       avatarUrl: 'https://placehold.co/80x80',
       unread: 0,
       isRead: false,
-      selected: true,
     ),
     _ChatItem(
       name: 'Phoebe',
@@ -124,6 +127,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void dispose() {
     _searchC.dispose();
+    _searchFocus.dispose();
     super.dispose();
   }
 
@@ -151,12 +155,39 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             // ===== HEADER GRADIENT =====
             _HeaderGradient(
+              onBack: () {
+                if (widget.prevRoute != null && widget.prevRoute!.isNotEmpty) {
+                  context.go(widget.prevRoute!);
+                } else if (context.canPop()) {
+                  context.pop();
+                } else {
+                  context.go('/home');
+                }
+              },
               onNotif: () {
                 ScaffoldMessenger.of(
                   context,
                 ).showSnackBar(const SnackBar(content: Text('Notifikasi')));
               },
+              isSearching: _isSearching,
               searchController: _searchC,
+              searchFocusNode: _searchFocus,
+              onOpenSearch: () {
+                setState(() => _isSearching = true);
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (mounted) {
+                    _searchFocus.requestFocus();
+                  }
+                });
+              },
+              onCloseSearch: () {
+                _searchC.clear();
+                _searchFocus.unfocus();
+                setState(() {
+                  _isSearching = false;
+                  _query = '';
+                });
+              },
               onSearchChanged: (v) => setState(() => _query = v),
               onClear: () {
                 _searchC.clear();
@@ -319,14 +350,24 @@ class _ChatScreenState extends State<ChatScreen> {
 // ===================== HEADER (GRADIENT + SEARCH) =====================
 //
 class _HeaderGradient extends StatelessWidget {
+  final VoidCallback onBack;
   final VoidCallback onNotif;
+  final bool isSearching;
   final TextEditingController searchController;
+  final FocusNode searchFocusNode;
+  final VoidCallback onOpenSearch;
+  final VoidCallback onCloseSearch;
   final ValueChanged<String> onSearchChanged;
   final VoidCallback onClear;
 
   const _HeaderGradient({
+    required this.onBack,
     required this.onNotif,
+    required this.isSearching,
     required this.searchController,
+    required this.searchFocusNode,
+    required this.onOpenSearch,
+    required this.onCloseSearch,
     required this.onSearchChanged,
     required this.onClear,
   });
@@ -351,34 +392,53 @@ class _HeaderGradient extends StatelessWidget {
         children: [
           Row(
             children: [
-              // Back
-              _HeaderIcon(
-                icon: Icons.arrow_back_ios_new_rounded,
-                onTap: () => context.pop(),
-              ),
-              SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  'Chat',
-                  style: TextStyle(
-                    color: Theme.of(context).appColors.card,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w900,
+              if (isSearching)
+                Expanded(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: _SearchPillBetter(
+                          controller: searchController,
+                          focusNode: searchFocusNode,
+                          onChanged: onSearchChanged,
+                          onClear: onClear,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      _HeaderIcon(
+                        icon: Icons.close_rounded,
+                        onTap: onCloseSearch,
+                      ),
+                    ],
+                  ),
+                )
+              else ...[
+                _HeaderIcon(
+                  icon: Icons.arrow_back_ios_new_rounded,
+                  onTap: onBack,
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    'Chat',
+                    style: TextStyle(
+                      color: Theme.of(context).appColors.card,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900,
+                    ),
                   ),
                 ),
-              ),
-              // Notif
-              _HeaderIcon(
-                icon: Icons.notifications_none_rounded,
-                onTap: onNotif,
-              ),
+                _HeaderIcon(
+                  icon: Icons.search_rounded,
+                  onTap: onOpenSearch,
+                ),
+                const SizedBox(width: 10),
+                _HeaderIcon(
+                  icon: Icons.notifications_none_rounded,
+                  onTap: onNotif,
+                ),
+              ],
             ],
-          ),
-          const SizedBox(height: 12),
-          _SearchPillBetter(
-            controller: searchController,
-            onChanged: onSearchChanged,
-            onClear: onClear,
           ),
         ],
       ),
@@ -414,11 +474,13 @@ class _HeaderIcon extends StatelessWidget {
 
 class _SearchPillBetter extends StatelessWidget {
   final TextEditingController controller;
+  final FocusNode? focusNode;
   final ValueChanged<String> onChanged;
   final VoidCallback onClear;
 
   const _SearchPillBetter({
     required this.controller,
+    this.focusNode,
     required this.onChanged,
     required this.onClear,
   });
@@ -441,6 +503,7 @@ class _SearchPillBetter extends StatelessWidget {
           Expanded(
             child: TextField(
               controller: controller,
+              focusNode: focusNode,
               onChanged: onChanged,
               decoration: InputDecoration(
                 border: InputBorder.none,

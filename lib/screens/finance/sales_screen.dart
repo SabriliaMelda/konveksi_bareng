@@ -1,25 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
+import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
 
 const Color kPurple = Color(0xFF6B257F);
 const Color kBg = Color(0xFFF7F7FB);
+const List<double> _marketplaceWeekValues = [
+  0.49,
+  0.58,
+  0.61,
+  0.57,
+  0.68,
+  0.72,
+  0.94,
+];
+const List<double> _offlineWeekValues = [
+  0.53,
+  0.58,
+  0.55,
+  0.63,
+  0.68,
+  0.74,
+  0.84,
+];
+const List<String> _weekChartLabels = [
+  '12 Apr',
+  '13 Apr',
+  '14 Apr',
+  '15 Apr',
+  '16 Apr',
+  '17 Apr',
+  '18 Apr',
+];
 
 class SalesScreen extends StatefulWidget {
-  const SalesScreen({super.key});
+  final String? prevRoute;
+
+  const SalesScreen({super.key, this.prevRoute});
 
   @override
   State<SalesScreen> createState() => _SalesScreenState();
 }
 
 class _SalesScreenState extends State<SalesScreen> {
-  int _selectedSource = 0;
-
-  final List<String> _sources = const [
-    'Semua',
-    'Marketplace',
-    'Offline',
-  ];
+  final TextEditingController _searchC = TextEditingController();
+  final FocusNode _searchFocus = FocusNode();
+  bool _isSearching = false;
 
   final List<_SaleItem> _sales = const [
     _SaleItem(
@@ -65,9 +91,16 @@ class _SalesScreenState extends State<SalesScreen> {
   ];
 
   List<_SaleItem> get _filteredSales {
-    final selected = _sources[_selectedSource];
-    if (selected == 'Semua') return _sales;
-    return _sales.where((e) => e.source == selected).toList();
+    final query = _searchC.text.trim().toLowerCase();
+    return _sales.where((e) {
+      final matchesQuery =
+          query.isEmpty ||
+          e.source.toLowerCase().contains(query) ||
+          e.invoice.toLowerCase().contains(query) ||
+          e.customer.toLowerCase().contains(query) ||
+          e.product.toLowerCase().contains(query);
+      return matchesQuery;
+    }).toList();
   }
 
   void _showMessage(String text) {
@@ -78,6 +111,13 @@ class _SalesScreenState extends State<SalesScreen> {
   }
 
   @override
+  void dispose() {
+    _searchC.dispose();
+    _searchFocus.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBg,
@@ -85,8 +125,25 @@ class _SalesScreenState extends State<SalesScreen> {
         child: Column(
           children: [
             _Header(
-              onHomeTap: () {
-                context.go('/home');
+              prevRoute: widget.prevRoute,
+              isSearching: _isSearching,
+              searchController: _searchC,
+              searchFocusNode: _searchFocus,
+              onSearchChanged: (_) => setState(() {}),
+              onOpenSearch: () {
+                setState(() => _isSearching = true);
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (mounted) _searchFocus.requestFocus();
+                });
+              },
+              onCloseSearch: () {
+                _searchC.clear();
+                _searchFocus.unfocus();
+                setState(() => _isSearching = false);
+              },
+              onClearSearch: () {
+                _searchC.clear();
+                setState(() {});
               },
             ),
             Expanded(
@@ -95,55 +152,9 @@ class _SalesScreenState extends State<SalesScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const _ChannelSummary(),
+                    const _TotalSalesCard(),
                     const SizedBox(height: 18),
-                    const _SectionTitle(title: 'Sumber Penjualan'),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      height: 38,
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: _sources.length,
-                        separatorBuilder: (_, __) => const SizedBox(width: 10),
-                        itemBuilder: (context, index) {
-                          final active = _selectedSource == index;
-                          return InkWell(
-                            borderRadius: BorderRadius.circular(999),
-                            onTap: () =>
-                                setState(() => _selectedSource = index),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 14,
-                                vertical: 8,
-                              ),
-                              decoration: BoxDecoration(
-                                color: active ? kPurple : Colors.white,
-                                borderRadius: BorderRadius.circular(999),
-                                border: Border.all(
-                                  color: active
-                                      ? kPurple
-                                      : const Color(0xFFE8ECF4),
-                                ),
-                              ),
-                              child: Text(
-                                _sources[index],
-                                style: TextStyle(
-                                  color: active
-                                      ? Colors.white
-                                      : const Color(0xFF6B7280),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w800,
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 18),
-                    const _SectionTitle(title: 'Penjualan Hari Ini'),
-                    const SizedBox(height: 10),
-                    const _TodaySalesCard(),
+                    _ChannelSummary(query: _searchC.text),
                     const SizedBox(height: 18),
                     const _SectionTitle(title: 'Daftar Transaksi Penjualan'),
                     const SizedBox(height: 12),
@@ -160,19 +171,41 @@ class _SalesScreenState extends State<SalesScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: _BottomActionBar(
-        onTambahOffline: () => _showMessage('Tambah penjualan offline'),
-        onSinkronMarketplace: () =>
-            _showMessage('Sinkron penjualan dari marketplace'),
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _BottomActionBar(
+            onTambahOffline: () => _showMessage('Tambah penjualan offline'),
+            onSinkronMarketplace: () =>
+                _showMessage('Sinkron penjualan dari marketplace'),
+          ),
+          const AppBottomNav(activeIndex: -1),
+        ],
       ),
     );
   }
 }
 
 class _Header extends StatelessWidget {
-  final VoidCallback onHomeTap;
+  final String? prevRoute;
+  final bool isSearching;
+  final TextEditingController searchController;
+  final FocusNode searchFocusNode;
+  final ValueChanged<String> onSearchChanged;
+  final VoidCallback onOpenSearch;
+  final VoidCallback onCloseSearch;
+  final VoidCallback onClearSearch;
 
-  const _Header({required this.onHomeTap});
+  const _Header({
+    this.prevRoute,
+    required this.isSearching,
+    required this.searchController,
+    required this.searchFocusNode,
+    required this.onSearchChanged,
+    required this.onOpenSearch,
+    required this.onCloseSearch,
+    required this.onClearSearch,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -190,53 +223,122 @@ class _Header extends StatelessWidget {
         children: [
           Row(
             children: [
-              _HeaderIcon(
-                icon: Icons.arrow_back_ios_new_rounded,
-                onTap: () => context.pop(),
-              ),
-              SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  'Penjualan',
-                  style: TextStyle(
-                    color: Theme.of(context).appColors.card,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w900,
+              if (isSearching)
+                Expanded(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: _HeaderSearchField(
+                          controller: searchController,
+                          focusNode: searchFocusNode,
+                          onChanged: onSearchChanged,
+                          onClear: onClearSearch,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      _HeaderIcon(
+                        icon: Icons.close_rounded,
+                        onTap: onCloseSearch,
+                      ),
+                    ],
+                  ),
+                )
+              else ...[
+                _HeaderIcon(
+                  icon: Icons.arrow_back_ios_new_rounded,
+                  onTap: () {
+                    if (prevRoute != null && prevRoute!.isNotEmpty) {
+                      context.go(prevRoute!);
+                    } else if (context.canPop()) {
+                      context.pop();
+                    } else {
+                      context.go('/home');
+                    }
+                  },
+                ),
+                SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    'Penjualan',
+                    style: TextStyle(
+                      color: Theme.of(context).appColors.card,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900,
+                    ),
                   ),
                 ),
-              ),
-              _HeaderIcon(
-                icon: Icons.home_filled,
-                onTap: onHomeTap,
-              ),
-            ],
-          ),
-          SizedBox(height: 12),
-          Container(
-            height: 46,
-            padding: EdgeInsets.symmetric(horizontal: 12),
-            decoration: BoxDecoration(
-              color: Theme.of(context).appColors.card.withValues(alpha: 0.14),
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(
-                  color:
-                      Theme.of(context).appColors.card.withValues(alpha: 0.12)),
-            ),
-            child: Row(
-              children: const [
-                Icon(Icons.search, color: Colors.white70, size: 20),
-                SizedBox(width: 10),
-                Text(
-                  'Cari invoice, pelanggan, produk...',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                  ),
+                _HeaderIcon(
+                  icon: Icons.search_rounded,
+                  onTap: onOpenSearch,
                 ),
               ],
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _HeaderSearchField extends StatelessWidget {
+  final TextEditingController controller;
+  final FocusNode focusNode;
+  final ValueChanged<String> onChanged;
+  final VoidCallback onClear;
+
+  const _HeaderSearchField({
+    required this.controller,
+    required this.focusNode,
+    required this.onChanged,
+    required this.onClear,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 40,
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        color: Theme.of(context).appColors.card.withValues(alpha: 0.14),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: Theme.of(context).appColors.card.withValues(alpha: 0.12),
+        ),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.search, color: Colors.white70, size: 18),
+          const SizedBox(width: 8),
+          Expanded(
+            child: TextField(
+              controller: controller,
+              focusNode: focusNode,
+              onChanged: onChanged,
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                hintText: 'Cari invoice, pelanggan, produk...',
+                hintStyle: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              style: TextStyle(
+                color: Theme.of(context).appColors.card,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
+          if (controller.text.isNotEmpty)
+            InkWell(
+              borderRadius: BorderRadius.circular(999),
+              onTap: onClear,
+              child: const Padding(
+                padding: EdgeInsets.all(4),
+                child: Icon(Icons.close, color: Colors.white70, size: 18),
+              ),
+            ),
         ],
       ),
     );
@@ -273,31 +375,50 @@ class _HeaderIcon extends StatelessWidget {
 }
 
 class _ChannelSummary extends StatelessWidget {
-  const _ChannelSummary();
+  final String query;
+
+  const _ChannelSummary({required this.query});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: const [
-        Expanded(
+    final normalized = query.trim().toLowerCase();
+    final showMarketplace =
+        normalized.isEmpty || 'marketplace'.contains(normalized);
+    final showOffline = normalized.isEmpty || 'offline'.contains(normalized);
+
+    final cards = <Widget>[
+      if (showMarketplace)
+        const Expanded(
           child: _SummaryCard(
             title: 'Marketplace',
             value: 'Rp 7.250.000',
             subtitle: '2 transaksi',
             icon: Icons.storefront_outlined,
+            chartValues: _marketplaceWeekValues,
+            chartColor: Color(0xFF2563EB),
+            chartLabels: _weekChartLabels,
           ),
         ),
-        SizedBox(width: 12),
-        Expanded(
+      if (showMarketplace && showOffline) const SizedBox(width: 12),
+      if (showOffline)
+        const Expanded(
           child: _SummaryCard(
             title: 'Offline',
             value: 'Rp 5.000.000',
             subtitle: '2 transaksi',
             icon: Icons.store_mall_directory_outlined,
+            chartValues: _offlineWeekValues,
+            chartColor: Color(0xFFEA580C),
+            chartLabels: _weekChartLabels,
           ),
         ),
-      ],
-    );
+    ];
+
+    if (cards.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Row(children: cards);
   }
 }
 
@@ -306,12 +427,18 @@ class _SummaryCard extends StatelessWidget {
   final String value;
   final String subtitle;
   final IconData icon;
+  final List<double> chartValues;
+  final Color chartColor;
+  final List<String> chartLabels;
 
   const _SummaryCard({
     required this.title,
     required this.value,
     required this.subtitle,
     required this.icon,
+    required this.chartValues,
+    required this.chartColor,
+    required this.chartLabels,
   });
 
   @override
@@ -331,29 +458,44 @@ class _SummaryCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Container(
-            width: 42,
-            height: 42,
-            decoration: BoxDecoration(
-              color: Color(0xFFF3E4FF),
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: Icon(icon, color: kPurple),
-          ),
-          SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    color: Theme.of(context).appColors.muted,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w700,
+                Row(
+                  children: [
+                    Container(
+                      width: 42,
+                      height: 42,
+                      decoration: BoxDecoration(
+                        color: chartColor.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: Icon(icon, color: chartColor),
+                    ),
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        title,
+                        style: TextStyle(
+                          color: Theme.of(context).appColors.muted,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 12),
+                SizedBox(
+                  height: 72,
+                  child: _MiniLineChart(
+                    values: chartValues,
+                    color: chartColor,
+                    labels: chartLabels,
                   ),
                 ),
-                SizedBox(height: 4),
+                SizedBox(height: 12),
                 Text(
                   value,
                   style: TextStyle(
@@ -380,45 +522,300 @@ class _SummaryCard extends StatelessWidget {
   }
 }
 
-class _TodaySalesCard extends StatelessWidget {
-  const _TodaySalesCard();
+class _TotalSalesCard extends StatelessWidget {
+  const _TotalSalesCard();
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(14),
+      width: double.infinity,
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Theme.of(context).appColors.card,
-        borderRadius: BorderRadius.circular(18),
-        boxShadow: [
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Color(0xFF6B257F), Color(0xFF8E44AD)],
+        ),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: const [
           BoxShadow(
-            color: Color(0x14000000),
+            color: Color(0x22000000),
             blurRadius: 18,
-            offset: Offset(0, 8),
+            offset: Offset(0, 10),
           ),
         ],
-        border: Border.all(color: Color(0x0FE8ECF4)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Row(
+            children: [
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.14),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: const Icon(
+                  Icons.payments_outlined,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(width: 12),
+              const Expanded(
+                child: Text(
+                  'Total Penjualan',
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: const Text(
+                  '18 April 2026',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 9.5,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
           Text(
-            'Rekap Hari Ini',
+            'Rp 12.250.000',
             style: TextStyle(
-              color: Theme.of(context).appColors.ink,
-              fontSize: 15,
+              color: Theme.of(context).appColors.card,
+              fontSize: 21,
               fontWeight: FontWeight.w900,
             ),
           ),
-          SizedBox(height: 12),
-          _InfoRow(label: 'Total Order', value: '4 transaksi'),
-          _InfoRow(label: 'Marketplace', value: '2 transaksi'),
-          _InfoRow(label: 'Offline', value: '2 transaksi'),
-          _InfoRow(
-              label: 'Nilai Penjualan', value: 'Rp 12.250.000', strong: true),
+          const SizedBox(height: 4),
+          const Text(
+            '4 transaksi masuk hari ini',
+            style: TextStyle(
+              color: Colors.white70,
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
         ],
       ),
     );
+  }
+}
+
+class _MiniLineChart extends StatefulWidget {
+  final List<double> values;
+  final Color color;
+  final List<String> labels;
+
+  const _MiniLineChart({
+    required this.values,
+    required this.color,
+    required this.labels,
+  });
+
+  @override
+  State<_MiniLineChart> createState() => _MiniLineChartState();
+}
+
+class _MiniLineChartState extends State<_MiniLineChart> {
+  int? _selectedIndex;
+
+  void _selectPoint(Offset localPosition, double width) {
+    if (widget.values.isEmpty) return;
+    const horizontalPadding = 4.0;
+    final usableWidth = width - (horizontalPadding * 2);
+    final stepX =
+        widget.values.length == 1 ? 0.0 : usableWidth / (widget.values.length - 1);
+
+    var bestIndex = 0;
+    var bestDistance = double.infinity;
+    for (var i = 0; i < widget.values.length; i++) {
+      final pointX = horizontalPadding + (stepX * i);
+      final distance = (localPosition.dx - pointX).abs();
+      if (distance < bestDistance) {
+        bestDistance = distance;
+        bestIndex = i;
+      }
+    }
+    setState(() => _selectedIndex = bestIndex);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTapDown: (details) =>
+              _selectPoint(details.localPosition, constraints.maxWidth),
+          onHorizontalDragStart: (details) =>
+              _selectPoint(details.localPosition, constraints.maxWidth),
+          onHorizontalDragUpdate: (details) =>
+              _selectPoint(details.localPosition, constraints.maxWidth),
+          child: CustomPaint(
+            size: const Size(double.infinity, 72),
+            painter: _MiniLineChartPainter(
+              values: widget.values,
+              color: widget.color,
+              labels: widget.labels,
+              selectedIndex: _selectedIndex,
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _MiniLineChartPainter extends CustomPainter {
+  final List<double> values;
+  final Color color;
+  final List<String> labels;
+  final int? selectedIndex;
+
+  const _MiniLineChartPainter({
+    required this.values,
+    required this.color,
+    required this.labels,
+    required this.selectedIndex,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (values.isEmpty) return;
+
+    const horizontalPadding = 4.0;
+    const verticalPadding = 6.0;
+    const tooltipHeight = 22.0;
+    final usableWidth = size.width - (horizontalPadding * 2);
+    final usableHeight = size.height - (verticalPadding * 2) - tooltipHeight;
+    final stepX = values.length == 1 ? 0.0 : usableWidth / (values.length - 1);
+
+    final linePaint = Paint()
+      ..color = color
+      ..strokeWidth = 2.4
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
+
+    final fillPaint = Paint()
+      ..shader = LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [
+          color.withValues(alpha: 0.20),
+          color.withValues(alpha: 0.02),
+        ],
+      ).createShader(Offset.zero & size);
+
+    final gridPaint = Paint()
+      ..color = const Color(0xFFE5E7EB)
+      ..strokeWidth = 1;
+
+    for (var i = 1; i <= 2; i++) {
+      final y = verticalPadding + (usableHeight / 3) * i;
+      canvas.drawLine(
+        Offset(horizontalPadding, y),
+        Offset(size.width - horizontalPadding, y),
+        gridPaint,
+      );
+    }
+
+    final points = <Offset>[];
+    for (var i = 0; i < values.length; i++) {
+      final x = horizontalPadding + (stepX * i);
+      final y =
+          verticalPadding + ((1 - values[i].clamp(0.0, 1.0)) * usableHeight);
+      points.add(Offset(x, y));
+    }
+
+    final linePath = Path()..moveTo(points.first.dx, points.first.dy);
+    for (var i = 1; i < points.length; i++) {
+      linePath.lineTo(points[i].dx, points[i].dy);
+    }
+
+    final fillPath = Path.from(linePath)
+      ..lineTo(points.last.dx, size.height - verticalPadding)
+      ..lineTo(points.first.dx, size.height - verticalPadding)
+      ..close();
+
+    canvas.drawPath(fillPath, fillPaint);
+    canvas.drawPath(linePath, linePaint);
+
+    final dotPaint = Paint()..color = color;
+    for (var i = 0; i < points.length; i++) {
+      final point = points[i];
+      final isSelected = selectedIndex == i;
+      canvas.drawCircle(point, isSelected ? 4 : 2.8, dotPaint);
+
+      if (isSelected) {
+        final guidePaint = Paint()
+          ..color = color.withValues(alpha: 0.32)
+          ..strokeWidth = 1.2;
+        canvas.drawLine(
+          Offset(point.dx, verticalPadding),
+          Offset(point.dx, size.height - verticalPadding),
+          guidePaint,
+        );
+        canvas.drawCircle(
+          point,
+          8,
+          Paint()..color = color.withValues(alpha: 0.12),
+        );
+
+        if (i < labels.length) {
+          final textPainter = TextPainter(
+            text: TextSpan(
+              text: labels[i],
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 9,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            textDirection: TextDirection.ltr,
+            maxLines: 1,
+          )..layout();
+
+          final bubbleWidth = textPainter.width + 14;
+          final bubbleLeft =
+              (point.dx - (bubbleWidth / 2)).clamp(0.0, size.width - bubbleWidth);
+          final bubbleRect = RRect.fromRectAndRadius(
+            Rect.fromLTWH(bubbleLeft, 0, bubbleWidth, 20),
+            const Radius.circular(999),
+          );
+
+          canvas.drawRRect(bubbleRect, Paint()..color = color);
+          textPainter.paint(
+            canvas,
+            Offset(
+              bubbleLeft + ((bubbleWidth - textPainter.width) / 2),
+              (20 - textPainter.height) / 2,
+            ),
+          );
+        }
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _MiniLineChartPainter oldDelegate) {
+    return oldDelegate.values != values ||
+        oldDelegate.color != color ||
+        oldDelegate.labels != labels ||
+        oldDelegate.selectedIndex != selectedIndex;
   }
 }
 

@@ -2,13 +2,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:konveksi_bareng/config/app_colors.dart';
-import 'package:konveksi_bareng/screens/main/home.dart';
 import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
 
 const kPurple = Color(0xFF6B257F);
 
 class ShipmentScreen extends StatefulWidget {
-  const ShipmentScreen({super.key});
+  final String? prevRoute;
+
+  const ShipmentScreen({super.key, this.prevRoute});
 
   @override
   State<ShipmentScreen> createState() => _ShipmentScreenState();
@@ -104,7 +105,7 @@ class _ShipmentScreenState extends State<ShipmentScreen> {
           children: [
             const SizedBox(height: 10),
 
-            // ===== TOP ROW: BACK + SEARCH + HOME =====
+            // ===== TOP ROW: BACK + SEARCH =====
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
@@ -112,7 +113,16 @@ class _ShipmentScreenState extends State<ShipmentScreen> {
                   _CircleIconButton(
                     icon: Icons.arrow_back_ios_new,
                     iconColor: Colors.black87,
-                    onTap: () => context.pop(),
+                    onTap: () {
+                      if (widget.prevRoute != null &&
+                          widget.prevRoute!.isNotEmpty) {
+                        context.go(widget.prevRoute!);
+                      } else if (context.canPop()) {
+                        context.pop();
+                      } else {
+                        context.go('/home');
+                      }
+                    },
                   ),
                   const SizedBox(width: 10),
                   Expanded(
@@ -125,18 +135,6 @@ class _ShipmentScreenState extends State<ShipmentScreen> {
                         setState(() {});
                       },
                     ),
-                  ),
-                  const SizedBox(width: 10),
-                  _CircleIconButton(
-                    icon: Icons.home_outlined,
-                    iconColor: kPurple,
-                    onTap: () {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (_) => HomeScreen()),
-                        (route) => false,
-                      );
-                    },
                   ),
                 ],
               ),
@@ -202,7 +200,10 @@ class _ShipmentScreenState extends State<ShipmentScreen> {
                         final s = filtered[i];
                         return _ShipmentCard(
                           item: s,
-                          onTap: () => _openTrackingSheet(context, s),
+                          onTap: () => context.push(
+                            '/shipment-detail?prev=${Uri.encodeComponent(_detailPrevRoute)}',
+                            extra: s,
+                          ),
                           onCopyResi: () {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
@@ -222,13 +223,12 @@ class _ShipmentScreenState extends State<ShipmentScreen> {
     );
   }
 
-  void _openTrackingSheet(BuildContext context, _ShipmentItem item) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) => _TrackingSheet(item: item),
-    );
+  String get _detailPrevRoute {
+    final parentRoute =
+        (widget.prevRoute != null && widget.prevRoute!.isNotEmpty)
+            ? widget.prevRoute!
+            : '/home';
+    return '/shipment?prev=${Uri.encodeComponent(parentRoute)}';
   }
 }
 
@@ -613,6 +613,183 @@ class _ShipmentCard extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class ShipmentDetailScreen extends StatelessWidget {
+  final Object itemData;
+  final String? prevRoute;
+
+  const ShipmentDetailScreen({
+    super.key,
+    required this.itemData,
+    this.prevRoute,
+  });
+
+  _ShipmentItem get item => itemData as _ShipmentItem;
+
+  void _handleBack(BuildContext context) {
+    if (prevRoute != null && prevRoute!.isNotEmpty) {
+      context.go(prevRoute!);
+    } else if (context.canPop()) {
+      context.pop();
+    } else {
+      context.go('/shipment');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Theme.of(context).appColors.card,
+      bottomNavigationBar: const AppBottomNav(activeIndex: -1),
+      body: SafeArea(
+        child: Column(
+          children: [
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  _CircleIconButton(
+                    icon: Icons.arrow_back_ios_new,
+                    iconColor: Colors.black87,
+                    onTap: () => _handleBack(context),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      'Detail Pengiriman',
+                      style: TextStyle(
+                        color: Theme.of(context).appColors.ink,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 14),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _InfoTile(
+                      title: item.title,
+                      subtitle:
+                          '${item.courier} ${item.service} • ${item.resi}',
+                      statusText: item.statusText,
+                      statusColor: item.statusColor,
+                    ),
+                    const SizedBox(height: 16),
+                    _ShipmentSummaryCard(item: item),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Riwayat Pengiriman',
+                      style: TextStyle(
+                        color: Theme.of(context).appColors.ink,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    _Timeline(events: item.timeline),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ShipmentSummaryCard extends StatelessWidget {
+  final _ShipmentItem item;
+
+  const _ShipmentSummaryCard({required this.item});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Theme.of(context).appColors.card,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Theme.of(context).appColors.border),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x0CB3B3B3),
+            blurRadius: 40,
+            offset: Offset(0, 16),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Informasi Pengiriman',
+            style: TextStyle(
+              color: Theme.of(context).appColors.ink,
+              fontSize: 14,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+          const SizedBox(height: 12),
+          _ShipmentInfoRow(label: 'Order ID', value: item.orderId),
+          _ShipmentInfoRow(label: 'Toko', value: item.store),
+          _ShipmentInfoRow(label: 'Kurir', value: item.courier),
+          _ShipmentInfoRow(label: 'Layanan', value: item.service),
+          _ShipmentInfoRow(label: 'Resi', value: item.resi),
+          _ShipmentInfoRow(label: 'Estimasi', value: item.etaText),
+        ],
+      ),
+    );
+  }
+}
+
+class _ShipmentInfoRow extends StatelessWidget {
+  final String label;
+  final String value;
+
+  const _ShipmentInfoRow({required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 72,
+            child: Text(
+              label,
+              style: TextStyle(
+                color: Theme.of(context).appColors.muted,
+                fontSize: 11.5,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              value,
+              style: TextStyle(
+                color: Theme.of(context).appColors.ink,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

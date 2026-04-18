@@ -110,7 +110,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
           children: [
             SizedBox(height: 10),
 
-            // ===== TOP ROW: back + search + home + notif + avatar =====
+            // ===== TOP ROW: back + search + filter + notif =====
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Row(
@@ -133,11 +133,12 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                     ),
                   ),
                   const SizedBox(width: 10),
-                  _CircleIconButton(
-                    icon: Icons.home_filled,
-                    iconColor: kPurple,
+                  _IconPill(
+                    icon: Icons.tune_rounded,
                     onTap: () {
-                      context.go('/home');
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Filter/Sort (dummy)')),
+                      );
                     },
                   ),
                   const SizedBox(width: 10),
@@ -149,17 +150,13 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                       );
                     },
                   ),
-                  SizedBox(width: 10),
-                  const _AvatarCircle(
-                    url: 'https://picsum.photos/seed/me/120/120',
-                  ),
                 ],
               ),
             ),
 
             SizedBox(height: 14),
 
-            // ===== TITLE + Action =====
+            // ===== TITLE =====
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Row(
@@ -171,31 +168,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                         color: Theme.of(context).appColors.ink,
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    borderRadius: BorderRadius.circular(12),
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Filter/Sort (dummy)')),
-                      );
-                    },
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                      child: Row(
-                        children: [
-                          Icon(Icons.tune_rounded, size: 18, color: kPurple),
-                          SizedBox(width: 6),
-                          Text(
-                            'Filter',
-                            style: TextStyle(
-                              color: kPurple,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ],
                       ),
                     ),
                   ),
@@ -260,8 +232,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (_) => ProductDetailScreen(
+                        PageRouteBuilder(
+                          transitionDuration: Duration.zero,
+                          reverseTransitionDuration: Duration.zero,
+                          pageBuilder: (_, __, ___) => ProductDetailScreen(
                             product: MarketplaceProduct(
                               title: p.title,
                               store: p.store,
@@ -431,23 +405,6 @@ class _IconPill extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
         ),
         child: Icon(icon, size: 22, color: Theme.of(context).appColors.ink),
-      ),
-    );
-  }
-}
-
-class _AvatarCircle extends StatelessWidget {
-  final String url;
-  const _AvatarCircle({required this.url});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 42,
-      height: 42,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        image: DecorationImage(image: NetworkImage(url), fit: BoxFit.cover),
       ),
     );
   }

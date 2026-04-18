@@ -3,11 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:konveksi_bareng/screens/finance/sales_screen.dart';
 import 'package:konveksi_bareng/screens/inventory/shipment_screen.dart';
 import 'package:konveksi_bareng/screens/finance/purchase_screen.dart';
-import 'package:konveksi_bareng/screens/main/chat.dart';
 import 'package:konveksi_bareng/screens/marketplace/checkout.dart';
-import 'package:konveksi_bareng/screens/main/wishlist.dart';
 import 'package:konveksi_bareng/screens/marketplace/marketplace.dart';
-import 'package:konveksi_bareng/screens/main/home.dart';
 import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
@@ -25,6 +22,7 @@ class RawMaterialScreen extends StatefulWidget {
 
 class _RawMaterialScreenState extends State<RawMaterialScreen> {
   int _activeCategory = 0;
+  final TextEditingController _searchC = TextEditingController();
 
   static const _categories = [
     'Kain',
@@ -35,31 +33,62 @@ class _RawMaterialScreenState extends State<RawMaterialScreen> {
   ];
 
   String get _category => _categories[_activeCategory];
+  String get _query => _searchC.text.trim();
+
+  @override
+  void dispose() {
+    _searchC.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final isSearching = _query.isNotEmpty;
     return Scaffold(
       backgroundColor: kBg,
       bottomNavigationBar: AppBottomNav(activeIndex: -1),
       body: SafeArea(
         child: Column(
           children: [
-            const _Header(),
+            _Header(
+              controller: _searchC,
+              onChanged: (_) => setState(() {}),
+              onClear: () {
+                _searchC.clear();
+                setState(() {});
+              },
+            ),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.fromLTRB(16, 14, 16, 18),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const _QuickMenuGrid(),
+                    _QuickMenuGrid(query: _query),
+                    if (isSearching) ...[
+                      const SizedBox(height: 18),
+                      Text(
+                        'Hasil Pencarian',
+                        style: TextStyle(
+                          color: Theme.of(context).appColors.ink,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ] else ...[
+                      const SizedBox(height: 18),
+                      _CategoryRow(
+                        active: _activeCategory,
+                        categories: _categories,
+                        onChanged: (idx) =>
+                            setState(() => _activeCategory = idx),
+                      ),
+                    ],
                     const SizedBox(height: 18),
-                    _CategoryRow(
-                      active: _activeCategory,
-                      categories: _categories,
-                      onChanged: (idx) => setState(() => _activeCategory = idx),
+                    _RekomendasiSection(
+                      category: _category,
+                      query: _query,
                     ),
-                    const SizedBox(height: 18),
-                    _RekomendasiSection(category: _category),
                     const SizedBox(height: 18),
                   ],
                 ),
@@ -74,7 +103,15 @@ class _RawMaterialScreenState extends State<RawMaterialScreen> {
 
 // ================== HEADER UNGU + SEARCH ==================
 class _Header extends StatelessWidget {
-  const _Header();
+  final TextEditingController controller;
+  final ValueChanged<String> onChanged;
+  final VoidCallback onClear;
+
+  const _Header({
+    required this.controller,
+    required this.onChanged,
+    required this.onClear,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -96,31 +133,16 @@ class _Header extends StatelessWidget {
                 icon: Icons.arrow_back_ios_new_rounded,
                 onTap: () => context.pop(),
               ),
-              SizedBox(width: 12),
+              const SizedBox(width: 10),
               Expanded(
-                child: Text(
-                  'Bahan Baku',
-                  style: TextStyle(
-                    color: Theme.of(context).appColors.card,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w900,
-                  ),
+                child: _SearchBar(
+                  controller: controller,
+                  onChanged: onChanged,
+                  onClear: onClear,
                 ),
-              ),
-              _HeaderIcon(
-                icon: Icons.home_filled,
-                onTap: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (_) => HomeScreen()),
-                    (route) => false,
-                  );
-                },
               ),
             ],
           ),
-          const SizedBox(height: 12),
-          _SearchBar(onTap: () {}),
         ],
       ),
     );
@@ -154,37 +176,62 @@ class _HeaderIcon extends StatelessWidget {
 }
 
 class _SearchBar extends StatelessWidget {
-  final VoidCallback? onTap;
-  const _SearchBar({this.onTap});
+  final TextEditingController controller;
+  final ValueChanged<String> onChanged;
+  final VoidCallback onClear;
+
+  const _SearchBar({
+    required this.controller,
+    required this.onChanged,
+    required this.onClear,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(14),
-      onTap: onTap,
-      child: Container(
-        height: 46,
-        padding: EdgeInsets.symmetric(horizontal: 12),
-        decoration: BoxDecoration(
-          color: Theme.of(context).appColors.card.withValues(alpha: 0.14),
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-              color: Theme.of(context).appColors.card.withValues(alpha: 0.12)),
+    return Container(
+      height: 46,
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        color: Theme.of(context).appColors.card.withValues(alpha: 0.14),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: Theme.of(context).appColors.card.withValues(alpha: 0.12),
         ),
-        child: Row(
-          children: const [
-            Icon(Icons.search, color: Colors.white70, size: 20),
-            SizedBox(width: 10),
-            Text(
-              'Cari bahan baku, kain, aksesoris...',
-              style: TextStyle(
-                color: Colors.white70,
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.search, color: Colors.white70, size: 20),
+          const SizedBox(width: 10),
+          Expanded(
+            child: TextField(
+              controller: controller,
+              onChanged: onChanged,
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                hintText: 'Cari bahan baku, kain, aksesoris...',
+                hintStyle: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              style: const TextStyle(
+                color: Colors.white,
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
               ),
             ),
-          ],
-        ),
+          ),
+          if (controller.text.isNotEmpty)
+            InkWell(
+              borderRadius: BorderRadius.circular(999),
+              onTap: onClear,
+              child: const Padding(
+                padding: EdgeInsets.all(4),
+                child: Icon(Icons.close, color: Colors.white70, size: 18),
+              ),
+            ),
+        ],
       ),
     );
   }
@@ -192,7 +239,9 @@ class _SearchBar extends StatelessWidget {
 
 // ================== QUICK MENU (GRID 4 KOLOM / 8 ITEM) ==================
 class _QuickMenuGrid extends StatelessWidget {
-  const _QuickMenuGrid();
+  final String query;
+
+  const _QuickMenuGrid({required this.query});
 
   @override
   Widget build(BuildContext context) {
@@ -201,10 +250,18 @@ class _QuickMenuGrid extends StatelessWidget {
       const _QuickItem('Wishlist', Icons.favorite_border),
       const _QuickItem('Keranjang', Icons.shopping_cart_outlined),
       const _QuickItem('Chat', Icons.chat_bubble_outline),
-      const _QuickItem('Pembelian', Icons.local_offer_outlined),
+      const _QuickItem('Pemesanan', Icons.local_offer_outlined),
       const _QuickItem('Pengiriman', Icons.local_shipping_outlined),
       const _QuickItem('Penjualan', Icons.point_of_sale_outlined),
     ];
+    final normalizedQuery = query.toLowerCase();
+    final filteredItems = normalizedQuery.isEmpty
+        ? items
+        : items
+            .where(
+              (item) => item.label.toLowerCase().contains(normalizedQuery),
+            )
+            .toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -218,25 +275,45 @@ class _QuickMenuGrid extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 10),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: items.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 4,
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 12,
-            mainAxisExtent: 90,
+        if (filteredItems.isEmpty)
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+            decoration: BoxDecoration(
+              color: Theme.of(context).appColors.card,
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(color: const Color(0xFFE8ECF4)),
+            ),
+            child: Text(
+              'Tidak ada menu akses cepat yang cocok.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Theme.of(context).appColors.muted,
+                fontSize: 12.5,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          )
+        else
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: filteredItems.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 12,
+              mainAxisExtent: 90,
+            ),
+            itemBuilder: (context, i) {
+              final it = filteredItems[i];
+              return _QuickCardSmall(
+                label: it.label,
+                icon: it.icon,
+                onTap: () => _goQuick(context, it.label),
+              );
+            },
           ),
-          itemBuilder: (context, i) {
-            final it = items[i];
-            return _QuickCardSmall(
-              label: it.label,
-              icon: it.icon,
-              onTap: () => _goQuick(context, it.label),
-            );
-          },
-        ),
       ],
     );
   }
@@ -250,10 +327,7 @@ class _QuickMenuGrid extends StatelessWidget {
       return;
     }
     if (label == 'Wishlist') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => WishlistScreen()),
-      );
+      context.go('/wishlist?prev=/raw-material');
       return;
     }
     if (label == 'Keranjang') {
@@ -264,31 +338,19 @@ class _QuickMenuGrid extends StatelessWidget {
       return;
     }
     if (label == 'Chat') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => ChatScreen()),
-      );
+      context.go('/chat?prev=/raw-material');
       return;
     }
-    if (label == 'Pembelian') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => PurchaseScreen()),
-      );
+    if (label == 'Pemesanan') {
+      context.go('/purchase?prev=/raw-material');
       return;
     }
     if (label == 'Pengiriman') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => ShipmentScreen()),
-      );
+      context.go('/shipment?prev=/raw-material');
       return;
     }
     if (label == 'Penjualan') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => SalesScreen()),
-      );
+      context.go('/sales?prev=/raw-material');
       return;
     }
   }
@@ -442,7 +504,12 @@ class _CategoryRow extends StatelessWidget {
 // ================== REKOMENDASI (DINAMIS) ==================
 class _RekomendasiSection extends StatelessWidget {
   final String category;
-  const _RekomendasiSection({required this.category});
+  final String query;
+
+  const _RekomendasiSection({
+    required this.category,
+    required this.query,
+  });
 
   List<_Product> _dataByCategory(String cat) {
     switch (cat) {
@@ -611,7 +678,24 @@ class _RekomendasiSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final products = _dataByCategory(category);
+    final normalizedQuery = query.toLowerCase();
+    const allCategories = [
+      'Kain',
+      'Benang',
+      'Aksesoris',
+      'Packaging',
+      'Lainnya',
+    ];
+    final products = normalizedQuery.isEmpty
+        ? _dataByCategory(category)
+        : allCategories
+            .expand(_dataByCategory)
+            .where(
+              (product) =>
+                  product.title.toLowerCase().contains(normalizedQuery) ||
+                  product.subtitle.toLowerCase().contains(normalizedQuery),
+            )
+            .toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -619,7 +703,9 @@ class _RekomendasiSection extends StatelessWidget {
         Row(
           children: [
             Text(
-              'Rekomendasi • $category',
+              normalizedQuery.isEmpty
+                  ? 'Rekomendasi $category'
+                  : 'Hasil pencarian',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w900,
@@ -627,38 +713,59 @@ class _RekomendasiSection extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            InkWell(
-              borderRadius: BorderRadius.circular(999),
-              onTap: () {},
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 6, vertical: 6),
-                child: Text(
-                  'See all',
-                  style: TextStyle(
-                    color: kPurple,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w900,
+            if (normalizedQuery.isEmpty)
+              InkWell(
+                borderRadius: BorderRadius.circular(999),
+                onTap: () {},
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                  child: Text(
+                    'See all',
+                    style: TextStyle(
+                      color: kPurple,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w900,
+                    ),
                   ),
                 ),
               ),
-            ),
           ],
         ),
         const SizedBox(height: 12),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: products.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 14,
-            crossAxisSpacing: 14,
-            childAspectRatio: 0.62,
+        if (products.isEmpty)
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 16),
+            decoration: BoxDecoration(
+              color: Theme.of(context).appColors.card,
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(color: const Color(0xFFE8ECF4)),
+            ),
+            child: Text(
+              'Tidak ada bahan baku yang cocok dengan "$query".',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Theme.of(context).appColors.muted,
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          )
+        else
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: products.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 14,
+              crossAxisSpacing: 14,
+              childAspectRatio: 0.62,
+            ),
+            itemBuilder: (context, index) {
+              return _ProductCard(product: products[index]);
+            },
           ),
-          itemBuilder: (context, index) {
-            return _ProductCard(product: products[index]);
-          },
-        ),
       ],
     );
   }

@@ -6,7 +6,9 @@ import 'package:go_router/go_router.dart';
 const kPurple = Color(0xFF6B257F);
 
 class WishlistScreen extends StatefulWidget {
-  const WishlistScreen({super.key});
+  final String? prevRoute;
+
+  const WishlistScreen({super.key, this.prevRoute});
 
   @override
   State<WishlistScreen> createState() => _WishlistScreenState();
@@ -77,7 +79,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
           children: [
             SizedBox(height: 10),
 
-            // ===== TOP ROW: back + search + home + notif + avatar =====
+            // ===== TOP ROW: back + search =====
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Row(
@@ -85,7 +87,14 @@ class _WishlistScreenState extends State<WishlistScreen> {
                   _CircleIconButton(
                     icon: Icons.arrow_back_ios_new,
                     iconColor: Theme.of(context).appColors.ink,
-                    onTap: () => context.pop(),
+                    onTap: () {
+                      if (widget.prevRoute != null &&
+                          widget.prevRoute!.isNotEmpty) {
+                        context.go(widget.prevRoute!);
+                      } else {
+                        context.go('/home');
+                      }
+                    },
                   ),
                   const SizedBox(width: 10),
                   Expanded(
@@ -98,27 +107,6 @@ class _WishlistScreenState extends State<WishlistScreen> {
                         setState(() => _query = '');
                       },
                     ),
-                  ),
-                  const SizedBox(width: 10),
-                  _CircleIconButton(
-                    icon: Icons.home_filled,
-                    iconColor: kPurple,
-                    onTap: () {
-                      context.go('/home');
-                    },
-                  ),
-                  const SizedBox(width: 10),
-                  _IconPill(
-                    icon: Icons.notifications_none_rounded,
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Notifikasi (dummy)')),
-                      );
-                    },
-                  ),
-                  SizedBox(width: 10),
-                  const _AvatarCircle(
-                    url: 'https://picsum.photos/seed/me/120/120',
                   ),
                 ],
               ),
@@ -338,48 +326,6 @@ class _SearchPill extends StatelessWidget {
               ),
             ),
         ],
-      ),
-    );
-  }
-}
-
-class _IconPill extends StatelessWidget {
-  final IconData icon;
-  final VoidCallback onTap;
-
-  const _IconPill({required this.icon, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(16),
-      onTap: onTap,
-      child: Container(
-        width: 44,
-        height: 44,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: Color(0xFFF0F0F0),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Icon(icon, size: 22, color: Theme.of(context).appColors.ink),
-      ),
-    );
-  }
-}
-
-class _AvatarCircle extends StatelessWidget {
-  final String url;
-  const _AvatarCircle({required this.url});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 42,
-      height: 42,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        image: DecorationImage(image: NetworkImage(url), fit: BoxFit.cover),
       ),
     );
   }

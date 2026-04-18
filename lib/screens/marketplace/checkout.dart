@@ -74,6 +74,11 @@ const _paymentOptions = [
       group: 'QRIS',
       icon: Icons.qr_code_2_rounded,
       color: Color(0xFF6B257F)),
+  _PaymentOption(
+      label: 'Bayar di Tempat',
+      group: 'Lainnya',
+      icon: Icons.local_shipping_outlined,
+      color: Color(0xFF16A34A)),
 ];
 
 // ── Helper ────────────────────────────────────────────────────────────────────

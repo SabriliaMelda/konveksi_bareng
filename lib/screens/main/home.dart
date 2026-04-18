@@ -451,7 +451,7 @@ class _MenuGrid extends StatelessWidget {
             };
           } else if (label == 'Chat') {
             onTap = () {
-              context.push('/chat');
+              context.go('/chat?prev=/home');
             };
           } else if (label == 'Beli') {
             onTap = () {
@@ -594,7 +594,7 @@ class _FeatureGrid extends StatelessWidget {
                   } else if (title == 'Bahan Baku') {
                     context.push('/raw-material');
                   } else if (title == 'Komunitas') {
-                    context.push('/chat');
+                    context.go('/chat?prev=/home');
                   } else if (title == 'Keuangan') {
                     context.push('/finance');
                   }
