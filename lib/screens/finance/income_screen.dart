@@ -1,6 +1,8 @@
 // pemasukan.dart
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
+import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
 
 const Color kPurple = Color(0xFF6B257F);
 
@@ -72,7 +74,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
       ),
@@ -162,7 +164,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
 
                         context.pop();
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Pemasukan ditambahkan (dummy)')),
+                          SnackBar(content: Text('Pemasukan ditambahkan (dummy)')),
                         );
                       },
                       child: Container(
@@ -173,10 +175,10 @@ class _IncomeScreenState extends State<IncomeScreen> {
                           border: Border.all(color: kPurple),
                         ),
                         alignment: Alignment.center,
-                        child: const Text(
+                        child: Text(
                           'Simpan',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Theme.of(context).appColors.card,
                             fontSize: 12.5,
                             fontWeight: FontWeight.w900,
                           ),
@@ -197,7 +199,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
   void _openEditSheet(_IncomeTxn e) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
       ),
@@ -240,11 +242,11 @@ class _IncomeScreenState extends State<IncomeScreen> {
               _SheetAction(
                 icon: Icons.delete_outline_rounded,
                 label: 'Hapus pemasukan (dummy)',
-                color: const Color(0xFFD32F2F),
+                color: Color(0xFFD32F2F),
                 onTap: () {
                   context.pop();
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Hapus (dummy)')),
+                    SnackBar(content: Text('Hapus (dummy)')),
                   );
                 },
               ),
@@ -259,7 +261,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
   void _pickProject() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
       ),
@@ -342,7 +344,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
               onTap: () => setState(() => _tab = _InTab.edit),
             ),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 10),
           Expanded(
             child: _TabPill(
               label: 'Pemasukan project',
@@ -358,25 +360,26 @@ class _IncomeScreenState extends State<IncomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
 
       // ✅ PLUS DI KANAN BAWAH (hanya tab input)
       floatingActionButton: _tab == _InTab.input
           ? FloatingActionButton(
         backgroundColor: kPurple,
-        foregroundColor: Colors.white,
+        foregroundColor: Theme.of(context).appColors.card,
         elevation: 3,
         onPressed: _openAddSheet,
         child: const Icon(Icons.add_rounded, size: 26),
       )
           : null,
+      bottomNavigationBar: AppBottomNav(activeIndex: -1),
 
       body: SafeArea(
         child: Column(
           children: [
             // ===== HEADER =====
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+              padding: EdgeInsets.fromLTRB(16, 12, 16, 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -384,25 +387,25 @@ class _IncomeScreenState extends State<IncomeScreen> {
                     borderRadius: BorderRadius.circular(32),
                     onTap: () => context.pop(),
                     child: Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(32),
-                        border: Border.all(color: const Color(0xFFDFDEDE)),
-                        color: Colors.white,
+                        border: Border.all(color: Theme.of(context).appColors.border),
+                        color: Theme.of(context).appColors.card,
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.arrow_back_ios_new,
                         size: 18,
-                        color: Colors.black87,
+                        color: Theme.of(context).appColors.ink,
                       ),
                     ),
                   ),
-                  const Text(
+                  Text(
                     'Pemasukan',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF121111),
+                      color: Theme.of(context).appColors.ink,
                       height: 1.4,
                     ),
                   ),
@@ -412,11 +415,11 @@ class _IncomeScreenState extends State<IncomeScreen> {
                       context.go('/home');
                     },
                     child: Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(32),
-                        border: Border.all(color: const Color(0xFFDFDEDE)),
-                        color: Colors.white,
+                        border: Border.all(color: Theme.of(context).appColors.border),
+                        color: Theme.of(context).appColors.card,
                       ),
                       child: const Icon(
                         Icons.home_filled,
@@ -456,32 +459,32 @@ class _IncomeScreenState extends State<IncomeScreen> {
   // ================== INPUT MODE ==================
   Widget _buildInputMode() {
     return Column(
-      key: const ValueKey('input_mode_income'),
+      key: ValueKey('input_mode_income'),
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: 16),
           child: Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(14),
+            padding: EdgeInsets.all(14),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0xFFE8ECF4)),
-              boxShadow: const [
+              border: Border.all(color: Theme.of(context).appColors.border),
+              boxShadow: [
                 BoxShadow(
                   color: Color(0x0CB3B3B3),
                   blurRadius: 40,
                   offset: Offset(0, 16),
                 ),
               ],
-              color: Colors.white,
+              color: Theme.of(context).appColors.card,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Total Pemasukan',
                   style: TextStyle(
-                    color: Color(0xFF6A707C),
+                    color: Theme.of(context).appColors.muted,
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
                   ),
@@ -534,7 +537,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             lastDate: DateTime(now.year + 2),
                             initialDateRange: _customRange ??
                                 DateTimeRange(
-                                  start: now.subtract(const Duration(days: 7)),
+                                  start: now.subtract(Duration(days: 7)),
                                   end: now,
                                 ),
                           );
@@ -550,11 +553,11 @@ class _IncomeScreenState extends State<IncomeScreen> {
                   ],
                 ),
                 if (_period == _Period.custom && _customRange != null) ...[
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   Text(
                     '${_fmtDate(_customRange!.start)} - ${_fmtDate(_customRange!.end)}',
-                    style: const TextStyle(
-                      color: Color(0xFF1E232C),
+                    style: TextStyle(
+                      color: Theme.of(context).appColors.ink,
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
                     ),
@@ -564,22 +567,22 @@ class _IncomeScreenState extends State<IncomeScreen> {
             ),
           ),
         ),
-        const SizedBox(height: 10),
+        SizedBox(height: 10),
 
         Expanded(
           child: ListView.separated(
-            padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
+            padding: EdgeInsets.fromLTRB(16, 10, 16, 16),
             itemCount: _items.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 10),
+            separatorBuilder: (_, __) => SizedBox(height: 10),
             itemBuilder: (context, i) {
               final e = _items[i];
               return Container(
-                padding: const EdgeInsets.all(14),
+                padding: EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).appColors.card,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: const Color(0xFFE8ECF4)),
-                  boxShadow: const [
+                  border: Border.all(color: Theme.of(context).appColors.border),
+                  boxShadow: [
                     BoxShadow(
                       color: Color(0x0CB3B3B3),
                       blurRadius: 40,
@@ -593,17 +596,17 @@ class _IncomeScreenState extends State<IncomeScreen> {
                       width: 44,
                       height: 44,
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF6F7F8),
+                        color: Theme.of(context).appColors.iconSurface,
                         borderRadius: BorderRadius.circular(14),
                       ),
                       alignment: Alignment.center,
-                      child: const Icon(
+                      child: Icon(
                         Icons.arrow_downward_rounded,
                         color: Color(0xFF2E7D32),
                         size: 20,
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -612,19 +615,19 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             e.title,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              color: Color(0xFF1E232C),
+                            style: TextStyle(
+                              color: Theme.of(context).appColors.ink,
                               fontSize: 13,
                               fontWeight: FontWeight.w900,
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          SizedBox(height: 4),
                           Text(
                             e.note,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              color: Color(0xFF6A707C),
+                            style: TextStyle(
+                              color: Theme.of(context).appColors.muted,
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                             ),
@@ -663,53 +666,53 @@ class _IncomeScreenState extends State<IncomeScreen> {
   // ================== EDIT MODE ==================
   Widget _buildEditMode() {
     return Column(
-      key: const ValueKey('edit_mode_income'),
+      key: ValueKey('edit_mode_income'),
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: 16),
           child: Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(14),
+            padding: EdgeInsets.all(14),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0xFFE8ECF4)),
-              boxShadow: const [
+              border: Border.all(color: Theme.of(context).appColors.border),
+              boxShadow: [
                 BoxShadow(
                   color: Color(0x0CB3B3B3),
                   blurRadius: 40,
                   offset: Offset(0, 16),
                 ),
               ],
-              color: Colors.white,
+              color: Theme.of(context).appColors.card,
             ),
-            child: const Text(
+            child: Text(
               'Mode Edit aktif. Tap item untuk opsi edit/hapus.',
               style: TextStyle(
-                color: Color(0xFF6A707C),
+                color: Theme.of(context).appColors.muted,
                 fontSize: 12.5,
                 fontWeight: FontWeight.w800,
               ),
             ),
           ),
         ),
-        const SizedBox(height: 10),
+        SizedBox(height: 10),
         Expanded(
           child: ListView.separated(
-            padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
+            padding: EdgeInsets.fromLTRB(16, 10, 16, 16),
             itemCount: _items.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 10),
+            separatorBuilder: (_, __) => SizedBox(height: 10),
             itemBuilder: (context, i) {
               final e = _items[i];
               return InkWell(
                 borderRadius: BorderRadius.circular(16),
                 onTap: () => _openEditSheet(e),
                 child: Container(
-                  padding: const EdgeInsets.all(14),
+                  padding: EdgeInsets.all(14),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).appColors.card,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: const Color(0xFFE8ECF4)),
-                    boxShadow: const [
+                    border: Border.all(color: Theme.of(context).appColors.border),
+                    boxShadow: [
                       BoxShadow(
                         color: Color(0x0CB3B3B3),
                         blurRadius: 40,
@@ -723,13 +726,13 @@ class _IncomeScreenState extends State<IncomeScreen> {
                         width: 44,
                         height: 44,
                         decoration: BoxDecoration(
-                          color: const Color(0xFFF6F7F8),
+                          color: Theme.of(context).appColors.iconSurface,
                           borderRadius: BorderRadius.circular(14),
                         ),
                         alignment: Alignment.center,
-                        child: const Icon(Icons.edit_outlined, color: kPurple, size: 20),
+                        child: Icon(Icons.edit_outlined, color: kPurple, size: 20),
                       ),
-                      const SizedBox(width: 12),
+                      SizedBox(width: 12),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -738,19 +741,19 @@ class _IncomeScreenState extends State<IncomeScreen> {
                               e.title,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                color: Color(0xFF1E232C),
+                              style: TextStyle(
+                                color: Theme.of(context).appColors.ink,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w900,
                               ),
                             ),
-                            const SizedBox(height: 4),
+                            SizedBox(height: 4),
                             Text(
                               e.note,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                color: Color(0xFF6A707C),
+                              style: TextStyle(
+                                color: Theme.of(context).appColors.muted,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -785,31 +788,31 @@ class _IncomeScreenState extends State<IncomeScreen> {
     final projectLabel = _project == _Project.a ? 'Proyek A' : 'Proyek B';
 
     return Column(
-      key: const ValueKey('project_mode_income'),
+      key: ValueKey('project_mode_income'),
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: 16),
           child: Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(14),
+            padding: EdgeInsets.all(14),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0xFFE8ECF4)),
-              boxShadow: const [
+              border: Border.all(color: Theme.of(context).appColors.border),
+              boxShadow: [
                 BoxShadow(
                   color: Color(0x0CB3B3B3),
                   blurRadius: 40,
                   offset: Offset(0, 16),
                 ),
               ],
-              color: Colors.white,
+              color: Theme.of(context).appColors.card,
             ),
             child: Row(
               children: [
                 Expanded(
                   child: Text(
                     'Menampilkan pemasukan: $projectLabel',
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Color(0xFF111827),
                       fontSize: 12.5,
                       fontWeight: FontWeight.w900,
@@ -820,11 +823,11 @@ class _IncomeScreenState extends State<IncomeScreen> {
                   borderRadius: BorderRadius.circular(999),
                   onTap: _pickProject,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF6F7F8),
+                      color: Theme.of(context).appColors.iconSurface,
                       borderRadius: BorderRadius.circular(999),
-                      border: Border.all(color: const Color(0xFFE8ECF4)),
+                      border: Border.all(color: Theme.of(context).appColors.border),
                     ),
                     child: const Text(
                       'Ganti',
@@ -840,14 +843,14 @@ class _IncomeScreenState extends State<IncomeScreen> {
             ),
           ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         Expanded(
           child: Center(
             child: Text(
               'Dummy data pemasukan $projectLabel\n(nanti sambung ke API/DB)',
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Color(0xFF6A707C),
+              style: TextStyle(
+                color: Theme.of(context).appColors.muted,
                 fontSize: 12.5,
                 fontWeight: FontWeight.w800,
               ),
@@ -959,9 +962,9 @@ class _GhostButton extends StatelessWidget {
       child: Container(
         height: 44,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).appColors.card,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
+          border: Border.all(color: Theme.of(context).appColors.border),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -1003,11 +1006,11 @@ class _SheetAction extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
-          color: Colors.white,
+          border: Border.all(color: Theme.of(context).appColors.border),
+          color: Theme.of(context).appColors.card,
         ),
         child: Row(
           children: [
@@ -1051,25 +1054,25 @@ class _InputField extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(
-            color: Color(0xFF6A707C),
+          style: TextStyle(
+            color: Theme.of(context).appColors.muted,
             fontSize: 12,
             fontWeight: FontWeight.w800,
           ),
         ),
-        const SizedBox(height: 6),
+        SizedBox(height: 6),
         TextField(
           controller: controller,
           keyboardType: keyboardType,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: const TextStyle(
+            hintStyle: TextStyle(
               color: Color(0xFF9AA4B2),
               fontSize: 12,
               fontWeight: FontWeight.w600,
             ),
             filled: true,
-            fillColor: const Color(0xFFF6F7F8),
+            fillColor: Theme.of(context).appColors.iconSurface,
             contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),

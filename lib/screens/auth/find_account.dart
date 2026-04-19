@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import '../../services/auth_service.dart';
 import '../../services/storage_service.dart';
@@ -101,14 +102,14 @@ class _FindAccountScreenState extends State<FindAccountScreen> {
                   fontSize: 24,
                   fontWeight: FontWeight.w800,
                   height: 1.22)),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           Text(t['subtitle']!,
-              style: const TextStyle(
+              style: TextStyle(
                   color: kPurpleLight,
                   fontSize: 10.5,
                   fontWeight: FontWeight.w500,
                   height: 1.45)),
-          const SizedBox(height: 14),
+          SizedBox(height: 14),
 
           // Error
           AuthErrorBox(message: _error),
@@ -116,11 +117,11 @@ class _FindAccountScreenState extends State<FindAccountScreen> {
           // Input
           Container(
             height: 46,
-            padding: const EdgeInsets.symmetric(horizontal: 14),
+            padding: EdgeInsets.symmetric(horizontal: 14),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).appColors.card,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: const Color(0xFFBEB6C2), width: 1),
+              border: Border.all(color: Color(0xFFBEB6C2), width: 1),
             ),
             alignment: Alignment.center,
             child: TextField(
@@ -131,8 +132,8 @@ class _FindAccountScreenState extends State<FindAccountScreen> {
               onSubmitted: (_) {
                 if (!_loading) _handleSubmit();
               },
-              style: const TextStyle(
-                  color: Color(0xFF2A2A2A),
+              style: TextStyle(
+                  color: Theme.of(context).appColors.ink,
                   fontSize: 13,
                   fontWeight: FontWeight.w500),
               decoration: InputDecoration(
@@ -146,7 +147,7 @@ class _FindAccountScreenState extends State<FindAccountScreen> {
               ),
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
 
           // Submit
           SizedBox(
@@ -156,7 +157,7 @@ class _FindAccountScreenState extends State<FindAccountScreen> {
               onPressed: _loading ? null : _handleSubmit,
               style: ElevatedButton.styleFrom(
                 backgroundColor: kPurpleButton,
-                disabledBackgroundColor: kPurpleButton.withOpacity(0.7),
+                disabledBackgroundColor: kPurpleButton.withValues(alpha: 0.7),
                 elevation: 0,
                 padding: EdgeInsets.zero,
                 shape: RoundedRectangleBorder(
@@ -164,8 +165,8 @@ class _FindAccountScreenState extends State<FindAccountScreen> {
               ),
               child: Text(
                 _loading ? t['searching']! : t['next']!,
-                style: const TextStyle(
-                    color: Colors.white,
+                style: TextStyle(
+                    color: Theme.of(context).appColors.card,
                     fontSize: 13,
                     fontWeight: FontWeight.w700),
               ),

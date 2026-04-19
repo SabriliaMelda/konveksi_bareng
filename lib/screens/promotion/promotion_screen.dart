@@ -1,6 +1,8 @@
 // promosi.dart
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
+import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
 
 const Color kPurple = Color(0xFF6B257F);
 
@@ -127,7 +129,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
               onTap: () => setState(() => _tab = _PromoTab.voucher),
             ),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 10),
           Expanded(
             child: _TabPill(
               label: 'Riwayat',
@@ -143,13 +145,14 @@ class _PromotionScreenState extends State<PromotionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
+      bottomNavigationBar: AppBottomNav(activeIndex: -1),
       body: SafeArea(
         child: Column(
           children: [
             // ===== HEADER =====
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+              padding: EdgeInsets.fromLTRB(16, 12, 16, 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -157,25 +160,25 @@ class _PromotionScreenState extends State<PromotionScreen> {
                     borderRadius: BorderRadius.circular(32),
                     onTap: () => context.pop(),
                     child: Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(32),
-                        border: Border.all(color: const Color(0xFFDFDEDE)),
-                        color: Colors.white,
+                        border: Border.all(color: Theme.of(context).appColors.border),
+                        color: Theme.of(context).appColors.card,
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.arrow_back_ios_new,
                         size: 18,
-                        color: Colors.black87,
+                        color: Theme.of(context).appColors.ink,
                       ),
                     ),
                   ),
-                  const Text(
+                  Text(
                     'Promosi',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF121111),
+                      color: Theme.of(context).appColors.ink,
                       height: 1.4,
                     ),
                   ),
@@ -185,11 +188,11 @@ class _PromotionScreenState extends State<PromotionScreen> {
                       context.go('/home');
                     },
                     child: Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(32),
-                        border: Border.all(color: const Color(0xFFDFDEDE)),
-                        color: Colors.white,
+                        border: Border.all(color: Theme.of(context).appColors.border),
+                        color: Theme.of(context).appColors.card,
                       ),
                       child: const Icon(
                         Icons.home_filled,
@@ -225,10 +228,10 @@ class _PromotionScreenState extends State<PromotionScreen> {
   // ================== TAB PROMO ==================
   Widget _buildPromo() {
     return ListView.separated(
-      key: const ValueKey('promo'),
-      padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
+      key: ValueKey('promo'),
+      padding: EdgeInsets.fromLTRB(16, 10, 16, 16),
       itemCount: _promos.length + 1,
-      separatorBuilder: (_, __) => const SizedBox(height: 10),
+      separatorBuilder: (_, __) => SizedBox(height: 10),
       itemBuilder: (context, i) {
         if (i == 0) return _HighlightCard();
         final p = _promos[i - 1];
@@ -240,17 +243,17 @@ class _PromotionScreenState extends State<PromotionScreen> {
                 width: 44,
                 height: 44,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF6F7F8),
+                  color: Theme.of(context).appColors.iconSurface,
                   borderRadius: BorderRadius.circular(14),
                 ),
                 alignment: Alignment.center,
-                child: const Icon(
+                child: Icon(
                   Icons.local_offer_outlined,
                   color: kPurple,
                   size: 20,
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -259,19 +262,19 @@ class _PromotionScreenState extends State<PromotionScreen> {
                       p.title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: Color(0xFF1E232C),
+                      style: TextStyle(
+                        color: Theme.of(context).appColors.ink,
                         fontSize: 13,
                         fontWeight: FontWeight.w900,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4),
                     Text(
                       p.subtitle,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: Color(0xFF6A707C),
+                      style: TextStyle(
+                        color: Theme.of(context).appColors.muted,
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                       ),
@@ -316,10 +319,10 @@ class _PromotionScreenState extends State<PromotionScreen> {
   // ================== TAB VOUCHER ==================
   Widget _buildVoucher() {
     return ListView.separated(
-      key: const ValueKey('voucher'),
-      padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
+      key: ValueKey('voucher'),
+      padding: EdgeInsets.fromLTRB(16, 10, 16, 16),
       itemCount: _vouchers.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 10),
+      separatorBuilder: (_, __) => SizedBox(height: 10),
       itemBuilder: (context, i) {
         final v = _vouchers[i];
 
@@ -330,17 +333,17 @@ class _PromotionScreenState extends State<PromotionScreen> {
                 width: 44,
                 height: 44,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF6F7F8),
+                  color: Theme.of(context).appColors.iconSurface,
                   borderRadius: BorderRadius.circular(14),
                 ),
                 alignment: Alignment.center,
-                child: const Icon(
+                child: Icon(
                   Icons.confirmation_number_outlined,
                   color: kPurple,
                   size: 20,
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -349,19 +352,19 @@ class _PromotionScreenState extends State<PromotionScreen> {
                       v.title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: Color(0xFF1E232C),
+                      style: TextStyle(
+                        color: Theme.of(context).appColors.ink,
                         fontSize: 13,
                         fontWeight: FontWeight.w900,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4),
                     Text(
                       v.subtitle,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: Color(0xFF6A707C),
+                      style: TextStyle(
+                        color: Theme.of(context).appColors.muted,
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                       ),
@@ -427,10 +430,10 @@ class _PromotionScreenState extends State<PromotionScreen> {
   // ================== TAB RIWAYAT ==================
   Widget _buildHistory() {
     return ListView.separated(
-      key: const ValueKey('history'),
-      padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
+      key: ValueKey('history'),
+      padding: EdgeInsets.fromLTRB(16, 10, 16, 16),
       itemCount: _history.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 10),
+      separatorBuilder: (_, __) => SizedBox(height: 10),
       itemBuilder: (context, i) {
         final v = _history[i];
         return Opacity(
@@ -442,17 +445,17 @@ class _PromotionScreenState extends State<PromotionScreen> {
                   width: 44,
                   height: 44,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF6F7F8),
+                    color: Theme.of(context).appColors.iconSurface,
                     borderRadius: BorderRadius.circular(14),
                   ),
                   alignment: Alignment.center,
-                  child: const Icon(
+                  child: Icon(
                     Icons.history_rounded,
                     color: kPurple,
                     size: 20,
                   ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -461,19 +464,19 @@ class _PromotionScreenState extends State<PromotionScreen> {
                         v.title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: Color(0xFF1E232C),
+                        style: TextStyle(
+                          color: Theme.of(context).appColors.ink,
                           fontSize: 13,
                           fontWeight: FontWeight.w900,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4),
                       Text(
                         '${v.subtitle} • ${v.code}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: Color(0xFF6A707C),
+                        style: TextStyle(
+                          color: Theme.of(context).appColors.muted,
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
                         ),
@@ -535,7 +538,7 @@ class _TabPill extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
           textAlign: TextAlign.center,
           style: TextStyle(
-            color: active ? Colors.white : const Color(0xFF1E232C),
+            color: active ? Colors.white : Color(0xFF1E232C),
             fontSize: 11.5,
             fontWeight: active ? FontWeight.w900 : FontWeight.w800,
           ),
@@ -552,11 +555,11 @@ class _CardBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).appColors.card,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE8ECF4)),
+        border: Border.all(color: Theme.of(context).appColors.border),
         boxShadow: const [
           BoxShadow(
             color: Color(0x0CB3B3B3),
@@ -577,15 +580,15 @@ class _Badge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: const Color(0xFFF6F7F8),
+        color: Theme.of(context).appColors.iconSurface,
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: const Color(0xFFE8ECF4)),
+        border: Border.all(color: Theme.of(context).appColors.border),
       ),
       child: Text(
         text,
-        style: const TextStyle(
+        style: TextStyle(
           color: kPurple,
           fontSize: 11,
           fontWeight: FontWeight.w900,
@@ -602,11 +605,11 @@ class _CodeChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).appColors.card,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: const Color(0xFFE8ECF4)),
+        border: Border.all(color: Theme.of(context).appColors.border),
       ),
       child: Text(
         code,
@@ -633,7 +636,7 @@ class _PrimaryMiniButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: 30,
-        padding: const EdgeInsets.symmetric(horizontal: 12),
+        padding: EdgeInsets.symmetric(horizontal: 12),
         decoration: BoxDecoration(
           color: kPurple,
           borderRadius: BorderRadius.circular(12),
@@ -641,8 +644,8 @@ class _PrimaryMiniButton extends StatelessWidget {
         alignment: Alignment.center,
         child: Text(
           text,
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: Theme.of(context).appColors.card,
             fontSize: 11.5,
             fontWeight: FontWeight.w900,
           ),
@@ -664,11 +667,11 @@ class _GhostMiniButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: 30,
-        padding: const EdgeInsets.symmetric(horizontal: 12),
+        padding: EdgeInsets.symmetric(horizontal: 12),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).appColors.card,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
+          border: Border.all(color: Theme.of(context).appColors.border),
         ),
         alignment: Alignment.center,
         child: Text(
@@ -694,21 +697,21 @@ class _HighlightCard extends StatelessWidget {
             width: 44,
             height: 44,
             decoration: BoxDecoration(
-              color: const Color(0xFFF6F7F8),
+              color: Theme.of(context).appColors.iconSurface,
               borderRadius: BorderRadius.circular(14),
             ),
             alignment: Alignment.center,
-            child: const Icon(Icons.percent_rounded, color: kPurple, size: 20),
+            child: Icon(Icons.percent_rounded, color: kPurple, size: 20),
           ),
-          const SizedBox(width: 12),
-          const Expanded(
+          SizedBox(width: 12),
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'Promo untuk kamu',
                   style: TextStyle(
-                    color: Color(0xFF1E232C),
+                    color: Theme.of(context).appColors.ink,
                     fontSize: 13,
                     fontWeight: FontWeight.w900,
                   ),
@@ -717,7 +720,7 @@ class _HighlightCard extends StatelessWidget {
                 Text(
                   'Cek promo & voucher yang bisa dipakai saat checkout.',
                   style: TextStyle(
-                    color: Color(0xFF6A707C),
+                    color: Theme.of(context).appColors.muted,
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                   ),

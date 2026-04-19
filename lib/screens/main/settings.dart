@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:konveksi_bareng/config/app_theme.dart';
 import 'package:konveksi_bareng/providers/theme_provider.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -44,7 +43,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     // ===== Theme tokens from ThemeProvider =====
     final bool isDark = tp.darkMode;
-    const _purple = AppColors.purple;
+    const purple = Color(0xFF6B257F);
 
     final bg = tp.bg;
     final ink = tp.ink;
@@ -56,20 +55,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final iconSurface = tp.iconSurface;
 
     // === Auto open section kalau ada hasil search ===
-    final prefHas =
-        _match('notifikasi reminder update status', q) ||
+    final prefHas = _match('notifikasi reminder update status', q) ||
         _match('dark mode tema gelap', q) ||
         _match('biometrik fingerprint face id', q) ||
         _match('auto backup simpan otomatis', q);
 
-    final umumHas =
-        _match('profil nama foto kontak', q) ||
+    final umumHas = _match('profil nama foto kontak', q) ||
         _match('keamanan pin perangkat', q) ||
         _match('bahasa indonesia', q) ||
         _match('tema tampilan warna font layout', q);
 
-    final bantuanHas =
-        _match('pusat bantuan faq panduan', q) ||
+    final bantuanHas = _match('pusat bantuan faq panduan', q) ||
         _match('kebijakan privasi data penggunaan', q) ||
         _match('tentang aplikasi versi build lisensi', q);
 
@@ -112,7 +108,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                     _CircleIcon(
                       icon: Icons.home_filled,
-                      iconColor: _purple,
+                      iconColor: purple,
                       onTap: () {
                         context.go('/home');
                       },
@@ -197,7 +193,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                         child: const Icon(
                           Icons.person_rounded,
-                          color: _purple,
+                          color: purple,
                           size: 30,
                         ),
                       ),
@@ -233,7 +229,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       const SizedBox(width: 8),
                       _Pill(
                         text: 'Edit',
-                        color: _purple,
+                        color: purple,
                         onTap: () => _toast(context, 'Edit profil (dummy)'),
                       ),
                     ],
@@ -253,7 +249,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     muted: muted,
                     border: border,
                     card: card,
-                    accent: _purple,
+                    accent: purple,
                   ),
                   const SizedBox(height: 10),
                   if (expPref)
@@ -264,7 +260,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         children: [
                           if (_match('notifikasi reminder update status', q))
                             _SwitchRow(
-                              accent: _purple,
+                              accent: purple,
                               icon: Icons.notifications_active_outlined,
                               title: 'Notifikasi',
                               subtitle: 'Reminder & update status',
@@ -285,10 +281,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   ? const Color(0x14FFFFFF)
                                   : const Color(0x110F172A),
                             ),
-
                           if (_match('dark mode tema gelap', q))
                             _SwitchRow(
-                              accent: _purple,
+                              accent: purple,
                               icon: Icons.dark_mode_outlined,
                               title: 'Dark Mode',
                               subtitle: 'Tema gelap',
@@ -308,10 +303,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   ? const Color(0x14FFFFFF)
                                   : const Color(0x110F172A),
                             ),
-
                           if (_match('biometrik fingerprint face id', q))
                             _SwitchRow(
-                              accent: _purple,
+                              accent: purple,
                               icon: Icons.fingerprint_rounded,
                               title: 'Biometrik',
                               subtitle: 'Fingerprint / Face ID (dummy)',
@@ -330,10 +324,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   ? const Color(0x14FFFFFF)
                                   : const Color(0x110F172A),
                             ),
-
                           if (_match('auto backup simpan otomatis', q))
                             _SwitchRow(
-                              accent: _purple,
+                              accent: purple,
                               icon: Icons.cloud_sync_outlined,
                               title: 'Auto Backup',
                               subtitle: 'Simpan otomatis (dummy)',
@@ -362,7 +355,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     muted: muted,
                     border: border,
                     card: card,
-                    accent: _purple,
+                    accent: purple,
                   ),
                   const SizedBox(height: 10),
                   if (expUmum)
@@ -373,7 +366,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         children: [
                           if (_match('profil nama foto kontak', q))
                             _MenuRow(
-                              accent: _purple,
+                              accent: purple,
                               icon: Icons.person_outline_rounded,
                               title: 'Profil',
                               subtitle: 'Nama, foto, kontak',
@@ -392,10 +385,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   ? const Color(0x14FFFFFF)
                                   : const Color(0x110F172A),
                             ),
-
                           if (_match('keamanan pin perangkat', q))
                             _MenuRow(
-                              accent: _purple,
+                              accent: purple,
                               icon: Icons.lock_outline_rounded,
                               title: 'Keamanan',
                               subtitle: 'PIN, perangkat',
@@ -413,10 +405,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   ? const Color(0x14FFFFFF)
                                   : const Color(0x110F172A),
                             ),
-
                           if (_match('bahasa indonesia', q))
                             _MenuRow(
-                              accent: _purple,
+                              accent: purple,
                               icon: Icons.language_rounded,
                               title: 'Bahasa',
                               subtitle: 'Indonesia',
@@ -433,10 +424,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   ? const Color(0x14FFFFFF)
                                   : const Color(0x110F172A),
                             ),
-
                           if (_match('tema tampilan warna font layout', q))
                             _MenuRow(
-                              accent: _purple,
+                              accent: purple,
                               icon: Icons.palette_outlined,
                               title: 'Tema & Tampilan',
                               subtitle: 'Warna, font, layout',
@@ -463,7 +453,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     muted: muted,
                     border: border,
                     card: card,
-                    accent: _purple,
+                    accent: purple,
                   ),
                   const SizedBox(height: 10),
                   if (expBantuan)
@@ -474,7 +464,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         children: [
                           if (_match('pusat bantuan faq panduan', q))
                             _MenuRow(
-                              accent: _purple,
+                              accent: purple,
                               icon: Icons.help_outline_rounded,
                               title: 'Pusat Bantuan',
                               subtitle: 'FAQ & panduan',
@@ -496,10 +486,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   ? const Color(0x14FFFFFF)
                                   : const Color(0x110F172A),
                             ),
-
                           if (_match('kebijakan privasi data penggunaan', q))
                             _MenuRow(
-                              accent: _purple,
+                              accent: purple,
                               icon: Icons.privacy_tip_outlined,
                               title: 'Kebijakan Privasi',
                               subtitle: 'Data & penggunaan',
@@ -517,10 +506,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   ? const Color(0x14FFFFFF)
                                   : const Color(0x110F172A),
                             ),
-
                           if (_match('tentang aplikasi versi build lisensi', q))
                             _MenuRow(
-                              accent: _purple,
+                              accent: purple,
                               icon: Icons.info_outline_rounded,
                               title: 'Tentang Aplikasi',
                               subtitle: 'Versi, build, lisensi',
@@ -848,11 +836,11 @@ class _Pill extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(999),
-          border: Border.all(color: color.withOpacity(0.18)),
+          border: Border.all(color: color.withValues(alpha: 0.18)),
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [color.withOpacity(0.14), const Color(0x00FFFFFF)],
+            colors: [color.withValues(alpha: 0.14), const Color(0x00FFFFFF)],
           ),
         ),
         child: Text(
@@ -938,7 +926,7 @@ class _SwitchRow extends StatelessWidget {
         Switch(
           value: value,
           onChanged: onChanged,
-          activeColor: accent,
+          activeThumbColor: accent,
           inactiveThumbColor: isDark ? const Color(0xFFCBD5E1) : null,
           inactiveTrackColor: isDark ? const Color(0x33475569) : null,
         ),

@@ -1,53 +1,50 @@
 import 'package:flutter/material.dart';
-import '../config/app_theme.dart';
-
-enum FontSizeOption { small, medium, large }
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeProvider extends ChangeNotifier {
-  FontSizeOption _fontSize = FontSizeOption.medium;
+  static const _key = 'dark_mode';
+
   bool _darkMode = false;
 
-  FontSizeOption get fontSize => _fontSize;
   bool get darkMode => _darkMode;
 
-  double get fontScale {
-    switch (_fontSize) {
-      case FontSizeOption.small:
-        return 0.9;
-      case FontSizeOption.large:
-        return 1.1;
-      case FontSizeOption.medium:
-        return 1.0;
-    }
+  ThemeProvider() {
+    _load();
   }
 
-  // Shortcut warna berdasarkan mode aktif
-  Color get bg => _darkMode ? AppColors.darkBg : AppColors.lightBg;
-  Color get ink => _darkMode ? AppColors.darkInk : AppColors.lightInk;
-  Color get muted => _darkMode ? AppColors.darkMuted : AppColors.lightMuted;
-  Color get border => _darkMode ? AppColors.darkBorder : AppColors.lightBorder;
-  Color get card => _darkMode ? AppColors.darkCard : AppColors.lightCard;
-  Color get tile => _darkMode ? AppColors.darkTile : AppColors.lightTile;
-  Color get tileBorder =>
-      _darkMode ? AppColors.darkTileBorder : AppColors.lightTileBorder;
-  Color get divider =>
-      _darkMode ? AppColors.darkDivider : AppColors.lightDivider;
-  Color get iconSurface =>
-      _darkMode ? const Color(0xFF0F172A) : Colors.white;
-  Color get primary => AppColors.purple;
-
-  void setFontSize(FontSizeOption size) {
-    _fontSize = size;
+  Future<void> _load() async {
+    final prefs = await SharedPreferences.getInstance();
+    _darkMode = prefs.getBool(_key) ?? false;
     notifyListeners();
   }
 
-  void setDarkMode(bool value) {
+  Future<void> setDarkMode(bool value) async {
     _darkMode = value;
     notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_key, value);
   }
 
-  void toggleDarkMode() {
-    _darkMode = !_darkMode;
-    notifyListeners();
-  }
+  // ── Theme tokens (used by screens that still read ThemeProvider directly) ──
+
+  Color get bg => _darkMode ? const Color(0xFF0F172A) : const Color(0xFFF7F7FB);
+
+  Color get ink =>
+      _darkMode ? const Color(0xFFF1F5F9) : const Color(0xFF0F172A);
+
+  Color get muted =>
+      _darkMode ? const Color(0xFF94A3B8) : const Color(0xFF6B7280);
+
+  Color get border =>
+      _darkMode ? const Color(0xFF1E293B) : const Color(0xFFE8ECF4);
+
+  Color get card => _darkMode ? const Color(0xFF1E293B) : Colors.white;
+
+  Color get tile =>
+      _darkMode ? const Color(0xFF0F172A) : const Color(0xFFF3E8FF);
+
+  Color get tileBorder =>
+      _darkMode ? const Color(0xFF334155) : const Color(0xFFE8ECF4);
+
+  Color get iconSurface => _darkMode ? const Color(0xFF1E293B) : Colors.white;
 }

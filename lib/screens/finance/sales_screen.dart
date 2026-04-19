@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
 const Color kPurple = Color(0xFF6B257F);
@@ -178,7 +179,7 @@ class _Header extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: kPurple,
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(24),
@@ -193,12 +194,12 @@ class _Header extends StatelessWidget {
                 icon: Icons.arrow_back_ios_new_rounded,
                 onTap: () => context.pop(),
               ),
-              const SizedBox(width: 12),
-              const Expanded(
+              SizedBox(width: 12),
+              Expanded(
                 child: Text(
                   'Penjualan',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Theme.of(context).appColors.card,
                     fontSize: 18,
                     fontWeight: FontWeight.w900,
                   ),
@@ -210,14 +211,16 @@ class _Header extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           Container(
             height: 46,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: EdgeInsets.symmetric(horizontal: 12),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.14),
+              color: Theme.of(context).appColors.card.withValues(alpha: 0.14),
               borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: Colors.white.withOpacity(0.12)),
+              border: Border.all(
+                  color:
+                      Theme.of(context).appColors.card.withValues(alpha: 0.12)),
             ),
             child: Row(
               children: const [
@@ -258,11 +261,12 @@ class _HeaderIcon extends StatelessWidget {
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.12),
+          color: Theme.of(context).appColors.card.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.white.withOpacity(0.12)),
+          border: Border.all(
+              color: Theme.of(context).appColors.card.withValues(alpha: 0.12)),
         ),
-        child: Icon(icon, color: Colors.white, size: 20),
+        child: Icon(icon, color: Theme.of(context).appColors.card, size: 20),
       ),
     );
   }
@@ -313,9 +317,9 @@ class _SummaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).appColors.card,
         borderRadius: BorderRadius.circular(18),
         boxShadow: const [
           BoxShadow(
@@ -331,29 +335,29 @@ class _SummaryCard extends StatelessWidget {
             width: 42,
             height: 42,
             decoration: BoxDecoration(
-              color: const Color(0xFFF3E4FF),
+              color: Color(0xFFF3E4FF),
               borderRadius: BorderRadius.circular(14),
             ),
             child: Icon(icon, color: kPurple),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
-                    color: Color(0xFF6B7280),
+                  style: TextStyle(
+                    color: Theme.of(context).appColors.muted,
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   value,
-                  style: const TextStyle(
-                    color: Color(0xFF24252C),
+                  style: TextStyle(
+                    color: Theme.of(context).appColors.ink,
                     fontSize: 13,
                     fontWeight: FontWeight.w900,
                   ),
@@ -382,26 +386,26 @@ class _TodaySalesCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).appColors.card,
         borderRadius: BorderRadius.circular(18),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
             color: Color(0x14000000),
             blurRadius: 18,
             offset: Offset(0, 8),
           ),
         ],
-        border: Border.all(color: const Color(0x0FE8ECF4)),
+        border: Border.all(color: Color(0x0FE8ECF4)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
+        children: [
           Text(
             'Rekap Hari Ini',
             style: TextStyle(
-              color: Color(0xFF24252C),
+              color: Theme.of(context).appColors.ink,
               fontSize: 15,
               fontWeight: FontWeight.w900,
             ),
@@ -432,15 +436,15 @@ class _InfoRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+      padding: EdgeInsets.only(bottom: 8),
       child: Row(
         children: [
           SizedBox(
             width: 100,
             child: Text(
               label,
-              style: const TextStyle(
-                color: Color(0xFF6B7280),
+              style: TextStyle(
+                color: Theme.of(context).appColors.muted,
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
               ),
@@ -450,7 +454,7 @@ class _InfoRow extends StatelessWidget {
             child: Text(
               value,
               style: TextStyle(
-                color: const Color(0xFF24252C),
+                color: Theme.of(context).appColors.ink,
                 fontSize: strong ? 13 : 11.5,
                 fontWeight: strong ? FontWeight.w900 : FontWeight.w700,
               ),
@@ -471,8 +475,8 @@ class _SectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
-      style: const TextStyle(
-        color: Color(0xFF24252C),
+      style: TextStyle(
+        color: Theme.of(context).appColors.ink,
         fontSize: 16,
         fontWeight: FontWeight.w900,
       ),
@@ -514,13 +518,11 @@ class _SaleCard extends StatelessWidget {
   Color get sourceColor {
     return item.source == 'Marketplace'
         ? const Color(0xFF2563EB)
-        : const Color(0xFFEA580C);
+        : Color(0xFFEA580C);
   }
 
   Color get sourceBg {
-    return item.source == 'Marketplace'
-        ? const Color(0xFFEAF2FF)
-        : const Color(0xFFFFEFE5);
+    return item.source == 'Marketplace' ? Color(0xFFEAF2FF) : Color(0xFFFFEFE5);
   }
 
   IconData get sourceIcon {
@@ -532,9 +534,9 @@ class _SaleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).appColors.card,
         borderRadius: BorderRadius.circular(18),
         boxShadow: const [
           BoxShadow(
@@ -557,36 +559,36 @@ class _SaleCard extends StatelessWidget {
             ),
             child: Icon(sourceIcon, color: sourceColor, size: 22),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   item.product,
-                  style: const TextStyle(
-                    color: Color(0xFF24252C),
+                  style: TextStyle(
+                    color: Theme.of(context).appColors.ink,
                     fontSize: 13,
                     fontWeight: FontWeight.w900,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   item.customer,
-                  style: const TextStyle(
-                    color: Color(0xFF6B7280),
+                  style: TextStyle(
+                    color: Theme.of(context).appColors.muted,
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 Row(
                   children: [
                     Expanded(
                       child: Text(
                         item.amount,
-                        style: const TextStyle(
-                          color: Color(0xFF24252C),
+                        style: TextStyle(
+                          color: Theme.of(context).appColors.ink,
                           fontSize: 12,
                           fontWeight: FontWeight.w900,
                         ),
@@ -683,9 +685,9 @@ class _BottomActionBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      padding: EdgeInsets.fromLTRB(16, 12, 16, 16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).appColors.card,
         boxShadow: [
           BoxShadow(
             color: Color(0x12000000),
@@ -718,7 +720,7 @@ class _BottomActionBar extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             Expanded(
               child: ElevatedButton(
                 onPressed: onTambahOffline,
@@ -727,12 +729,12 @@ class _BottomActionBar extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(14),
                   ),
-                  minimumSize: const Size.fromHeight(46),
+                  minimumSize: Size.fromHeight(46),
                 ),
-                child: const Text(
+                child: Text(
                   'Tambah Offline',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Theme.of(context).appColors.card,
                     fontWeight: FontWeight.w800,
                     fontSize: 12.5,
                   ),

@@ -1,9 +1,8 @@
 // home_screen.dart
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
-
-
 import 'package:konveksi_bareng/providers/session_guard.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -37,17 +36,16 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
 
       // ✅ SIDEBAR (DRAWER)
-      drawer: const _AppSidebar(),
+      drawer: _AppSidebar(),
 
-      bottomNavigationBar: const _BottomNavBar(),
       body: SafeArea(
         child: Column(
           children: [
             // ===== HEADER (TETAP DI ATAS) =====
-            const _HeaderSection(),
+            _HeaderSection(),
 
             // ===== BODY YANG SCROLL =====
             Expanded(
@@ -78,16 +76,16 @@ class _HomeScreenState extends State<HomeScreen> {
 // ================== HEADER (UNGU + SEARCH) ==================
 //
 class _HeaderSection extends StatelessWidget {
-  const _HeaderSection();
+  _HeaderSection();
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: Color(0xFF6B257F),
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(24)),
       ),
-      padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
+      padding: EdgeInsets.fromLTRB(24, 16, 24, 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -100,14 +98,15 @@ class _HeaderSection extends StatelessWidget {
                 builder: (context) => InkWell(
                   borderRadius: BorderRadius.circular(20),
                   onTap: () => Scaffold.of(context).openDrawer(),
-                  child: const Icon(Icons.menu, color: Colors.white),
+                  child:
+                      Icon(Icons.menu, color: Theme.of(context).appColors.card),
                 ),
               ),
 
-              const Text(
+              Text(
                 'Konveksi Bareng',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Theme.of(context).appColors.card,
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
                 ),
@@ -121,22 +120,24 @@ class _HeaderSection extends StatelessWidget {
                 },
                 child: Stack(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.shopping_cart_outlined,
-                      color: Colors.white,
+                      color: Theme.of(context).appColors.card,
                     ),
                     Positioned(
                       right: 0,
                       top: 0,
                       child: Container(
-                        padding: const EdgeInsets.all(2),
-                        decoration: const BoxDecoration(
+                        padding: EdgeInsets.all(2),
+                        decoration: BoxDecoration(
                           color: Color(0xFFEB6383),
                           shape: BoxShape.circle,
                         ),
-                        child: const Text(
+                        child: Text(
                           '2',
-                          style: TextStyle(fontSize: 9, color: Colors.white),
+                          style: TextStyle(
+                              fontSize: 9,
+                              color: Theme.of(context).appColors.card),
                         ),
                       ),
                     ),
@@ -145,19 +146,20 @@ class _HeaderSection extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
 
           // Search box
           Container(
             height: 44,
             decoration: BoxDecoration(
-              color: const Color(0xFF50047D),
+              color: Color(0xFF50047D),
               borderRadius: BorderRadius.circular(8),
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: EdgeInsets.symmetric(horizontal: 12),
             child: Row(
-              children: const [
-                Icon(Icons.search, color: Colors.white, size: 20),
+              children: [
+                Icon(Icons.search,
+                    color: Theme.of(context).appColors.card, size: 20),
                 SizedBox(width: 8),
                 Text(
                   'Search',
@@ -246,7 +248,7 @@ class _PromoSectionState extends State<_PromoSection> {
         children: [
           // ====== CAROUSEL ======
           SizedBox(
-            height: 160,
+            height: 170,
             child: PageView.builder(
               controller: _pageController,
               itemCount: promos.length,
@@ -308,13 +310,12 @@ class _PromoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 150,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).appColors.card,
         borderRadius: BorderRadius.circular(24),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x14000000), // shadow lembut
+            color: Color(0x14000000),
             blurRadius: 20,
             offset: Offset(0, 6),
           ),
@@ -326,7 +327,7 @@ class _PromoCard extends StatelessWidget {
           Expanded(
             flex: 3,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 18),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -336,8 +337,8 @@ class _PromoCard extends StatelessWidget {
                     children: [
                       Text(
                         title,
-                        style: const TextStyle(
-                          color: Colors.black,
+                        style: TextStyle(
+                          color: Theme.of(context).appColors.ink,
                           fontSize: 20,
                           fontWeight: FontWeight.w700,
                         ),
@@ -423,11 +424,14 @@ class _MenuGrid extends StatelessWidget {
     ];
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Wrap(
-        runSpacing: 16,
-        spacing: 16,
-        alignment: WrapAlignment.spaceBetween,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: GridView.count(
+        crossAxisCount: 5,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        mainAxisSpacing: 3,
+        crossAxisSpacing: 0,
+        childAspectRatio: 50 / 62,
         children: items.map((e) {
           final label = e.$1;
           final icon = e.$2;
@@ -555,14 +559,14 @@ class _FeatureGrid extends StatelessWidget {
     ];
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: EdgeInsets.symmetric(horizontal: 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Fitur',
             style: TextStyle(
-              color: Colors.black,
+              color: Theme.of(context).appColors.ink,
               fontSize: 16,
               fontWeight: FontWeight.w700,
             ),
@@ -576,7 +580,7 @@ class _FeatureGrid extends StatelessWidget {
               crossAxisCount: 2,
               mainAxisSpacing: 16,
               crossAxisSpacing: 16,
-              childAspectRatio: 1.05,
+              childAspectRatio: 1.1,
             ),
             itemBuilder: (context, index) {
               final item = features[index];
@@ -598,22 +602,23 @@ class _FeatureGrid extends StatelessWidget {
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF6F4F0),
+                    color: Theme.of(context).appColors.iconSurface,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  padding: const EdgeInsets.all(16),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(icon, size: 90, color: const Color(0xFF6B257F)),
-                      const SizedBox(height: 12),
+                      Icon(icon, size: 72, color: Color(0xFF6B257F)),
+                      SizedBox(height: 8),
                       Text(
                         title,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
-                          color: Colors.black,
+                          color: Theme.of(context).appColors.ink,
                         ),
                       ),
                     ],
@@ -637,7 +642,7 @@ class _FlashDealSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: EdgeInsets.symmetric(horizontal: 24),
       child: Column(
         children: [
           // header
@@ -646,10 +651,10 @@ class _FlashDealSection extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const Text(
+                  Text(
                     'Flash Deal',
                     style: TextStyle(
-                      color: Colors.black,
+                      color: Theme.of(context).appColors.ink,
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                     ),
@@ -742,7 +747,7 @@ class _ProductCard extends StatelessWidget {
           Container(
             height: 130,
             decoration: BoxDecoration(
-              color: const Color(0xFFF6F4F0),
+              color: Theme.of(context).appColors.iconSurface,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Stack(
@@ -760,10 +765,10 @@ class _ProductCard extends StatelessWidget {
                     width: 28,
                     height: 28,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Theme.of(context).appColors.card,
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.favorite_border,
                       size: 16,
                       color: Color(0xFFEB6383),
@@ -774,13 +779,13 @@ class _ProductCard extends StatelessWidget {
                   left: 12,
                   bottom: 12,
                   child: Row(
-                    children: const [
+                    children: [
                       Icon(Icons.star, size: 16, color: Colors.amber),
                       SizedBox(width: 4),
                       Text(
                         '4.8',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: Theme.of(context).appColors.ink,
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
                         ),
@@ -791,29 +796,29 @@ class _ProductCard extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w700,
-              color: Colors.black,
+              color: Theme.of(context).appColors.ink,
             ),
           ),
           Text(
             subtitle,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12,
               color: Color(0xFF7A7E86),
             ),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Row(
             children: [
               Text(
                 price,
-                style: const TextStyle(
-                  color: Colors.black,
+                style: TextStyle(
+                  color: Theme.of(context).appColors.ink,
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                 ),
@@ -845,20 +850,21 @@ class _SeeAllCard extends StatelessWidget {
       child: Container(
         height: 130,
         decoration: BoxDecoration(
-          color: const Color(0xFF6B257F),
+          color: Color(0xFF6B257F),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Icon(Icons.arrow_forward, color: Colors.white, size: 28),
+            children: [
+              Icon(Icons.arrow_forward,
+                  color: Theme.of(context).appColors.card, size: 28),
               SizedBox(height: 8),
               Text(
                 'Lihat Semua',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Theme.of(context).appColors.card,
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
                 ),
@@ -872,116 +878,16 @@ class _SeeAllCard extends StatelessWidget {
 }
 
 //
-// ================== BOTTOM NAV ==================
-//
-class _BottomNavBar extends StatelessWidget {
-  const _BottomNavBar();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 72,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        border: Border(top: BorderSide(color: Color(0xFFE8ECF4))),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _BottomNavItem(
-            label: 'Home',
-            icon: Icons.home_filled,
-            active: true,
-            onTap: () {},
-          ),
-          _BottomNavItem(
-            label: 'Wishlist',
-            icon: Icons.favorite_border,
-            onTap: () {
-              context.push('/wishlist');
-            },
-          ),
-          _BottomNavItem(
-            label: 'Settings',
-            icon: Icons.settings_outlined,
-            onTap: () {
-              context.push('/settings');
-            },
-          ),
-          _BottomNavItem(
-            label: 'Chat',
-            icon: Icons.chat_bubble_outline,
-            onTap: () {
-              context.push('/chat');
-            },
-          ),
-          _BottomNavItem(
-            label: 'Profile',
-            icon: Icons.person_outline,
-            onTap: () {
-              context.push('/profile');
-            },
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _BottomNavItem extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final bool active;
-  final VoidCallback? onTap;
-
-  const _BottomNavItem({
-    required this.label,
-    required this.icon,
-    this.active = false,
-    this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final color = active ? const Color(0xFF6B257F) : const Color(0xFFC9CBCE);
-    final fontWeight = active ? FontWeight.w700 : FontWeight.w400;
-
-    return InkWell(
-      borderRadius: BorderRadius.circular(24),
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: color, size: 22),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                color: color,
-                fontSize: 12,
-                fontWeight: fontWeight,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-//
 // ================== SIDEBAR / DRAWER ==================
 //
 class _AppSidebar extends StatelessWidget {
-  const _AppSidebar();
+  _AppSidebar();
 
-  static const Color _main = Color(0xFF6B257F);
-  static const Color _mainDark = Color(0xFF50047D);
-  static const Color _bg = Color(0xFFF7F5F1);
-  static const Color _text = Color(0xFF111827);
-  static const Color _muted = Color(0xFF6B7280);
+  static Color _main = Color(0xFF6B257F);
+  static Color _mainDark = Color(0xFF50047D);
+  static Color _bg = Color(0xFFF7F5F1);
+  static Color _text = Color(0xFF111827);
+  static Color _muted = Color(0xFF6B7280);
 
   void _go(BuildContext context, String route) {
     context.pop(); // tutup drawer
@@ -992,15 +898,15 @@ class _AppSidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       elevation: 0,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
       child: SafeArea(
         child: Column(
           children: [
             // ===== HEADER (GRADIENT + PROFIL) =====
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.fromLTRB(16, 18, 16, 16),
-              decoration: const BoxDecoration(
+              padding: EdgeInsets.fromLTRB(16, 18, 16, 16),
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [_main, _mainDark],
                   begin: Alignment.topLeft,
@@ -1019,61 +925,74 @@ class _AppSidebar extends StatelessWidget {
                     width: 52,
                     height: 52,
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.18),
+                      color: Theme.of(context)
+                          .appColors
+                          .card
+                          .withValues(alpha: 0.18),
                       borderRadius: BorderRadius.circular(18),
-                      border: Border.all(color: Colors.white.withOpacity(0.25)),
+                      border: Border.all(
+                          color: Theme.of(context)
+                              .appColors
+                              .card
+                              .withValues(alpha: 0.25)),
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.person,
-                      color: Colors.white,
+                      color: Theme.of(context).appColors.card,
                       size: 28,
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
 
                   // nama + role
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           'Nama Pengguna',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Theme.of(context).appColors.card,
                             fontWeight: FontWeight.w800,
                             fontSize: 16,
                           ),
                         ),
-                        const SizedBox(height: 4),
+                        SizedBox(height: 4),
                         Row(
                           children: [
                             Container(
-                              padding: const EdgeInsets.symmetric(
+                              padding: EdgeInsets.symmetric(
                                 horizontal: 10,
                                 vertical: 5,
                               ),
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.18),
+                                color: Theme.of(context)
+                                    .appColors
+                                    .card
+                                    .withValues(alpha: 0.18),
                                 borderRadius: BorderRadius.circular(999),
                                 border: Border.all(
-                                  color: Colors.white.withOpacity(0.25),
+                                  color: Theme.of(context)
+                                      .appColors
+                                      .card
+                                      .withValues(alpha: 0.25),
                                 ),
                               ),
-                              child: const Text(
+                              child: Text(
                                 'Owner Konveksi',
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: Theme.of(context).appColors.card,
                                   fontWeight: FontWeight.w700,
                                   fontSize: 11,
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 8),
-                            const Icon(
+                            SizedBox(width: 8),
+                            Icon(
                               Icons.verified,
-                              color: Colors.white,
+                              color: Theme.of(context).appColors.card,
                               size: 16,
                             ),
                           ],
@@ -1085,7 +1004,8 @@ class _AppSidebar extends StatelessWidget {
                   // close
                   IconButton(
                     onPressed: () => context.pop(),
-                    icon: const Icon(Icons.close_rounded, color: Colors.white),
+                    icon: Icon(Icons.close_rounded,
+                        color: Theme.of(context).appColors.card),
                   ),
                 ],
               ),
@@ -1094,7 +1014,7 @@ class _AppSidebar extends StatelessWidget {
             // ===== BODY =====
             Expanded(
               child: Container(
-                color: Colors.white,
+                color: Theme.of(context).appColors.card,
                 child: ListView(
                   padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
                   children: [
@@ -1137,7 +1057,7 @@ class _AppSidebar extends StatelessWidget {
                     ),
 
                     const SizedBox(height: 14),
-                    _dividerPill(),
+                    _dividerPill(context),
                     const SizedBox(height: 14),
 
                     _sectionLabel('AKUN'),
@@ -1167,9 +1087,9 @@ class _AppSidebar extends StatelessWidget {
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Row(
-                        children: const [
+                        children: [
                           Icon(Icons.lightbulb_outline, color: _main),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           Expanded(
                             child: Text(
                               'Tips: rapikan alur produksi di Kelola Proyek untuk hasil lebih cepat.',
@@ -1195,10 +1115,10 @@ class _AppSidebar extends StatelessWidget {
                 children: [
                   Expanded(
                     child: _ghostButton(
+                      context,
                       label: 'Logout',
                       icon: Icons.logout_rounded,
                       onTap: () {
-                        // TODO: logout action (kalau sudah ada auth)
                         context.pop();
                       },
                     ),
@@ -1206,11 +1126,11 @@ class _AppSidebar extends StatelessWidget {
                   const SizedBox(width: 10),
                   Expanded(
                     child: _primaryButton(
+                      context,
                       label: 'Upgrade',
                       icon: Icons.workspace_premium_rounded,
                       onTap: () {
                         context.pop();
-                        // TODO: arahkan ke halaman upgrade jika ada
                       },
                     ),
                   ),
@@ -1225,10 +1145,10 @@ class _AppSidebar extends StatelessWidget {
 
   Widget _sectionLabel(String text) {
     return Padding(
-      padding: const EdgeInsets.only(left: 6, bottom: 10),
+      padding: EdgeInsets.only(left: 6, bottom: 10),
       child: Text(
         text,
-        style: const TextStyle(
+        style: TextStyle(
           color: _muted,
           fontWeight: FontWeight.w800,
           fontSize: 11,
@@ -1238,12 +1158,12 @@ class _AppSidebar extends StatelessWidget {
     );
   }
 
-  Widget _dividerPill() {
+  Widget _dividerPill(BuildContext context) {
     return Container(
       height: 1,
-      margin: const EdgeInsets.symmetric(horizontal: 6),
+      margin: EdgeInsets.symmetric(horizontal: 6),
       decoration: BoxDecoration(
-        color: const Color(0xFFE8ECF4),
+        color: Theme.of(context).appColors.border,
         borderRadius: BorderRadius.circular(999),
       ),
     );
@@ -1257,12 +1177,12 @@ class _AppSidebar extends StatelessWidget {
     required VoidCallback onTap,
   }) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: EdgeInsets.only(bottom: 10),
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
         onTap: onTap,
         child: Ink(
-          padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+          padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
           decoration: BoxDecoration(
             color: _bg,
             borderRadius: BorderRadius.circular(16),
@@ -1273,9 +1193,9 @@ class _AppSidebar extends StatelessWidget {
                 width: 42,
                 height: 42,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).appColors.card,
                   borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: const Color(0xFFE8ECF4)),
+                  border: Border.all(color: Theme.of(context).appColors.border),
                 ),
                 child: Icon(icon, color: _main, size: 22),
               ),
@@ -1286,7 +1206,7 @@ class _AppSidebar extends StatelessWidget {
                   children: [
                     Text(
                       label,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: _text,
                         fontWeight: FontWeight.w800,
                         fontSize: 14,
@@ -1295,7 +1215,7 @@ class _AppSidebar extends StatelessWidget {
                     const SizedBox(height: 3),
                     Text(
                       subtitle,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: _muted,
                         fontSize: 12,
                       ),
@@ -1303,7 +1223,7 @@ class _AppSidebar extends StatelessWidget {
                   ],
                 ),
               ),
-              const Icon(Icons.chevron_right_rounded, color: _muted),
+              Icon(Icons.chevron_right_rounded, color: _muted),
             ],
           ),
         ),
@@ -1311,7 +1231,8 @@ class _AppSidebar extends StatelessWidget {
     );
   }
 
-  Widget _primaryButton({
+  Widget _primaryButton(
+    BuildContext context, {
     required String label,
     required IconData icon,
     required VoidCallback onTap,
@@ -1323,13 +1244,13 @@ class _AppSidebar extends StatelessWidget {
         icon: Icon(icon, size: 18),
         label: Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.w800,
           ),
         ),
         style: ElevatedButton.styleFrom(
           backgroundColor: _main,
-          foregroundColor: Colors.white,
+          foregroundColor: Theme.of(context).appColors.card,
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(14),
@@ -1339,7 +1260,8 @@ class _AppSidebar extends StatelessWidget {
     );
   }
 
-  Widget _ghostButton({
+  Widget _ghostButton(
+    BuildContext context, {
     required String label,
     required IconData icon,
     required VoidCallback onTap,
@@ -1351,17 +1273,17 @@ class _AppSidebar extends StatelessWidget {
         icon: Icon(icon, size: 18, color: _main),
         label: Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.w800,
             color: _main,
           ),
         ),
         style: OutlinedButton.styleFrom(
-          side: const BorderSide(color: Color(0xFFE8ECF4)),
+          side: BorderSide(color: Color(0xFFE8ECF4)),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(14),
           ),
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).appColors.card,
         ),
       ),
     );

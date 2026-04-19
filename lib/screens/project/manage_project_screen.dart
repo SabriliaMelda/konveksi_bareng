@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
+import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
 
 const kPurple = Color(0xFF6B257F);
 const kLightPurple = Color(0xFFF7E1FF);
 const kCardPurple = Color(0xFFCA82DE);
 
 class ManageProjectScreen extends StatelessWidget {
-  const ManageProjectScreen({super.key});
+  ManageProjectScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).appColors.card,
+      bottomNavigationBar: AppBottomNav(activeIndex: -1),
       body: SafeArea(
         child: Column(
           children: [
@@ -75,7 +78,7 @@ class _HeaderBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(
+      padding: EdgeInsets.symmetric(
         horizontal: 20,
       ).copyWith(top: 12, bottom: 8),
       child: Row(
@@ -85,10 +88,10 @@ class _HeaderBar extends StatelessWidget {
             icon: Icons.arrow_back,
             onTap: () => context.pop(),
           ),
-          const Text(
+          Text(
             'Kelola Proyek',
             style: TextStyle(
-              color: Color(0xFF24252C),
+              color: Theme.of(context).appColors.ink,
               fontSize: 18,
               fontWeight: FontWeight.w600,
             ),
@@ -115,11 +118,11 @@ class _CircleIconButton extends StatelessWidget {
         height: 40,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: const Color(0xFFE4E4E4)),
-          color: Colors.white,
+          border: Border.all(color: Color(0xFFE4E4E4)),
+          color: Theme.of(context).appColors.card,
         ),
         alignment: Alignment.center,
-        child: Icon(icon, color: Colors.black87, size: 20),
+        child: Icon(icon, color: Theme.of(context).appColors.ink, size: 20),
       ),
     );
   }
@@ -221,8 +224,8 @@ class _SectionHeader extends StatelessWidget {
       children: [
         Text(
           title,
-          style: const TextStyle(
-            color: Color(0xFF24252C),
+          style: TextStyle(
+            color: Theme.of(context).appColors.ink,
             fontSize: 18,
             fontWeight: FontWeight.w600,
           ),
@@ -258,7 +261,7 @@ class _InProgressList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 178,
+      height: 195,
       child: ListView(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.only(right: 2),
@@ -344,7 +347,7 @@ class _InProgressCard extends StatelessWidget {
             offset: Offset(0, 8),
           ),
         ],
-        border: Border.all(color: const Color(0x14FFFFFF)),
+        border: Border.all(color: Color(0x14FFFFFF)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -355,18 +358,18 @@ class _InProgressCard extends StatelessWidget {
             accent: accent,
             icon: icon,
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           Text(
             title,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 15,
-              color: Color(0xFF24252C),
+              color: Theme.of(context).appColors.ink,
               fontWeight: FontWeight.w700,
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
 
           // progress bar + badge %
           Row(
@@ -375,7 +378,7 @@ class _InProgressCard extends StatelessWidget {
                 child: Container(
                   height: 8,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).appColors.card,
                     borderRadius: BorderRadius.circular(999),
                     border: Border.all(color: const Color(0x1A000000)),
                   ),
@@ -386,7 +389,7 @@ class _InProgressCard extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(999),
                         gradient: LinearGradient(
-                          colors: [accent, accent.withOpacity(0.6)],
+                          colors: [accent, accent.withValues(alpha: 0.6)],
                           begin: Alignment.centerLeft,
                           end: Alignment.centerRight,
                         ),
@@ -395,14 +398,14 @@ class _InProgressCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 10),
+              SizedBox(width: 10),
               Container(
-                padding: const EdgeInsets.symmetric(
+                padding: EdgeInsets.symmetric(
                   horizontal: 10,
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).appColors.card,
                   borderRadius: BorderRadius.circular(999),
                   border: Border.all(color: const Color(0x1A000000)),
                 ),
@@ -426,23 +429,23 @@ class _InProgressCard extends StatelessWidget {
               Icon(
                 Icons.schedule_rounded,
                 size: 16,
-                color: accent.withOpacity(0.9),
+                color: accent.withValues(alpha: 0.9),
               ),
-              const SizedBox(width: 6),
+              SizedBox(width: 6),
               Text(
                 eta,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 12,
                   color: Color(0xFF6E6A7C),
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              const Spacer(),
+              Spacer(),
               Container(
                 width: 34,
                 height: 34,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).appColors.card,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: const Color(0x1A000000)),
                 ),
@@ -479,9 +482,9 @@ class _InProgressTopRow extends StatelessWidget {
       children: [
         // chip kategori
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.75),
+            color: Theme.of(context).appColors.card.withValues(alpha: 0.75),
             borderRadius: BorderRadius.circular(999),
             border: Border.all(color: const Color(0x1A000000)),
           ),
@@ -502,7 +505,7 @@ class _InProgressTopRow extends StatelessWidget {
             subtitle,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 11,
               color: Color(0xFF6E6A7C),
               fontWeight: FontWeight.w600,
@@ -515,7 +518,7 @@ class _InProgressTopRow extends StatelessWidget {
           width: 34,
           height: 34,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).appColors.card,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: const Color(0x1A000000)),
           ),
@@ -543,7 +546,7 @@ class _TaskGroupCard extends StatelessWidget {
     return Container(
       height: 70,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).appColors.card,
         borderRadius: BorderRadius.circular(15),
         boxShadow: const [
           BoxShadow(
@@ -561,16 +564,16 @@ class _TaskGroupCard extends StatelessWidget {
               width: 36,
               height: 36,
               decoration: BoxDecoration(
-                color: const Color(0xFFF3E4FF),
+                color: Color(0xFFF3E4FF),
                 borderRadius: BorderRadius.circular(9),
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.folder_copy_outlined,
                 color: kPurple,
                 size: 20,
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -578,9 +581,9 @@ class _TaskGroupCard extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
-                      color: Color(0xFF24252C),
+                      color: Theme.of(context).appColors.ink,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -613,16 +616,16 @@ class _TaskGroupProgressBadge extends StatelessWidget {
       width: 54,
       height: 54,
       decoration: BoxDecoration(
-        color: const Color(0xFFF3E4FF),
+        color: Color(0xFFF3E4FF),
         shape: BoxShape.circle,
         border: Border.all(color: kPurple, width: 2),
       ),
       alignment: Alignment.center,
       child: Text(
         '$percent%',
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 11,
-          color: Color(0xFF24252C),
+          color: Theme.of(context).appColors.ink,
           fontWeight: FontWeight.w600,
         ),
       ),

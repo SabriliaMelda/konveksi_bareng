@@ -1,11 +1,12 @@
 // lib/pages/keuanganproyek.dart
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
+import 'package:konveksi_bareng/screens/main/home.dart';
 
 const kPurple = Color(0xFF6B257F);
 
 class ProjectFinanceScreen extends StatefulWidget {
-  const ProjectFinanceScreen({super.key});
+  ProjectFinanceScreen({super.key});
 
   @override
   State<ProjectFinanceScreen> createState() => _ProjectFinanceScreenState();
@@ -15,7 +16,7 @@ class _ProjectFinanceScreenState extends State<ProjectFinanceScreen> {
   _FinanceMenu _active = _FinanceMenu.keuanganPerproyek;
   String _activeProject = 'Keuangan Proyek 1 dst';
 
-  final List<String> _projects = const [
+  final List<String> _projects = [
     'Keuangan Proyek 1 dst',
     'Keuangan Proyek 2',
     'Keuangan Proyek 3',
@@ -24,29 +25,29 @@ class _ProjectFinanceScreenState extends State<ProjectFinanceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F7F8),
+      backgroundColor: Theme.of(context).appColors.iconSurface,
       body: SafeArea(
         child: Column(
           children: [
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
 
             // ===== TOP BAR (mirip bookmark bar) =====
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
                   _CircleIconButton(
                     icon: Icons.arrow_back_ios_new,
-                    onTap: () => context.pop(),
+                    onTap: () => Navigator.pop(context),
                   ),
-                  const SizedBox(width: 10),
-                  const Expanded(
+                  SizedBox(width: 10),
+                  Expanded(
                     child: Text(
                       'Keuangan',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        color: Color(0xFF1E232C),
+                        color: Theme.of(context).appColors.ink,
                         fontSize: 18,
                         fontWeight: FontWeight.w800,
                       ),
@@ -57,7 +58,11 @@ class _ProjectFinanceScreenState extends State<ProjectFinanceScreen> {
                     icon: Icons.home_outlined,
                     iconColor: kPurple,
                     onTap: () {
-                      context.go('/home');
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (_) => HomeScreen()),
+                        (route) => false,
+                      );
                     },
                   ),
                 ],
@@ -206,15 +211,15 @@ class _ProjectFinanceScreenState extends State<ProjectFinanceScreen> {
                       ],
                     ),
 
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
 
                     // Section title
                     Text(
                       _active == _FinanceMenu.keuanganPerproyek
                           ? _activeProject
                           : _active.label,
-                      style: const TextStyle(
-                        color: Color(0xFF1E232C),
+                      style: TextStyle(
+                        color: Theme.of(context).appColors.ink,
                         fontSize: 16,
                         fontWeight: FontWeight.w900,
                       ),
@@ -318,15 +323,15 @@ enum _FinanceMenu {
 
 extension on _FinanceMenu {
   String get label => switch (this) {
-    _FinanceMenu.keuanganPerproyek => 'Keuangan Perproyek',
-    _FinanceMenu.operasional => 'Operasional kantor',
-    _FinanceMenu.pemasukan => 'Pemasukan',
-    _FinanceMenu.pengeluaran => 'Pengeluaran',
-    _FinanceMenu.promosi => 'Promosi',
-    _FinanceMenu.rencanaBelanja => 'Rencana Belanja',
-    _FinanceMenu.rugiLaba => 'Rugi Laba',
-    _FinanceMenu.upah => 'Upah',
-  };
+        _FinanceMenu.keuanganPerproyek => 'Keuangan Perproyek',
+        _FinanceMenu.operasional => 'Operasional kantor',
+        _FinanceMenu.pemasukan => 'Pemasukan',
+        _FinanceMenu.pengeluaran => 'Pengeluaran',
+        _FinanceMenu.promosi => 'Promosi',
+        _FinanceMenu.rencanaBelanja => 'Rencana Belanja',
+        _FinanceMenu.rugiLaba => 'Rugi Laba',
+        _FinanceMenu.upah => 'Upah',
+      };
 }
 
 //
@@ -353,9 +358,9 @@ class _CircleIconButton extends StatelessWidget {
         height: 44,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).appColors.card,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
+          border: Border.all(color: Theme.of(context).appColors.border),
         ),
         child: Icon(icon, size: 18, color: iconColor),
       ),
@@ -378,8 +383,9 @@ class _BookmarkFolder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = active ? kPurple.withOpacity(0.10) : Colors.white;
-    final br = active ? kPurple.withOpacity(0.40) : const Color(0xFFE8ECF4);
+    final bg = active ? kPurple.withValues(alpha: 0.10) : Colors.white;
+    final br =
+        active ? kPurple.withValues(alpha: 0.40) : const Color(0xFFE8ECF4);
     final txt = active ? kPurple : const Color(0xFF1E232C);
 
     return PopupMenuButton<String>(
@@ -443,26 +449,26 @@ class _BreadCrumb extends StatelessWidget {
       children: [
         Text(
           left,
-          style: const TextStyle(
-            color: Color(0xFF6A707C),
+          style: TextStyle(
+            color: Theme.of(context).appColors.muted,
             fontSize: 12.5,
             fontWeight: FontWeight.w700,
           ),
         ),
-        const SizedBox(width: 6),
-        const Icon(
+        SizedBox(width: 6),
+        Icon(
           Icons.chevron_right_rounded,
           size: 18,
-          color: Color(0xFF6A707C),
+          color: Theme.of(context).appColors.muted,
         ),
-        const SizedBox(width: 6),
+        SizedBox(width: 6),
         Expanded(
           child: Text(
             right,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              color: Color(0xFF1E232C),
+            style: TextStyle(
+              color: Theme.of(context).appColors.ink,
               fontSize: 12.5,
               fontWeight: FontWeight.w900,
             ),
@@ -489,11 +495,11 @@ class _StatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).appColors.card,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE8ECF4)),
+        border: Border.all(color: Theme.of(context).appColors.border),
         boxShadow: const [
           BoxShadow(
             color: Color(0x0A000000),
@@ -508,41 +514,41 @@ class _StatCard extends StatelessWidget {
             width: 42,
             height: 42,
             decoration: BoxDecoration(
-              color: kPurple.withOpacity(0.10),
+              color: kPurple.withValues(alpha: 0.10),
               borderRadius: BorderRadius.circular(14),
             ),
             alignment: Alignment.center,
             child: Icon(icon, color: kPurple, size: 22),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
-                    color: Color(0xFF6A707C),
+                  style: TextStyle(
+                    color: Theme.of(context).appColors.muted,
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   value,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: Color(0xFF1E232C),
+                  style: TextStyle(
+                    color: Theme.of(context).appColors.ink,
                     fontSize: 14,
                     fontWeight: FontWeight.w900,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   subtitle,
-                  style: const TextStyle(
-                    color: Color(0xFF6A707C),
+                  style: TextStyle(
+                    color: Theme.of(context).appColors.muted,
                     fontSize: 11.5,
                     fontWeight: FontWeight.w600,
                   ),
@@ -565,19 +571,19 @@ class _SectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).appColors.card,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE8ECF4)),
+        border: Border.all(color: Theme.of(context).appColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: const TextStyle(
-              color: Color(0xFF1E232C),
+            style: TextStyle(
+              color: Theme.of(context).appColors.ink,
               fontSize: 13.5,
               fontWeight: FontWeight.w900,
             ),
@@ -614,17 +620,17 @@ class _TxnRow extends StatelessWidget {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: kPurple.withOpacity(0.08),
+            color: kPurple.withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(14),
           ),
           alignment: Alignment.center,
-          child: const Icon(
+          child: Icon(
             Icons.receipt_long_outlined,
             color: kPurple,
             size: 20,
           ),
         ),
-        const SizedBox(width: 10),
+        SizedBox(width: 10),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -633,19 +639,19 @@ class _TxnRow extends StatelessWidget {
                 title,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  color: Color(0xFF1E232C),
+                style: TextStyle(
+                  color: Theme.of(context).appColors.ink,
                   fontSize: 12.5,
                   fontWeight: FontWeight.w900,
                 ),
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: 4),
               Text(
                 subtitle,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  color: Color(0xFF6A707C),
+                style: TextStyle(
+                  color: Theme.of(context).appColors.muted,
                   fontSize: 11.5,
                   fontWeight: FontWeight.w600,
                 ),
@@ -653,7 +659,7 @@ class _TxnRow extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(width: 10),
+        SizedBox(width: 10),
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -665,11 +671,11 @@ class _TxnRow extends StatelessWidget {
                 fontWeight: FontWeight.w900,
               ),
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: 4),
             Text(
               time,
-              style: const TextStyle(
-                color: Color(0xFF6A707C),
+              style: TextStyle(
+                color: Theme.of(context).appColors.muted,
                 fontSize: 11.5,
                 fontWeight: FontWeight.w600,
               ),
@@ -710,21 +716,21 @@ class _QuickAction extends StatelessWidget {
       borderRadius: BorderRadius.circular(14),
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12),
+        padding: EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          color: const Color(0xFFF6F7F8),
+          color: Theme.of(context).appColors.iconSurface,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xFFE8ECF4)),
+          border: Border.all(color: Theme.of(context).appColors.border),
         ),
         child: Column(
           children: [
             Icon(icon, color: kPurple, size: 22),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             Text(
               label,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Color(0xFF1E232C),
+              style: TextStyle(
+                color: Theme.of(context).appColors.ink,
                 fontSize: 11.5,
                 fontWeight: FontWeight.w800,
                 height: 1.2,
