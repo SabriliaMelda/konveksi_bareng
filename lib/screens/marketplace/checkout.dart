@@ -234,6 +234,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: _kBg,
+      resizeToAvoidBottomInset: true,
       bottomNavigationBar: AppBottomNav(activeIndex: -1),
       body: SafeArea(
         child: Column(

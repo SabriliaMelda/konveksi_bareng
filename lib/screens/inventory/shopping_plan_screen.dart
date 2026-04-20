@@ -217,7 +217,8 @@ class _ShoppingPlanScreenState extends State<ShoppingPlanScreen> {
                       decoration: BoxDecoration(
                         color: Theme.of(context).appColors.iconSurface,
                         borderRadius: BorderRadius.circular(14),
-                        border: Border.all(color: Theme.of(context).appColors.border),
+                        border: Border.all(
+                            color: Theme.of(context).appColors.border),
                       ),
                       alignment: Alignment.centerLeft,
                       child: Row(
@@ -468,9 +469,8 @@ class _ShoppingPlanScreenState extends State<ShoppingPlanScreen> {
                 const SizedBox(width: 10),
                 _MiniStat(
                   label: 'Kategori',
-                  value: _tab == _PlanTab.marketplace
-                      ? 'Marketplace'
-                      : 'Lainnya',
+                  value:
+                      _tab == _PlanTab.marketplace ? 'Marketplace' : 'Lainnya',
                 ),
               ],
             ),
@@ -602,7 +602,7 @@ class _ShoppingPlanScreenState extends State<ShoppingPlanScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).appColors.card,
-
+      resizeToAvoidBottomInset: true,
       // ✅ plus icon bawah (untuk tambah rencana)
       floatingActionButton: FloatingActionButton(
         backgroundColor: kPurple,
@@ -629,7 +629,8 @@ class _ShoppingPlanScreenState extends State<ShoppingPlanScreen> {
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(32),
-                        border: Border.all(color: Theme.of(context).appColors.border),
+                        border: Border.all(
+                            color: Theme.of(context).appColors.border),
                         color: Theme.of(context).appColors.card,
                       ),
                       child: Icon(
@@ -655,7 +656,8 @@ class _ShoppingPlanScreenState extends State<ShoppingPlanScreen> {
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(32),
-                        border: Border.all(color: Theme.of(context).appColors.border),
+                        border: Border.all(
+                            color: Theme.of(context).appColors.border),
                         color: Theme.of(context).appColors.card,
                       ),
                       child: const Icon(

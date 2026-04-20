@@ -270,7 +270,8 @@ class _WageScreenState extends State<WageScreen> {
                       decoration: BoxDecoration(
                         color: Theme.of(context).appColors.iconSurface,
                         borderRadius: BorderRadius.circular(14),
-                        border: Border.all(color: Theme.of(context).appColors.border),
+                        border: Border.all(
+                            color: Theme.of(context).appColors.border),
                       ),
                       alignment: Alignment.centerLeft,
                       child: Row(
@@ -827,6 +828,7 @@ class _WageScreenState extends State<WageScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).appColors.card,
+      resizeToAvoidBottomInset: true,
       floatingActionButton: FloatingActionButton(
         backgroundColor: kPurple,
         foregroundColor: Theme.of(context).appColors.card,
@@ -851,7 +853,8 @@ class _WageScreenState extends State<WageScreen> {
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(32),
-                        border: Border.all(color: Theme.of(context).appColors.border),
+                        border: Border.all(
+                            color: Theme.of(context).appColors.border),
                         color: Theme.of(context).appColors.card,
                       ),
                       child: Icon(
@@ -879,7 +882,8 @@ class _WageScreenState extends State<WageScreen> {
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(32),
-                        border: Border.all(color: Theme.of(context).appColors.border),
+                        border: Border.all(
+                            color: Theme.of(context).appColors.border),
                         color: Theme.of(context).appColors.card,
                       ),
                       child: const Icon(

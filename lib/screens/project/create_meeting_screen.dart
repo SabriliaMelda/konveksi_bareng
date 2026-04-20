@@ -73,7 +73,7 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).appColors.card,
-
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Column(
           children: [
@@ -161,9 +161,8 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
                         Expanded(
                           child: _TapField(
                             hint: 'Start time',
-                            value: startCtrl.text.isEmpty
-                                ? null
-                                : startCtrl.text,
+                            value:
+                                startCtrl.text.isEmpty ? null : startCtrl.text,
                             icon: Icons.access_time,
                             onTap: () => _pickTime(startCtrl),
                           ),
@@ -248,8 +247,8 @@ class _CreateMeetingScreenState extends State<CreateMeetingScreen> {
                         setState(() {
                           selectedColor =
                               selectedColor == const Color(0xFF89AFFF)
-                              ? const Color(0xFF26BFBF)
-                              : const Color(0xFF89AFFF);
+                                  ? const Color(0xFF26BFBF)
+                                  : const Color(0xFF89AFFF);
                         });
                       },
                     ),
