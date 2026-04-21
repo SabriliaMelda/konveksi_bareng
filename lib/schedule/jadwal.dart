@@ -1,11 +1,10 @@
 // jadwal.dart
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:konveksi_bareng/screens/schedule/unified_schedule_screen.dart';
+import 'package:konveksi_bareng/screens/worker/wage_schedule_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:konveksi_bareng/screens/project/work_order_screen.dart';
 import 'package:konveksi_bareng/screens/main/home.dart';
-import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
 
 const kPurple = Color(0xFF6B257F);
 
@@ -33,7 +32,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).appColors.card,
-      bottomNavigationBar: AppBottomNav(activeIndex: -1),
       body: SafeArea(
         child: Column(
           children: [
@@ -83,7 +81,7 @@ class _HeaderBar extends StatelessWidget {
         children: [
           _CircleIconButton(
             icon: Icons.arrow_back,
-            onTap: () => context.pop(),
+            onTap: () => Navigator.pop(context),
           ),
           Text(
             'Jadwal',
@@ -161,7 +159,7 @@ class _DaySelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 110,
+      height: 100,
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         scrollDirection: Axis.horizontal,
@@ -264,8 +262,13 @@ class _JadwalMenuGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     final menus = [
       _JadwalMenuItem(label: 'SPK', icon: Icons.description_outlined),
+      _JadwalMenuItem(label: 'Jadwal Buat', icon: Icons.calendar_month),
       _JadwalMenuItem(
-          label: 'Kalender Jadwal', icon: Icons.calendar_view_month_rounded),
+        label: 'Jadwal Belanja',
+        icon: Icons.shopping_bag_outlined,
+      ),
+      _JadwalMenuItem(label: 'Jadwal Upah', icon: Icons.payments_outlined),
+      _JadwalMenuItem(label: 'Jadwal Kirim', icon: Icons.send_rounded),
     ];
 
     return Wrap(
@@ -307,7 +310,32 @@ class _JadwalMenuCard extends StatelessWidget {
           return;
         }
 
-        if (item.label == 'Kalender Jadwal') {
+        // ✅ NAVIGASI JADWAL BUAT
+        if (item.label == 'Jadwal Buat') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const UnifiedScheduleScreen()),
+          );
+          return;
+        }
+
+        if (item.label == 'Jadwal Belanja') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const UnifiedScheduleScreen()),
+          );
+          return;
+        }
+
+        if (item.label == 'Jadwal Upah') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const WageScheduleScreen()),
+          );
+          return;
+        }
+
+        if (item.label == 'Jadwal Kirim') {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (_) => const UnifiedScheduleScreen()),
@@ -318,6 +346,7 @@ class _JadwalMenuCard extends StatelessWidget {
         // TODO: menu lain nanti
       },
       child: Container(
+        height: 86,
         decoration: BoxDecoration(
           color: Theme.of(context).appColors.card,
           borderRadius: BorderRadius.circular(16),
@@ -329,10 +358,8 @@ class _JadwalMenuCard extends StatelessWidget {
             ),
           ],
         ),
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
           children: [
             Icon(item.icon, size: 26, color: kPurple),
             const SizedBox(height: 8),
@@ -341,13 +368,10 @@ class _JadwalMenuCard extends StatelessWidget {
               child: Text(
                 item.label,
                 textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   color: Color(0xFF393333),
-                  fontSize: 11,
+                  fontSize: 12,
                   fontWeight: FontWeight.w600,
-                  height: 1.3,
                 ),
               ),
             ),

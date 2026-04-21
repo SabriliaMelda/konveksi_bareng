@@ -8,7 +8,9 @@ import 'package:konveksi_bareng/screens/main/chat_conversation_screen.dart';
 const kPurple = Color(0xFF6B257F);
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+  final String? prevRoute;
+
+  const ChatScreen({super.key, this.prevRoute});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -18,9 +20,11 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _searchC = TextEditingController();
+  final FocusNode _searchFocus = FocusNode();
 
   // true = Chats, false = Groups
   bool _showChats = true;
+  bool _isSearching = false;
 
   String _query = '';
 
@@ -49,7 +53,6 @@ class _ChatScreenState extends State<ChatScreen> {
       avatarUrl: 'https://placehold.co/80x80',
       unread: 0,
       isRead: false,
-      selected: true,
     ),
     _ChatItem(
       name: 'Phoebe',
@@ -124,6 +127,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void dispose() {
     _searchC.dispose();
+    _searchFocus.dispose();
     super.dispose();
   }
 
@@ -151,17 +155,45 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             // ===== HEADER GRADIENT =====
             _HeaderGradient(
+              onBack: () {
+                if (widget.prevRoute != null && widget.prevRoute!.isNotEmpty) {
+                  context.go(widget.prevRoute!);
+                } else if (context.canPop()) {
+                  context.pop();
+                } else {
+                  context.go('/home');
+                }
+              },
               onNotif: () {
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(const SnackBar(content: Text('Notifikasi')));
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                    transitionDuration: Duration.zero,
+                    reverseTransitionDuration: Duration.zero,
+                    pageBuilder: (_, __, ___) =>
+                        const _ChatNotificationsScreen(),
+                  ),
+                );
               },
+              isSearching: _isSearching,
               searchController: _searchC,
-              onSearchChanged: (v) => setState(() => _query = v),
-              onClear: () {
-                _searchC.clear();
-                setState(() => _query = '');
+              searchFocusNode: _searchFocus,
+              onOpenSearch: () {
+                setState(() => _isSearching = true);
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (mounted) {
+                    _searchFocus.requestFocus();
+                  }
+                });
               },
+              onCloseSearch: () {
+                _searchC.clear();
+                _searchFocus.unfocus();
+                setState(() {
+                  _isSearching = false;
+                  _query = '';
+                });
+              },
+              onSearchChanged: (v) => setState(() => _query = v),
             ),
 
             const SizedBox(height: 12),
@@ -319,16 +351,24 @@ class _ChatScreenState extends State<ChatScreen> {
 // ===================== HEADER (GRADIENT + SEARCH) =====================
 //
 class _HeaderGradient extends StatelessWidget {
+  final VoidCallback onBack;
   final VoidCallback onNotif;
+  final bool isSearching;
   final TextEditingController searchController;
+  final FocusNode searchFocusNode;
+  final VoidCallback onOpenSearch;
+  final VoidCallback onCloseSearch;
   final ValueChanged<String> onSearchChanged;
-  final VoidCallback onClear;
 
   const _HeaderGradient({
+    required this.onBack,
     required this.onNotif,
+    required this.isSearching,
     required this.searchController,
+    required this.searchFocusNode,
+    required this.onOpenSearch,
+    required this.onCloseSearch,
     required this.onSearchChanged,
-    required this.onClear,
   });
 
   @override
@@ -351,34 +391,42 @@ class _HeaderGradient extends StatelessWidget {
         children: [
           Row(
             children: [
-              // Back
-              _HeaderIcon(
-                icon: Icons.arrow_back_ios_new_rounded,
-                onTap: () => context.pop(),
-              ),
-              SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  'Chat',
-                  style: TextStyle(
-                    color: Theme.of(context).appColors.card,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w900,
+              if (isSearching)
+                Expanded(
+                  child: _SearchPillBetter(
+                    controller: searchController,
+                    focusNode: searchFocusNode,
+                    onChanged: onSearchChanged,
+                    onClear: onCloseSearch,
+                  ),
+                )
+              else ...[
+                _HeaderIcon(
+                  icon: Icons.arrow_back_ios_new_rounded,
+                  onTap: onBack,
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    'Chat',
+                    style: TextStyle(
+                      color: Theme.of(context).appColors.card,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900,
+                    ),
                   ),
                 ),
-              ),
-              // Notif
-              _HeaderIcon(
-                icon: Icons.notifications_none_rounded,
-                onTap: onNotif,
-              ),
+                _HeaderIcon(
+                  icon: Icons.search_rounded,
+                  onTap: onOpenSearch,
+                ),
+                const SizedBox(width: 10),
+                _HeaderIcon(
+                  icon: Icons.notifications_none_rounded,
+                  onTap: onNotif,
+                ),
+              ],
             ],
-          ),
-          const SizedBox(height: 12),
-          _SearchPillBetter(
-            controller: searchController,
-            onChanged: onSearchChanged,
-            onClear: onClear,
           ),
         ],
       ),
@@ -414,11 +462,13 @@ class _HeaderIcon extends StatelessWidget {
 
 class _SearchPillBetter extends StatelessWidget {
   final TextEditingController controller;
+  final FocusNode? focusNode;
   final ValueChanged<String> onChanged;
   final VoidCallback onClear;
 
   const _SearchPillBetter({
     required this.controller,
+    this.focusNode,
     required this.onChanged,
     required this.onClear,
   });
@@ -441,6 +491,7 @@ class _SearchPillBetter extends StatelessWidget {
           Expanded(
             child: TextField(
               controller: controller,
+              focusNode: focusNode,
               onChanged: onChanged,
               decoration: InputDecoration(
                 border: InputBorder.none,
@@ -458,19 +509,300 @@ class _SearchPillBetter extends StatelessWidget {
               ),
             ),
           ),
-          if (controller.text.isNotEmpty)
-            InkWell(
-              borderRadius: BorderRadius.circular(18),
-              onTap: onClear,
-              child: const Padding(
-                padding: EdgeInsets.all(6),
-                child: Icon(Icons.close, size: 18, color: Colors.white70),
-              ),
+          InkWell(
+            borderRadius: BorderRadius.circular(18),
+            onTap: onClear,
+            child: const Padding(
+              padding: EdgeInsets.all(6),
+              child: Icon(Icons.close, size: 18, color: Colors.white70),
             ),
+          ),
         ],
       ),
     );
   }
+}
+
+class _ChatNotificationsScreen extends StatelessWidget {
+  const _ChatNotificationsScreen();
+
+  static const _items = [
+    _ChatNotificationItem(
+      title: 'Pesan baru dari Chloe',
+      subtitle: 'Hello! Are you available for tonight?',
+      time: '2 menit lalu',
+      contactName: 'Chloe',
+      avatarUrl: 'https://placehold.co/80x80',
+      unread: true,
+      icon: Icons.chat_bubble_outline,
+    ),
+    _ChatNotificationItem(
+      title: 'Group Penjahit',
+      subtitle: 'Admin: besok meeting jam 10',
+      time: '18 menit lalu',
+      contactName: 'Group Penjahit',
+      isGroup: true,
+      memberCount: 128,
+      unread: true,
+      icon: Icons.groups_2_outlined,
+    ),
+    _ChatNotificationItem(
+      title: 'Pesan belum dibaca',
+      subtitle: 'Kaitlyn mengirim pesan terakhir hari ini',
+      time: '1 jam lalu',
+      contactName: 'Kaitlyn',
+      avatarUrl: 'https://placehold.co/80x80',
+      unread: false,
+      icon: Icons.mark_chat_unread_outlined,
+    ),
+    _ChatNotificationItem(
+      title: 'Group Supplier Kain',
+      subtitle: 'Harga combed naik 2k/meter',
+      time: 'Kemarin',
+      contactName: 'Group Supplier Kain',
+      isGroup: true,
+      memberCount: 203,
+      unread: false,
+      icon: Icons.storefront_outlined,
+    ),
+  ];
+
+  void _openNotification(BuildContext context, _ChatNotificationItem item) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => ChatConversationScreen(
+          contactName: item.contactName,
+          avatarUrl: item.avatarUrl,
+          isGroup: item.isGroup,
+          memberCount: item.memberCount,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Theme.of(context).appColors.bg,
+      body: SafeArea(
+        child: Column(
+          children: [
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  _CircleBackButton(onTap: () => Navigator.of(context).pop()),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      'Notifikasi Chat',
+                      style: TextStyle(
+                        color: Theme.of(context).appColors.ink,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 14),
+            Expanded(
+              child: ListView.separated(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                itemCount: _items.length,
+                separatorBuilder: (_, __) => const SizedBox(height: 10),
+                itemBuilder: (context, index) {
+                  final item = _items[index];
+                  return _ChatNotificationTile(
+                    item: item,
+                    onTap: () => _openNotification(context, item),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CircleBackButton extends StatelessWidget {
+  final VoidCallback onTap;
+
+  const _CircleBackButton({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(16),
+      onTap: onTap,
+      child: Container(
+        width: 44,
+        height: 44,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: Theme.of(context).appColors.card,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Theme.of(context).appColors.border),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x0D000000),
+              blurRadius: 14,
+              offset: Offset(0, 8),
+            ),
+          ],
+        ),
+        child: Icon(
+          Icons.arrow_back_ios_new,
+          color: Theme.of(context).appColors.ink,
+          size: 20,
+        ),
+      ),
+    );
+  }
+}
+
+class _ChatNotificationTile extends StatelessWidget {
+  final _ChatNotificationItem item;
+  final VoidCallback onTap;
+
+  const _ChatNotificationTile({
+    required this.item,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(18),
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: Theme.of(context).appColors.card,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(
+            color: item.unread
+                ? const Color(0xFFE3C7F0)
+                : Theme.of(context).appColors.border,
+          ),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x0D000000),
+              blurRadius: 16,
+              offset: Offset(0, 8),
+            ),
+          ],
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: item.unread
+                    ? const Color(0xFFF3E4FF)
+                    : Theme.of(context).appColors.iconSurface,
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: Icon(
+                item.icon,
+                color:
+                    item.unread ? kPurple : Theme.of(context).appColors.muted,
+                size: 22,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          item.title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: Theme.of(context).appColors.ink,
+                            fontSize: 13.5,
+                            fontWeight:
+                                item.unread ? FontWeight.w900 : FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        item.time,
+                        style: TextStyle(
+                          color: Theme.of(context).appColors.muted,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    item.subtitle,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: Theme.of(context).appColors.muted,
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w600,
+                      height: 1.35,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (item.unread) ...[
+              const SizedBox(width: 10),
+              Container(
+                width: 9,
+                height: 9,
+                margin: const EdgeInsets.only(top: 6),
+                decoration: const BoxDecoration(
+                  color: kPurple,
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ChatNotificationItem {
+  final String title;
+  final String subtitle;
+  final String time;
+  final String contactName;
+  final String? avatarUrl;
+  final bool isGroup;
+  final int? memberCount;
+  final bool unread;
+  final IconData icon;
+
+  const _ChatNotificationItem({
+    required this.title,
+    required this.subtitle,
+    required this.time,
+    required this.contactName,
+    this.avatarUrl,
+    this.isGroup = false,
+    this.memberCount,
+    required this.unread,
+    required this.icon,
+  });
 }
 
 //

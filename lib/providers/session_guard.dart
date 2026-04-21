@@ -28,7 +28,7 @@ class SessionGuard {
         onSessionExpired?.call();
         return;
       }
-      final status = await AuthService.checkSession();
+      final status = await AuthService.checkSession(token);
       if (status == 401) {
         await StorageService.deleteItem('auth_token');
         onSessionExpired?.call();

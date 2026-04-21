@@ -1,9 +1,10 @@
-// lib/finance/pembelian.dart
+// lib/finance/pemesanan.dart
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:konveksi_bareng/config/app_colors.dart';
-import 'package:konveksi_bareng/screens/main/home.dart';
 import 'package:konveksi_bareng/services/payment_service.dart';
+import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
 
 const Color kPurple = Color(0xFF6B257F);
 const Color kBg = Color(0xFFF7F7FB);
@@ -46,8 +47,9 @@ String _fmtDate(DateTime d) {
 class PurchaseScreen extends StatefulWidget {
   /// Pass null to open in standalone/history mode (no active order).
   final OrderResult? order;
+  final String? prevRoute;
 
-  const PurchaseScreen({super.key, this.order});
+  const PurchaseScreen({super.key, this.order, this.prevRoute});
 
   @override
   State<PurchaseScreen> createState() => _PurchaseScreenState();
@@ -55,8 +57,7 @@ class PurchaseScreen extends StatefulWidget {
 
 class _PurchaseScreenState extends State<PurchaseScreen> {
   late PaymentStatus _status;
-  bool _isPolling = false;
-  bool _isRetrying = false;
+  final TextEditingController _searchC = TextEditingController();
 
   // Countdown timer (24 h from order creation)
   Timer? _countdownTimer;
@@ -119,6 +120,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
   @override
   void dispose() {
     _countdownTimer?.cancel();
+    _searchC.dispose();
     super.dispose();
   }
 
@@ -144,61 +146,6 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
     return '$h:$m:$s';
   }
 
-  Future<void> _checkStatus() async {
-    if (_isPolling || _order == null) return;
-    setState(() => _isPolling = true);
-    try {
-      final newStatus = await PaymentService.checkStatus(_order!.orderId);
-      if (!mounted) return;
-      setState(() {
-        _status = newStatus;
-        _order!.status = newStatus;
-      });
-      _showSnack(_statusMessage(newStatus));
-    } catch (_) {
-      if (mounted) _showSnack('Gagal mengambil status. Coba lagi.');
-    } finally {
-      if (mounted) setState(() => _isPolling = false);
-    }
-  }
-
-  Future<void> _retryPayment() async {
-    if (_isRetrying || _order == null) return;
-    setState(() => _isRetrying = true);
-    try {
-      await PaymentService.retryPayment(_order!.orderId);
-      if (!mounted) return;
-      setState(() {
-        _status = PaymentStatus.pending;
-        _order!.status = PaymentStatus.pending;
-      });
-      _showSnack('Permintaan pembayaran ulang dikirim.');
-    } catch (_) {
-      if (mounted) _showSnack('Gagal. Coba lagi.');
-    } finally {
-      if (mounted) setState(() => _isRetrying = false);
-    }
-  }
-
-  String _statusMessage(PaymentStatus s) {
-    switch (s) {
-      case PaymentStatus.pending:
-        return 'Menunggu pembayaran...';
-      case PaymentStatus.verifying:
-        return 'Sedang diverifikasi...';
-      case PaymentStatus.success:
-        return 'Pembayaran berhasil!';
-      case PaymentStatus.failed:
-        return 'Pembayaran gagal.';
-    }
-  }
-
-  void _showSnack(String msg) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(msg)));
-  }
-
   List<_HistoryItem> get _filteredHistory {
     final label = _filters[_selectedFilter];
     if (label == 'Semua') return _history;
@@ -210,23 +157,64 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
     return _history.where((e) => e.status == map[label]).toList();
   }
 
+  String get _detailPrevRoute {
+    final parentRoute =
+        (widget.prevRoute != null && widget.prevRoute!.isNotEmpty)
+            ? widget.prevRoute!
+            : '/home';
+    return '/purchase?prev=${Uri.encodeComponent(parentRoute)}';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBg,
+      backgroundColor: Theme.of(context).appColors.card,
+      bottomNavigationBar: AppBottomNav(activeIndex: -1),
       body: SafeArea(
         child: Column(
           children: [
-            _Header(
-              onHomeTap: () => Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (_) => HomeScreen()),
-                (r) => false,
+            const SizedBox(height: 10),
+
+            // ===== TOP ROW: BACK + SEARCH =====
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  _CircleIconButton(
+                    icon: Icons.arrow_back_ios_new,
+                    iconColor: Theme.of(context).appColors.ink,
+                    onTap: () {
+                      if (widget.prevRoute != null &&
+                          widget.prevRoute!.isNotEmpty) {
+                        context.go(widget.prevRoute!);
+                      } else if (context.canPop()) {
+                        context.pop();
+                      } else {
+                        context.go('/home');
+                      }
+                    },
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: _SearchPill(
+                      controller: _searchC,
+                      hint: 'Cari resi / order / produk...',
+                      onChanged: (_) => setState(() {}),
+                      onClear: () {
+                        _searchC.clear();
+                        setState(() {});
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
+
+            const SizedBox(height: 14),
+
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(16, 14, 16, 120),
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -247,7 +235,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                     ],
 
                     // History section
-                    const _SectionTitle(title: 'Riwayat Pembelian'),
+                    const _SectionTitle(title: 'Riwayat Pemesanan'),
                     const SizedBox(height: 10),
                     _FilterChips(
                       filters: _filters,
@@ -280,11 +268,9 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                                 createdAt: DateTime.now(),
                                 status: item.status,
                               );
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => PurchaseScreen(order: order),
-                                ),
+                              context.push(
+                                '/purchase-detail?prev=${Uri.encodeComponent(_detailPrevRoute)}',
+                                extra: order,
                               );
                             },
                           ),
@@ -296,76 +282,167 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: _BottomBar(
-        status: _status,
-        hasOrder: _order != null,
-        isPolling: _isPolling,
-        isRetrying: _isRetrying,
-        onCheckStatus: _checkStatus,
-        onRetry: _retryPayment,
-      ),
     );
   }
 }
 
-// ── Header ────────────────────────────────────────────────────────────────────
+// ── Circle Icon Button ────────────────────────────────────────────────────────
 
-class _Header extends StatelessWidget {
-  final VoidCallback onHomeTap;
-  const _Header({required this.onHomeTap});
+class PurchaseDetailScreen extends StatefulWidget {
+  final OrderResult order;
+  final String? prevRoute;
+
+  const PurchaseDetailScreen({
+    super.key,
+    required this.order,
+    this.prevRoute,
+  });
+
+  @override
+  State<PurchaseDetailScreen> createState() => _PurchaseDetailScreenState();
+}
+
+class _PurchaseDetailScreenState extends State<PurchaseDetailScreen> {
+  Timer? _countdownTimer;
+  Duration _remaining = Duration.zero;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.order.status == PaymentStatus.pending) {
+      _startCountdown();
+    }
+  }
+
+  @override
+  void dispose() {
+    _countdownTimer?.cancel();
+    super.dispose();
+  }
+
+  void _startCountdown() {
+    final deadline = widget.order.createdAt.add(const Duration(hours: 24));
+    _updateRemaining(deadline);
+    _countdownTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (!mounted) return;
+      _updateRemaining(deadline);
+    });
+  }
+
+  void _updateRemaining(DateTime deadline) {
+    final diff = deadline.difference(DateTime.now());
+    setState(() => _remaining = diff.isNegative ? Duration.zero : diff);
+  }
+
+  String get _countdownText {
+    if (_remaining == Duration.zero) return '00:00:00';
+    final h = _remaining.inHours.toString().padLeft(2, '0');
+    final m = (_remaining.inMinutes % 60).toString().padLeft(2, '0');
+    final s = (_remaining.inSeconds % 60).toString().padLeft(2, '0');
+    return '$h:$m:$s';
+  }
+
+  void _handleBack(BuildContext context) {
+    if (widget.prevRoute != null && widget.prevRoute!.isNotEmpty) {
+      context.go(widget.prevRoute!);
+    } else if (context.canPop()) {
+      context.pop();
+    } else {
+      context.go('/purchase');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.fromLTRB(16, 12, 16, 16),
-      decoration: BoxDecoration(
-        color: kPurple,
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(24),
-          bottomRight: Radius.circular(24),
+    return Scaffold(
+      backgroundColor: Theme.of(context).appColors.card,
+      bottomNavigationBar: const AppBottomNav(activeIndex: -1),
+      body: SafeArea(
+        child: Column(
+          children: [
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  _CircleIconButton(
+                    icon: Icons.arrow_back_ios_new,
+                    iconColor: Theme.of(context).appColors.ink,
+                    onTap: () => _handleBack(context),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      'Detail Pemesanan',
+                      style: TextStyle(
+                        color: Theme.of(context).appColors.ink,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 14),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _StatusCard(
+                      status: widget.order.status,
+                      countdown: _countdownText,
+                      showCountdown:
+                          widget.order.status == PaymentStatus.pending,
+                    ),
+                    const SizedBox(height: 16),
+                    _OrderInfoCard(order: widget.order),
+                    const SizedBox(height: 16),
+                    _PaymentMethodCard(method: widget.order.paymentMethod),
+                    const SizedBox(height: 16),
+                    _TimelineCard(
+                      status: widget.order.status,
+                      order: widget.order,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
-      ),
-      child: Row(
-        children: [
-          _HeaderIcon(
-              icon: Icons.arrow_back_ios_new_rounded,
-              onTap: () => Navigator.pop(context)),
-          SizedBox(width: 12),
-          Expanded(
-            child: Text('Status Pembelian',
-                style: TextStyle(
-                    color: Theme.of(context).appColors.card,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w900)),
-          ),
-          _HeaderIcon(icon: Icons.home_filled, onTap: onHomeTap),
-        ],
       ),
     );
   }
 }
 
-class _HeaderIcon extends StatelessWidget {
+class _CircleIconButton extends StatelessWidget {
   final IconData icon;
+  final Color iconColor;
   final VoidCallback onTap;
-  const _HeaderIcon({required this.icon, required this.onTap});
+
+  const _CircleIconButton({
+    required this.icon,
+    required this.iconColor,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(16),
       onTap: onTap,
       child: Container(
-        width: 40,
-        height: 40,
+        width: 44,
+        height: 44,
+        alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: Theme.of(context).appColors.card.withValues(alpha: 0.12),
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-              color: Theme.of(context).appColors.card.withValues(alpha: 0.12)),
+          color: Theme.of(context).appColors.card,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Theme.of(context).appColors.border),
         ),
-        child: Icon(icon, color: Theme.of(context).appColors.card, size: 20),
+        child: Icon(icon, size: 20, color: iconColor),
       ),
     );
   }
@@ -972,117 +1049,6 @@ class _EmptyHistory extends StatelessWidget {
   }
 }
 
-// ── Bottom bar ────────────────────────────────────────────────────────────────
-
-class _BottomBar extends StatelessWidget {
-  final PaymentStatus status;
-  final bool hasOrder;
-  final bool isPolling;
-  final bool isRetrying;
-  final VoidCallback onCheckStatus;
-  final VoidCallback onRetry;
-
-  const _BottomBar({
-    required this.status,
-    required this.hasOrder,
-    required this.isPolling,
-    required this.isRetrying,
-    required this.onCheckStatus,
-    required this.onRetry,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    if (!hasOrder) return SizedBox.shrink();
-
-    return Container(
-      padding: EdgeInsets.fromLTRB(16, 12, 16, 16),
-      decoration: BoxDecoration(
-        color: Theme.of(context).appColors.card,
-        boxShadow: [
-          BoxShadow(
-              color: Color(0x12000000), blurRadius: 18, offset: Offset(0, -6))
-        ],
-      ),
-      child: SafeArea(
-        top: false,
-        child: Row(
-          children: [
-            // Cek Status
-            Expanded(
-              child: OutlinedButton.icon(
-                onPressed: isPolling ? null : onCheckStatus,
-                icon: isPolling
-                    ? const SizedBox(
-                        width: 14,
-                        height: 14,
-                        child: CircularProgressIndicator(
-                            strokeWidth: 2, color: kPurple))
-                    : const Icon(Icons.refresh_rounded, size: 16),
-                label: Text(isPolling ? 'Mengecek...' : 'Cek Status'),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: kPurple,
-                  side: const BorderSide(color: kPurple),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14)),
-                  minimumSize: const Size.fromHeight(46),
-                  textStyle:
-                      TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
-                ),
-              ),
-            ),
-            SizedBox(width: 12),
-
-            // Bayar Lagi / Selesai
-            Expanded(
-              child: status == PaymentStatus.success
-                  ? ElevatedButton.icon(
-                      onPressed: () => Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (_) => HomeScreen()),
-                        (r) => false,
-                      ),
-                      icon: Icon(Icons.home_rounded, size: 16),
-                      label: Text('Selesai'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF16A34A),
-                        foregroundColor: Theme.of(context).appColors.card,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14)),
-                        minimumSize: Size.fromHeight(46),
-                        textStyle: TextStyle(
-                            fontSize: 13, fontWeight: FontWeight.w700),
-                      ),
-                    )
-                  : ElevatedButton.icon(
-                      onPressed: isRetrying ? null : onRetry,
-                      icon: isRetrying
-                          ? SizedBox(
-                              width: 14,
-                              height: 14,
-                              child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: Theme.of(context).appColors.card))
-                          : Icon(Icons.replay_rounded, size: 16),
-                      label: Text(isRetrying ? 'Memproses...' : 'Bayar Lagi'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: kPurple,
-                        foregroundColor: Theme.of(context).appColors.card,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14)),
-                        minimumSize: const Size.fromHeight(46),
-                        textStyle: const TextStyle(
-                            fontSize: 13, fontWeight: FontWeight.w700),
-                      ),
-                    ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 // ── Shared small widgets ──────────────────────────────────────────────────────
 
 class _Card extends StatelessWidget {
@@ -1191,6 +1157,67 @@ class _FilterChips extends StatelessWidget {
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class _SearchPill extends StatelessWidget {
+  final TextEditingController controller;
+  final String hint;
+  final ValueChanged<String> onChanged;
+  final VoidCallback onClear;
+
+  const _SearchPill({
+    required this.controller,
+    required this.hint,
+    required this.onChanged,
+    required this.onClear,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 44,
+      padding: EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        color: Color(0xFFF0F0F0),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.search, size: 20, color: Color(0xFF010101)),
+          SizedBox(width: 8),
+          Expanded(
+            child: TextField(
+              controller: controller,
+              onChanged: onChanged,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: hint,
+                hintStyle: TextStyle(
+                  color: Theme.of(context).appColors.muted,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              style: const TextStyle(
+                color: Color(0xFF010101),
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          if (controller.text.isNotEmpty)
+            InkWell(
+              borderRadius: BorderRadius.circular(18),
+              onTap: onClear,
+              child: const Padding(
+                padding: EdgeInsets.all(6),
+                child: Icon(Icons.close, size: 18, color: Color(0xFF777777)),
+              ),
+            ),
+        ],
       ),
     );
   }

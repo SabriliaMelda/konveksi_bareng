@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:konveksi_bareng/config/api_config.dart';
-import 'package:konveksi_bareng/services/storage_service.dart';
 
 class AuthService {
   AuthService._();
@@ -69,8 +69,8 @@ class AuthService {
 
   // ── Verify OTP ──
 
-  static Future<
-      ({bool ok, int statusCode, String? token, String? message})> verifyOtp({
+  static Future<({bool ok, int statusCode, String? token, String? message})>
+      verifyOtp({
     required String email,
     required String otp,
     Map<String, dynamic>? deviceInfo,
@@ -157,8 +157,8 @@ class AuthService {
 
   // ── Resend Register OTP ──
 
-  static Future<({bool ok, int statusCode, String? message})>
-      resendRegisterOtp(String email) async {
+  static Future<({bool ok, int statusCode, String? message})> resendRegisterOtp(
+      String email) async {
     try {
       final res = await _dio.post(
         '/auth/resend-register-otp',
@@ -336,7 +336,8 @@ class AuthService {
 
   static Future<Map<String, dynamic>?> getMe() async {
     try {
-      final token = await StorageService.getItem('auth_token');
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('auth_token');
       if (token == null) return null;
       final res = await _dio.get(
         '/auth/me',
@@ -349,6 +350,23 @@ class AuthService {
       return _asMap(res.data);
     } on DioException {
       return null;
+    }
+  }
+
+  // ── Check Session (untuk Session Guard) ──
+
+  static Future<int> checkSession(String token) async {
+    try {
+      final res = await _dio.get(
+        '/auth/me',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+          responseType: ResponseType.plain,
+        ),
+      );
+      return res.statusCode ?? 500;
+    } on DioException catch (e) {
+      return e.response?.statusCode ?? 0;
     }
   }
 

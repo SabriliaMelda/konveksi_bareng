@@ -74,6 +74,11 @@ const _paymentOptions = [
       group: 'QRIS',
       icon: Icons.qr_code_2_rounded,
       color: Color(0xFF6B257F)),
+  _PaymentOption(
+      label: 'Bayar di Tempat',
+      group: 'Lainnya',
+      icon: Icons.local_shipping_outlined,
+      color: Color(0xFF16A34A)),
 ];
 
 // ── Helper ────────────────────────────────────────────────────────────────────
@@ -225,15 +230,229 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
   }
 
+  void _showCheckoutMenu() {
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Theme.of(context).appColors.card,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (sheetContext) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Opsi Checkout',
+                        style: TextStyle(
+                          color: Theme.of(context).appColors.ink,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      borderRadius: BorderRadius.circular(999),
+                      onTap: () => Navigator.of(sheetContext).pop(),
+                      child: const Padding(
+                        padding: EdgeInsets.all(6),
+                        child: Icon(Icons.close, size: 20),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                _CheckoutMenuTile(
+                  icon: Icons.select_all_rounded,
+                  title: 'Pilih semua',
+                  subtitle: 'Centang semua item di keranjang',
+                  onTap: () {
+                    Navigator.of(sheetContext).pop();
+                    setState(() {
+                      for (final product in _products) {
+                        product.selected = true;
+                      }
+                    });
+                  },
+                ),
+                _CheckoutMenuTile(
+                  icon: Icons.deselect_rounded,
+                  title: 'Batal pilih semua',
+                  subtitle: 'Hapus centang semua item',
+                  onTap: () {
+                    Navigator.of(sheetContext).pop();
+                    setState(() {
+                      for (final product in _products) {
+                        product.selected = false;
+                      }
+                    });
+                  },
+                ),
+                _CheckoutMenuTile(
+                  icon: Icons.local_offer_outlined,
+                  title: 'Voucher',
+                  subtitle: 'Cek voucher yang bisa dipakai',
+                  onTap: () {
+                    Navigator.of(sheetContext).pop();
+                    _showVoucherSheet();
+                  },
+                ),
+                _CheckoutMenuTile(
+                  icon: Icons.edit_note_outlined,
+                  title: 'Catatan pesanan',
+                  subtitle: 'Tambahkan catatan untuk seller',
+                  onTap: () {
+                    Navigator.of(sheetContext).pop();
+                    _showOrderNoteSheet();
+                  },
+                ),
+                _CheckoutMenuTile(
+                  icon: Icons.help_outline_rounded,
+                  title: 'Bantuan checkout',
+                  subtitle: 'Lihat informasi pembayaran dan keranjang',
+                  onTap: () {
+                    Navigator.of(sheetContext).pop();
+                    _showCheckoutHelpSheet();
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showVoucherSheet() {
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Theme.of(context).appColors.card,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) => const _SimpleInfoSheet(
+        title: 'Voucher',
+        icon: Icons.local_offer_outlined,
+        message:
+            'Voucher gratis ongkir dan diskon akan otomatis muncul saat tersedia untuk item yang dipilih.',
+      ),
+    );
+  }
+
+  void _showOrderNoteSheet() {
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Theme.of(context).appColors.card,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (sheetContext) {
+        return SafeArea(
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: 16,
+              right: 16,
+              top: 16,
+              bottom: MediaQuery.of(sheetContext).viewInsets.bottom + 16,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Catatan Pesanan',
+                  style: TextStyle(
+                    color: Theme.of(context).appColors.ink,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  autofocus: true,
+                  maxLines: 4,
+                  decoration: InputDecoration(
+                    hintText: 'Contoh: warna, ukuran, atau instruksi packing',
+                    filled: true,
+                    fillColor: _kBg,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                      borderSide:
+                          BorderSide(color: Theme.of(context).appColors.border),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                      borderSide:
+                          BorderSide(color: Theme.of(context).appColors.border),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                      borderSide: const BorderSide(color: kPurple),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 14),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.of(sheetContext).pop(),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: kPurple,
+                      minimumSize: const Size.fromHeight(46),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                    ),
+                    child: Text(
+                      'Simpan',
+                      style: TextStyle(
+                        color: Theme.of(context).appColors.card,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showCheckoutHelpSheet() {
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Theme.of(context).appColors.card,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) => const _SimpleInfoSheet(
+        title: 'Bantuan Checkout',
+        icon: Icons.help_outline_rounded,
+        message:
+            'Pilih minimal satu item dan metode pembayaran sebelum menekan Bayar Sekarang.',
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: _kBg,
+      resizeToAvoidBottomInset: true,
       bottomNavigationBar: AppBottomNav(activeIndex: -1),
       body: SafeArea(
         child: Column(
           children: [
-            const _AppBar(),
+            _AppBar(onMoreTap: _showCheckoutMenu),
             const Divider(height: 1, color: Color(0xFFEEEEEE)),
             Expanded(
               child: SingleChildScrollView(
@@ -290,7 +509,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 // ── App bar ───────────────────────────────────────────────────────────────────
 
 class _AppBar extends StatelessWidget {
-  const _AppBar();
+  final VoidCallback onMoreTap;
+
+  const _AppBar({required this.onMoreTap});
 
   @override
   Widget build(BuildContext context) {
@@ -309,8 +530,130 @@ class _AppBar extends StatelessWidget {
                     fontSize: 16,
                     fontWeight: FontWeight.w700)),
           ),
-          _RoundBtn(icon: Icons.more_horiz, onTap: () {}),
+          _RoundBtn(icon: Icons.more_horiz, onTap: onMoreTap),
         ],
+      ),
+    );
+  }
+}
+
+class _CheckoutMenuTile extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  const _CheckoutMenuTile({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(14),
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Row(
+          children: [
+            Container(
+              width: 42,
+              height: 42,
+              decoration: BoxDecoration(
+                color: kPurple.withValues(alpha: 0.10),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(icon, color: kPurple, size: 22),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      color: Theme.of(context).appColors.ink,
+                      fontSize: 13.5,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      color: Theme.of(context).appColors.muted,
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(
+              Icons.chevron_right_rounded,
+              color: Theme.of(context).appColors.muted,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SimpleInfoSheet extends StatelessWidget {
+  final String title;
+  final IconData icon;
+  final String message;
+
+  const _SimpleInfoSheet({
+    required this.title,
+    required this.icon,
+    required this.message,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 18),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 54,
+              height: 54,
+              decoration: BoxDecoration(
+                color: kPurple.withValues(alpha: 0.10),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Icon(icon, color: kPurple, size: 28),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              title,
+              style: TextStyle(
+                color: Theme.of(context).appColors.ink,
+                fontSize: 16,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Theme.of(context).appColors.muted,
+                fontSize: 12.5,
+                fontWeight: FontWeight.w600,
+                height: 1.35,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

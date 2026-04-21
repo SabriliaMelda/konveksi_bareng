@@ -17,7 +17,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   static const _ink = Color(0xFF0F172A);
   static const _muted = Color(0xFF64748B);
   static const _border = Color(0x1A0F172A);
-  static const _card = Color(0xCCFFFFFF);
 
   // ===== Dummy user =====
   final _nameC = TextEditingController(text: 'IT BDN');
@@ -42,6 +41,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF7FAFF),
+      resizeToAvoidBottomInset: true,
       body: Stack(
         children: [
           const _GradientBackdropPurple(),

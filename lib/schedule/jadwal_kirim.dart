@@ -1,7 +1,6 @@
 // jadwal_kirim.dart
 import 'package:flutter/material.dart';
 import 'package:konveksi_bareng/config/app_colors.dart';
-import 'package:go_router/go_router.dart';
 
 const kPurple = Color(0xFF6B257F);
 
@@ -233,7 +232,7 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
                         child: _GhostButton(
                           icon: Icons.close_rounded,
                           text: 'Batal',
-                          onTap: () => context.pop(),
+                          onTap: () => Navigator.pop(context),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -287,7 +286,7 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
                                 ..add(const Color(0xFF735BF2));
                             });
 
-                            context.pop();
+                            Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(
@@ -371,7 +370,7 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
                 label: 'Tandai selesai (dummy)',
                 color: const Color(0xFF2E7D32),
                 onTap: () {
-                  context.pop();
+                  Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Ditandai selesai (dummy)')),
                   );
@@ -383,7 +382,7 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
                 label: 'Hapus jadwal (dummy)',
                 color: Color(0xFFD32F2F),
                 onTap: () {
-                  context.pop();
+                  Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Hapus (dummy)')),
                   );
@@ -400,7 +399,6 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).appColors.card,
-      resizeToAvoidBottomInset: true,
       floatingActionButton: FloatingActionButton(
         backgroundColor: kPurple,
         foregroundColor: Theme.of(context).appColors.card,
@@ -565,7 +563,7 @@ class _TopHeader extends StatelessWidget {
         children: [
           _CircleIcon(
             icon: Icons.arrow_back,
-            onTap: () => context.pop(),
+            onTap: () => Navigator.pop(context),
           ),
           Text(
             title,
@@ -579,7 +577,7 @@ class _TopHeader extends StatelessWidget {
           _CircleIcon(
             icon: Icons.home_filled,
             iconColor: kPurple,
-            onTap: () => context.pop(),
+            onTap: () => Navigator.pop(context),
           ),
         ],
       ),
@@ -692,7 +690,7 @@ class _CalendarGrid extends StatelessWidget {
         crossAxisCount: 7,
         mainAxisSpacing: 10,
         crossAxisSpacing: 6,
-        childAspectRatio: 0.95,
+        childAspectRatio: 1.1,
       ),
       itemBuilder: (context, index) {
         final cell = days[index];

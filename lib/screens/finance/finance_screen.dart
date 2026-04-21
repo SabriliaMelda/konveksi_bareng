@@ -376,7 +376,7 @@ class _FinanceMenu {
 
 // ===== GRID MENU (2 KOLOM CARD) =====
 class _MenuGridKeuangan extends StatelessWidget {
-  const _MenuGridKeuangan({super.key});
+  const _MenuGridKeuangan();
 
   static const menus = [
     _FinanceMenu(

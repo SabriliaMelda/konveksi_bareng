@@ -1,69 +1,68 @@
-// jadwal_kirim.dart
+// jadwal_upah.dart
 import 'package:flutter/material.dart';
 import 'package:konveksi_bareng/config/app_colors.dart';
-import 'package:go_router/go_router.dart';
 
 const kPurple = Color(0xFF6B257F);
 
-class DeliveryScheduleScreen extends StatefulWidget {
-  const DeliveryScheduleScreen({super.key});
+class WageScheduleScreen extends StatefulWidget {
+  const WageScheduleScreen({super.key});
 
   @override
-  State<DeliveryScheduleScreen> createState() => _DeliveryScheduleScreenState();
+  State<WageScheduleScreen> createState() => _WageScheduleScreenState();
 }
 
-class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
-  int selectedDay = 5;
+class _WageScheduleScreenState extends State<WageScheduleScreen> {
+  int selectedDay = 5; // default
 
   // indikator dot per tanggal (dummy)
   final Map<int, List<Color>> dots = {
-    2: [Color(0xFF00B383)],
-    5: [Color(0xFF0095FF), Color(0xFF735BF2)],
-    8: [Color(0xFF0095FF)],
+    2: [Color(0xFF00B383), Color(0xFF0095FF)],
+    5: [Color(0xFF735BF2)],
     10: [Color(0xFF00B383), Color(0xFF0095FF), Color(0xFF735BF2)],
-    12: [Color(0xFF735BF2)],
-    18: [Color(0xFF00B383)],
+    12: [Color(0xFF0095FF)],
+    18: [Color(0xFF735BF2)],
+    22: [Color(0xFF00B383)],
     29: [Color(0xFF0095FF)],
   };
 
-  // dummy jadwal kirim per tanggal
-  final Map<int, List<_KirimSchedule>> schedulesByDay = {
+  // dummy jadwal upah per tanggal (fashion)
+  final Map<int, List<_UpahSchedule>> schedulesByDay = {
     5: const [
-      _KirimSchedule(
+      _UpahSchedule(
         time: '10:00 - 10:30',
-        title: 'Pickup Paket Proyek 1',
-        desc: 'Kurir menjemput 2 box (Blouse) dari workshop.',
-        pickup: 'Workshop Bandung',
-        destination: 'Gudang Jakarta',
-        courier: 'JNE',
-        awb: 'JNE-23920193',
-        status: _KirimStatus.siap,
+        title: 'Bayar Upah Penjahit',
+        desc: 'Pembayaran jahit 20 pcs blouse (Mbak Sari).',
+        location: 'Workshop',
+        worker: 'Mbak Sari',
+        project: 'Proyek 1',
+        amount: 400000,
+        status: _UpahPayStatus.belum,
         borderColor: Color(0xFF26BFBF),
         barColor: Color(0xFF26BFBF),
       ),
-      _KirimSchedule(
+      _UpahSchedule(
         time: '15:00 - 15:30',
-        title: 'Kirim Paket QC',
-        desc: 'Dokumen QC + sample dikirim ke client.',
-        pickup: 'Workshop Bandung',
-        destination: 'Client (Bekasi)',
-        courier: 'SiCepat',
-        awb: 'SICEPAT-990122',
-        status: _KirimStatus.dikirim,
+        title: 'Bayar Upah QC',
+        desc: 'QC 50 pcs + re-check ukuran (Pak Deni).',
+        location: 'Workshop',
+        worker: 'Pak Deni',
+        project: 'Proyek 2',
+        amount: 250000,
+        status: _UpahPayStatus.jatuhTempo,
         borderColor: Color(0xFF89AFFF),
         barColor: Color(0xFF89AFFF),
       ),
     ],
     10: const [
-      _KirimSchedule(
+      _UpahSchedule(
         time: '11:00 - 11:30',
-        title: 'Pickup Bahan (Supplier)',
-        desc: 'Ambil kain 5 roll dari supplier.',
-        pickup: 'Supplier Cimahi',
-        destination: 'Workshop Bandung',
-        courier: 'Kurir Internal',
-        awb: '-',
-        status: _KirimStatus.dijemput,
+        title: 'Bayar Upah Cutting',
+        desc: 'Cutting kain 10 roll (Mbak Rina).',
+        location: 'Workshop',
+        worker: 'Mbak Rina',
+        project: 'Proyek 1',
+        amount: 300000,
+        status: _UpahPayStatus.lunas,
         borderColor: Color(0xFF735BF2),
         barColor: Color(0xFF735BF2),
       ),
@@ -74,22 +73,34 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
   // Helpers
   // =========================
   String _fmtDateBar(int day) {
+    // dummy: January 2024 (biar mirip desain contoh)
     return 'Thursday, ${day.toString().padLeft(2, '0')} Jan, 2024';
   }
 
-  List<_KirimSchedule> get _activeSchedules =>
+  String _rupiah(int n) {
+    final s = n.toString();
+    final buf = StringBuffer();
+    for (int i = 0; i < s.length; i++) {
+      final idxFromEnd = s.length - i;
+      buf.write(s[i]);
+      if (idxFromEnd > 1 && idxFromEnd % 3 == 1) buf.write('.');
+    }
+    return 'Rp $buf';
+  }
+
+  List<_UpahSchedule> get _activeSchedules =>
       schedulesByDay[selectedDay] ?? [];
 
   void _openAddSheet() {
-    final titleC = TextEditingController(text: 'Kirim Paket');
-    final awbC = TextEditingController();
-    final courierC = TextEditingController(text: 'JNE');
+    final titleC = TextEditingController(text: 'Bayar Upah');
+    final workerC = TextEditingController();
+    final projectC = TextEditingController(text: 'Proyek 1');
     final descC = TextEditingController();
-    final pickupC = TextEditingController(text: 'Workshop');
-    final destC = TextEditingController(text: 'Gudang/Client');
+    final locC = TextEditingController(text: 'Workshop');
     final timeC = TextEditingController(text: '10:00 - 10:30');
+    final amountC = TextEditingController();
 
-    _KirimStatus status = _KirimStatus.siap;
+    _UpahPayStatus status = _UpahPayStatus.belum;
 
     showModalBottomSheet(
       context: context,
@@ -120,7 +131,7 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
                   ),
                   const SizedBox(height: 12),
                   const Text(
-                    'Tambah Jadwal Kirim (dummy)',
+                    'Tambah Jadwal Upah (dummy)',
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w900,
@@ -131,43 +142,44 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
                   _InputField(
                     controller: titleC,
                     label: 'Judul',
-                    hint: 'Contoh: Pickup Paket Proyek 1',
+                    hint: 'Contoh: Bayar Upah Penjahit',
                   ),
                   const SizedBox(height: 10),
                   _InputField(
-                    controller: courierC,
-                    label: 'Kurir',
-                    hint: 'Contoh: JNE / SiCepat / Internal',
+                    controller: workerC,
+                    label: 'Nama pekerja',
+                    hint: 'Contoh: Mbak Sari',
                   ),
                   const SizedBox(height: 10),
                   _InputField(
-                    controller: awbC,
-                    label: 'No. Resi / AWB',
-                    hint: 'Contoh: JNE-123456 (boleh kosong)',
+                    controller: projectC,
+                    label: 'Project',
+                    hint: 'Contoh: Proyek 1',
                   ),
                   const SizedBox(height: 10),
                   _InputField(
-                    controller: pickupC,
-                    label: 'Pickup',
-                    hint: 'Contoh: Workshop Bandung',
+                    controller: descC,
+                    label: 'Catatan',
+                    hint: 'Contoh: Jahit 20 pcs blouse',
                   ),
                   const SizedBox(height: 10),
                   _InputField(
-                    controller: destC,
-                    label: 'Tujuan',
-                    hint: 'Contoh: Gudang Jakarta / Client',
+                    controller: amountC,
+                    label: 'Nominal',
+                    hint: 'Contoh: 250000',
+                    keyboardType: TextInputType.number,
+                  ),
+                  SizedBox(height: 10),
+                  _InputField(
+                    controller: locC,
+                    label: 'Lokasi',
+                    hint: 'Contoh: Workshop',
                   ),
                   SizedBox(height: 10),
                   _InputField(
                     controller: timeC,
                     label: 'Jam',
                     hint: 'Contoh: 10:00 - 10:30',
-                  ),
-                  SizedBox(height: 10),
-                  _InputField(
-                    controller: descC,
-                    label: 'Catatan',
-                    hint: 'Contoh: 2 box blouse + invoice',
                   ),
                   SizedBox(height: 10),
                   Text(
@@ -183,47 +195,31 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
                     children: [
                       Expanded(
                         child: _ChoicePill(
-                          label: 'Siap',
-                          active: status == _KirimStatus.siap,
+                          label: 'Belum',
+                          active: status == _UpahPayStatus.belum,
                           onTap: () =>
-                              setLocal(() => status = _KirimStatus.siap),
+                              setLocal(() => status = _UpahPayStatus.belum),
                         ),
                       ),
                       const SizedBox(width: 10),
                       Expanded(
                         child: _ChoicePill(
-                          label: 'Dijemput',
-                          active: status == _KirimStatus.dijemput,
-                          onTap: () =>
-                              setLocal(() => status = _KirimStatus.dijemput),
+                          label: 'J. Tempo',
+                          active: status == _UpahPayStatus.jatuhTempo,
+                          onTap: () => setLocal(
+                            () => status = _UpahPayStatus.jatuhTempo,
+                          ),
                         ),
                       ),
                       const SizedBox(width: 10),
                       Expanded(
                         child: _ChoicePill(
-                          label: 'Dikirim',
-                          active: status == _KirimStatus.dikirim,
+                          label: 'Lunas',
+                          active: status == _UpahPayStatus.lunas,
                           onTap: () =>
-                              setLocal(() => status = _KirimStatus.dikirim),
+                              setLocal(() => status = _UpahPayStatus.lunas),
                         ),
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _ChoicePill(
-                          label: 'Selesai',
-                          active: status == _KirimStatus.selesai,
-                          onTap: () =>
-                              setLocal(() => status = _KirimStatus.selesai),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      const Expanded(child: SizedBox()),
-                      const SizedBox(width: 10),
-                      const Expanded(child: SizedBox()),
                     ],
                   ),
                   const SizedBox(height: 14),
@@ -233,7 +229,7 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
                         child: _GhostButton(
                           icon: Icons.close_rounded,
                           text: 'Batal',
-                          onTap: () => context.pop(),
+                          onTap: () => Navigator.pop(context),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -242,16 +238,20 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
                           borderRadius: BorderRadius.circular(14),
                           onTap: () {
                             final title = titleC.text.trim();
-                            if (title.isEmpty) {
+                            final worker = workerC.text.trim();
+                            final amount =
+                                int.tryParse(amountC.text.trim()) ?? 0;
+
+                            if (title.isEmpty || worker.isEmpty) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text('Judul wajib diisi'),
+                                  content: Text('Judul & pekerja wajib diisi'),
                                 ),
                               );
                               return;
                             }
 
-                            final newItem = _KirimSchedule(
+                            final newItem = _UpahSchedule(
                               time: timeC.text.trim().isEmpty
                                   ? '-'
                                   : timeC.text.trim(),
@@ -259,25 +259,21 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
                               desc: descC.text.trim().isEmpty
                                   ? '-'
                                   : descC.text.trim(),
-                              pickup: pickupC.text.trim().isEmpty
+                              location: locC.text.trim().isEmpty
                                   ? '-'
-                                  : pickupC.text.trim(),
-                              destination: destC.text.trim().isEmpty
+                                  : locC.text.trim(),
+                              worker: worker,
+                              project: projectC.text.trim().isEmpty
                                   ? '-'
-                                  : destC.text.trim(),
-                              courier: courierC.text.trim().isEmpty
-                                  ? '-'
-                                  : courierC.text.trim(),
-                              awb: awbC.text.trim().isEmpty
-                                  ? '-'
-                                  : awbC.text.trim(),
+                                  : projectC.text.trim(),
+                              amount: amount < 0 ? 0 : amount,
                               status: status,
                               borderColor: const Color(0xFF26BFBF),
                               barColor: const Color(0xFF26BFBF),
                             );
 
                             setState(() {
-                              final list = List<_KirimSchedule>.from(
+                              final list = List<_UpahSchedule>.from(
                                 _activeSchedules,
                               );
                               list.insert(0, newItem);
@@ -287,11 +283,11 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
                                 ..add(const Color(0xFF735BF2));
                             });
 
-                            context.pop();
+                            Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(
-                                  'Jadwal kirim ditambahkan (dummy)',
+                                  'Jadwal upah ditambahkan (dummy)',
                                 ),
                               ),
                             );
@@ -326,7 +322,7 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
     );
   }
 
-  void _openItemAction(_KirimSchedule item) {
+  void _openItemAction(_UpahSchedule item) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Theme.of(context).appColors.card,
@@ -358,7 +354,7 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
               ),
               SizedBox(height: 6),
               Text(
-                '${item.courier} • ${item.awb}',
+                '${item.worker} • ${item.project} • ${_rupiah(item.amount)}',
                 style: TextStyle(
                   color: Theme.of(context).appColors.muted,
                   fontSize: 12,
@@ -368,12 +364,12 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
               const SizedBox(height: 12),
               _SheetAction(
                 icon: Icons.check_circle_outline_rounded,
-                label: 'Tandai selesai (dummy)',
+                label: 'Tandai lunas (dummy)',
                 color: const Color(0xFF2E7D32),
                 onTap: () {
-                  context.pop();
+                  Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Ditandai selesai (dummy)')),
+                    const SnackBar(content: Text('Ditandai lunas (dummy)')),
                   );
                 },
               ),
@@ -383,7 +379,7 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
                 label: 'Hapus jadwal (dummy)',
                 color: Color(0xFFD32F2F),
                 onTap: () {
-                  context.pop();
+                  Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Hapus (dummy)')),
                   );
@@ -400,7 +396,7 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).appColors.card,
-      resizeToAvoidBottomInset: true,
+
       floatingActionButton: FloatingActionButton(
         backgroundColor: kPurple,
         foregroundColor: Theme.of(context).appColors.card,
@@ -408,10 +404,11 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
         onPressed: _openAddSheet,
         child: const Icon(Icons.add_rounded, size: 26),
       ),
+
       body: SafeArea(
         child: Column(
           children: [
-            const _TopHeader(title: 'Jadwal Kirim'),
+            const _TopHeader(title: 'Jadwal Upah'),
             const SizedBox(height: 8),
 
             // month header (dummy)
@@ -520,7 +517,7 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
                 child: _activeSchedules.isEmpty
                     ? Center(
                         child: Text(
-                          'Belum ada jadwal kirim pada tanggal ini.',
+                          'Belum ada jadwal upah pada tanggal ini.',
                           style: TextStyle(
                             color: Theme.of(context).appColors.muted,
                             fontSize: 12.5,
@@ -529,6 +526,7 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
                         ),
                       )
                     : ListView.separated(
+                        // ✅ aman dari FAB
                         padding: const EdgeInsets.fromLTRB(0, 0, 0, 90),
                         itemCount: _activeSchedules.length,
                         separatorBuilder: (_, __) => const SizedBox(height: 12),
@@ -536,7 +534,10 @@ class _DeliveryScheduleScreenState extends State<DeliveryScheduleScreen> {
                           final item = _activeSchedules[i];
                           return GestureDetector(
                             onTap: () => _openItemAction(item),
-                            child: _ScheduleCardKirim(item: item),
+                            child: _ScheduleCardUpah(
+                              item: item,
+                              rupiah: _rupiah,
+                            ),
                           );
                         },
                       ),
@@ -565,7 +566,7 @@ class _TopHeader extends StatelessWidget {
         children: [
           _CircleIcon(
             icon: Icons.arrow_back,
-            onTap: () => context.pop(),
+            onTap: () => Navigator.pop(context),
           ),
           Text(
             title,
@@ -579,7 +580,7 @@ class _TopHeader extends StatelessWidget {
           _CircleIcon(
             icon: Icons.home_filled,
             iconColor: kPurple,
-            onTap: () => context.pop(),
+            onTap: () => Navigator.pop(context),
           ),
         ],
       ),
@@ -692,7 +693,7 @@ class _CalendarGrid extends StatelessWidget {
         crossAxisCount: 7,
         mainAxisSpacing: 10,
         crossAxisSpacing: 6,
-        childAspectRatio: 0.95,
+        childAspectRatio: 1.1,
       ),
       itemBuilder: (context, index) {
         final cell = days[index];
@@ -707,8 +708,9 @@ class _CalendarGrid extends StatelessWidget {
                 width: 30,
                 height: 30,
                 decoration: BoxDecoration(
-                  color:
-                      isSelected ? const Color(0xFFDBC0F2) : Colors.transparent,
+                  color: isSelected
+                      ? const Color(0xFFDBC0F2)
+                      : Colors.transparent,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 alignment: Alignment.center,
@@ -775,70 +777,69 @@ class _SmallDot extends StatelessWidget {
 }
 
 //
-// ================== CARD KIRIM ==================
+// ================== CARD UPAH ==================
 //
-enum _KirimStatus { siap, dijemput, dikirim, selesai }
+enum _UpahPayStatus { belum, jatuhTempo, lunas }
 
-class _KirimSchedule {
+class _UpahSchedule {
   final String time;
   final String title;
   final String desc;
-  final String pickup;
-  final String destination;
-  final String courier;
-  final String awb;
-  final _KirimStatus status;
+  final String location;
+  final String worker;
+  final String project;
+  final int amount;
+  final _UpahPayStatus status;
   final Color borderColor;
   final Color barColor;
 
-  const _KirimSchedule({
+  const _UpahSchedule({
     required this.time,
     required this.title,
     required this.desc,
-    required this.pickup,
-    required this.destination,
-    required this.courier,
-    required this.awb,
+    required this.location,
+    required this.worker,
+    required this.project,
+    required this.amount,
     required this.status,
     required this.borderColor,
     required this.barColor,
   });
 }
 
-class _ScheduleCardKirim extends StatelessWidget {
-  final _KirimSchedule item;
-  const _ScheduleCardKirim({required this.item});
+class _ScheduleCardUpah extends StatelessWidget {
+  final _UpahSchedule item;
+  final String Function(int) rupiah;
+
+  const _ScheduleCardUpah({required this.item, required this.rupiah});
 
   Color get _statusColor {
     switch (item.status) {
-      case _KirimStatus.siap:
+      case _UpahPayStatus.belum:
         return const Color(0xFFD32F2F);
-      case _KirimStatus.dijemput:
+      case _UpahPayStatus.jatuhTempo:
         return const Color(0xFFE65100);
-      case _KirimStatus.dikirim:
-        return const Color(0xFF1565C0);
-      case _KirimStatus.selesai:
+      case _UpahPayStatus.lunas:
         return const Color(0xFF2E7D32);
     }
   }
 
   String get _statusText {
     switch (item.status) {
-      case _KirimStatus.siap:
-        return 'Siap';
-      case _KirimStatus.dijemput:
-        return 'Dijemput';
-      case _KirimStatus.dikirim:
-        return 'Dikirim';
-      case _KirimStatus.selesai:
-        return 'Selesai';
+      case _UpahPayStatus.belum:
+        return 'Belum';
+      case _UpahPayStatus.jatuhTempo:
+        return 'J. Tempo';
+      case _UpahPayStatus.lunas:
+        return 'Lunas';
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(minHeight: 132),
+      // ✅ FIX: jangan kunci height, biar adaptif & tidak overflow
+      constraints: BoxConstraints(minHeight: 128),
       decoration: BoxDecoration(
         color: Theme.of(context).appColors.card,
         borderRadius: BorderRadius.circular(12),
@@ -891,8 +892,7 @@ class _ScheduleCardKirim extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: Theme.of(context).appColors.iconSurface,
                           borderRadius: BorderRadius.circular(999),
-                          border: Border.all(
-                              color: Theme.of(context).appColors.border),
+                          border: Border.all(color: Theme.of(context).appColors.border),
                         ),
                         child: Text(
                           _statusText,
@@ -917,13 +917,13 @@ class _ScheduleCardKirim extends StatelessWidget {
                   ),
                   SizedBox(height: 4),
                   Text(
-                    '${item.courier} • ${item.awb}',
+                    '${item.worker} • ${item.project} • ${rupiah(item.amount)}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       color: Theme.of(context).appColors.muted,
                       fontSize: 12,
-                      height: 1.35,
+                      height: 1.4,
                     ),
                   ),
                   SizedBox(height: 4),
@@ -941,14 +941,14 @@ class _ScheduleCardKirim extends StatelessWidget {
                   Row(
                     children: [
                       Icon(
-                        Icons.place_outlined,
+                        Icons.location_on_outlined,
                         size: 18,
                         color: Theme.of(context).appColors.muted,
                       ),
                       SizedBox(width: 6),
                       Expanded(
                         child: Text(
-                          '${item.pickup} → ${item.destination}',
+                          item.location,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -1113,11 +1113,13 @@ class _InputField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
   final String hint;
+  final TextInputType keyboardType;
 
   const _InputField({
     required this.controller,
     required this.label,
     required this.hint,
+    this.keyboardType = TextInputType.text,
   });
 
   @override
@@ -1136,6 +1138,7 @@ class _InputField extends StatelessWidget {
         SizedBox(height: 6),
         TextField(
           controller: controller,
+          keyboardType: keyboardType,
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: TextStyle(

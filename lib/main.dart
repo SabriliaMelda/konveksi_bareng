@@ -46,3 +46,21 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+class MyAppHome extends StatelessWidget {
+  const MyAppHome({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = context.watch<ThemeProvider>().darkMode;
+
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      title: 'Konveksi Bareng',
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
+      routerConfig: appRouter,
+    );
+  }
+}

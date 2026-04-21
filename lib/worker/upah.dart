@@ -1,8 +1,7 @@
 // upah.dart
 import 'package:flutter/material.dart';
 import 'package:konveksi_bareng/config/app_colors.dart';
-import 'package:go_router/go_router.dart';
-import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
+import 'package:konveksi_bareng/screens/main/home.dart';
 
 const Color kPurple = Color(0xFF6B257F);
 
@@ -270,8 +269,7 @@ class _WageScreenState extends State<WageScreen> {
                       decoration: BoxDecoration(
                         color: Theme.of(context).appColors.iconSurface,
                         borderRadius: BorderRadius.circular(14),
-                        border: Border.all(
-                            color: Theme.of(context).appColors.border),
+                        border: Border.all(color: Theme.of(context).appColors.border),
                       ),
                       alignment: Alignment.centerLeft,
                       child: Row(
@@ -341,7 +339,7 @@ class _WageScreenState extends State<WageScreen> {
                         child: _GhostButton(
                           icon: Icons.close_rounded,
                           text: 'Batal',
-                          onTap: () => context.pop(),
+                          onTap: () => Navigator.pop(context),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -377,7 +375,7 @@ class _WageScreenState extends State<WageScreen> {
                             );
 
                             setState(() => _bills.insert(0, newBill));
-                            context.pop();
+                            Navigator.pop(context);
 
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
@@ -462,7 +460,7 @@ class _WageScreenState extends State<WageScreen> {
                 label: 'Edit tagihan (dummy)',
                 color: kPurple,
                 onTap: () {
-                  context.pop();
+                  Navigator.pop(context);
                   ScaffoldMessenger.of(
                     context,
                   ).showSnackBar(const SnackBar(content: Text('Edit (dummy)')));
@@ -474,7 +472,7 @@ class _WageScreenState extends State<WageScreen> {
                 label: 'Hapus tagihan (dummy)',
                 color: const Color(0xFFD32F2F),
                 onTap: () {
-                  context.pop();
+                  Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Hapus (dummy)')),
                   );
@@ -828,7 +826,6 @@ class _WageScreenState extends State<WageScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).appColors.card,
-      resizeToAvoidBottomInset: true,
       floatingActionButton: FloatingActionButton(
         backgroundColor: kPurple,
         foregroundColor: Theme.of(context).appColors.card,
@@ -836,7 +833,6 @@ class _WageScreenState extends State<WageScreen> {
         onPressed: _openAddSheet,
         child: Icon(Icons.add_rounded, size: 26),
       ),
-      bottomNavigationBar: AppBottomNav(activeIndex: -1),
       body: SafeArea(
         child: Column(
           children: [
@@ -848,13 +844,12 @@ class _WageScreenState extends State<WageScreen> {
                 children: [
                   InkWell(
                     borderRadius: BorderRadius.circular(32),
-                    onTap: () => context.pop(),
+                    onTap: () => Navigator.pop(context),
                     child: Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(32),
-                        border: Border.all(
-                            color: Theme.of(context).appColors.border),
+                        border: Border.all(color: Theme.of(context).appColors.border),
                         color: Theme.of(context).appColors.card,
                       ),
                       child: Icon(
@@ -876,14 +871,17 @@ class _WageScreenState extends State<WageScreen> {
                   InkWell(
                     borderRadius: BorderRadius.circular(32),
                     onTap: () {
-                      context.go('/home');
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (_) => HomeScreen()),
+                        (route) => false,
+                      );
                     },
                     child: Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(32),
-                        border: Border.all(
-                            color: Theme.of(context).appColors.border),
+                        border: Border.all(color: Theme.of(context).appColors.border),
                         color: Theme.of(context).appColors.card,
                       ),
                       child: const Icon(

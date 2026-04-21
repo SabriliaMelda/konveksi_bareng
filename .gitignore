@@ -45,5 +45,3 @@ app.*.map.json
 /android/app/release
 
 .env
-PROGRESS.md
-new.md

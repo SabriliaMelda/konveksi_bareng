@@ -44,14 +44,10 @@ import '../screens/worker/worker_screen.dart';
 import '../screens/worker/worker_list_screen.dart';
 import '../screens/worker/worker_detail_screen.dart';
 import '../screens/worker/wage_screen.dart';
-import '../screens/worker/wage_schedule_screen.dart';
 import '../screens/worker/wage_billing_status_screen.dart';
 
 // ── Schedule ──
 import '../screens/schedule/schedule_screen.dart';
-import '../screens/schedule/production_schedule_screen.dart';
-import '../screens/schedule/shopping_schedule_screen.dart';
-import '../screens/schedule/delivery_schedule_screen.dart';
 import '../screens/schedule/unified_schedule_screen.dart';
 
 // ── Inventory ──
@@ -99,6 +95,18 @@ Page<void> _fadePage(Widget child, GoRouterState state) {
   );
 }
 
+Page<void> _softFadePage(Widget child, GoRouterState state) {
+  return CustomTransitionPage<void>(
+    key: state.pageKey,
+    child: child,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return child;
+    },
+    transitionDuration: Duration.zero,
+    reverseTransitionDuration: Duration.zero,
+  );
+}
+
 final GoRouter appRouter = GoRouter(
   navigatorKey: rootNavigatorKey,
   initialLocation: '/welcome',
@@ -133,13 +141,22 @@ final GoRouter appRouter = GoRouter(
         GoRoute(
             path: '/home', pageBuilder: (_, s) => _fadePage(HomeScreen(), s)),
         GoRoute(
-            path: '/wishlist',
-            pageBuilder: (_, s) => _fadePage(WishlistScreen(), s)),
+          path: '/wishlist',
+          pageBuilder: (_, s) {
+            final prevRoute = s.uri.queryParameters['prev'] ?? '/home';
+            return _fadePage(WishlistScreen(prevRoute: prevRoute), s);
+          },
+        ),
         GoRoute(
             path: '/settings',
             pageBuilder: (_, s) => _fadePage(SettingsScreen(), s)),
         GoRoute(
-            path: '/chat', pageBuilder: (_, s) => _fadePage(ChatScreen(), s)),
+          path: '/chat',
+          pageBuilder: (_, s) {
+            final prevRoute = s.uri.queryParameters['prev'] ?? '/home';
+            return _softFadePage(ChatScreen(prevRoute: prevRoute), s);
+          },
+        ),
         GoRoute(
             path: '/profile',
             pageBuilder: (_, s) => _fadePage(ProfileScreen(), s)),
@@ -148,15 +165,39 @@ final GoRouter appRouter = GoRouter(
 
     // ── Finance routes ──
     GoRoute(
-        path: '/finance', pageBuilder: (_, s) => _fadePage(FinanceScreen(), s)),
+        path: '/finance',
+        pageBuilder: (_, s) => _softFadePage(FinanceScreen(), s)),
     GoRoute(
         path: '/profit-loss',
         pageBuilder: (_, s) => _fadePage(ProfitLossScreen(), s)),
     GoRoute(
         path: '/purchase',
-        pageBuilder: (_, s) =>
-            _fadePage(PurchaseScreen(order: s.extra as OrderResult?), s)),
-    GoRoute(path: '/sales', pageBuilder: (_, s) => _fadePage(SalesScreen(), s)),
+        pageBuilder: (_, s) {
+          final prevRoute = s.uri.queryParameters['prev'] ?? '/home';
+          return _fadePage(
+            PurchaseScreen(
+                order: s.extra as OrderResult?, prevRoute: prevRoute),
+            s,
+          );
+        }),
+    GoRoute(
+        path: '/purchase-detail',
+        pageBuilder: (_, s) {
+          final prevRoute = s.uri.queryParameters['prev'] ?? '/purchase';
+          return _softFadePage(
+            PurchaseDetailScreen(
+              order: s.extra as OrderResult,
+              prevRoute: prevRoute,
+            ),
+            s,
+          );
+        }),
+    GoRoute(
+        path: '/sales',
+        pageBuilder: (_, s) {
+          final prevRoute = s.uri.queryParameters['prev'] ?? '/home';
+          return _fadePage(SalesScreen(prevRoute: prevRoute), s);
+        }),
     GoRoute(
         path: '/payment', pageBuilder: (_, s) => _fadePage(PaymentScreen(), s)),
     GoRoute(
@@ -176,7 +217,7 @@ final GoRouter appRouter = GoRouter(
     // ── Project routes ──
     GoRoute(
         path: '/manage-project',
-        pageBuilder: (_, s) => _fadePage(ManageProjectScreen(), s)),
+        pageBuilder: (_, s) => _softFadePage(ManageProjectScreen(), s)),
     GoRoute(
         path: '/project-list',
         pageBuilder: (_, s) => _fadePage(ProjectListScreen(), s)),
@@ -218,15 +259,16 @@ final GoRouter appRouter = GoRouter(
             role: args['role'] as String,
             projects: args['projects'] as List<String>,
             avatarAsset: args['avatarAsset'] as String?,
+            phone: (args['phone'] as String?) ?? '',
+            address: (args['address'] as String?) ?? '',
+            notes: (args['notes'] as String?) ?? '',
           ),
           s,
         );
       },
     ),
     GoRoute(path: '/wage', pageBuilder: (_, s) => _fadePage(WageScreen(), s)),
-    GoRoute(
-        path: '/wage-schedule',
-        pageBuilder: (_, s) => _fadePage(WageScheduleScreen(), s)),
+    GoRoute(path: '/wage-schedule', redirect: (_, __) => '/unified-schedule'),
     GoRoute(
         path: '/wage-billing-status',
         pageBuilder: (_, s) => _fadePage(WageBillingStatusScreen(), s)),
@@ -236,14 +278,11 @@ final GoRouter appRouter = GoRouter(
         path: '/schedule',
         pageBuilder: (_, s) => _fadePage(ScheduleScreen(), s)),
     GoRoute(
-        path: '/production-schedule',
-        pageBuilder: (_, s) => _fadePage(ProductionScheduleScreen(), s)),
+        path: '/production-schedule', redirect: (_, __) => '/unified-schedule'),
     GoRoute(
-        path: '/shopping-schedule',
-        pageBuilder: (_, s) => _fadePage(ShoppingScheduleScreen(), s)),
+        path: '/shopping-schedule', redirect: (_, __) => '/unified-schedule'),
     GoRoute(
-        path: '/delivery-schedule',
-        pageBuilder: (_, s) => _fadePage(DeliveryScheduleScreen(), s)),
+        path: '/delivery-schedule', redirect: (_, __) => '/unified-schedule'),
     GoRoute(
         path: '/unified-schedule',
         pageBuilder: (_, s) => _fadePage(const UnifiedScheduleScreen(), s)),
@@ -251,10 +290,25 @@ final GoRouter appRouter = GoRouter(
     // ── Inventory routes ──
     GoRoute(
         path: '/raw-material',
-        pageBuilder: (_, s) => _fadePage(RawMaterialScreen(), s)),
+        pageBuilder: (_, s) => _softFadePage(RawMaterialScreen(), s)),
     GoRoute(
         path: '/shipment',
-        pageBuilder: (_, s) => _fadePage(ShipmentScreen(), s)),
+        pageBuilder: (_, s) {
+          final prevRoute = s.uri.queryParameters['prev'] ?? '/home';
+          return _fadePage(ShipmentScreen(prevRoute: prevRoute), s);
+        }),
+    GoRoute(
+        path: '/shipment-detail',
+        pageBuilder: (_, s) {
+          final prevRoute = s.uri.queryParameters['prev'] ?? '/shipment';
+          return _softFadePage(
+            ShipmentDetailScreen(
+              itemData: s.extra as Object,
+              prevRoute: prevRoute,
+            ),
+            s,
+          );
+        }),
     GoRoute(
         path: '/shopping-plan',
         pageBuilder: (_, s) => _fadePage(ShoppingPlanScreen(), s)),

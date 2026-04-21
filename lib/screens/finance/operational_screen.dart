@@ -194,7 +194,6 @@ class _OperationalScreenState extends State<OperationalScreen> {
                 ),
               ),
               const SizedBox(height: 12),
-
               _InputField(
                 controller: titleC,
                 label: 'Judul',
@@ -214,7 +213,6 @@ class _OperationalScreenState extends State<OperationalScreen> {
                 keyboardType: TextInputType.number,
               ),
               const SizedBox(height: 14),
-
               Row(
                 children: [
                   Expanded(
@@ -414,9 +412,8 @@ class _OperationalScreenState extends State<OperationalScreen> {
             Expanded(
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 180),
-                child: _tab == _OpTab.edit
-                    ? _buildEditMode()
-                    : _buildInputMode(),
+                child:
+                    _tab == _OpTab.edit ? _buildEditMode() : _buildInputMode(),
               ),
             ),
           ],
@@ -505,8 +502,7 @@ class _OperationalScreenState extends State<OperationalScreen> {
                             context: context,
                             firstDate: DateTime(now.year - 2),
                             lastDate: DateTime(now.year + 2),
-                            initialDateRange:
-                                _customRange ??
+                            initialDateRange: _customRange ??
                                 DateTimeRange(
                                   start: now.subtract(Duration(days: 7)),
                                   end: now,
@@ -1045,7 +1041,10 @@ class _InputField extends StatelessWidget {
 //
 // ================== MODELS ==================
 //
-enum _OpType { pemasukan, pengeluaran }
+enum _OpType {
+  _pemasukan, // ignore: unused_field
+  pengeluaran
+}
 
 enum _Period { harian, mingguan, bulanan, custom }
 

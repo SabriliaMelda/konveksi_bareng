@@ -181,7 +181,7 @@ class _HeaderSection extends StatelessWidget {
 // ================== PROMO SECTION (CARD SIMPLE) ==================
 //
 class _PromoSection extends StatefulWidget {
-  const _PromoSection({super.key});
+  const _PromoSection();
 
   @override
   State<_PromoSection> createState() => _PromoSectionState();
@@ -301,7 +301,6 @@ class _PromoCard extends StatelessWidget {
   final String imagePath;
 
   const _PromoCard({
-    super.key,
     required this.title,
     required this.subtitle,
     required this.imagePath,
@@ -452,7 +451,7 @@ class _MenuGrid extends StatelessWidget {
             };
           } else if (label == 'Chat') {
             onTap = () {
-              context.push('/chat');
+              context.go('/chat?prev=/home');
             };
           } else if (label == 'Beli') {
             onTap = () {
@@ -595,7 +594,7 @@ class _FeatureGrid extends StatelessWidget {
                   } else if (title == 'Bahan Baku') {
                     context.push('/raw-material');
                   } else if (title == 'Komunitas') {
-                    context.push('/chat');
+                    context.go('/chat?prev=/home');
                   } else if (title == 'Keuangan') {
                     context.push('/finance');
                   }
@@ -841,7 +840,7 @@ class _ProductCard extends StatelessWidget {
 }
 
 class _SeeAllCard extends StatelessWidget {
-  const _SeeAllCard({super.key});
+  const _SeeAllCard();
 
   @override
   Widget build(BuildContext context) {

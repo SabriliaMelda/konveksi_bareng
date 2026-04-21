@@ -396,6 +396,7 @@ class _WageScheduleScreenState extends State<WageScheduleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).appColors.card,
+      resizeToAvoidBottomInset: true,
       floatingActionButton: FloatingActionButton(
         backgroundColor: kPurple,
         foregroundColor: Theme.of(context).appColors.card,
