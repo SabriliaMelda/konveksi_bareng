@@ -296,7 +296,8 @@ class AuthService {
 
   static Future<String?> getMyRole() async {
     try {
-      final token = await StorageService.getItem('auth_token');
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('auth_token');
       if (token == null) return null;
       final res = await _dio.get(
         '/auth/my-role',
@@ -310,25 +311,6 @@ class AuthService {
       return data['role'] as String?;
     } on DioException {
       return null;
-    }
-  }
-
-  // ── Check Session (untuk Session Guard) ──
-
-  static Future<int> checkSession() async {
-    final token = await StorageService.getItem('auth_token');
-    if (token == null) return 401;
-    try {
-      final res = await _dio.get(
-        '/auth/me',
-        options: Options(
-          headers: {'Authorization': 'Bearer $token'},
-          responseType: ResponseType.plain,
-        ),
-      );
-      return res.statusCode ?? 500;
-    } on DioException catch (e) {
-      return e.response?.statusCode ?? 0;
     }
   }
 
