@@ -102,7 +102,7 @@ class _RawMaterialScreenState extends State<RawMaterialScreen> {
 }
 
 // ================== HEADER UNGU + SEARCH ==================
-class _Header extends StatelessWidget {
+class _Header extends StatefulWidget {
   final TextEditingController controller;
   final ValueChanged<String> onChanged;
   final VoidCallback onClear;
@@ -112,6 +112,13 @@ class _Header extends StatelessWidget {
     required this.onChanged,
     required this.onClear,
   });
+
+  @override
+  State<_Header> createState() => _HeaderState();
+}
+
+class _HeaderState extends State<_Header> {
+  bool _isSearching = false;
 
   @override
   Widget build(BuildContext context) {
@@ -131,16 +138,43 @@ class _Header extends StatelessWidget {
             children: [
               _HeaderIcon(
                 icon: Icons.arrow_back_ios_new_rounded,
-                onTap: () => context.pop(),
+                onTap: () {
+                  if (context.canPop()) {
+                    context.pop();
+                  } else {
+                    context.go('/home');
+                  }
+                },
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 12),
               Expanded(
-                child: _SearchBar(
-                  controller: controller,
-                  onChanged: onChanged,
-                  onClear: onClear,
-                ),
+                child: _isSearching
+                    ? _SearchBar(
+                        controller: widget.controller,
+                        onChanged: widget.onChanged,
+                        onClear: () {
+                          widget.onClear();
+                          setState(() => _isSearching = false);
+                        },
+                      )
+                    : Text(
+                        'Bahan Baku',
+                        style: TextStyle(
+                          color: Theme.of(context).appColors.card,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
               ),
+              if (!_isSearching) ...[
+                const SizedBox(width: 10),
+                _HeaderIcon(
+                  icon: Icons.search_rounded,
+                  onTap: () {
+                    setState(() => _isSearching = true);
+                  },
+                ),
+              ],
             ],
           ),
         ],
@@ -205,6 +239,7 @@ class _SearchBar extends StatelessWidget {
           Expanded(
             child: TextField(
               controller: controller,
+              autofocus: true,
               onChanged: onChanged,
               decoration: const InputDecoration(
                 border: InputBorder.none,
@@ -222,15 +257,21 @@ class _SearchBar extends StatelessWidget {
               ),
             ),
           ),
-          if (controller.text.isNotEmpty)
-            InkWell(
-              borderRadius: BorderRadius.circular(999),
-              onTap: onClear,
-              child: const Padding(
-                padding: EdgeInsets.all(4),
-                child: Icon(Icons.close, color: Colors.white70, size: 18),
-              ),
-            ),
+          ValueListenableBuilder<TextEditingValue>(
+            valueListenable: controller,
+            builder: (context, value, _) {
+              if (value.text.isEmpty) return const SizedBox.shrink();
+
+              return InkWell(
+                borderRadius: BorderRadius.circular(999),
+                onTap: onClear,
+                child: const Padding(
+                  padding: EdgeInsets.all(4),
+                  child: Icon(Icons.close, color: Colors.white70, size: 18),
+                ),
+              );
+            },
+          ),
         ],
       ),
     );
@@ -333,7 +374,11 @@ class _QuickMenuGrid extends StatelessWidget {
     if (label == 'Keranjang') {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (_) => CheckoutScreen()),
+        PageRouteBuilder(
+          transitionDuration: Duration.zero,
+          reverseTransitionDuration: Duration.zero,
+          pageBuilder: (_, __, ___) => CheckoutScreen(),
+        ),
       );
       return;
     }
@@ -955,3 +1000,4 @@ class _ProductCard extends StatelessWidget {
     );
   }
 }
+

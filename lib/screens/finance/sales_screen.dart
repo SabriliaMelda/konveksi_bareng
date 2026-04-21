@@ -44,8 +44,6 @@ class SalesScreen extends StatefulWidget {
 
 class _SalesScreenState extends State<SalesScreen> {
   final TextEditingController _searchC = TextEditingController();
-  final FocusNode _searchFocus = FocusNode();
-  bool _isSearching = false;
 
   final List<_SaleItem> _sales = const [
     _SaleItem(
@@ -112,7 +110,6 @@ class _SalesScreenState extends State<SalesScreen> {
   @override
   void dispose() {
     _searchC.dispose();
-    _searchFocus.dispose();
     super.dispose();
   }
 
@@ -125,21 +122,8 @@ class _SalesScreenState extends State<SalesScreen> {
           children: [
             _Header(
               prevRoute: widget.prevRoute,
-              isSearching: _isSearching,
               searchController: _searchC,
-              searchFocusNode: _searchFocus,
               onSearchChanged: (_) => setState(() {}),
-              onOpenSearch: () {
-                setState(() => _isSearching = true);
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  if (mounted) _searchFocus.requestFocus();
-                });
-              },
-              onCloseSearch: () {
-                _searchC.clear();
-                _searchFocus.unfocus();
-                setState(() => _isSearching = false);
-              },
               onClearSearch: () {
                 _searchC.clear();
                 setState(() {});
@@ -160,7 +144,22 @@ class _SalesScreenState extends State<SalesScreen> {
                     ..._filteredSales.map(
                       (item) => Padding(
                         padding: const EdgeInsets.only(bottom: 12),
-                        child: _SaleCard(item: item),
+                        child: _SaleCard(
+                          item: item,
+                          onTap: () {
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                transitionDuration: Duration.zero,
+                                reverseTransitionDuration: Duration.zero,
+                                pageBuilder: (_, __, ___) =>
+                                    _SalesDetailScreen(
+                                  item: item,
+                                  prevRoute: widget.prevRoute,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ],
@@ -190,22 +189,14 @@ class _SalesScreenState extends State<SalesScreen> {
 
 class _Header extends StatelessWidget {
   final String? prevRoute;
-  final bool isSearching;
   final TextEditingController searchController;
-  final FocusNode searchFocusNode;
   final ValueChanged<String> onSearchChanged;
-  final VoidCallback onOpenSearch;
-  final VoidCallback onCloseSearch;
   final VoidCallback onClearSearch;
 
   const _Header({
     this.prevRoute,
-    required this.isSearching,
     required this.searchController,
-    required this.searchFocusNode,
     required this.onSearchChanged,
-    required this.onOpenSearch,
-    required this.onCloseSearch,
     required this.onClearSearch,
   });
 
@@ -213,68 +204,44 @@ class _Header extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-      decoration: BoxDecoration(
-        color: kPurple,
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(24),
-          bottomRight: Radius.circular(24),
-        ),
-      ),
+      padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              if (isSearching)
-                Expanded(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: _HeaderSearchField(
-                          controller: searchController,
-                          focusNode: searchFocusNode,
-                          onChanged: onSearchChanged,
-                          onClear: onClearSearch,
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      _HeaderIcon(
-                        icon: Icons.close_rounded,
-                        onTap: onCloseSearch,
-                      ),
-                    ],
-                  ),
-                )
-              else ...[
-                _HeaderIcon(
-                  icon: Icons.arrow_back_ios_new_rounded,
-                  onTap: () {
-                    if (prevRoute != null && prevRoute!.isNotEmpty) {
-                      context.go(prevRoute!);
-                    } else if (context.canPop()) {
-                      context.pop();
-                    } else {
-                      context.go('/home');
-                    }
-                  },
+              _CircleIconButton(
+                icon: Icons.arrow_back_ios_new,
+                iconColor: Colors.black87,
+                onTap: () {
+                  if (prevRoute != null && prevRoute!.isNotEmpty) {
+                    context.go(prevRoute!);
+                  } else if (context.canPop()) {
+                    context.pop();
+                  } else {
+                    context.go('/home');
+                  }
+                },
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: _SearchPill(
+                  controller: searchController,
+                  hint: 'Cari invoice, pelanggan, produk...',
+                  onChanged: onSearchChanged,
+                  onClear: onClearSearch,
                 ),
-                SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    'Penjualan',
-                    style: TextStyle(
-                      color: Theme.of(context).appColors.card,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                ),
-                _HeaderIcon(
-                  icon: Icons.search_rounded,
-                  onTap: onOpenSearch,
-                ),
-              ],
+              ),
             ],
+          ),
+          const SizedBox(height: 14),
+          Text(
+            'Penjualan',
+            style: TextStyle(
+              color: Theme.of(context).appColors.ink,
+              fontSize: 22,
+              fontWeight: FontWeight.w800,
+            ),
           ),
         ],
       ),
@@ -282,15 +249,45 @@ class _Header extends StatelessWidget {
   }
 }
 
-class _HeaderSearchField extends StatelessWidget {
+class _CircleIconButton extends StatelessWidget {
+  final IconData icon;
+  final Color iconColor;
+  final VoidCallback onTap;
+
+  const _CircleIconButton({
+    required this.icon,
+    required this.iconColor,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(32),
+      onTap: onTap,
+      child: Container(
+        width: 44,
+        height: 44,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: const Color(0xFFF0F0F0),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Icon(icon, size: 20, color: iconColor),
+      ),
+    );
+  }
+}
+
+class _SearchPill extends StatelessWidget {
   final TextEditingController controller;
-  final FocusNode focusNode;
+  final String hint;
   final ValueChanged<String> onChanged;
   final VoidCallback onClear;
 
-  const _HeaderSearchField({
+  const _SearchPill({
     required this.controller,
-    required this.focusNode,
+    required this.hint,
     required this.onChanged,
     required this.onClear,
   });
@@ -298,35 +295,31 @@ class _HeaderSearchField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 40,
+      height: 44,
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: Theme.of(context).appColors.card.withValues(alpha: 0.14),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: Theme.of(context).appColors.card.withValues(alpha: 0.12),
-        ),
+        color: const Color(0xFFF0F0F0),
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
         children: [
-          const Icon(Icons.search, color: Colors.white70, size: 18),
+          const Icon(Icons.search, size: 20, color: Color(0xFF010101)),
           const SizedBox(width: 8),
           Expanded(
             child: TextField(
               controller: controller,
-              focusNode: focusNode,
               onChanged: onChanged,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: 'Cari invoice, pelanggan, produk...',
+                hintText: hint,
                 hintStyle: TextStyle(
-                  color: Colors.white70,
+                  color: Theme.of(context).appColors.muted,
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              style: TextStyle(
-                color: Theme.of(context).appColors.card,
+              style: const TextStyle(
+                color: Color(0xFF010101),
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
               ),
@@ -334,43 +327,14 @@ class _HeaderSearchField extends StatelessWidget {
           ),
           if (controller.text.isNotEmpty)
             InkWell(
-              borderRadius: BorderRadius.circular(999),
+              borderRadius: BorderRadius.circular(18),
               onTap: onClear,
               child: const Padding(
-                padding: EdgeInsets.all(4),
-                child: Icon(Icons.close, color: Colors.white70, size: 18),
+                padding: EdgeInsets.all(6),
+                child: Icon(Icons.close, size: 18, color: Color(0xFF777777)),
               ),
             ),
         ],
-      ),
-    );
-  }
-}
-
-class _HeaderIcon extends StatelessWidget {
-  final IconData icon;
-  final VoidCallback onTap;
-
-  const _HeaderIcon({
-    required this.icon,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(14),
-      onTap: onTap,
-      child: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          color: Theme.of(context).appColors.card.withValues(alpha: 0.12),
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-              color: Theme.of(context).appColors.card.withValues(alpha: 0.12)),
-        ),
-        child: Icon(icon, color: Theme.of(context).appColors.card, size: 20),
       ),
     );
   }
@@ -885,190 +849,668 @@ class _SectionTitle extends StatelessWidget {
   }
 }
 
+Color _saleStatusColor(String status) {
+  switch (status) {
+    case 'Selesai':
+      return const Color(0xFF16A34A);
+    case 'DP':
+      return const Color(0xFFF59E0B);
+    case 'Diproses':
+      return kPurple;
+    default:
+      return kPurple;
+  }
+}
+
+Color _saleStatusBg(String status) {
+  switch (status) {
+    case 'Selesai':
+      return const Color(0xFFEAF8EE);
+    case 'DP':
+      return const Color(0xFFFFF4D8);
+    case 'Diproses':
+      return const Color(0xFFF3E4FF);
+    default:
+      return const Color(0xFFF3E4FF);
+  }
+}
+
+Color _saleSourceColor(String source) {
+  return source == 'Marketplace'
+      ? const Color(0xFF2563EB)
+      : const Color(0xFFEA580C);
+}
+
+Color _saleSourceBg(String source) {
+  return source == 'Marketplace'
+      ? const Color(0xFFEAF2FF)
+      : const Color(0xFFFFEFE5);
+}
+
+IconData _saleSourceIcon(String source) {
+  return source == 'Marketplace'
+      ? Icons.storefront_outlined
+      : Icons.store_mall_directory_outlined;
+}
+
 class _SaleCard extends StatelessWidget {
   final _SaleItem item;
+  final VoidCallback onTap;
 
-  const _SaleCard({required this.item});
+  const _SaleCard({
+    required this.item,
+    required this.onTap,
+  });
 
   Color get statusColor {
-    switch (item.status) {
-      case 'Selesai':
-        return const Color(0xFF16A34A);
-      case 'DP':
-        return const Color(0xFFF59E0B);
-      case 'Diproses':
-        return kPurple;
-      default:
-        return kPurple;
-    }
+    return _saleStatusColor(item.status);
   }
 
   Color get statusBg {
-    switch (item.status) {
-      case 'Selesai':
-        return const Color(0xFFEAF8EE);
-      case 'DP':
-        return const Color(0xFFFFF4D8);
-      case 'Diproses':
-        return const Color(0xFFF3E4FF);
-      default:
-        return const Color(0xFFF3E4FF);
-    }
+    return _saleStatusBg(item.status);
   }
 
   Color get sourceColor {
-    return item.source == 'Marketplace'
-        ? const Color(0xFF2563EB)
-        : Color(0xFFEA580C);
+    return _saleSourceColor(item.source);
   }
 
   Color get sourceBg {
-    return item.source == 'Marketplace' ? Color(0xFFEAF2FF) : Color(0xFFFFEFE5);
+    return _saleSourceBg(item.source);
   }
 
   IconData get sourceIcon {
-    return item.source == 'Marketplace'
-        ? Icons.storefront_outlined
-        : Icons.store_mall_directory_outlined;
+    return _saleSourceIcon(item.source);
   }
 
   @override
   Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(18),
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: Theme.of(context).appColors.card,
+          borderRadius: BorderRadius.circular(18),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x14000000),
+              blurRadius: 18,
+              offset: Offset(0, 8),
+            ),
+          ],
+          border: Border.all(color: const Color(0x0FE8ECF4)),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: sourceBg,
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: Icon(sourceIcon, color: sourceColor, size: 22),
+            ),
+            SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.product,
+                    style: TextStyle(
+                      color: Theme.of(context).appColors.ink,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    item.customer,
+                    style: TextStyle(
+                      color: Theme.of(context).appColors.muted,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          item.amount,
+                          style: TextStyle(
+                            color: Theme.of(context).appColors.ink,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 5,
+                        ),
+                        decoration: BoxDecoration(
+                          color: statusBg,
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        child: Text(
+                          item.status,
+                          style: TextStyle(
+                            color: statusColor,
+                            fontSize: 10.5,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 6,
+                    children: [
+                      Text(
+                        item.invoice,
+                        style: const TextStyle(
+                          color: Color(0xFF9CA3AF),
+                          fontSize: 10.5,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Text(
+                        item.date,
+                        style: const TextStyle(
+                          color: Color(0xFF9CA3AF),
+                          fontSize: 10.5,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Text(
+                        item.qty,
+                        style: const TextStyle(
+                          color: Color(0xFF9CA3AF),
+                          fontSize: 10.5,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 5,
+                    ),
+                    decoration: BoxDecoration(
+                      color: sourceBg,
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                    child: Text(
+                      item.source,
+                      style: TextStyle(
+                        color: sourceColor,
+                        fontSize: 10.5,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SalesDetailScreen extends StatelessWidget {
+  final _SaleItem item;
+  final String? prevRoute;
+
+  const _SalesDetailScreen({
+    required this.item,
+    this.prevRoute,
+  });
+
+  void _handleBack(BuildContext context) {
+    if (context.canPop()) {
+      context.pop();
+    } else if (prevRoute != null && prevRoute!.isNotEmpty) {
+      context.go('/sales?prev=${Uri.encodeComponent(prevRoute!)}');
+    } else {
+      context.go('/sales');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Theme.of(context).appColors.card,
+      bottomNavigationBar: const AppBottomNav(activeIndex: -1),
+      body: SafeArea(
+        child: Column(
+          children: [
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  _CircleIconButton(
+                    icon: Icons.arrow_back_ios_new,
+                    iconColor: Theme.of(context).appColors.ink,
+                    onTap: () => _handleBack(context),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      'Detail Penjualan',
+                      style: TextStyle(
+                        color: Theme.of(context).appColors.ink,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 14),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _SaleDetailHero(item: item),
+                    const SizedBox(height: 16),
+                    _SaleDetailInfoCard(item: item),
+                    const SizedBox(height: 16),
+                    _SalePaymentStatusCard(item: item),
+                    const SizedBox(height: 16),
+                    _SaleTimelineCard(item: item),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SaleDetailCard extends StatelessWidget {
+  final Widget child;
+
+  const _SaleDetailCard({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(14),
+      width: double.infinity,
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: Theme.of(context).appColors.card,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Theme.of(context).appColors.border),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x14000000),
-            blurRadius: 18,
-            offset: Offset(0, 8),
+            color: Color(0x0CB3B3B3),
+            blurRadius: 40,
+            offset: Offset(0, 16),
           ),
         ],
-        border: Border.all(color: const Color(0x0FE8ECF4)),
       ),
+      child: child,
+    );
+  }
+}
+
+class _SaleDetailHero extends StatelessWidget {
+  final _SaleItem item;
+
+  const _SaleDetailHero({required this.item});
+
+  @override
+  Widget build(BuildContext context) {
+    final sourceColor = _saleSourceColor(item.source);
+    final sourceBg = _saleSourceBg(item.source);
+    final statusColor = _saleStatusColor(item.status);
+    final statusBg = _saleStatusBg(item.status);
+
+    return _SaleDetailCard(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: 44,
-            height: 44,
+            width: 52,
+            height: 52,
             decoration: BoxDecoration(
               color: sourceBg,
               borderRadius: BorderRadius.circular(14),
             ),
-            child: Icon(sourceIcon, color: sourceColor, size: 22),
+            child: Icon(
+              _saleSourceIcon(item.source),
+              color: sourceColor,
+              size: 26,
+            ),
           ),
-          SizedBox(width: 12),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   item.product,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Theme.of(context).appColors.ink,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  item.customer,
+                  style: TextStyle(
+                    color: Theme.of(context).appColors.muted,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    _DetailChip(
+                      text: item.status,
+                      color: statusColor,
+                      background: statusBg,
+                    ),
+                    _DetailChip(
+                      text: item.source,
+                      color: sourceColor,
+                      background: sourceBg,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SaleDetailInfoCard extends StatelessWidget {
+  final _SaleItem item;
+
+  const _SaleDetailInfoCard({required this.item});
+
+  @override
+  Widget build(BuildContext context) {
+    return _SaleDetailCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const _SectionTitle(title: 'Informasi Transaksi'),
+          const SizedBox(height: 12),
+          _InfoRow(label: 'Invoice', value: item.invoice),
+          _InfoRow(label: 'Tanggal', value: item.date),
+          _InfoRow(label: 'Pelanggan', value: item.customer),
+          _InfoRow(label: 'Produk', value: item.product),
+          _InfoRow(label: 'Jumlah', value: item.qty),
+          _InfoRow(label: 'Total', value: item.amount, strong: true),
+        ],
+      ),
+    );
+  }
+}
+
+class _SalePaymentStatusCard extends StatelessWidget {
+  final _SaleItem item;
+
+  const _SalePaymentStatusCard({required this.item});
+
+  String get _title {
+    switch (item.status) {
+      case 'Selesai':
+        return 'Pembayaran lunas';
+      case 'DP':
+        return 'Down payment diterima';
+      case 'Diproses':
+        return 'Menunggu penyelesaian';
+      default:
+        return 'Status pembayaran';
+    }
+  }
+
+  String get _subtitle {
+    switch (item.status) {
+      case 'Selesai':
+        return 'Transaksi sudah selesai dan masuk laporan penjualan.';
+      case 'DP':
+        return 'Transaksi masih menunggu pelunasan dari pelanggan.';
+      case 'Diproses':
+        return 'Pesanan sedang diproses sebelum transaksi ditutup.';
+      default:
+        return 'Pantau status transaksi secara berkala.';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final color = _saleStatusColor(item.status);
+
+    return _SaleDetailCard(
+      child: Row(
+        children: [
+          Container(
+            width: 42,
+            height: 42,
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(Icons.receipt_long_outlined, color: color, size: 22),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  _title,
                   style: TextStyle(
                     color: Theme.of(context).appColors.ink,
                     fontSize: 13,
                     fontWeight: FontWeight.w900,
                   ),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
-                  item.customer,
+                  _subtitle,
                   style: TextStyle(
                     color: Theme.of(context).appColors.muted,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                SizedBox(height: 8),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        item.amount,
-                        style: TextStyle(
-                          color: Theme.of(context).appColors.ink,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 5,
-                      ),
-                      decoration: BoxDecoration(
-                        color: statusBg,
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                      child: Text(
-                        item.status,
-                        style: TextStyle(
-                          color: statusColor,
-                          fontSize: 10.5,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 6),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 6,
-                  children: [
-                    Text(
-                      item.invoice,
-                      style: const TextStyle(
-                        color: Color(0xFF9CA3AF),
-                        fontSize: 10.5,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    Text(
-                      item.date,
-                      style: const TextStyle(
-                        color: Color(0xFF9CA3AF),
-                        fontSize: 10.5,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    Text(
-                      item.qty,
-                      style: const TextStyle(
-                        color: Color(0xFF9CA3AF),
-                        fontSize: 10.5,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 5,
-                  ),
-                  decoration: BoxDecoration(
-                    color: sourceBg,
-                    borderRadius: BorderRadius.circular(999),
-                  ),
-                  child: Text(
-                    item.source,
-                    style: TextStyle(
-                      color: sourceColor,
-                      fontSize: 10.5,
-                      fontWeight: FontWeight.w800,
-                    ),
+                    fontSize: 11.5,
+                    fontWeight: FontWeight.w600,
+                    height: 1.35,
                   ),
                 ),
               ],
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _SaleTimelineCard extends StatelessWidget {
+  final _SaleItem item;
+
+  const _SaleTimelineCard({required this.item});
+
+  List<_SaleTimelineStep> get _steps {
+    if (item.status == 'Selesai') {
+      return const [
+        _SaleTimelineStep('Invoice dibuat', 'Transaksi dicatat ke sistem', true),
+        _SaleTimelineStep('Pembayaran diterima', 'Dana penjualan masuk', true),
+        _SaleTimelineStep('Transaksi selesai', 'Order sudah ditutup', true),
+      ];
+    }
+
+    if (item.status == 'DP') {
+      return const [
+        _SaleTimelineStep('Invoice dibuat', 'Transaksi dicatat ke sistem', true),
+        _SaleTimelineStep('DP diterima', 'Menunggu sisa pembayaran', true),
+        _SaleTimelineStep('Pelunasan', 'Belum selesai', false),
+      ];
+    }
+
+    return const [
+      _SaleTimelineStep('Invoice dibuat', 'Transaksi dicatat ke sistem', true),
+      _SaleTimelineStep('Pesanan diproses', 'Tim sedang menyiapkan order', true),
+      _SaleTimelineStep('Transaksi selesai', 'Belum selesai', false),
+    ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final steps = _steps;
+
+    return _SaleDetailCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const _SectionTitle(title: 'Riwayat Penjualan'),
+          const SizedBox(height: 12),
+          ...steps.map(
+            (step) => _SaleTimelineRow(
+              step: step,
+              isLast: step == steps.last,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SaleTimelineStep {
+  final String title;
+  final String subtitle;
+  final bool done;
+
+  const _SaleTimelineStep(this.title, this.subtitle, this.done);
+}
+
+class _SaleTimelineRow extends StatelessWidget {
+  final _SaleTimelineStep step;
+  final bool isLast;
+
+  const _SaleTimelineRow({
+    required this.step,
+    required this.isLast,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final color = step.done ? kPurple : Theme.of(context).appColors.border;
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Column(
+          children: [
+            Container(
+              width: 10,
+              height: 10,
+              margin: const EdgeInsets.only(top: 3),
+              decoration: BoxDecoration(
+                color: color,
+                shape: BoxShape.circle,
+              ),
+            ),
+            if (!isLast)
+              Container(
+                width: 2,
+                height: 42,
+                margin: const EdgeInsets.only(top: 2),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).appColors.border,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+          ],
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Padding(
+            padding: EdgeInsets.only(bottom: isLast ? 0 : 14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  step.title,
+                  style: TextStyle(
+                    color: Theme.of(context).appColors.ink,
+                    fontSize: 12.5,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  step.subtitle,
+                  style: TextStyle(
+                    color: Theme.of(context).appColors.muted,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _DetailChip extends StatelessWidget {
+  final String text;
+  final Color color;
+  final Color background;
+
+  const _DetailChip({
+    required this.text,
+    required this.color,
+    required this.background,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: background,
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(
+          color: color,
+          fontSize: 10.5,
+          fontWeight: FontWeight.w800,
+        ),
       ),
     );
   }

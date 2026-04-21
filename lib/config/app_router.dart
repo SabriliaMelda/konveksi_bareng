@@ -164,7 +164,8 @@ final GoRouter appRouter = GoRouter(
 
     // ── Finance routes ──
     GoRoute(
-        path: '/finance', pageBuilder: (_, s) => _fadePage(FinanceScreen(), s)),
+        path: '/finance',
+        pageBuilder: (_, s) => _softFadePage(FinanceScreen(), s)),
     GoRoute(
         path: '/profit-loss',
         pageBuilder: (_, s) => _fadePage(ProfitLossScreen(), s)),
@@ -215,7 +216,7 @@ final GoRouter appRouter = GoRouter(
     // ── Project routes ──
     GoRoute(
         path: '/manage-project',
-        pageBuilder: (_, s) => _fadePage(ManageProjectScreen(), s)),
+        pageBuilder: (_, s) => _softFadePage(ManageProjectScreen(), s)),
     GoRoute(
         path: '/project-list',
         pageBuilder: (_, s) => _fadePage(ProjectListScreen(), s)),
