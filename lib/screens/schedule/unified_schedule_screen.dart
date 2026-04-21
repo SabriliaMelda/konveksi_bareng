@@ -1,8 +1,7 @@
 // unified_schedule_screen.dart
 //
 // Merged calendar for Jadwal Kirim / Buat / Beli / Upah.
-// Month calendar with real dates + Gantt-style timetable for the selected day,
-// each category rendered with its own color.
+// Fully scrollable — calendar, gantt, and item list all scroll together.
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -36,8 +35,8 @@ const Map<ScheduleCategory, _CategoryMeta> _catMeta = {
 
 class ScheduleItem {
   final ScheduleCategory category;
-  final DateTime date; // y/m/d — time portion ignored
-  final double start; // hour of day (0-24, e.g. 10.5 = 10:30)
+  final DateTime date;
+  final double start; // hour of day, e.g. 10.5 = 10:30
   final double end;
   final String title;
   final String desc;
@@ -73,18 +72,35 @@ bool _sameMonth(DateTime a, DateTime b) =>
     a.year == b.year && a.month == b.month;
 
 const _monthNames = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December',
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
 ];
 const _dayNamesLong = [
-  'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday',
 ];
 
 // =========================================================
 // SCREEN
 // =========================================================
 class UnifiedScheduleScreen extends StatefulWidget {
-  const UnifiedScheduleScreen({super.key});
+  final ScheduleCategory? initialCategory;
+  const UnifiedScheduleScreen({super.key, this.initialCategory});
 
   @override
   State<UnifiedScheduleScreen> createState() => _UnifiedScheduleScreenState();
@@ -92,13 +108,8 @@ class UnifiedScheduleScreen extends StatefulWidget {
 
 class _UnifiedScheduleScreenState extends State<UnifiedScheduleScreen> {
   late DateTime _selectedDate;
-  late DateTime _focusedMonth; // first day of currently-viewed month
-  final Set<ScheduleCategory> _enabled = {
-    ScheduleCategory.kirim,
-    ScheduleCategory.buat,
-    ScheduleCategory.beli,
-    ScheduleCategory.upah,
-  };
+  late DateTime _focusedMonth;
+  late final Set<ScheduleCategory> _enabled;
   late final List<ScheduleItem> _items;
 
   @override
@@ -108,13 +119,19 @@ class _UnifiedScheduleScreenState extends State<UnifiedScheduleScreen> {
     _selectedDate = today;
     _focusedMonth = DateTime(today.year, today.month, 1);
     _items = _seedItems(today);
+    _enabled = widget.initialCategory != null
+        ? {widget.initialCategory!}
+        : {
+            ScheduleCategory.kirim,
+            ScheduleCategory.buat,
+            ScheduleCategory.beli,
+            ScheduleCategory.upah,
+          };
   }
 
-  // Seed dummy data relative to today so the calendar is never empty.
   List<ScheduleItem> _seedItems(DateTime today) {
     DateTime offset(int d) => today.add(Duration(days: d));
     return [
-      // today
       ScheduleItem(
         category: ScheduleCategory.kirim,
         date: today,
@@ -154,8 +171,6 @@ class _UnifiedScheduleScreenState extends State<UnifiedScheduleScreen> {
         location: 'Workshop',
         extra: 'Rp 400.000 • Mbak Sari',
       ),
-
-      // +2 days
       ScheduleItem(
         category: ScheduleCategory.buat,
         date: offset(2),
@@ -175,8 +190,6 @@ class _UnifiedScheduleScreenState extends State<UnifiedScheduleScreen> {
         location: 'Workshop → Client (Bekasi)',
         extra: 'SiCepat',
       ),
-
-      // +5 days
       ScheduleItem(
         category: ScheduleCategory.beli,
         date: offset(5),
@@ -197,8 +210,6 @@ class _UnifiedScheduleScreenState extends State<UnifiedScheduleScreen> {
         location: 'Workshop',
         extra: 'Rp 300.000 • Mbak Rina',
       ),
-
-      // -3 days (past)
       ScheduleItem(
         category: ScheduleCategory.beli,
         date: offset(-3),
@@ -209,8 +220,6 @@ class _UnifiedScheduleScreenState extends State<UnifiedScheduleScreen> {
         location: 'Pasar Baru',
         extra: 'Bahan',
       ),
-
-      // +10 days
       ScheduleItem(
         category: ScheduleCategory.buat,
         date: offset(10),
@@ -223,22 +232,28 @@ class _UnifiedScheduleScreenState extends State<UnifiedScheduleScreen> {
     ];
   }
 
-  // -------- derived --------
+  // ── derived ──────────────────────────────────────────────────────────────
+
   List<ScheduleItem> get _visibleItems {
     final list = _items
         .where((e) =>
             _enabled.contains(e.category) && _sameDay(e.date, _selectedDate))
-        .toList();
-    list.sort((a, b) => a.start.compareTo(b.start));
+        .toList()
+      ..sort((a, b) => a.start.compareTo(b.start));
     return list;
   }
 
-  Map<DateTime, Set<ScheduleCategory>> get _dotsByDay {
-    final m = <DateTime, Set<ScheduleCategory>>{};
+  // items grouped by date, for the calendar cell event bars
+  Map<DateTime, List<ScheduleItem>> get _itemsByDay {
+    final m = <DateTime, List<ScheduleItem>>{};
     for (final it in _items) {
       if (!_enabled.contains(it.category)) continue;
       if (!_sameMonth(it.date, _focusedMonth)) continue;
-      m.putIfAbsent(it.date, () => <ScheduleCategory>{}).add(it.category);
+      m.putIfAbsent(it.date, () => []).add(it);
+    }
+    // sort each day's items by start time
+    for (final list in m.values) {
+      list.sort((a, b) => a.start.compareTo(b.start));
     }
     return m;
   }
@@ -249,7 +264,8 @@ class _UnifiedScheduleScreenState extends State<UnifiedScheduleScreen> {
     return '$w, ${dt.day.toString().padLeft(2, '0')} $mo ${dt.year}';
   }
 
-  // -------- actions --------
+  // ── navigation ────────────────────────────────────────────────────────────
+
   void _prevMonth() => setState(() {
         _focusedMonth =
             DateTime(_focusedMonth.year, _focusedMonth.month - 1, 1);
@@ -277,16 +293,20 @@ class _UnifiedScheduleScreenState extends State<UnifiedScheduleScreen> {
     });
   }
 
+  // ── item detail sheet ─────────────────────────────────────────────────────
+
   void _openItemDetails(ScheduleItem it) {
     final meta = _catMeta[it.category]!;
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       backgroundColor: Theme.of(context).appColors.card,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (_) => Padding(
-        padding: const EdgeInsets.fromLTRB(16, 14, 16, 20),
+        padding: EdgeInsets.fromLTRB(
+            16, 14, 16, 20 + MediaQuery.of(context).viewInsets.bottom),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -328,12 +348,15 @@ class _UnifiedScheduleScreenState extends State<UnifiedScheduleScreen> {
                   ),
                 ),
                 const Spacer(),
-                Text(
-                  '${_dateLabel(it.date)} • ${it.timeLabel}',
-                  style: const TextStyle(
-                    color: Color(0xFF6B7280),
-                    fontSize: 11,
-                    fontWeight: FontWeight.w700,
+                Flexible(
+                  child: Text(
+                    '${_dateLabel(it.date)} • ${it.timeLabel}',
+                    textAlign: TextAlign.right,
+                    style: const TextStyle(
+                      color: Color(0xFF6B7280),
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               ],
@@ -366,9 +389,7 @@ class _UnifiedScheduleScreenState extends State<UnifiedScheduleScreen> {
                   child: Text(
                     it.location,
                     style: TextStyle(
-                      color: Theme.of(context).appColors.muted,
-                      fontSize: 12,
-                    ),
+                        color: Theme.of(context).appColors.muted, fontSize: 12),
                   ),
                 ),
               ],
@@ -384,15 +405,14 @@ class _UnifiedScheduleScreenState extends State<UnifiedScheduleScreen> {
                     child: Text(
                       it.extra!,
                       style: TextStyle(
-                        color: Theme.of(context).appColors.muted,
-                        fontSize: 12,
-                      ),
+                          color: Theme.of(context).appColors.muted,
+                          fontSize: 12),
                     ),
                   ),
                 ],
               ),
             ],
-            const SizedBox(height: 14),
+            const SizedBox(height: 16),
             Row(
               children: [
                 Expanded(
@@ -405,6 +425,12 @@ class _UnifiedScheduleScreenState extends State<UnifiedScheduleScreen> {
                         size: 16, color: Color(0xFFDC2626)),
                     label: const Text('Hapus',
                         style: TextStyle(color: Color(0xFFDC2626))),
+                    style: OutlinedButton.styleFrom(
+                      side: const BorderSide(color: Color(0xFFDC2626)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -413,6 +439,9 @@ class _UnifiedScheduleScreenState extends State<UnifiedScheduleScreen> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: _kPurple,
                       foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
                     onPressed: () => context.pop(),
                     child: const Text('Tutup'),
@@ -426,53 +455,38 @@ class _UnifiedScheduleScreenState extends State<UnifiedScheduleScreen> {
     );
   }
 
-  Future<void> _pickDate() async {
-    final first = DateTime(DateTime.now().year - 2, 1, 1);
-    final last = DateTime(DateTime.now().year + 3, 12, 31);
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: _selectedDate,
-      firstDate: first,
-      lastDate: last,
-    );
-    if (picked != null) _onTapDay(_d(picked));
-  }
+  // ── add sheet ─────────────────────────────────────────────────────────────
 
   void _openAddSheet() {
-    ScheduleCategory cat = ScheduleCategory.buat;
+    ScheduleCategory cat = widget.initialCategory ?? ScheduleCategory.buat;
     DateTime date = _selectedDate;
+    TimeOfDay startTime = const TimeOfDay(hour: 9, minute: 0);
+    TimeOfDay endTime = const TimeOfDay(hour: 10, minute: 0);
     final titleC = TextEditingController();
     final descC = TextEditingController();
     final locC = TextEditingController();
-    final startC = TextEditingController(text: '09:00');
-    final endC = TextEditingController(text: '10:00');
 
-    double? parseTime(String s) {
-      final m = RegExp(r'^(\d{1,2}):(\d{2})$').firstMatch(s.trim());
-      if (m == null) return null;
-      final h = int.parse(m.group(1)!);
-      final mi = int.parse(m.group(2)!);
-      if (h > 23 || mi > 59) return null;
-      return h + mi / 60.0;
-    }
+    String fmtTime(TimeOfDay t) =>
+        '${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}';
 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Theme.of(context).appColors.card,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (sheetCtx) {
-        final bottomInset = MediaQuery.of(sheetCtx).viewInsets.bottom;
-        return Padding(
-          padding: EdgeInsets.fromLTRB(16, 14, 16, 16 + bottomInset),
-          child: StatefulBuilder(
-            builder: (ctx, setLocal) => SingleChildScrollView(
+        return StatefulBuilder(
+          builder: (ctx, setLocal) {
+            final inset = MediaQuery.of(sheetCtx).viewInsets.bottom;
+            return SingleChildScrollView(
+              padding: EdgeInsets.fromLTRB(18, 14, 18, 18 + inset),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // drag handle
                   Center(
                     child: Container(
                       width: 44,
@@ -483,22 +497,20 @@ class _UnifiedScheduleScreenState extends State<UnifiedScheduleScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 14),
                   const Text(
                     'Tambah Jadwal',
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 15,
                       fontWeight: FontWeight.w900,
                       color: Color(0xFF111827),
                     ),
                   ),
-                  const SizedBox(height: 12),
-                  const Text('Kategori',
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w800,
-                          color: Color(0xFF6B7280))),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 16),
+
+                  // ── Kategori ──
+                  const _SheetLabel('Kategori'),
+                  const SizedBox(height: 8),
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
@@ -507,14 +519,20 @@ class _UnifiedScheduleScreenState extends State<UnifiedScheduleScreen> {
                       final active = cat == c;
                       return GestureDetector(
                         onTap: () => setLocal(() => cat = c),
-                        child: Container(
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 150),
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 8),
+                              horizontal: 14, vertical: 8),
                           decoration: BoxDecoration(
                             color: active
                                 ? m.color
-                                : m.color.withValues(alpha: 0.12),
+                                : m.color.withValues(alpha: 0.10),
                             borderRadius: BorderRadius.circular(999),
+                            border: Border.all(
+                              color: active
+                                  ? m.color
+                                  : m.color.withValues(alpha: 0.3),
+                            ),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -537,15 +555,13 @@ class _UnifiedScheduleScreenState extends State<UnifiedScheduleScreen> {
                       );
                     }).toList(),
                   ),
-                  const SizedBox(height: 12),
-                  const Text('Tanggal',
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w800,
-                          color: Color(0xFF6B7280))),
-                  const SizedBox(height: 6),
-                  InkWell(
-                    borderRadius: BorderRadius.circular(12),
+                  const SizedBox(height: 14),
+
+                  // ── Tanggal — native date picker ──
+                  const _SheetLabel('Tanggal'),
+                  const SizedBox(height: 8),
+                  _DatePickerTile(
+                    label: _dateLabel(date),
                     onTap: () async {
                       final picked = await showDatePicker(
                         context: ctx,
@@ -555,84 +571,106 @@ class _UnifiedScheduleScreenState extends State<UnifiedScheduleScreen> {
                       );
                       if (picked != null) setLocal(() => date = _d(picked));
                     },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 12),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: const Color(0xFFE8ECF4)),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.calendar_today,
-                              size: 16, color: Color(0xFF6B7280)),
-                          const SizedBox(width: 8),
-                          Text(_dateLabel(date),
-                              style: const TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w700,
-                                  color: Color(0xFF111827))),
-                        ],
-                      ),
-                    ),
                   ),
-                  const SizedBox(height: 10),
-                  _LabeledField(
-                      label: 'Judul',
-                      controller: titleC,
-                      hint: 'Judul jadwal'),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 14),
+
+                  // ── Jam — native time picker ──
+                  const _SheetLabel('Jam'),
+                  const SizedBox(height: 8),
                   Row(
                     children: [
                       Expanded(
-                          child: _LabeledField(
-                              label: 'Mulai (HH:MM)',
-                              controller: startC,
-                              hint: '09:00')),
+                        child: _TimePickerTile(
+                          label: 'Mulai',
+                          time: fmtTime(startTime),
+                          onTap: () async {
+                            final picked = await showTimePicker(
+                              context: ctx,
+                              initialTime: startTime,
+                            );
+                            if (picked != null) {
+                              setLocal(() => startTime = picked);
+                            }
+                          },
+                        ),
+                      ),
                       const SizedBox(width: 10),
                       Expanded(
-                          child: _LabeledField(
-                              label: 'Selesai (HH:MM)',
-                              controller: endC,
-                              hint: '10:00')),
+                        child: _TimePickerTile(
+                          label: 'Selesai',
+                          time: fmtTime(endTime),
+                          onTap: () async {
+                            final picked = await showTimePicker(
+                              context: ctx,
+                              initialTime: endTime,
+                            );
+                            if (picked != null) {
+                              setLocal(() => endTime = picked);
+                            }
+                          },
+                        ),
+                      ),
                     ],
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 14),
+
+                  // ── Fields ──
+                  _LabeledField(
+                      label: 'Judul', controller: titleC, hint: 'Judul jadwal'),
+                  const SizedBox(height: 12),
                   _LabeledField(
                       label: 'Lokasi', controller: locC, hint: 'Lokasi'),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 12),
                   _LabeledField(
-                      label: 'Catatan',
-                      controller: descC,
-                      hint: 'Catatan (opsional)'),
-                  const SizedBox(height: 14),
+                    label: 'Catatan',
+                    controller: descC,
+                    hint: 'Catatan (opsional)',
+                    maxLines: 3,
+                  ),
+                  const SizedBox(height: 20),
+
+                  // ── Actions ──
                   Row(
                     children: [
                       Expanded(
                         child: OutlinedButton(
-                          onPressed: () => context.pop(),
-                          child: const Text('Batal'),
+                          onPressed: () => Navigator.pop(sheetCtx),
+                          style: OutlinedButton.styleFrom(
+                            side: const BorderSide(color: Color(0xFFD1D5DB)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12)),
+                            padding: const EdgeInsets.symmetric(vertical: 13),
+                          ),
+                          child: const Text('Batal',
+                              style: TextStyle(color: Color(0xFF374151))),
                         ),
                       ),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 12),
                       Expanded(
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: _kPurple,
                             foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12)),
+                            padding: const EdgeInsets.symmetric(vertical: 13),
                           ),
                           onPressed: () {
                             final title = titleC.text.trim();
-                            final s = parseTime(startC.text);
-                            final e = parseTime(endC.text);
-                            if (title.isEmpty ||
-                                s == null ||
-                                e == null ||
-                                e <= s) {
+                            if (title.isEmpty) {
+                              ScaffoldMessenger.of(ctx).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Judul wajib diisi.')),
+                              );
+                              return;
+                            }
+                            final s = startTime.hour + startTime.minute / 60.0;
+                            final e = endTime.hour + endTime.minute / 60.0;
+                            if (e <= s) {
                               ScaffoldMessenger.of(ctx).showSnackBar(
                                 const SnackBar(
                                     content: Text(
-                                        'Isi judul dan jam yang valid (HH:MM, selesai > mulai).')),
+                                        'Jam selesai harus lebih dari jam mulai.')),
                               );
                               return;
                             }
@@ -654,7 +692,7 @@ class _UnifiedScheduleScreenState extends State<UnifiedScheduleScreen> {
                               _focusedMonth =
                                   DateTime(date.year, date.month, 1);
                             });
-                            context.pop();
+                            Navigator.pop(sheetCtx);
                           },
                           child: const Text('Simpan'),
                         ),
@@ -663,17 +701,20 @@ class _UnifiedScheduleScreenState extends State<UnifiedScheduleScreen> {
                   ),
                 ],
               ),
-            ),
-          ),
+            );
+          },
         );
       },
     );
   }
 
-  // -------- build --------
+  // ── build ─────────────────────────────────────────────────────────────────
+
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
+    final visible = _visibleItems;
+
     return Scaffold(
       backgroundColor: colors.card,
       floatingActionButton: FloatingActionButton(
@@ -683,113 +724,118 @@ class _UnifiedScheduleScreenState extends State<UnifiedScheduleScreen> {
         child: const Icon(Icons.add_rounded),
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            _TopHeader(
-              title: 'Kalender Jadwal',
-              onBack: () => context.pop(),
-              onHome: () {
-                Navigator.pushAndRemoveUntil(
+        child: CustomScrollView(
+          slivers: [
+            // ── Header ──
+            SliverToBoxAdapter(
+              child: _TopHeader(
+                title: 'Kalender Jadwal',
+                onBack: () => context.pop(),
+                onHome: () => Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (_) => const HomeScreen()),
                   (r) => false,
-                );
-              },
-            ),
-            const SizedBox(height: 4),
-            _MonthBar(
-              month: _monthNames[_focusedMonth.month - 1],
-              year: '${_focusedMonth.year}',
-              onPrev: _prevMonth,
-              onNext: _nextMonth,
-              onTapTitle: _pickDate,
-              onToday: _jumpToToday,
-            ),
-            const SizedBox(height: 6),
-            _CategoryLegend(
-              enabled: _enabled,
-              onToggle: (c) => setState(() {
-                if (_enabled.contains(c)) {
-                  if (_enabled.length > 1) _enabled.remove(c);
-                } else {
-                  _enabled.add(c);
-                }
-              }),
-            ),
-            const SizedBox(height: 6),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14),
-              child: _CalendarGrid(
-                focusedMonth: _focusedMonth,
-                selectedDate: _selectedDate,
-                dotsByDay: _dotsByDay,
-                onTap: _onTapDay,
+                ),
               ),
             ),
-            const SizedBox(height: 10),
-            Container(
-              width: double.infinity,
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-              color: _kPurple,
-              child: Row(
-                children: [
-                  const Icon(Icons.event, size: 16, color: Color(0xFFECECEC)),
-                  const SizedBox(width: 10),
-                  Expanded(
+
+            // ── Month bar ──
+            SliverToBoxAdapter(
+              child: _MonthBar(
+                month: _monthNames[_focusedMonth.month - 1],
+                year: '${_focusedMonth.year}',
+                onPrev: _prevMonth,
+                onNext: _nextMonth,
+                onToday: _jumpToToday,
+              ),
+            ),
+
+            // ── Category legend ──
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(14, 6, 14, 6),
+                child: _CategoryLegend(
+                  enabled: _enabled,
+                  onToggle: (c) => setState(() {
+                    if (_enabled.contains(c)) {
+                      if (_enabled.length > 1) _enabled.remove(c);
+                    } else {
+                      _enabled.add(c);
+                    }
+                  }),
+                ),
+              ),
+            ),
+
+            // ── Calendar grid ──
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 14),
+                child: _CalendarGrid(
+                  focusedMonth: _focusedMonth,
+                  selectedDate: _selectedDate,
+                  itemsByDay: _itemsByDay,
+                  onTap: _onTapDay,
+                  onTapItem: _openItemDetails,
+                ),
+              ),
+            ),
+
+            const SliverToBoxAdapter(child: SizedBox(height: 10)),
+            const SliverToBoxAdapter(child: Divider(height: 1)),
+
+            // ── Selected day label ──
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(18, 12, 18, 4),
+                child: Text(
+                  _dateLabel(_selectedDate),
+                  style: const TextStyle(
+                    color: _kPurple,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+            ),
+
+            // ── Item list or empty state ──
+            if (visible.isEmpty)
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 32),
+                  child: Center(
                     child: Text(
-                      _dateLabel(_selectedDate),
-                      style: const TextStyle(
-                        color: Color(0xFFECECEC),
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
+                      'Belum ada jadwal pada tanggal ini.',
+                      style: TextStyle(
+                        color: colors.muted,
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),
-                  Text(
-                    '${_visibleItems.length} item',
-                    style: const TextStyle(
-                      color: Color(0xFFECECEC),
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 10),
-            _GanttChart(
-              items: _visibleItems,
-              enabled: _enabled,
-              onTap: _openItemDetails,
-            ),
-            const SizedBox(height: 6),
-            const Divider(height: 1),
-            Expanded(
-              child: _visibleItems.isEmpty
-                  ? Center(
-                      child: Text(
-                        'Belum ada jadwal pada tanggal ini.',
-                        style: TextStyle(
-                          color: colors.muted,
-                          fontSize: 12.5,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    )
-                  : ListView.separated(
-                      padding: const EdgeInsets.fromLTRB(14, 10, 14, 90),
-                      itemCount: _visibleItems.length,
-                      separatorBuilder: (_, __) => const SizedBox(height: 10),
-                      itemBuilder: (_, i) {
-                        final it = _visibleItems[i];
-                        return _ItemCard(
+                ),
+              )
+            else
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(14, 10, 14, 100),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (_, i) {
+                      final it = visible[i];
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: _ItemCard(
                           item: it,
                           onTap: () => _openItemDetails(it),
-                        );
-                      },
-                    ),
-            ),
+                        ),
+                      );
+                    },
+                    childCount: visible.length,
+                  ),
+                ),
+              ),
           ],
         ),
       ),
@@ -858,19 +904,20 @@ class _CircleIconBtn extends StatelessWidget {
   }
 }
 
+// =========================================================
+// MONTH BAR
+// =========================================================
 class _MonthBar extends StatelessWidget {
   final String month;
   final String year;
   final VoidCallback onPrev;
   final VoidCallback onNext;
-  final VoidCallback onTapTitle;
   final VoidCallback onToday;
   const _MonthBar({
     required this.month,
     required this.year,
     required this.onPrev,
     required this.onNext,
-    required this.onTapTitle,
     required this.onToday,
   });
 
@@ -882,25 +929,18 @@ class _MonthBar extends StatelessWidget {
         children: [
           _CircleIconBtn(icon: Icons.chevron_left, onTap: onPrev),
           Expanded(
-            child: InkWell(
-              borderRadius: BorderRadius.circular(8),
-              onTap: onTapTitle,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6),
-                child: Column(
-                  children: [
-                    Text(month,
-                        style: const TextStyle(
-                            color: Color(0xFF222B45),
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700)),
-                    const SizedBox(height: 2),
-                    Text(year,
-                        style: const TextStyle(
-                            color: Color(0xFF8F9BB3), fontSize: 12)),
-                  ],
-                ),
-              ),
+            child: Column(
+              children: [
+                Text(month,
+                    style: const TextStyle(
+                        color: Color(0xFF222B45),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700)),
+                const SizedBox(height: 2),
+                Text(year,
+                    style: const TextStyle(
+                        color: Color(0xFF8F9BB3), fontSize: 12)),
+              ],
             ),
           ),
           TextButton(
@@ -919,7 +959,7 @@ class _MonthBar extends StatelessWidget {
 }
 
 // =========================================================
-// LEGEND (tap to toggle category filter)
+// CATEGORY LEGEND
 // =========================================================
 class _CategoryLegend extends StatelessWidget {
   final Set<ScheduleCategory> enabled;
@@ -928,68 +968,70 @@ class _CategoryLegend extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 14),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: ScheduleCategory.values.map((c) {
-          final m = _catMeta[c]!;
-          final on = enabled.contains(c);
-          return GestureDetector(
-            onTap: () => onToggle(c),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-              decoration: BoxDecoration(
-                color:
-                    on ? m.color.withValues(alpha: 0.15) : const Color(0xFFF3F4F6),
-                borderRadius: BorderRadius.circular(999),
-                border: Border.all(
-                    color: on ? m.color : const Color(0xFFE5E7EB), width: 1),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: 8,
-                    height: 8,
-                    decoration: BoxDecoration(
-                      color: on ? m.color : const Color(0xFFCBD5E1),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-                  Text(
-                    m.label,
-                    style: TextStyle(
-                      color: on ? m.color : const Color(0xFF9CA3AF),
-                      fontSize: 11.5,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ],
-              ),
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: ScheduleCategory.values.map((c) {
+        final m = _catMeta[c]!;
+        final on = enabled.contains(c);
+        return GestureDetector(
+          onTap: () => onToggle(c),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 150),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
+              color: on
+                  ? m.color.withValues(alpha: 0.15)
+                  : const Color(0xFFF3F4F6),
+              borderRadius: BorderRadius.circular(999),
+              border: Border.all(
+                  color: on ? m.color : const Color(0xFFE5E7EB), width: 1),
             ),
-          );
-        }).toList(),
-      ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 8,
+                  height: 8,
+                  decoration: BoxDecoration(
+                    color: on ? m.color : const Color(0xFFCBD5E1),
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  m.label,
+                  style: TextStyle(
+                    color: on ? m.color : const Color(0xFF9CA3AF),
+                    fontSize: 11.5,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 }
 
 // =========================================================
-// CALENDAR GRID — real dates, Monday-first
+// CALENDAR GRID — real dates, Monday-first, Google Calendar style
 // =========================================================
 class _CalendarGrid extends StatelessWidget {
   final DateTime focusedMonth;
   final DateTime selectedDate;
-  final Map<DateTime, Set<ScheduleCategory>> dotsByDay;
+  final Map<DateTime, List<ScheduleItem>> itemsByDay;
   final ValueChanged<DateTime> onTap;
+  final void Function(ScheduleItem) onTapItem;
 
   const _CalendarGrid({
     required this.focusedMonth,
     required this.selectedDate,
-    required this.dotsByDay,
+    required this.itemsByDay,
     required this.onTap,
+    required this.onTapItem,
   });
 
   @override
@@ -997,122 +1039,157 @@ class _CalendarGrid extends StatelessWidget {
     final firstOfMonth = DateTime(focusedMonth.year, focusedMonth.month, 1);
     final daysInMonth =
         DateTime(focusedMonth.year, focusedMonth.month + 1, 0).day;
-    // leading blanks: Monday=1 … Sunday=7 → offset 0..6
-    final leading = firstOfMonth.weekday - 1;
-    // Always render 6 weeks (42 cells) for a stable height.
+    final leading = firstOfMonth.weekday - 1; // Mon=0 … Sun=6
     const totalCells = 42;
-
     final today = _d(DateTime.now());
 
     final cells = <DateTime>[];
-    // prev-month fillers
     for (int i = leading - 1; i >= 0; i--) {
       cells.add(firstOfMonth.subtract(Duration(days: i + 1)));
     }
-    // current month
     for (int d = 1; d <= daysInMonth; d++) {
       cells.add(DateTime(focusedMonth.year, focusedMonth.month, d));
     }
-    // next-month fillers
     while (cells.length < totalCells) {
-      final last = cells.last;
-      cells.add(last.add(const Duration(days: 1)));
+      cells.add(cells.last.add(const Duration(days: 1)));
     }
 
     return Column(
       children: [
+        // weekday header
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 4),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _WDay('Mon'),
-              _WDay('Tue'),
-              _WDay('Wed'),
-              _WDay('Thu'),
-              _WDay('Fri'),
-              _WDay('Sat'),
-              _WDay('Sun'),
+              _WDay('Sen'),
+              _WDay('Sel'),
+              _WDay('Rab'),
+              _WDay('Kam'),
+              _WDay('Jum'),
+              _WDay('Sab'),
+              _WDay('Min'),
             ],
           ),
         ),
         const SizedBox(height: 6),
-        GridView.builder(
-          itemCount: cells.length,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 7,
-            mainAxisSpacing: 4,
-            crossAxisSpacing: 4,
-            childAspectRatio: 1.05,
-          ),
-          itemBuilder: (_, i) {
-            final d = cells[i];
-            final inMonth = _sameMonth(d, focusedMonth);
-            final isSel = _sameDay(d, selectedDate);
-            final isToday = _sameDay(d, today);
-            final cats = dotsByDay[d] ?? const <ScheduleCategory>{};
-            return GestureDetector(
-              onTap: () => onTap(d),
-              behavior: HitTestBehavior.opaque,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 28,
-                    height: 28,
-                    decoration: BoxDecoration(
-                      color: isSel
-                          ? _kPurple
-                          : (isToday
-                              ? _kPurple.withValues(alpha: 0.12)
-                              : Colors.transparent),
-                      borderRadius: BorderRadius.circular(10),
-                      border: (!isSel && isToday)
-                          ? Border.all(color: _kPurple, width: 1)
-                          : null,
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      '${d.day}',
-                      style: TextStyle(
+        // 6-week grid
+        for (int week = 0; week < 6; week++) ...[
+          IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: List.generate(7, (col) {
+                final idx = week * 7 + col;
+                final d = cells[idx];
+                final inMonth = _sameMonth(d, focusedMonth);
+                final isSel = _sameDay(d, selectedDate);
+                final isToday = _sameDay(d, today);
+                final dayItems = itemsByDay[d] ?? const [];
+                const maxVisible = 2;
+                final overflow = dayItems.length > maxVisible
+                    ? dayItems.length - maxVisible
+                    : 0;
+
+                return Expanded(
+                  child: GestureDetector(
+                    onTap: () => onTap(d),
+                    behavior: HitTestBehavior.opaque,
+                    child: Container(
+                      margin: const EdgeInsets.all(1),
+                      decoration: BoxDecoration(
                         color: isSel
-                            ? Colors.white
-                            : (inMonth
-                                ? const Color(0xFF222B45)
-                                : const Color(0xFFB9C0CC)),
-                        fontSize: 13.5,
-                        fontWeight: (isSel || isToday)
-                            ? FontWeight.w800
-                            : FontWeight.w500,
+                            ? _kPurple.withValues(alpha: 0.08)
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(8),
+                        border: isSel
+                            ? Border.all(color: _kPurple, width: 1.5)
+                            : null,
+                      ),
+                      padding: const EdgeInsets.fromLTRB(2, 4, 2, 4),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          // date number
+                          Container(
+                            width: 26,
+                            height: 26,
+                            decoration: BoxDecoration(
+                              color: isToday && !isSel
+                                  ? _kPurple
+                                  : Colors.transparent,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              '${d.day}',
+                              style: TextStyle(
+                                color: isToday && !isSel
+                                    ? Colors.white
+                                    : (inMonth
+                                        ? const Color(0xFF222B45)
+                                        : const Color(0xFFB9C0CC)),
+                                fontSize: 12,
+                                fontWeight: (isSel || isToday)
+                                    ? FontWeight.w800
+                                    : FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          // event pills
+                          ...dayItems.take(maxVisible).map((it) {
+                            final c = _catMeta[it.category]!.color;
+                            return GestureDetector(
+                              onTap: () => onTapItem(it),
+                              child: Container(
+                                margin: const EdgeInsets.only(bottom: 2),
+                                height: 13,
+                                decoration: BoxDecoration(
+                                  color: c,
+                                  borderRadius: BorderRadius.circular(3),
+                                ),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 3),
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  it.title,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 8.5,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
+                          // overflow indicator
+                          if (overflow > 0)
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 3, top: 1),
+                                child: Text(
+                                  '+$overflow',
+                                  style: TextStyle(
+                                    color: _kPurple.withValues(alpha: 0.7),
+                                    fontSize: 8.5,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
                     ),
                   ),
-                  const SizedBox(height: 3),
-                  SizedBox(
-                    height: 5,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: ScheduleCategory.values
-                          .where(cats.contains)
-                          .map((c) => Container(
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 1),
-                                width: 4,
-                                height: 4,
-                                decoration: BoxDecoration(
-                                    color: _catMeta[c]!.color,
-                                    shape: BoxShape.circle),
-                              ))
-                          .toList(),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
+                );
+              }),
+            ),
+          ),
+          if (week < 5) const Divider(height: 1, color: Color(0xFFF0F0F0)),
+        ],
       ],
     );
   }
@@ -1122,194 +1199,12 @@ class _WDay extends StatelessWidget {
   final String t;
   const _WDay(this.t);
   @override
-  Widget build(BuildContext context) => Text(t,
-      style: const TextStyle(color: Color(0xFF8F9BB3), fontSize: 11.5));
+  Widget build(BuildContext context) =>
+      Text(t, style: const TextStyle(color: Color(0xFF8F9BB3), fontSize: 11.5));
 }
 
 // =========================================================
-// GANTT CHART
-// =========================================================
-class _GanttChart extends StatelessWidget {
-  final List<ScheduleItem> items;
-  final Set<ScheduleCategory> enabled;
-  final void Function(ScheduleItem) onTap;
-  const _GanttChart({
-    required this.items,
-    required this.enabled,
-    required this.onTap,
-  });
-
-  static const double startHour = 6;
-  static const double endHour = 22;
-  static const double hourWidth = 56;
-  static const double rowHeight = 34;
-  static const double labelColW = 52;
-  static const double headerH = 24;
-
-  @override
-  Widget build(BuildContext context) {
-    final rows = ScheduleCategory.values.where(enabled.contains).toList();
-    final totalWidth = (endHour - startHour) * hourWidth;
-
-    return SizedBox(
-      height: rows.length * rowHeight + headerH + 4,
-      child: Row(
-        children: [
-          SizedBox(
-            width: labelColW,
-            child: Padding(
-              padding: const EdgeInsets.only(top: headerH),
-              child: Column(
-                children: rows.map((c) {
-                  final m = _catMeta[c]!;
-                  return Container(
-                    height: rowHeight,
-                    padding: const EdgeInsets.only(left: 10),
-                    alignment: Alignment.centerLeft,
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 6,
-                          height: 6,
-                          decoration: BoxDecoration(
-                              color: m.color, shape: BoxShape.circle),
-                        ),
-                        const SizedBox(width: 5),
-                        Text(
-                          m.label,
-                          style: TextStyle(
-                            color: m.color,
-                            fontSize: 10.5,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: SizedBox(
-                width: totalWidth,
-                child: Stack(
-                  children: [
-                    for (double h = startHour; h <= endHour; h += 1)
-                      Positioned(
-                        left: (h - startHour) * hourWidth,
-                        top: 0,
-                        bottom: 0,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              height: headerH,
-                              child: Text(
-                                '${h.toInt().toString().padLeft(2, '0')}:00',
-                                style: const TextStyle(
-                                  color: Color(0xFF9AA4B2),
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                width: 1,
-                                color: const Color(0xFFEEF0F4),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    for (int r = 0; r < rows.length; r++)
-                      Positioned(
-                        left: 0,
-                        right: 0,
-                        top: headerH + r * rowHeight,
-                        height: rowHeight,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(
-                                color: const Color(0xFFF1F2F6),
-                                width: r == rows.length - 1 ? 0 : 1,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    for (final it in items)
-                      if (rows.contains(it.category))
-                        Positioned(
-                          left: (it.start.clamp(startHour, endHour) -
-                                  startHour) *
-                              hourWidth,
-                          top: headerH +
-                              rows.indexOf(it.category) * rowHeight +
-                              4,
-                          width: ((it.end.clamp(startHour, endHour) -
-                                      it.start.clamp(startHour, endHour)) *
-                                  hourWidth)
-                              .clamp(18.0, double.infinity),
-                          height: rowHeight - 8,
-                          child: _GanttBar(item: it, onTap: () => onTap(it)),
-                        ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _GanttBar extends StatelessWidget {
-  final ScheduleItem item;
-  final VoidCallback onTap;
-  const _GanttBar({required this.item, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    final c = _catMeta[item.category]!.color;
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: c.withValues(alpha: 0.9),
-          borderRadius: BorderRadius.circular(6),
-          boxShadow: [
-            BoxShadow(
-              color: c.withValues(alpha: 0.3),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            )
-          ],
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 6),
-        alignment: Alignment.centerLeft,
-        child: Text(
-          item.title,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 10.5,
-            fontWeight: FontWeight.w800,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// =========================================================
-// ITEM CARD
+// ITEM CARD — agenda list style, time shown below title
 // =========================================================
 class _ItemCard extends StatelessWidget {
   final ScheduleItem item;
@@ -1327,19 +1222,17 @@ class _ItemCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: colors.card,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: meta.color.withValues(alpha: 0.6)),
+          border: Border.all(color: meta.color.withValues(alpha: 0.5)),
           boxShadow: const [
             BoxShadow(
-                color: Color(0x0C1C252C),
-                blurRadius: 8,
-                offset: Offset(0, 4)),
+                color: Color(0x0C1C252C), blurRadius: 8, offset: Offset(0, 4)),
           ],
         ),
         child: Row(
           children: [
+            // left color bar
             Container(
               width: 8,
-              height: 74,
               decoration: BoxDecoration(
                 color: meta.color,
                 borderRadius: const BorderRadius.only(
@@ -1348,34 +1241,33 @@ class _ItemCard extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 12),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 10, 10, 10),
+                padding: const EdgeInsets.fromLTRB(0, 12, 12, 12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // category badge
                     Row(
                       children: [
-                        Icon(meta.icon, size: 13, color: meta.color),
+                        Icon(meta.icon, size: 12, color: meta.color),
                         const SizedBox(width: 4),
-                        Text(meta.label,
-                            style: TextStyle(
-                                color: meta.color,
-                                fontSize: 10.5,
-                                fontWeight: FontWeight.w900)),
-                        const Spacer(),
-                        Text(item.timeLabel,
-                            style: const TextStyle(
-                                color: Color(0xFF6B7280),
-                                fontSize: 11,
-                                fontWeight: FontWeight.w700)),
+                        Text(
+                          meta.label,
+                          style: TextStyle(
+                            color: meta.color,
+                            fontSize: 10.5,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 4),
+                    // title
                     Text(
                       item.title,
-                      maxLines: 1,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         color: Color(0xFF1B1B1B),
@@ -1383,12 +1275,40 @@ class _ItemCard extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
+                    const SizedBox(height: 4),
+                    // time — now below title
+                    Row(
+                      children: [
+                        const Icon(Icons.access_time_rounded,
+                            size: 12, color: Color(0xFF9AA4B2)),
+                        const SizedBox(width: 4),
+                        Text(
+                          item.timeLabel,
+                          style: const TextStyle(
+                            color: Color(0xFF6B7280),
+                            fontSize: 11.5,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 2),
-                    Text(
-                      item.location,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: colors.muted, fontSize: 11.5),
+                    // location
+                    Row(
+                      children: [
+                        const Icon(Icons.place_outlined,
+                            size: 12, color: Color(0xFF9AA4B2)),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(
+                            item.location,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style:
+                                TextStyle(color: colors.muted, fontSize: 11.5),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -1402,14 +1322,128 @@ class _ItemCard extends StatelessWidget {
 }
 
 // =========================================================
-// SMALL FORM FIELD
+// SHEET HELPERS
 // =========================================================
+
+class _SheetLabel extends StatelessWidget {
+  final String text;
+  const _SheetLabel(this.text);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: const TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.w800,
+        color: Color(0xFF6B7280),
+      ),
+    );
+  }
+}
+
+class _DatePickerTile extends StatelessWidget {
+  final String label;
+  final VoidCallback onTap;
+  const _DatePickerTile({required this.label, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(12),
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+        decoration: BoxDecoration(
+          border: Border.all(color: const Color(0xFFE8ECF4)),
+          borderRadius: BorderRadius.circular(12),
+          color: const Color(0xFFF9FAFB),
+        ),
+        child: Row(
+          children: [
+            const Icon(Icons.calendar_today_outlined,
+                size: 16, color: Color(0xFF6B7280)),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF111827),
+                ),
+              ),
+            ),
+            const Icon(Icons.arrow_drop_down,
+                size: 20, color: Color(0xFF9AA4B2)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _TimePickerTile extends StatelessWidget {
+  final String label;
+  final String time;
+  final VoidCallback onTap;
+  const _TimePickerTile(
+      {required this.label, required this.time, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(12),
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+        decoration: BoxDecoration(
+          border: Border.all(color: const Color(0xFFE8ECF4)),
+          borderRadius: BorderRadius.circular(12),
+          color: const Color(0xFFF9FAFB),
+        ),
+        child: Row(
+          children: [
+            const Icon(Icons.access_time_outlined,
+                size: 16, color: Color(0xFF6B7280)),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(label,
+                      style: const TextStyle(
+                          fontSize: 10,
+                          color: Color(0xFF9AA4B2),
+                          fontWeight: FontWeight.w700)),
+                  Text(time,
+                      style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w800,
+                          color: Color(0xFF111827))),
+                ],
+              ),
+            ),
+            const Icon(Icons.arrow_drop_down,
+                size: 20, color: Color(0xFF9AA4B2)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _LabeledField extends StatelessWidget {
   final String label;
   final String hint;
   final TextEditingController controller;
-  const _LabeledField(
-      {required this.label, required this.hint, required this.controller});
+  final int maxLines;
+  const _LabeledField({
+    required this.label,
+    required this.hint,
+    required this.controller,
+    this.maxLines = 1,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -1424,11 +1458,15 @@ class _LabeledField extends StatelessWidget {
         const SizedBox(height: 6),
         TextField(
           controller: controller,
+          maxLines: maxLines,
           decoration: InputDecoration(
             hintText: hint,
+            hintStyle: const TextStyle(color: Color(0xFFB0B7C3), fontSize: 13),
             isDense: true,
             contentPadding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            filled: true,
+            fillColor: const Color(0xFFF9FAFB),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: const BorderSide(color: Color(0xFFE8ECF4)),
@@ -1439,7 +1477,7 @@ class _LabeledField extends StatelessWidget {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: _kPurple),
+              borderSide: const BorderSide(color: _kPurple, width: 1.5),
             ),
           ),
         ),

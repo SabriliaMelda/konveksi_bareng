@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
-import 'package:konveksi_bareng/screens/schedule/production_schedule_screen.dart';
-import 'package:konveksi_bareng/screens/schedule/shopping_schedule_screen.dart';
-import 'package:konveksi_bareng/screens/schedule/delivery_schedule_screen.dart';
-import 'package:konveksi_bareng/screens/worker/wage_schedule_screen.dart';
+import 'package:konveksi_bareng/screens/schedule/unified_schedule_screen.dart';
+import 'package:konveksi_bareng/screens/worker/worker_list_screen.dart';
 import 'package:konveksi_bareng/screens/project/work_order_screen.dart';
 
 const kPurple = Color(0xFF6B257F);
@@ -141,18 +139,140 @@ class _ManageProjectScreenState extends State<ManageProjectScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            _DashboardHeader(
-              searchController: _searchC,
-              onSearchChanged: (_) => setState(() {}),
-              filterIndex: _filterIndex,
-              onFilterChanged: (i) => setState(() => _filterIndex = i),
+            const SizedBox(height: 10),
+
+            // ── TOP ROW: BACK + SEARCH ──
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  _NavIconButton(
+                    icon: Icons.arrow_back_ios_new,
+                    onTap: () => context.pop(),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: _NavSearchPill(
+                      controller: _searchC,
+                      hint: 'Cari project...',
+                      onChanged: (_) => setState(() {}),
+                      onClear: () {
+                        _searchC.clear();
+                        setState(() {});
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
+
+            const SizedBox(height: 14),
+
+            // ── TITLE ──
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Kelola Proyek',
+                  style: TextStyle(
+                    color: Color(0xFF111827),
+                    fontSize: 22,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            // ── FILTER CHIPS ──
+            SizedBox(
+              height: 36,
+              child: ListView.separated(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                scrollDirection: Axis.horizontal,
+                itemCount:
+                    const ['Semua', 'On Track', 'Revisi', 'Urgent'].length,
+                separatorBuilder: (_, __) => const SizedBox(width: 8),
+                itemBuilder: (_, i) {
+                  const labels = ['Semua', 'On Track', 'Revisi', 'Urgent'];
+                  final active = i == _filterIndex;
+                  return InkWell(
+                    borderRadius: BorderRadius.circular(999),
+                    onTap: () => setState(() => _filterIndex = i),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 14, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: active ? kPurple : const Color(0xFFF0F0F0),
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                      child: Text(
+                        labels[i],
+                        style: TextStyle(
+                          color:
+                              active ? Colors.white : const Color(0xFF555555),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+
+            const SizedBox(height: 12),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.fromLTRB(18, 16, 18, 100),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // ── JADWAL ──
+                    _SectionHeader(
+                      title: 'Jadwal',
+                    ),
+                    const SizedBox(height: 12),
+                    _JadwalGrid(),
+
+                    const SizedBox(height: 28),
+
+                    // ── POLA ──
+                    _SectionHeader(
+                      title: 'Pola',
+                      count: _polas.length,
+                      onSeeAll: () => context.push('/pattern'),
+                    ),
+                    const SizedBox(height: 12),
+                    ..._polas.map((p) => Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: _PolaCard(item: p),
+                        )),
+                    if (_polas.isEmpty)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: OutlinedButton.icon(
+                            onPressed: () => context.push('/pattern'),
+                            icon: const Icon(Icons.add_rounded, size: 18),
+                            label: const Text('Tambah Pola'),
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: kPurple,
+                              side: const BorderSide(color: kPurple),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 13),
+                            ),
+                          ),
+                        ),
+                      ),
+
+                    const SizedBox(height: 28),
+
                     // ── DAFTAR PROJECT ──
                     _SectionHeader(
                       title: 'Daftar Project',
@@ -178,30 +298,6 @@ class _ManageProjectScreenState extends State<ManageProjectScreen> {
                             _ProjectCard(project: projects[i]),
                       ),
 
-                    const SizedBox(height: 28),
-
-                    // ── JADWAL ──
-                    _SectionHeader(
-                      title: 'Jadwal',
-                      onSeeAll: () => context.push('/schedule'),
-                    ),
-                    const SizedBox(height: 12),
-                    _JadwalGrid(),
-
-                    const SizedBox(height: 28),
-
-                    // ── POLA ──
-                    _SectionHeader(
-                      title: 'Pola',
-                      count: _polas.length,
-                      onSeeAll: () => context.push('/pattern'),
-                    ),
-                    const SizedBox(height: 12),
-                    ..._polas.map((p) => Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: _PolaCard(item: p),
-                        )),
-
                     const SizedBox(height: 16),
                   ],
                 ),
@@ -215,181 +311,89 @@ class _ManageProjectScreenState extends State<ManageProjectScreen> {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// HEADER (purple, search, filter chips)
+// NAV WIDGETS (shipment-style)
 // ─────────────────────────────────────────────────────────────────────────────
 
-class _DashboardHeader extends StatelessWidget {
-  final TextEditingController searchController;
-  final ValueChanged<String> onSearchChanged;
-  final int filterIndex;
-  final ValueChanged<int> onFilterChanged;
+class _NavIconButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onTap;
+  const _NavIconButton({required this.icon, required this.onTap});
 
-  const _DashboardHeader({
-    required this.searchController,
-    required this.onSearchChanged,
-    required this.filterIndex,
-    required this.onFilterChanged,
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(16),
+      onTap: onTap,
+      child: Container(
+        width: 44,
+        height: 44,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: const Color(0xFFF0F0F0),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Icon(icon, size: 20, color: Colors.black87),
+      ),
+    );
+  }
+}
+
+class _NavSearchPill extends StatelessWidget {
+  final TextEditingController controller;
+  final String hint;
+  final ValueChanged<String> onChanged;
+  final VoidCallback onClear;
+
+  const _NavSearchPill({
+    required this.controller,
+    required this.hint,
+    required this.onChanged,
+    required this.onClear,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(18, 14, 18, 16),
-      decoration: const BoxDecoration(
-        color: kPurple,
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(24),
-          bottomRight: Radius.circular(24),
-        ),
+      height: 44,
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF0F0F0),
+        borderRadius: BorderRadius.circular(16),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          // top row
-          Row(
-            children: [
-              _HeaderIcon(
-                icon: Icons.arrow_back_ios_new_rounded,
-                onTap: () => context.pop(),
-              ),
-              const SizedBox(width: 12),
-              const Expanded(
-                child: Text(
-                  'Kelola Proyek',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ),
-              _HeaderIcon(
-                icon: Icons.home_filled,
-                onTap: () => context.go('/home'),
-              ),
-            ],
-          ),
-          const SizedBox(height: 14),
-
-          // search
-          Container(
-            height: 44,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            decoration: BoxDecoration(
-              color: const Color(0xFF50047D),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
-            ),
-            child: Row(
-              children: [
-                const Icon(Icons.search, color: Colors.white70, size: 20),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: TextField(
-                    controller: searchController,
-                    onChanged: onSearchChanged,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 13,
-                    ),
-                    cursorColor: Colors.white,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Cari project...',
-                      hintStyle: TextStyle(color: Colors.white70),
-                    ),
-                  ),
-                ),
-                if (searchController.text.isNotEmpty)
-                  InkWell(
-                    borderRadius: BorderRadius.circular(20),
-                    onTap: () {
-                      searchController.clear();
-                      onSearchChanged('');
-                    },
-                    child: const Padding(
-                      padding: EdgeInsets.all(6),
-                      child: Icon(Icons.close_rounded,
-                          color: Colors.white70, size: 18),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 12),
-
-          // filter chips
-          _FilterChips(currentIndex: filterIndex, onChange: onFilterChanged),
-        ],
-      ),
-    );
-  }
-}
-
-class _HeaderIcon extends StatelessWidget {
-  final IconData icon;
-  final VoidCallback onTap;
-  const _HeaderIcon({required this.icon, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(14),
-      onTap: onTap,
-      child: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.12),
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
-        ),
-        child: Icon(icon, color: Colors.white, size: 20),
-      ),
-    );
-  }
-}
-
-class _FilterChips extends StatelessWidget {
-  final int currentIndex;
-  final ValueChanged<int> onChange;
-  const _FilterChips({required this.currentIndex, required this.onChange});
-
-  @override
-  Widget build(BuildContext context) {
-    const items = ['Semua', 'On Track', 'Revisi', 'Urgent'];
-    return SizedBox(
-      height: 34,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: items.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 8),
-        itemBuilder: (_, i) {
-          final active = i == currentIndex;
-          return InkWell(
-            borderRadius: BorderRadius.circular(999),
-            onTap: () => onChange(i),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(
-                color: active
-                    ? Colors.white
-                    : Colors.white.withValues(alpha: 0.14),
-                borderRadius: BorderRadius.circular(999),
-              ),
-              child: Text(
-                items[i],
-                style: TextStyle(
-                  color: active ? kPurple : Colors.white,
-                  fontWeight: FontWeight.w800,
+          const Icon(Icons.search, size: 20, color: Color(0xFF010101)),
+          const SizedBox(width: 8),
+          Expanded(
+            child: TextField(
+              controller: controller,
+              onChanged: onChanged,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: hint,
+                hintStyle: TextStyle(
+                  color: Theme.of(context).appColors.muted,
                   fontSize: 12,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
+              style: const TextStyle(
+                color: Color(0xFF010101),
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-          );
-        },
+          ),
+          if (controller.text.isNotEmpty)
+            InkWell(
+              borderRadius: BorderRadius.circular(18),
+              onTap: onClear,
+              child: const Padding(
+                padding: EdgeInsets.all(6),
+                child: Icon(Icons.close, size: 18, color: Color(0xFF777777)),
+              ),
+            ),
+        ],
       ),
     );
   }
@@ -693,10 +697,8 @@ class _JadwalGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     final items = [
       _JadwalTile(label: 'SPK', icon: Icons.description_outlined),
-      _JadwalTile(label: 'Jadwal Buat', icon: Icons.calendar_month_outlined),
-      _JadwalTile(label: 'Jadwal Belanja', icon: Icons.shopping_bag_outlined),
-      _JadwalTile(label: 'Jadwal Upah', icon: Icons.payments_outlined),
-      _JadwalTile(label: 'Jadwal Kirim', icon: Icons.send_rounded),
+      _JadwalTile(label: 'Jadwal', icon: Icons.calendar_view_month_rounded),
+      _JadwalTile(label: 'Pekerja', icon: Icons.people_outline_rounded),
     ];
 
     final itemW = (MediaQuery.of(context).size.width - 18 * 2 - 12 * 2) / 3;
@@ -763,23 +765,13 @@ class _JadwalGrid extends StatelessWidget {
         Navigator.push(context,
             MaterialPageRoute(builder: (_) => const WorkOrderScreen()));
         break;
-      case 'Jadwal Buat':
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (_) => const ProductionScheduleScreen()));
-        break;
-      case 'Jadwal Belanja':
+      case 'Jadwal':
         Navigator.push(context,
-            MaterialPageRoute(builder: (_) => const ShoppingScheduleScreen()));
+            MaterialPageRoute(builder: (_) => const UnifiedScheduleScreen()));
         break;
-      case 'Jadwal Upah':
+      case 'Pekerja':
         Navigator.push(context,
-            MaterialPageRoute(builder: (_) => const WageScheduleScreen()));
-        break;
-      case 'Jadwal Kirim':
-        Navigator.push(context,
-            MaterialPageRoute(builder: (_) => const DeliveryScheduleScreen()));
+            MaterialPageRoute(builder: (_) => const WorkerListScreen()));
         break;
     }
   }

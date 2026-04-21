@@ -1,10 +1,8 @@
 // jadwal.dart
-import 'package:konveksi_bareng/screens/schedule/shopping_schedule_screen.dart';
-import 'package:konveksi_bareng/screens/schedule/delivery_schedule_screen.dart';
+import 'package:konveksi_bareng/screens/schedule/unified_schedule_screen.dart';
 import 'package:konveksi_bareng/screens/worker/wage_schedule_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:konveksi_bareng/config/app_colors.dart';
-import 'package:konveksi_bareng/screens/schedule/production_schedule_screen.dart';
 import 'package:konveksi_bareng/screens/project/work_order_screen.dart';
 import 'package:konveksi_bareng/screens/main/home.dart';
 
@@ -316,7 +314,7 @@ class _JadwalMenuCard extends StatelessWidget {
         if (item.label == 'Jadwal Buat') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => ProductionScheduleScreen()),
+            MaterialPageRoute(builder: (_) => const UnifiedScheduleScreen()),
           );
           return;
         }
@@ -324,7 +322,7 @@ class _JadwalMenuCard extends StatelessWidget {
         if (item.label == 'Jadwal Belanja') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => ShoppingScheduleScreen()),
+            MaterialPageRoute(builder: (_) => const UnifiedScheduleScreen()),
           );
           return;
         }
@@ -332,7 +330,7 @@ class _JadwalMenuCard extends StatelessWidget {
         if (item.label == 'Jadwal Upah') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => WageScheduleScreen()),
+            MaterialPageRoute(builder: (_) => const WageScheduleScreen()),
           );
           return;
         }
@@ -340,7 +338,7 @@ class _JadwalMenuCard extends StatelessWidget {
         if (item.label == 'Jadwal Kirim') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => DeliveryScheduleScreen()),
+            MaterialPageRoute(builder: (_) => const UnifiedScheduleScreen()),
           );
           return;
         }

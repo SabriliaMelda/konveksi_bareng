@@ -3,19 +3,26 @@ import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
 const kPurple = Color(0xFF6B257F);
+const _kSoft = Color(0xFFF3E4FF);
 
 class WorkerDetailScreen extends StatelessWidget {
   final String nama;
   final String role;
   final String? avatarAsset;
   final List<String> projects;
+  final String phone;
+  final String address;
+  final String notes;
 
-  WorkerDetailScreen({
+  const WorkerDetailScreen({
     super.key,
     required this.nama,
     required this.role,
     required this.projects,
     this.avatarAsset,
+    this.phone = '',
+    this.address = '',
+    this.notes = '',
   });
 
   @override
@@ -29,41 +36,66 @@ class WorkerDetailScreen extends StatelessWidget {
         title: Text(nama),
       ),
       body: ListView(
-        padding: EdgeInsets.fromLTRB(16, 14, 16, 18),
+        padding: const EdgeInsets.fromLTRB(16, 14, 16, 24),
         children: [
+          // ── Profile card ──────────────────────────────────────────────────
           _ProfileCard(nama: nama, role: role, avatarAsset: avatarAsset),
-          SizedBox(height: 14),
+          const SizedBox(height: 16),
 
-          Text(
-            'Sedang mengerjakan',
-            style: TextStyle(
-              color: Theme.of(context).appColors.ink,
-              fontSize: 14,
-              fontWeight: FontWeight.w900,
-            ),
+          // ── Info properties ───────────────────────────────────────────────
+          _InfoSection(
+            phone: phone,
+            address: address,
+            notes: notes,
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 20),
 
-          ...projects.map(
-            (p) => Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: _ProjectTile(
-                title: p,
-                subtitle: 'Status: On going',
-                onTap: () {
-                  context.push('/project-detail', extra: {
-                    'projectName': p,
-                    'workerName': nama,
-                  });
-                },
+          // ── Projects ──────────────────────────────────────────────────────
+          if (projects.isNotEmpty) ...[
+            Text(
+              'Sedang mengerjakan',
+              style: TextStyle(
+                color: Theme.of(context).appColors.ink,
+                fontSize: 14,
+                fontWeight: FontWeight.w900,
               ),
             ),
-          ),
+            const SizedBox(height: 10),
+            ...projects.map(
+              (p) => Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: _ProjectTile(
+                  title: p,
+                  subtitle: 'Status: On going',
+                  onTap: () => context.push('/project-detail', extra: {
+                    'projectName': p,
+                    'workerName': nama,
+                  }),
+                ),
+              ),
+            ),
+          ] else
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Text(
+                  'Belum ada proyek.',
+                  style: TextStyle(
+                    color: Theme.of(context).appColors.muted,
+                    fontSize: 13,
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );
   }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PROFILE CARD
+// ─────────────────────────────────────────────────────────────────────────────
 
 class _ProfileCard extends StatelessWidget {
   final String nama;
@@ -79,7 +111,7 @@ class _ProfileCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(14),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Theme.of(context).appColors.card,
         borderRadius: BorderRadius.circular(16),
@@ -95,7 +127,7 @@ class _ProfileCard extends StatelessWidget {
       child: Row(
         children: [
           _Avatar(asset: avatarAsset, name: nama),
-          SizedBox(width: 12),
+          const SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,12 +140,12 @@ class _ProfileCard extends StatelessWidget {
                     color: Theme.of(context).appColors.ink,
                   ),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
                   role,
                   style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
                     color: Theme.of(context).appColors.muted,
                   ),
                 ),
@@ -121,9 +153,9 @@ class _ProfileCard extends StatelessWidget {
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: const Color(0xFFF3E4FF),
+              color: _kSoft,
               borderRadius: BorderRadius.circular(999),
             ),
             child: const Text(
@@ -140,6 +172,107 @@ class _ProfileCard extends StatelessWidget {
     );
   }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INFO SECTION
+// ─────────────────────────────────────────────────────────────────────────────
+
+class _InfoSection extends StatelessWidget {
+  final String phone;
+  final String address;
+  final String notes;
+
+  const _InfoSection({
+    required this.phone,
+    required this.address,
+    required this.notes,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final rows = <_InfoRow>[
+      if (phone.isNotEmpty)
+        _InfoRow(icon: Icons.phone_outlined, label: 'Telepon', value: phone),
+      if (address.isNotEmpty)
+        _InfoRow(icon: Icons.place_outlined, label: 'Alamat', value: address),
+      if (notes.isNotEmpty)
+        _InfoRow(icon: Icons.notes_rounded, label: 'Catatan', value: notes),
+    ];
+
+    if (rows.isEmpty) return const SizedBox.shrink();
+
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Theme.of(context).appColors.card,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Theme.of(context).appColors.border),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Informasi',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w900,
+              color: Theme.of(context).appColors.ink,
+            ),
+          ),
+          const SizedBox(height: 12),
+          ...rows.map(
+            (r) => Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(r.icon, size: 18, color: kPurple),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          r.label,
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF9AA4B2),
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          r.value,
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: Theme.of(context).appColors.ink,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _InfoRow {
+  final IconData icon;
+  final String label;
+  final String value;
+  const _InfoRow(
+      {required this.icon, required this.label, required this.value});
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PROJECT TILE
+// ─────────────────────────────────────────────────────────────────────────────
 
 class _ProjectTile extends StatelessWidget {
   final String title;
@@ -158,7 +291,7 @@ class _ProjectTile extends StatelessWidget {
       borderRadius: BorderRadius.circular(14),
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
         decoration: BoxDecoration(
           color: Theme.of(context).appColors.card,
           borderRadius: BorderRadius.circular(14),
@@ -170,13 +303,13 @@ class _ProjectTile extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: Color(0xFFF3E4FF),
+                color: _kSoft,
                 borderRadius: BorderRadius.circular(10),
               ),
               alignment: Alignment.center,
-              child: Icon(Icons.folder_outlined, color: kPurple),
+              child: const Icon(Icons.folder_outlined, color: kPurple),
             ),
-            SizedBox(width: 12),
+            const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -194,7 +327,7 @@ class _ProjectTile extends StatelessWidget {
                     subtitle,
                     style: const TextStyle(
                       fontSize: 12,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       color: Color(0xFF8F9BB3),
                     ),
                   ),
@@ -209,6 +342,10 @@ class _ProjectTile extends StatelessWidget {
   }
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// AVATAR
+// ─────────────────────────────────────────────────────────────────────────────
+
 class _Avatar extends StatelessWidget {
   final String? asset;
   final String name;
@@ -221,8 +358,8 @@ class _Avatar extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         child: Image.asset(
           asset!,
-          width: 46,
-          height: 46,
+          width: 52,
+          height: 52,
           fit: BoxFit.cover,
           errorBuilder: (_, __, ___) => _fallback(),
         ),
@@ -233,10 +370,10 @@ class _Avatar extends StatelessWidget {
 
   Widget _fallback() {
     return Container(
-      width: 46,
-      height: 46,
+      width: 52,
+      height: 52,
       decoration: BoxDecoration(
-        color: const Color(0xFFF3E4FF),
+        color: _kSoft,
         borderRadius: BorderRadius.circular(12),
       ),
       alignment: Alignment.center,
@@ -245,7 +382,7 @@ class _Avatar extends StatelessWidget {
         style: const TextStyle(
           color: kPurple,
           fontWeight: FontWeight.w900,
-          fontSize: 16,
+          fontSize: 18,
         ),
       ),
     );

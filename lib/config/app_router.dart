@@ -43,14 +43,10 @@ import '../screens/worker/worker_screen.dart';
 import '../screens/worker/worker_list_screen.dart';
 import '../screens/worker/worker_detail_screen.dart';
 import '../screens/worker/wage_screen.dart';
-import '../screens/worker/wage_schedule_screen.dart';
 import '../screens/worker/wage_billing_status_screen.dart';
 
 // ── Schedule ──
 import '../screens/schedule/schedule_screen.dart';
-import '../screens/schedule/production_schedule_screen.dart';
-import '../screens/schedule/shopping_schedule_screen.dart';
-import '../screens/schedule/delivery_schedule_screen.dart';
 import '../screens/schedule/unified_schedule_screen.dart';
 
 // ── Inventory ──
@@ -259,15 +255,16 @@ final GoRouter appRouter = GoRouter(
             role: args['role'] as String,
             projects: args['projects'] as List<String>,
             avatarAsset: args['avatarAsset'] as String?,
+            phone: (args['phone'] as String?) ?? '',
+            address: (args['address'] as String?) ?? '',
+            notes: (args['notes'] as String?) ?? '',
           ),
           s,
         );
       },
     ),
     GoRoute(path: '/wage', pageBuilder: (_, s) => _fadePage(WageScreen(), s)),
-    GoRoute(
-        path: '/wage-schedule',
-        pageBuilder: (_, s) => _fadePage(WageScheduleScreen(), s)),
+    GoRoute(path: '/wage-schedule', redirect: (_, __) => '/unified-schedule'),
     GoRoute(
         path: '/wage-billing-status',
         pageBuilder: (_, s) => _fadePage(WageBillingStatusScreen(), s)),
@@ -277,14 +274,11 @@ final GoRouter appRouter = GoRouter(
         path: '/schedule',
         pageBuilder: (_, s) => _fadePage(ScheduleScreen(), s)),
     GoRoute(
-        path: '/production-schedule',
-        pageBuilder: (_, s) => _fadePage(ProductionScheduleScreen(), s)),
+        path: '/production-schedule', redirect: (_, __) => '/unified-schedule'),
     GoRoute(
-        path: '/shopping-schedule',
-        pageBuilder: (_, s) => _fadePage(ShoppingScheduleScreen(), s)),
+        path: '/shopping-schedule', redirect: (_, __) => '/unified-schedule'),
     GoRoute(
-        path: '/delivery-schedule',
-        pageBuilder: (_, s) => _fadePage(DeliveryScheduleScreen(), s)),
+        path: '/delivery-schedule', redirect: (_, __) => '/unified-schedule'),
     GoRoute(
         path: '/unified-schedule',
         pageBuilder: (_, s) => _fadePage(const UnifiedScheduleScreen(), s)),
