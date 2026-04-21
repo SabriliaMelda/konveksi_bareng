@@ -15,6 +15,7 @@ const _strings = {
     'label2': 'Pertanyaan keamanan 2:',
     'answer2': 'Jawaban keamanan 2:',
     'confirm': 'Konfirmasi',
+    'skip': 'Lewati',
     'saving': 'Menyimpan...',
     'errorFill': 'Harap isi semua jawaban.',
     'errorSame': 'Pertanyaan keamanan tidak boleh sama.',
@@ -22,7 +23,7 @@ const _strings = {
     'successTitle': 'Akun berhasil dibuat!',
     'successSubtitle':
         'Akun Anda telah berhasil dibuat dan pertanyaan keamanan tersimpan.',
-    'goToLogin': 'Masuk ke Login',
+    'goToLogin': 'Lanjutkan',
     'questions': [
       'Apa nama tengah ayah/ibu Anda?',
       'Apa nama panggilan masa kecil Anda?',
@@ -41,6 +42,7 @@ const _strings = {
     'label2': 'Security question 2:',
     'answer2': 'Security answer 2:',
     'confirm': 'Confirm',
+    'skip': 'Skip',
     'saving': 'Saving...',
     'errorFill': 'Please fill in all answers.',
     'errorSame': 'Security questions must be different.',
@@ -48,7 +50,7 @@ const _strings = {
     'successTitle': 'Account created!',
     'successSubtitle':
         'Your account has been created and security questions saved.',
-    'goToLogin': 'Go to Login',
+    'goToLogin': 'Continue',
     'questions': [
       "What is your father/mother's middle name?",
       'What was your childhood nickname?',
@@ -123,7 +125,8 @@ class _SecurityScreenState extends State<SecurityScreen> {
       if (!result.ok) {
         setState(() => _error = result.message ?? 'Gagal menyimpan');
       } else {
-        await StorageService.deleteItem('security_email');
+        // security_email sengaja TIDAK dihapus di sini — masih dipakai
+        // oleh halaman pemilihan role sebagai identifier user.
         setState(() => _success = true);
       }
     } catch (_) {
@@ -176,7 +179,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
               width: double.infinity,
               height: 42,
               child: ElevatedButton(
-                onPressed: () => context.go('/login'),
+                onPressed: () => context.go('/role-selection'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: kPurpleButton,
                   elevation: 0,
@@ -261,6 +264,30 @@ class _SecurityScreenState extends State<SecurityScreen> {
                     : t['confirm'] as String,
                 style: TextStyle(
                     color: Theme.of(context).appColors.card,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700),
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+
+          // Skip — isi pertanyaan keamanan nanti
+          SizedBox(
+            width: double.infinity,
+            height: 42,
+            child: OutlinedButton(
+              onPressed: _loading
+                  ? null
+                  : () => context.go('/role-selection'),
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: kPurpleButton, width: 1),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
+              ),
+              child: Text(
+                t['skip'] as String,
+                style: const TextStyle(
+                    color: kPurpleButton,
                     fontSize: 14,
                     fontWeight: FontWeight.w700),
               ),

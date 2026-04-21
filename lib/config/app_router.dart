@@ -9,6 +9,7 @@ import '../screens/auth/verification.dart';
 import '../screens/auth/find_account.dart';
 import '../screens/auth/account_screen.dart';
 import '../screens/auth/security_screen.dart';
+import '../screens/auth/role_selection_screen.dart';
 
 // ── Main ──
 import '../screens/main/home.dart';
@@ -100,7 +101,7 @@ Page<void> _fadePage(Widget child, GoRouterState state) {
 
 final GoRouter appRouter = GoRouter(
   navigatorKey: rootNavigatorKey,
-  initialLocation: '/home',
+  initialLocation: '/welcome',
   routes: [
     // ── Auth routes ──
     GoRoute(
@@ -120,6 +121,9 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
         path: '/security',
         pageBuilder: (_, s) => _fadePage(SecurityScreen(), s)),
+    GoRoute(
+        path: '/role-selection',
+        pageBuilder: (_, s) => _fadePage(const RoleSelectionScreen(), s)),
 
     // ── Main routes (persistent shell with bottom nav) ──
     ShellRoute(

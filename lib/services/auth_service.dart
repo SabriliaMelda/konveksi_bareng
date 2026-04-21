@@ -271,6 +271,48 @@ class AuthService {
     }
   }
 
+  // ── Role Selection ──
+
+  static Future<({bool ok, String? role, String? message})> selectRole({
+    required String email,
+    required String role,
+  }) async {
+    try {
+      final res = await _dio.post(
+        '/auth/select-role',
+        data: {'email': email, 'role': role},
+        options: Options(responseType: ResponseType.plain),
+      );
+      final data = _asMap(res.data);
+      return (
+        ok: _isOk(res.statusCode),
+        role: data['role'] as String?,
+        message: data['message'] as String?,
+      );
+    } on DioException {
+      return (ok: false, role: null, message: 'Network error');
+    }
+  }
+
+  static Future<String?> getMyRole() async {
+    try {
+      final token = await StorageService.getItem('auth_token');
+      if (token == null) return null;
+      final res = await _dio.get(
+        '/auth/my-role',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+          responseType: ResponseType.plain,
+        ),
+      );
+      if (!_isOk(res.statusCode)) return null;
+      final data = _asMap(res.data);
+      return data['role'] as String?;
+    } on DioException {
+      return null;
+    }
+  }
+
   // ── Check Session (untuk Session Guard) ──
 
   static Future<int> checkSession() async {
