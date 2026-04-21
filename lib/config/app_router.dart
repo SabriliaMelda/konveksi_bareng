@@ -51,6 +51,7 @@ import '../screens/schedule/schedule_screen.dart';
 import '../screens/schedule/production_schedule_screen.dart';
 import '../screens/schedule/shopping_schedule_screen.dart';
 import '../screens/schedule/delivery_schedule_screen.dart';
+import '../screens/schedule/unified_schedule_screen.dart';
 
 // ── Inventory ──
 import '../screens/inventory/raw_material_screen.dart';
@@ -239,6 +240,9 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
         path: '/delivery-schedule',
         pageBuilder: (_, s) => _fadePage(DeliveryScheduleScreen(), s)),
+    GoRoute(
+        path: '/unified-schedule',
+        pageBuilder: (_, s) => _fadePage(const UnifiedScheduleScreen(), s)),
 
     // ── Inventory routes ──
     GoRoute(

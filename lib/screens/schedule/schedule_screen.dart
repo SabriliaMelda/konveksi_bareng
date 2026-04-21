@@ -1,11 +1,8 @@
 // jadwal.dart
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/screens/schedule/delivery_schedule_screen.dart';
-import 'package:konveksi_bareng/screens/worker/wage_schedule_screen.dart';
-import 'package:konveksi_bareng/screens/schedule/shopping_schedule_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:konveksi_bareng/config/app_colors.dart';
-import 'package:konveksi_bareng/screens/schedule/production_schedule_screen.dart';
+import 'package:konveksi_bareng/screens/schedule/unified_schedule_screen.dart';
 import 'package:konveksi_bareng/screens/project/work_order_screen.dart';
 import 'package:konveksi_bareng/screens/main/home.dart';
 import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
@@ -268,13 +265,8 @@ class _JadwalMenuGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     final menus = [
       _JadwalMenuItem(label: 'SPK', icon: Icons.description_outlined),
-      _JadwalMenuItem(label: 'Jadwal Buat', icon: Icons.calendar_month),
       _JadwalMenuItem(
-        label: 'Jadwal Belanja',
-        icon: Icons.shopping_bag_outlined,
-      ),
-      _JadwalMenuItem(label: 'Jadwal Upah', icon: Icons.payments_outlined),
-      _JadwalMenuItem(label: 'Jadwal Kirim', icon: Icons.send_rounded),
+          label: 'Kalender Jadwal', icon: Icons.calendar_view_month_rounded),
     ];
 
     return Wrap(
@@ -316,35 +308,10 @@ class _JadwalMenuCard extends StatelessWidget {
           return;
         }
 
-        // ✅ NAVIGASI JADWAL BUAT
-        if (item.label == 'Jadwal Buat') {
+        if (item.label == 'Kalender Jadwal') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => ProductionScheduleScreen()),
-          );
-          return;
-        }
-
-        if (item.label == 'Jadwal Belanja') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => ShoppingScheduleScreen()),
-          );
-          return;
-        }
-
-        if (item.label == 'Jadwal Upah') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => WageScheduleScreen()),
-          );
-          return;
-        }
-
-        if (item.label == 'Jadwal Kirim') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => DeliveryScheduleScreen()),
+            MaterialPageRoute(builder: (_) => const UnifiedScheduleScreen()),
           );
           return;
         }
