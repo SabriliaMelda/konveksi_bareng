@@ -14,6 +14,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _sessionGuard = SessionGuard();
+  final TextEditingController _searchC = TextEditingController();
+
+  String _query = '';
 
   @override
   void initState() {
@@ -30,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     _sessionGuard.stop();
+    _searchC.dispose();
     super.dispose();
   }
 
@@ -45,24 +49,33 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
             // ===== HEADER (TETAP DI ATAS) =====
-            _HeaderSection(),
+            _HeaderSection(
+              controller: _searchC,
+              onChanged: (value) => setState(() => _query = value),
+              onClear: () {
+                _searchC.clear();
+                setState(() => _query = '');
+              },
+            ),
 
             // ===== BODY YANG SCROLL =====
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.only(bottom: 16, top: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    _PromoSection(),
-                    SizedBox(height: 16),
-                    _MenuGrid(),
-                    SizedBox(height: 16),
-                    _FeatureGrid(),
-                    SizedBox(height: 16),
-                    _FlashDealSection(),
-                  ],
-                ),
+                child: _query.trim().isEmpty
+                    ? const Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _PromoSection(),
+                          SizedBox(height: 16),
+                          _MenuGrid(),
+                          SizedBox(height: 16),
+                          _FeatureGrid(),
+                          SizedBox(height: 16),
+                          _FlashDealSection(),
+                        ],
+                      )
+                    : _HomeSearchResults(query: _query),
               ),
             ),
           ],
@@ -76,7 +89,15 @@ class _HomeScreenState extends State<HomeScreen> {
 // ================== HEADER (UNGU + SEARCH) ==================
 //
 class _HeaderSection extends StatelessWidget {
-  _HeaderSection();
+  final TextEditingController controller;
+  final ValueChanged<String> onChanged;
+  final VoidCallback onClear;
+
+  const _HeaderSection({
+    required this.controller,
+    required this.onChanged,
+    required this.onClear,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -161,13 +182,42 @@ class _HeaderSection extends StatelessWidget {
                 Icon(Icons.search,
                     color: Theme.of(context).appColors.card, size: 20),
                 SizedBox(width: 8),
-                Text(
-                  'Search',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 14,
+                Expanded(
+                  child: TextField(
+                    controller: controller,
+                    onChanged: onChanged,
+                    cursorColor: Theme.of(context).appColors.card,
+                    textInputAction: TextInputAction.search,
+                    style: TextStyle(
+                      color: Theme.of(context).appColors.card,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      isDense: true,
+                      hintText: 'Search',
+                      hintStyle: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
                   ),
                 ),
+                if (controller.text.isNotEmpty)
+                  InkWell(
+                    borderRadius: BorderRadius.circular(18),
+                    onTap: onClear,
+                    child: Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: Icon(
+                        Icons.close_rounded,
+                        color: Theme.of(context).appColors.card,
+                        size: 18,
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),
@@ -175,6 +225,284 @@ class _HeaderSection extends StatelessWidget {
       ),
     );
   }
+}
+
+class _HomeSearchResults extends StatelessWidget {
+  final String query;
+
+  const _HomeSearchResults({required this.query});
+
+  static const List<_HomeSearchItem> _items = [
+    _HomeSearchItem(
+      title: 'Jadwal',
+      subtitle: 'Lihat jadwal produksi dan belanja',
+      keywords: 'jadwal schedule produksi belanja',
+      icon: Icons.calendar_today,
+      route: '/schedule',
+    ),
+    _HomeSearchItem(
+      title: 'Pekerja',
+      subtitle: 'Kelola data pekerja',
+      keywords: 'pekerja worker karyawan tim',
+      icon: Icons.group,
+      route: '/worker',
+    ),
+    _HomeSearchItem(
+      title: 'Upah',
+      subtitle: 'Tagihan dan jadwal upah',
+      keywords: 'upah gaji wage pembayaran pekerja',
+      icon: Icons.attach_money,
+      route: '/wage',
+    ),
+    _HomeSearchItem(
+      title: 'Rugi Laba',
+      subtitle: 'Laporan profit dan loss',
+      keywords: 'rugi laba profit loss laporan',
+      icon: Icons.bar_chart,
+      route: '/profit-loss',
+    ),
+    _HomeSearchItem(
+      title: 'Pola',
+      subtitle: 'Pola dan desain produksi',
+      keywords: 'pola pattern desain',
+      icon: Icons.design_services,
+      route: '/pattern',
+    ),
+    _HomeSearchItem(
+      title: 'Beli',
+      subtitle: 'Pembelian bahan dan kebutuhan produksi',
+      keywords: 'beli purchase pembelian belanja',
+      icon: Icons.shopping_bag_outlined,
+      route: '/purchase',
+    ),
+    _HomeSearchItem(
+      title: 'Promosi',
+      subtitle: 'Kelola promo dan campaign',
+      keywords: 'promosi promotion promo campaign',
+      icon: Icons.campaign_outlined,
+      route: '/promotion',
+    ),
+    _HomeSearchItem(
+      title: 'Wishlist',
+      subtitle: 'Item favorit tersimpan',
+      keywords: 'wishlist favorit favorite simpan',
+      icon: Icons.favorite_border,
+      route: '/wishlist',
+    ),
+    _HomeSearchItem(
+      title: 'Chat',
+      subtitle: 'Komunikasi internal',
+      keywords: 'chat pesan message komunitas',
+      icon: Icons.chat_bubble_outline,
+      route: '/chat?prev=/home',
+      useGo: true,
+    ),
+    _HomeSearchItem(
+      title: 'Kelola Proyek',
+      subtitle: 'Manajemen order dan pekerjaan',
+      keywords: 'kelola proyek project order pekerjaan',
+      icon: Icons.assignment,
+      route: '/manage-project',
+    ),
+    _HomeSearchItem(
+      title: 'Bahan Baku',
+      subtitle: 'Stok, supplier, dan pemakaian',
+      keywords: 'bahan baku raw material stok supplier inventory',
+      icon: Icons.inventory_2,
+      route: '/raw-material',
+    ),
+    _HomeSearchItem(
+      title: 'Keuangan',
+      subtitle: 'Cashflow dan pencatatan',
+      keywords: 'keuangan finance cashflow uang pencatatan',
+      icon: Icons.account_balance_wallet_outlined,
+      route: '/finance',
+    ),
+    _HomeSearchItem(
+      title: 'Marketplace',
+      subtitle: 'Cari produk dan toko',
+      keywords: 'marketplace produk toko kaos hoodie flash deal',
+      icon: Icons.storefront_outlined,
+      route: '/marketplace',
+    ),
+    _HomeSearchItem(
+      title: 'Sportswear Club',
+      subtitle: 'Nike Sports T-Shirt',
+      keywords: 'sportswear club nike sports tshirt flash deal',
+      icon: Icons.local_offer_outlined,
+      route: '/marketplace',
+    ),
+    _HomeSearchItem(
+      title: 'Originals Trefoil',
+      subtitle: 'Adidas Sports T-Shirt',
+      keywords: 'originals trefoil adidas sports tshirt flash deal',
+      icon: Icons.local_offer_outlined,
+      route: '/marketplace',
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final normalized = query.trim().toLowerCase();
+    final results = _items.where((item) {
+      return item.title.toLowerCase().contains(normalized) ||
+          item.subtitle.toLowerCase().contains(normalized) ||
+          item.keywords.toLowerCase().contains(normalized);
+    }).toList();
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Hasil pencarian',
+            style: TextStyle(
+              color: Theme.of(context).appColors.ink,
+              fontSize: 16,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          const SizedBox(height: 10),
+          if (results.isEmpty)
+            _EmptySearch(query: query)
+          else
+            ...results.map((item) => _SearchResultTile(item: item)),
+        ],
+      ),
+    );
+  }
+}
+
+class _SearchResultTile extends StatelessWidget {
+  final _HomeSearchItem item;
+
+  const _SearchResultTile({required this.item});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(14),
+        onTap: () {
+          if (item.useGo) {
+            context.go(item.route);
+          } else {
+            context.push(item.route);
+          }
+        },
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Theme.of(context).appColors.iconSurface,
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 42,
+                height: 42,
+                decoration: BoxDecoration(
+                  color: const Color(0x176B257F),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Icon(item.icon, color: const Color(0xFF6B257F)),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item.title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Theme.of(context).appColors.ink,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      item.subtitle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Theme.of(context).appColors.muted,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Icon(
+                Icons.chevron_right_rounded,
+                color: Color(0xFF9CA3AF),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _EmptySearch extends StatelessWidget {
+  final String query;
+
+  const _EmptySearch({required this.query});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: Theme.of(context).appColors.iconSurface,
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Column(
+        children: [
+          const Icon(
+            Icons.search_off_rounded,
+            color: Color(0xFF6B257F),
+            size: 34,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Tidak ada hasil untuk "$query"',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Theme.of(context).appColors.ink,
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _HomeSearchItem {
+  final String title;
+  final String subtitle;
+  final String keywords;
+  final IconData icon;
+  final String route;
+  final bool useGo;
+
+  const _HomeSearchItem({
+    required this.title,
+    required this.subtitle,
+    required this.keywords,
+    required this.icon,
+    required this.route,
+    this.useGo = false,
+  });
 }
 
 //
@@ -880,13 +1208,13 @@ class _SeeAllCard extends StatelessWidget {
 // ================== SIDEBAR / DRAWER ==================
 //
 class _AppSidebar extends StatelessWidget {
-  _AppSidebar();
+  const _AppSidebar();
 
-  static Color _main = Color(0xFF6B257F);
-  static Color _mainDark = Color(0xFF50047D);
-  static Color _bg = Color(0xFFF7F5F1);
-  static Color _text = Color(0xFF111827);
-  static Color _muted = Color(0xFF6B7280);
+  static const Color _main = Color(0xFF6B257F);
+  static const Color _mainDark = Color(0xFF50047D);
+  static const Color _bg = Color(0xFFF7F5F1);
+  static const Color _text = Color(0xFF111827);
+  static const Color _muted = Color(0xFF6B7280);
 
   void _go(BuildContext context, String route) {
     context.pop(); // tutup drawer

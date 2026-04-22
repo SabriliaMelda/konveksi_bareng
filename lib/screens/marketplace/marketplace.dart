@@ -45,22 +45,13 @@ class MarketplaceScreen extends StatefulWidget {
 
 class _MarketplaceScreenState extends State<MarketplaceScreen> {
   final TextEditingController _searchC = TextEditingController();
+  final ScrollController _productScrollC = ScrollController();
 
-  String _activeCategory = 'Semua';
   _MarketplaceSort _sort = _MarketplaceSort.rekomendasi;
   RangeValues _priceRange = const RangeValues(0, 200000);
   double _minRating = 0;
   bool _promoOnly = false;
-
-  final List<String> _categories = const [
-    'Semua',
-    'Kaos',
-    'Hoodie',
-    'Kemeja',
-    'Jaket',
-    'Celana',
-    'Topi',
-  ];
+  bool _showShortcutShadow = false;
 
   final List<_Product> _products = const [
     _Product(
@@ -123,7 +114,21 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _productScrollC.addListener(_handleProductScroll);
+  }
+
+  void _handleProductScroll() {
+    final next = _productScrollC.hasClients && _productScrollC.offset > 2;
+    if (next == _showShortcutShadow) return;
+    setState(() => _showShortcutShadow = next);
+  }
+
+  @override
   void dispose() {
+    _productScrollC.removeListener(_handleProductScroll);
+    _productScrollC.dispose();
     _searchC.dispose();
     super.dispose();
   }
@@ -132,8 +137,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
   Widget build(BuildContext context) {
     final query = _searchC.text.trim().toLowerCase();
     final filtered = _products.where((p) {
-      final matchesCategory = _activeCategory == 'Semua' ||
-          p.title.toLowerCase().contains(_activeCategory.toLowerCase());
       final matchesQuery = query.isEmpty ||
           p.title.toLowerCase().contains(query) ||
           p.store.toLowerCase().contains(query) ||
@@ -143,11 +146,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
       final matchesRating = p.rating >= _minRating;
       final matchesPromo = !_promoOnly || p.isPromo;
 
-      return matchesCategory &&
-          matchesQuery &&
-          matchesPrice &&
-          matchesRating &&
-          matchesPromo;
+      return matchesQuery && matchesPrice && matchesRating && matchesPromo;
     }).toList()
       ..sort((a, b) {
         switch (_sort) {
@@ -170,115 +169,173 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            SizedBox(height: 10),
-
-            // ===== TOP ROW: back + search + filter + notif =====
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  _CircleIconButton(
-                    icon: Icons.arrow_back_ios_new,
-                    iconColor: Theme.of(context).appColors.ink,
-                    onTap: () => context.pop(),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: _SearchPill(
-                      controller: _searchC,
-                      hint: 'Cari produk, toko, kategori...',
-                      onChanged: (_) => setState(() {}),
-                      onClear: () {
-                        _searchC.clear();
-                        setState(() {});
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  _IconPill(
-                    icon: Icons.tune_rounded,
-                    onTap: _showFilterSheet,
-                  ),
-                  const SizedBox(width: 10),
-                  _IconPill(
-                    icon: Icons.notifications_none_rounded,
-                    onTap: () {
-                      Navigator.of(context).push(
-                        PageRouteBuilder(
-                          transitionDuration: Duration.zero,
-                          reverseTransitionDuration: Duration.zero,
-                          pageBuilder: (_, __, ___) =>
-                              const _MarketplaceNotificationsScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                ],
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xFF4F156C),
+                    Color(0xFF7B2AA0),
+                    Color(0xFFB261CF),
+                  ],
+                ),
               ),
-            ),
-
-            SizedBox(height: 14),
-
-            // ===== TITLE =====
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
+              child: Column(
                 children: [
-                  Expanded(
-                    child: Text(
-                      'Marketplace',
-                      style: TextStyle(
-                        color: Theme.of(context).appColors.ink,
-                        fontSize: 22,
-                        fontWeight: FontWeight.w800,
+                  // ===== TOP NAV: selected address + cart + chat =====
+                  Row(
+                    children: [
+                      _CircleIconButton(
+                        icon: Icons.arrow_back_ios_new,
+                        iconColor: Colors.white,
+                        backgroundColor: Colors.white24,
+                        borderColor: Colors.white30,
+                        onTap: () => context.pop(),
                       ),
-                    ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text(
+                              'Alamat dipilih:',
+                              style: TextStyle(
+                                color: Colors.white70,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(height: 3),
+                            const Row(
+                              children: [
+                                Icon(
+                                  Icons.location_on_outlined,
+                                  size: 16,
+                                  color: Colors.white,
+                                ),
+                                SizedBox(width: 4),
+                                Expanded(
+                                  child: Text(
+                                    'Workshop Konveksi, Jakarta',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      _NavIconButton(
+                        icon: Icons.shopping_cart_outlined,
+                        onTap: () => context.push('/checkout'),
+                      ),
+                      const SizedBox(width: 2),
+                      _NavIconButton(
+                        icon: Icons.chat_bubble_outline_rounded,
+                        onTap: () => context.go('/chat?prev=/marketplace'),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 14),
+                  // ===== SEARCH =====
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _SearchPill(
+                          controller: _searchC,
+                          hint: 'Cari produk, toko, kategori...',
+                          onChanged: (_) => setState(() {}),
+                          onClear: () {
+                            _searchC.clear();
+                            setState(() {});
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      _IconPill(
+                        icon: Icons.tune_rounded,
+                        iconColor: Colors.white,
+                        backgroundColor: Colors.white24,
+                        onTap: _showFilterSheet,
+                      ),
+                    ],
                   ),
                 ],
-              ),
-            ),
-
-            const SizedBox(height: 12),
-
-            // ===== PROMO BANNER =====
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: _PromoBanner(
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Buka promo (dummy)')),
-                  );
-                },
               ),
             ),
 
             const SizedBox(height: 14),
 
-            // ===== CATEGORIES =====
-            SizedBox(
-              height: 40,
-              child: ListView.separated(
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 180),
+              curve: Curves.easeOut,
+              height: 94,
+              padding: const EdgeInsets.only(top: 2, bottom: 6),
+              decoration: BoxDecoration(
+                color: Theme.of(context).appColors.card,
+                boxShadow: _showShortcutShadow
+                    ? const [
+                        BoxShadow(
+                          color: Color(0x26000000),
+                          blurRadius: 18,
+                          offset: Offset(0, 8),
+                        ),
+                      ]
+                    : const [],
+              ),
+              child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 scrollDirection: Axis.horizontal,
-                itemCount: _categories.length,
-                separatorBuilder: (_, __) => const SizedBox(width: 10),
-                itemBuilder: (context, i) {
-                  final c = _categories[i];
-                  final active = c == _activeCategory;
-                  return _CategoryChip(
-                    text: c,
-                    active: active,
-                    onTap: () => setState(() => _activeCategory = c),
-                  );
-                },
+                children: const [
+                  _MarketplaceShortcut(
+                    icon: Icons.confirmation_number_outlined,
+                    label: 'Voucher\nSpesial',
+                  ),
+                  _MarketplaceShortcut(
+                    icon: Icons.verified_outlined,
+                    label: 'Brand\nRekomendasi',
+                  ),
+                  _MarketplaceShortcut(
+                    icon: Icons.collections_bookmark_outlined,
+                    label: 'Koleksi\nPilihan',
+                  ),
+                  _MarketplaceShortcut(
+                    icon: Icons.new_releases_outlined,
+                    label: 'Produk\nTerbaru',
+                  ),
+                  _MarketplaceShortcut(
+                    icon: Icons.local_offer_outlined,
+                    label: 'Pasti\nDiskon',
+                  ),
+                  _MarketplaceShortcut(
+                    icon: Icons.flash_on_outlined,
+                    label: 'Flash\nSale',
+                  ),
+                  _MarketplaceShortcut(
+                    icon: Icons.recommend_outlined,
+                    label: 'Produk\nRekomendasi',
+                  ),
+                ],
               ),
             ),
 
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
 
             // ===== PRODUCT GRID (FIX OVERFLOW) =====
             Expanded(
               child: GridView.builder(
+                controller: _productScrollC,
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
@@ -422,22 +479,27 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                             ? 'Semua'
                             : draftRating.toStringAsFixed(1),
                       ),
-                      Slider(
-                        value: draftRating,
-                        min: 0,
-                        max: 5,
-                        divisions: 10,
-                        activeColor: kPurple,
-                        label: draftRating == 0
-                            ? 'Semua'
-                            : draftRating.toStringAsFixed(1),
-                        onChanged: (value) {
-                          setSheetState(() => draftRating = value);
-                        },
+                      SliderTheme(
+                        data: SliderTheme.of(context).copyWith(
+                          activeTrackColor: kPurple,
+                          thumbColor: kPurple,
+                        ),
+                        child: Slider(
+                          value: draftRating,
+                          min: 0,
+                          max: 5,
+                          divisions: 10,
+                          label: draftRating == 0
+                              ? 'Semua'
+                              : draftRating.toStringAsFixed(1),
+                          onChanged: (value) {
+                            setSheetState(() => draftRating = value);
+                          },
+                        ),
                       ),
                       SwitchListTile(
                         contentPadding: EdgeInsets.zero,
-                        activeColor: kPurple,
+                        activeThumbColor: kPurple,
                         title: Text(
                           'Promo saja',
                           style: TextStyle(
@@ -553,11 +615,15 @@ class _Product {
 class _CircleIconButton extends StatelessWidget {
   final IconData icon;
   final Color iconColor;
+  final Color? backgroundColor;
+  final Color? borderColor;
   final VoidCallback onTap;
 
   const _CircleIconButton({
     required this.icon,
     required this.iconColor,
+    this.backgroundColor,
+    this.borderColor,
     required this.onTap,
   });
 
@@ -571,9 +637,10 @@ class _CircleIconButton extends StatelessWidget {
         height: 44,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: Theme.of(context).appColors.card,
+          color: backgroundColor ?? Theme.of(context).appColors.card,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Theme.of(context).appColors.border),
+          border: Border.all(
+              color: borderColor ?? Theme.of(context).appColors.border),
         ),
         child: Icon(icon, size: 20, color: iconColor),
       ),
@@ -641,11 +708,41 @@ class _SearchPill extends StatelessWidget {
   }
 }
 
-class _IconPill extends StatelessWidget {
+class _NavIconButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback onTap;
 
-  const _IconPill({required this.icon, required this.onTap});
+  const _NavIconButton({
+    required this.icon,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(24),
+      onTap: onTap,
+      child: SizedBox(
+        width: 38,
+        height: 44,
+        child: Icon(icon, size: 25, color: Colors.white),
+      ),
+    );
+  }
+}
+
+class _IconPill extends StatelessWidget {
+  final IconData icon;
+  final Color? iconColor;
+  final Color? backgroundColor;
+  final VoidCallback onTap;
+
+  const _IconPill({
+    required this.icon,
+    this.iconColor,
+    this.backgroundColor,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -657,10 +754,59 @@ class _IconPill extends StatelessWidget {
         height: 44,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: Color(0xFFF0F0F0),
+          color: backgroundColor ?? const Color(0xFFF0F0F0),
           borderRadius: BorderRadius.circular(16),
         ),
-        child: Icon(icon, size: 22, color: Theme.of(context).appColors.ink),
+        child: Icon(
+          icon,
+          size: 22,
+          color: iconColor ?? Theme.of(context).appColors.ink,
+        ),
+      ),
+    );
+  }
+}
+
+class _MarketplaceShortcut extends StatelessWidget {
+  final IconData icon;
+  final String label;
+
+  const _MarketplaceShortcut({
+    required this.icon,
+    required this.label,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 78,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            width: 48,
+            height: 48,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: const Color(0xFFF4EAF8),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Icon(icon, size: 24, color: kPurple),
+          ),
+          const SizedBox(height: 7),
+          Text(
+            label,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Theme.of(context).appColors.ink,
+              fontSize: 11,
+              height: 1.12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -738,8 +884,8 @@ class _FilterLabelRow extends StatelessWidget {
   }
 }
 
-class _MarketplaceNotificationsScreen extends StatelessWidget {
-  const _MarketplaceNotificationsScreen();
+class MarketplaceNotificationsScreen extends StatelessWidget {
+  const MarketplaceNotificationsScreen({super.key});
 
   static const _items = [
     _MarketplaceNotificationItem(
@@ -777,7 +923,8 @@ class _MarketplaceNotificationsScreen extends StatelessWidget {
     ),
     _MarketplaceNotificationItem(
       title: 'Gratis ongkir tersedia',
-      subtitle: 'Kemeja Oxford punya voucher gratis ongkir untuk pembelian ini.',
+      subtitle:
+          'Kemeja Oxford punya voucher gratis ongkir untuk pembelian ini.',
       time: '1 jam lalu',
       icon: Icons.local_shipping_outlined,
       unread: false,
@@ -1007,111 +1154,6 @@ class _MarketplaceNotificationItem {
     required this.unread,
     required this.product,
   });
-}
-
-class _PromoBanner extends StatelessWidget {
-  final VoidCallback onTap;
-  const _PromoBanner({required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(16),
-      onTap: onTap,
-      child: Container(
-        height: 110,
-        padding: EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          gradient: LinearGradient(
-            begin: Alignment(0.05, 0.10),
-            end: Alignment(1.27, 1.27),
-            colors: [Color(0xFF9F82AD), Color(0x3FEBD4F3)],
-          ),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Promo Mingguan',
-                    style: TextStyle(
-                      color: Theme.of(context).appColors.card,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                  SizedBox(height: 6),
-                  Text(
-                    'Diskon sampai 30% + gratis ongkir.\nCek produk pilihan hari ini.',
-                    style: TextStyle(
-                      color: Theme.of(context).appColors.card,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      height: 1.3,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              width: 82,
-              height: 82,
-              decoration: BoxDecoration(
-                color: Theme.of(context).appColors.card.withValues(alpha: 0.22),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              alignment: Alignment.center,
-              child: Icon(
-                Icons.local_offer_outlined,
-                color: Theme.of(context).appColors.card,
-                size: 34,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _CategoryChip extends StatelessWidget {
-  final String text;
-  final bool active;
-  final VoidCallback onTap;
-
-  const _CategoryChip({
-    required this.text,
-    required this.active,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(999),
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        decoration: BoxDecoration(
-          color: active ? kPurple : const Color(0xFFF6F7F8),
-          borderRadius: BorderRadius.circular(999),
-          border: Border.all(color: active ? kPurple : const Color(0xFFE8ECF4)),
-        ),
-        child: Text(
-          text,
-          style: TextStyle(
-            color: active ? Colors.white : const Color(0xFF1E232C),
-            fontSize: 12,
-            fontWeight: active ? FontWeight.w800 : FontWeight.w600,
-          ),
-        ),
-      ),
-    );
-  }
 }
 
 class _ProductCard extends StatelessWidget {
