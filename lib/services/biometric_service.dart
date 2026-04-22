@@ -7,6 +7,13 @@ class BiometricService {
   BiometricService._();
 
   static const _prefKey = 'biometric_enabled';
+  static const _unlockedAtKey = 'biometric_unlocked_at';
+  static const _pausedAtKey = 'biometric_paused_at';
+
+  /// Grace period: kalau user di-background kurang dari ini, tidak perlu
+  /// biometrik ulang saat resume. Mirip Livin/BCA (~5 menit).
+  static const Duration unlockGrace = Duration(minutes: 5);
+
   static final LocalAuthentication _auth = LocalAuthentication();
 
   /// Device punya hardware biometrik & user sudah daftar minimal 1 sidik jari/face.
@@ -56,5 +63,51 @@ class BiometricService {
   static Future<void> setEnabled(bool value) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_prefKey, value);
+    if (!value) {
+      await prefs.remove(_unlockedAtKey);
+      await prefs.remove(_pausedAtKey);
+    }
+  }
+
+  /// Tandai session ini sudah ter-unlock via biometrik.
+  static Future<void> markUnlocked() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(
+        _unlockedAtKey, DateTime.now().millisecondsSinceEpoch);
+    await prefs.remove(_pausedAtKey);
+  }
+
+  /// Paksa lock di redirect berikutnya.
+  static Future<void> clearUnlock() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_unlockedAtKey);
+  }
+
+  /// Dipanggil saat app masuk background.
+  static Future<void> markPaused() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(
+        _pausedAtKey, DateTime.now().millisecondsSinceEpoch);
+  }
+
+  /// Dipanggil saat app resume. Return true kalau harus minta biometrik
+  /// ulang karena gap di background > [unlockGrace].
+  static Future<bool> shouldLockOnResume() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (!(prefs.getBool(_prefKey) ?? false)) return false;
+    final pausedAt = prefs.getInt(_pausedAtKey);
+    if (pausedAt == null) return false;
+    final gap = DateTime.now().millisecondsSinceEpoch - pausedAt;
+    return gap >= unlockGrace.inMilliseconds;
+  }
+
+  /// Cek saat redirect router: apakah perlu ke lock screen?
+  /// True jika biometrik ON dan session belum ter-unlock (atau sudah expired).
+  static Future<bool> needsUnlock() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (!(prefs.getBool(_prefKey) ?? false)) return false;
+    final unlockedAt = prefs.getInt(_unlockedAtKey);
+    if (unlockedAt == null) return true;
+    return false;
   }
 }

@@ -11,6 +11,8 @@ import '../screens/auth/find_account.dart';
 import '../screens/auth/account_screen.dart';
 import '../screens/auth/security_screen.dart';
 import '../screens/auth/role_selection_screen.dart';
+import '../screens/auth/biometric_lock_screen.dart';
+import '../services/biometric_service.dart';
 
 // ── Main ──
 import '../screens/main/home.dart';
@@ -125,9 +127,21 @@ Future<String?> _authRedirect(
   final hasToken = token != null && token.isNotEmpty;
   final loc = state.matchedLocation;
   final isAuthOnly = _authOnlyPaths.contains(loc);
+  final isLock = loc == '/biometric-lock';
 
+  // Belum login → lempar ke welcome (kecuali sudah di halaman auth).
+  if (!hasToken && !isAuthOnly && !isLock) return '/welcome';
+
+  // Sudah login tapi masih di halaman auth → ke home.
+  // (lock screen ditangani di bawah)
   if (hasToken && isAuthOnly) return '/home';
-  if (!hasToken && !isAuthOnly) return '/welcome';
+
+  // Sudah login, cek biometrik.
+  if (hasToken) {
+    final needsUnlock = await BiometricService.needsUnlock();
+    if (needsUnlock && !isLock) return '/biometric-lock';
+    if (!needsUnlock && isLock) return '/home';
+  }
   return null;
 }
 
@@ -157,6 +171,9 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
         path: '/role-selection',
         pageBuilder: (_, s) => _fadePage(const RoleSelectionScreen(), s)),
+    GoRoute(
+        path: '/biometric-lock',
+        pageBuilder: (_, s) => _fadePage(const BiometricLockScreen(), s)),
 
     // ── Main routes (persistent shell with bottom nav) ──
     ShellRoute(
