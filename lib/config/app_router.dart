@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ── Auth ──
 import '../screens/auth/welcome.dart';
@@ -106,9 +107,34 @@ Page<void> _softFadePage(Widget child, GoRouterState state) {
   );
 }
 
+const _authOnlyPaths = <String>{
+  '/welcome',
+  '/login',
+  '/register',
+  '/verification',
+  '/find-account',
+  '/account',
+  '/security',
+  '/role-selection',
+};
+
+Future<String?> _authRedirect(
+    BuildContext context, GoRouterState state) async {
+  final prefs = await SharedPreferences.getInstance();
+  final token = prefs.getString('auth_token');
+  final hasToken = token != null && token.isNotEmpty;
+  final loc = state.matchedLocation;
+  final isAuthOnly = _authOnlyPaths.contains(loc);
+
+  if (hasToken && isAuthOnly) return '/home';
+  if (!hasToken && !isAuthOnly) return '/welcome';
+  return null;
+}
+
 final GoRouter appRouter = GoRouter(
   navigatorKey: rootNavigatorKey,
   initialLocation: '/welcome',
+  redirect: _authRedirect,
   routes: [
     // ── Auth routes ──
     GoRoute(
