@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../services/auth_service.dart';
 import '../services/storage_service.dart';
 
@@ -9,11 +10,21 @@ class SessionGuard {
   Timer? _timer;
   VoidCallback? onSessionExpired;
 
+  bool get _isAuthBypassed {
+    final bypass = dotenv.env['DEV_AUTH_BYPASS']?.toLowerCase();
+    return bypass == 'true' || bypass == '1';
+  }
+
   void start({required VoidCallback onExpired}) {
+    // Skip session guard if auth bypass is enabled
+    if (_isAuthBypassed) {
+      debugPrint('🔓 DEV_AUTH_BYPASS enabled - session guard disabled');
+      return;
+    }
+
     onSessionExpired = onExpired;
     _timer?.cancel();
-    _timer = Timer.periodic(
-        const Duration(seconds: 15), (_) => _check());
+    _timer = Timer.periodic(const Duration(seconds: 15), (_) => _check());
   }
 
   void stop() {
@@ -22,6 +33,9 @@ class SessionGuard {
   }
 
   Future<void> _check() async {
+    // Skip check if auth bypass is enabled
+    if (_isAuthBypassed) return;
+
     try {
       final token = await StorageService.getItem('auth_token');
       if (token == null) {

@@ -37,20 +37,6 @@ class _Project {
   });
 }
 
-class _PolaItem {
-  final String name;
-  final String gaya;
-  final String size;
-  final int qty;
-
-  const _PolaItem({
-    required this.name,
-    required this.gaya,
-    required this.size,
-    required this.qty,
-  });
-}
-
 // ─────────────────────────────────────────────────────────────────────────────
 // MAIN SCREEN
 // ─────────────────────────────────────────────────────────────────────────────
@@ -84,14 +70,6 @@ class _ManageProjectScreenState extends State<ManageProjectScreen> {
       nilaiProject: 15000000 + (i * 3500000),
     );
   });
-
-  final List<_PolaItem> _polas = const [
-    _PolaItem(name: 'Pola Kaos Polos', gaya: 'T-Shirt', size: 'S-M-L', qty: 3),
-    _PolaItem(
-        name: 'Pola Hoodie Zip', gaya: 'Hoodie', size: 'XS-S-M-L-XL', qty: 5),
-    _PolaItem(
-        name: 'Pola Kemeja Formal', gaya: 'Kemeja', size: '1 Size', qty: 2),
-  ];
 
   List<_Project> get _filtered {
     final q = _searchC.text.trim().toLowerCase();
@@ -242,34 +220,89 @@ class _ManageProjectScreenState extends State<ManageProjectScreen> {
                     // ── POLA ──
                     _SectionHeader(
                       title: 'Pola',
-                      count: _polas.length,
-                      onSeeAll: () => context.push('/pattern'),
                     ),
                     const SizedBox(height: 12),
-                    ..._polas.map((p) => Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: _PolaCard(item: p),
-                        )),
-                    if (_polas.isEmpty)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: OutlinedButton.icon(
-                            onPressed: () => context.push('/pattern'),
-                            icon: const Icon(Icons.add_rounded, size: 18),
-                            label: const Text('Tambah Pola'),
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: kPurple,
-                              side: const BorderSide(color: kPurple),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              padding: const EdgeInsets.symmetric(vertical: 13),
+                    // ✅ NEW: Big rectangle button to pattern screen
+                    InkWell(
+                      borderRadius: BorderRadius.circular(16),
+                      onTap: () => context.push('/pattern'),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 20),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).appColors.card,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color(0x12000000),
+                              blurRadius: 14,
+                              offset: Offset(0, 5),
                             ),
+                          ],
+                          border: Border.all(
+                            color: kPurple.withValues(alpha: 0.2),
+                            width: 1.5,
                           ),
                         ),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 56,
+                              height: 56,
+                              decoration: BoxDecoration(
+                                color: _kSoft2,
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              child: const Icon(
+                                Icons.content_cut_rounded,
+                                color: kPurple,
+                                size: 28,
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'Kelola Pola',
+                                    style: TextStyle(
+                                      color: Color(0xFF111827),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    'Lihat dan kelola semua pola produksi',
+                                    style: TextStyle(
+                                      color: Theme.of(context).appColors.muted,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Container(
+                              width: 36,
+                              height: 36,
+                              decoration: BoxDecoration(
+                                color: kPurple,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: const Icon(
+                                Icons.arrow_forward_rounded,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
+                    ),
 
                     const SizedBox(height: 28),
 
@@ -781,114 +814,6 @@ class _JadwalTile {
   final String label;
   final IconData icon;
   const _JadwalTile({required this.label, required this.icon});
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// POLA CARD
-// ─────────────────────────────────────────────────────────────────────────────
-
-class _PolaCard extends StatelessWidget {
-  final _PolaItem item;
-  const _PolaCard({required this.item});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      decoration: BoxDecoration(
-        color: Theme.of(context).appColors.card,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: const [
-          BoxShadow(
-              color: Color(0x0A000000), blurRadius: 20, offset: Offset(0, 4)),
-        ],
-        border: Border.all(color: const Color(0x0FE8ECF4)),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 46,
-            height: 46,
-            decoration: BoxDecoration(
-              color: _kSoft2,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child:
-                const Icon(Icons.content_cut_rounded, color: kPurple, size: 22),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  item.name,
-                  style: TextStyle(
-                    color: Theme.of(context).appColors.ink,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    _PolaBadge(label: item.gaya),
-                    const SizedBox(width: 6),
-                    _PolaBadge(label: item.size),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                '${item.qty}x',
-                style: const TextStyle(
-                  color: kPurple,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-              const Text(
-                'qty',
-                style: TextStyle(
-                  color: Color(0xFF9E9E9E),
-                  fontSize: 11,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _PolaBadge extends StatelessWidget {
-  final String label;
-  const _PolaBadge({required this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(
-        color: _kSoft,
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Text(
-        label,
-        style: const TextStyle(
-          color: kPurple,
-          fontSize: 10,
-          fontWeight: FontWeight.w700,
-        ),
-      ),
-    );
-  }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

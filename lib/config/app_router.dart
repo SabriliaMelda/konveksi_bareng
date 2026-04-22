@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // ── Auth ──
 import '../screens/auth/welcome.dart';
@@ -47,7 +48,6 @@ import '../screens/worker/wage_screen.dart';
 import '../screens/worker/wage_billing_status_screen.dart';
 
 // ── Schedule ──
-import '../screens/schedule/schedule_screen.dart';
 import '../screens/schedule/unified_schedule_screen.dart';
 
 // ── Inventory ──
@@ -75,6 +75,11 @@ import '../widgets/main_shell.dart';
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 final GlobalKey<NavigatorState> _shellNavigatorKey =
     GlobalKey<NavigatorState>();
+
+bool get _isAuthBypassed {
+  final bypass = dotenv.env['DEV_AUTH_BYPASS']?.toLowerCase();
+  return bypass == 'true' || bypass == '1';
+}
 
 Page<void> _fadePage(Widget child, GoRouterState state) {
   return CustomTransitionPage<void>(
@@ -109,7 +114,7 @@ Page<void> _softFadePage(Widget child, GoRouterState state) {
 
 final GoRouter appRouter = GoRouter(
   navigatorKey: rootNavigatorKey,
-  initialLocation: '/welcome',
+  initialLocation: '/home',
   routes: [
     // ── Auth routes ──
     GoRoute(
@@ -276,7 +281,7 @@ final GoRouter appRouter = GoRouter(
     // ── Schedule routes ──
     GoRoute(
         path: '/schedule',
-        pageBuilder: (_, s) => _fadePage(ScheduleScreen(), s)),
+        pageBuilder: (_, s) => _fadePage(const UnifiedScheduleScreen(), s)),
     GoRoute(
         path: '/production-schedule', redirect: (_, __) => '/unified-schedule'),
     GoRoute(

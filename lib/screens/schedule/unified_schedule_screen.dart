@@ -111,6 +111,7 @@ class _UnifiedScheduleScreenState extends State<UnifiedScheduleScreen> {
   late DateTime _focusedMonth;
   late final Set<ScheduleCategory> _enabled;
   late final List<ScheduleItem> _items;
+  bool _calendarExpanded = false; // ✅ NEW: track calendar expand state
 
   @override
   void initState() {
@@ -777,6 +778,9 @@ class _UnifiedScheduleScreenState extends State<UnifiedScheduleScreen> {
                   itemsByDay: _itemsByDay,
                   onTap: _onTapDay,
                   onTapItem: _openItemDetails,
+                  isExpanded: _calendarExpanded, // ✅ NEW
+                  onToggleExpand: () => setState(
+                      () => _calendarExpanded = !_calendarExpanded), // ✅ NEW
                 ),
               ),
             ),
@@ -1018,6 +1022,7 @@ class _CategoryLegend extends StatelessWidget {
 
 // =========================================================
 // CALENDAR GRID — real dates, Monday-first, Google Calendar style
+// ✅ NEW: Collapsible to show only 1 week
 // =========================================================
 class _CalendarGrid extends StatelessWidget {
   final DateTime focusedMonth;
@@ -1025,6 +1030,8 @@ class _CalendarGrid extends StatelessWidget {
   final Map<DateTime, List<ScheduleItem>> itemsByDay;
   final ValueChanged<DateTime> onTap;
   final void Function(ScheduleItem) onTapItem;
+  final bool isExpanded; // ✅ NEW
+  final VoidCallback onToggleExpand; // ✅ NEW
 
   const _CalendarGrid({
     required this.focusedMonth,
@@ -1032,6 +1039,8 @@ class _CalendarGrid extends StatelessWidget {
     required this.itemsByDay,
     required this.onTap,
     required this.onTapItem,
+    required this.isExpanded,
+    required this.onToggleExpand,
   });
 
   @override
@@ -1054,6 +1063,19 @@ class _CalendarGrid extends StatelessWidget {
       cells.add(cells.last.add(const Duration(days: 1)));
     }
 
+    // ✅ NEW: Find which week contains the selected date
+    int selectedWeek = 0;
+    for (int i = 0; i < cells.length; i++) {
+      if (_sameDay(cells[i], selectedDate)) {
+        selectedWeek = i ~/ 7;
+        break;
+      }
+    }
+
+    // ✅ NEW: Determine how many weeks to show
+    final weeksToShow = isExpanded ? 6 : 1;
+    final startWeek = isExpanded ? 0 : selectedWeek;
+
     return Column(
       children: [
         // weekday header
@@ -1073,123 +1095,171 @@ class _CalendarGrid extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 6),
-        // 6-week grid
-        for (int week = 0; week < 6; week++) ...[
-          IntrinsicHeight(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: List.generate(7, (col) {
-                final idx = week * 7 + col;
-                final d = cells[idx];
-                final inMonth = _sameMonth(d, focusedMonth);
-                final isSel = _sameDay(d, selectedDate);
-                final isToday = _sameDay(d, today);
-                final dayItems = itemsByDay[d] ?? const [];
-                const maxVisible = 2;
-                final overflow = dayItems.length > maxVisible
-                    ? dayItems.length - maxVisible
-                    : 0;
+        // ✅ NEW: Animated size for smooth expand/collapse
+        AnimatedSize(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+          child: Column(
+            children: [
+              // grid rows (1 week or 6 weeks)
+              for (int week = startWeek;
+                  week < startWeek + weeksToShow;
+                  week++) ...[
+                IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: List.generate(7, (col) {
+                      final idx = week * 7 + col;
+                      final d = cells[idx];
+                      final inMonth = _sameMonth(d, focusedMonth);
+                      final isSel = _sameDay(d, selectedDate);
+                      final isToday = _sameDay(d, today);
+                      final dayItems = itemsByDay[d] ?? const [];
+                      const maxVisible = 2;
+                      final overflow = dayItems.length > maxVisible
+                          ? dayItems.length - maxVisible
+                          : 0;
 
-                return Expanded(
-                  child: GestureDetector(
-                    onTap: () => onTap(d),
-                    behavior: HitTestBehavior.opaque,
-                    child: Container(
-                      margin: const EdgeInsets.all(1),
-                      decoration: BoxDecoration(
-                        color: isSel
-                            ? _kPurple.withValues(alpha: 0.08)
-                            : Colors.transparent,
-                        borderRadius: BorderRadius.circular(8),
-                        border: isSel
-                            ? Border.all(color: _kPurple, width: 1.5)
-                            : null,
-                      ),
-                      padding: const EdgeInsets.fromLTRB(2, 4, 2, 4),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          // date number
-                          Container(
-                            width: 26,
-                            height: 26,
+                      return Expanded(
+                        child: GestureDetector(
+                          onTap: () => onTap(d),
+                          behavior: HitTestBehavior.opaque,
+                          child: Container(
+                            margin: const EdgeInsets.all(1),
                             decoration: BoxDecoration(
-                              color: isToday && !isSel
-                                  ? _kPurple
+                              color: isSel
+                                  ? _kPurple.withValues(alpha: 0.08)
                                   : Colors.transparent,
                               borderRadius: BorderRadius.circular(8),
+                              border: isSel
+                                  ? Border.all(color: _kPurple, width: 1.5)
+                                  : null,
                             ),
-                            alignment: Alignment.center,
-                            child: Text(
-                              '${d.day}',
-                              style: TextStyle(
-                                color: isToday && !isSel
-                                    ? Colors.white
-                                    : (inMonth
-                                        ? const Color(0xFF222B45)
-                                        : const Color(0xFFB9C0CC)),
-                                fontSize: 12,
-                                fontWeight: (isSel || isToday)
-                                    ? FontWeight.w800
-                                    : FontWeight.w500,
-                              ),
+                            padding: const EdgeInsets.fromLTRB(2, 4, 2, 4),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                // date number
+                                Container(
+                                  width: 26,
+                                  height: 26,
+                                  decoration: BoxDecoration(
+                                    color: isToday && !isSel
+                                        ? _kPurple
+                                        : Colors.transparent,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    '${d.day}',
+                                    style: TextStyle(
+                                      color: isToday && !isSel
+                                          ? Colors.white
+                                          : (inMonth
+                                              ? const Color(0xFF222B45)
+                                              : const Color(0xFFB9C0CC)),
+                                      fontSize: 12,
+                                      fontWeight: (isSel || isToday)
+                                          ? FontWeight.w800
+                                          : FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                // event pills
+                                ...dayItems.take(maxVisible).map((it) {
+                                  final c = _catMeta[it.category]!.color;
+                                  return GestureDetector(
+                                    onTap: () => onTapItem(it),
+                                    child: Container(
+                                      margin: const EdgeInsets.only(bottom: 2),
+                                      height: 13,
+                                      decoration: BoxDecoration(
+                                        color: c,
+                                        borderRadius: BorderRadius.circular(3),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 3),
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        it.title,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 8.5,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }),
+                                // overflow indicator
+                                if (overflow > 0)
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 3, top: 1),
+                                      child: Text(
+                                        '+$overflow',
+                                        style: TextStyle(
+                                          color:
+                                              _kPurple.withValues(alpha: 0.7),
+                                          fontSize: 8.5,
+                                          fontWeight: FontWeight.w800,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                              ],
                             ),
                           ),
-                          const SizedBox(height: 2),
-                          // event pills
-                          ...dayItems.take(maxVisible).map((it) {
-                            final c = _catMeta[it.category]!.color;
-                            return GestureDetector(
-                              onTap: () => onTapItem(it),
-                              child: Container(
-                                margin: const EdgeInsets.only(bottom: 2),
-                                height: 13,
-                                decoration: BoxDecoration(
-                                  color: c,
-                                  borderRadius: BorderRadius.circular(3),
-                                ),
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 3),
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  it.title,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 8.5,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              ),
-                            );
-                          }),
-                          // overflow indicator
-                          if (overflow > 0)
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 3, top: 1),
-                                child: Text(
-                                  '+$overflow',
-                                  style: TextStyle(
-                                    color: _kPurple.withValues(alpha: 0.7),
-                                    fontSize: 8.5,
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
+                        ),
+                      );
+                    }),
                   ),
-                );
-              }),
+                ),
+                if (week < startWeek + weeksToShow - 1)
+                  const Divider(height: 1, color: Color(0xFFF0F0F0)),
+              ],
+            ],
+          ),
+        ),
+        // ✅ NEW: Expand/Collapse button
+        const SizedBox(height: 8),
+        InkWell(
+          onTap: onToggleExpand,
+          borderRadius: BorderRadius.circular(8),
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+            decoration: BoxDecoration(
+              color: _kPurple.withValues(alpha: 0.08),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  isExpanded
+                      ? Icons.keyboard_arrow_up
+                      : Icons.keyboard_arrow_down,
+                  size: 18,
+                  color: _kPurple,
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  isExpanded ? 'Sembunyikan' : 'Lihat Kalender Penuh',
+                  style: const TextStyle(
+                    color: _kPurple,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ],
             ),
           ),
-          if (week < 5) const Divider(height: 1, color: Color(0xFFF0F0F0)),
-        ],
+        ),
       ],
     );
   }
