@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
-import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
+import 'package:konveksi_bareng/widgets/marketplace_bottom_nav.dart';
 
 const Color kPurple = Color(0xFF6B257F);
 
@@ -109,6 +109,14 @@ class _PromotionScreenState extends State<PromotionScreen> {
     }
   }
 
+  void _handleBack() {
+    if (context.canPop()) {
+      context.pop();
+    } else {
+      context.go('/marketplace');
+    }
+  }
+
   Widget _buildTabs() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -146,7 +154,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).appColors.card,
-      bottomNavigationBar: AppBottomNav(activeIndex: -1),
+      bottomNavigationBar: MarketplaceBottomNav(activeIndex: 1),
       body: SafeArea(
         child: Column(
           children: [
@@ -158,7 +166,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                 children: [
                   InkWell(
                     borderRadius: BorderRadius.circular(32),
-                    onTap: () => context.pop(),
+                    onTap: _handleBack,
                     child: Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(

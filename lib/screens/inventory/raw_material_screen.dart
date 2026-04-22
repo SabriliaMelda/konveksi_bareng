@@ -1,8 +1,5 @@
 // lib/pages/bahan_baku.dart
 import 'package:flutter/material.dart';
-import 'package:konveksi_bareng/screens/finance/sales_screen.dart';
-import 'package:konveksi_bareng/screens/inventory/shipment_screen.dart';
-import 'package:konveksi_bareng/screens/finance/purchase_screen.dart';
 import 'package:konveksi_bareng/screens/marketplace/checkout.dart';
 import 'package:konveksi_bareng/screens/marketplace/marketplace.dart';
 import 'package:konveksi_bareng/config/app_colors.dart';
@@ -363,7 +360,12 @@ class _QuickMenuGrid extends StatelessWidget {
     if (label == 'Marketplace') {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (_) => MarketplaceScreen()),
+        PageRouteBuilder(
+          transitionDuration: Duration.zero,
+          reverseTransitionDuration: Duration.zero,
+          pageBuilder: (_, __, ___) =>
+              MarketplaceScreen(prevRoute: '/raw-material'),
+        ),
       );
       return;
     }

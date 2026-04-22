@@ -16,6 +16,12 @@ import '../screens/main/settings.dart';
 import '../screens/main/profile.dart';
 import '../screens/main/wishlist.dart';
 import '../screens/main/chat.dart';
+import '../screens/main/security_settings.dart';
+import '../screens/main/language_settings.dart';
+import '../screens/main/appearance_settings.dart';
+import '../screens/main/help_center.dart';
+import '../screens/main/privacy_policy.dart';
+import '../screens/main/about_app.dart';
 
 // ── Finance ──
 import '../screens/finance/finance_screen.dart';
@@ -149,6 +155,24 @@ final GoRouter appRouter = GoRouter(
         GoRoute(
             path: '/settings',
             pageBuilder: (_, s) => _fadePage(SettingsScreen(), s)),
+        GoRoute(
+            path: '/security-settings',
+            pageBuilder: (_, s) => _softFadePage(SecuritySettingsScreen(), s)),
+        GoRoute(
+            path: '/language-settings',
+            pageBuilder: (_, s) => _softFadePage(LanguageSettingsScreen(), s)),
+        GoRoute(
+            path: '/appearance-settings',
+            pageBuilder: (_, s) => _softFadePage(AppearanceSettingsScreen(), s)),
+        GoRoute(
+            path: '/help-center',
+            pageBuilder: (_, s) => _softFadePage(HelpCenterScreen(), s)),
+        GoRoute(
+            path: '/privacy-policy',
+            pageBuilder: (_, s) => _softFadePage(PrivacyPolicyScreen(), s)),
+        GoRoute(
+            path: '/about-app',
+            pageBuilder: (_, s) => _softFadePage(AboutAppScreen(), s)),
         GoRoute(
           path: '/chat',
           pageBuilder: (_, s) {
@@ -318,7 +342,10 @@ final GoRouter appRouter = GoRouter(
     // ── Marketplace ──
     GoRoute(
         path: '/marketplace',
-        pageBuilder: (_, s) => _fadePage(MarketplaceScreen(), s)),
+        pageBuilder: (_, s) {
+          final prevRoute = s.uri.queryParameters['prev'];
+          return _softFadePage(MarketplaceScreen(prevRoute: prevRoute), s);
+        }),
     GoRoute(
         path: '/checkout',
         pageBuilder: (_, s) => _fadePage(CheckoutScreen(), s)),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:konveksi_bareng/services/payment_service.dart';
-import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
 
 const Color kPurple = Color(0xFF6B257F);
 const Color _kBg = Color(0xFFF7F7FB);
@@ -16,7 +15,7 @@ class _CartProduct {
   final int harga;
   final String imagePath;
   int qty;
-  bool selected;
+  bool selected = true;
 
   _CartProduct({
     required this.nama,
@@ -25,7 +24,6 @@ class _CartProduct {
     required this.harga,
     required this.imagePath,
     this.qty = 1,
-    this.selected = true,
   });
 }
 
@@ -447,7 +445,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: _kBg,
-      bottomNavigationBar: AppBottomNav(activeIndex: -1),
       body: SafeArea(
         child: Column(
           children: [
@@ -519,8 +516,15 @@ class _AppBar extends StatelessWidget {
       child: Row(
         children: [
           _RoundBtn(
-              icon: Icons.arrow_back_ios_new,
-              onTap: () => Navigator.pop(context)),
+            icon: Icons.arrow_back_ios_new,
+            onTap: () {
+              if (context.canPop()) {
+                context.pop();
+              } else {
+                context.go('/marketplace');
+              }
+            },
+          ),
           Expanded(
             child: Text('Checkout',
                 textAlign: TextAlign.center,

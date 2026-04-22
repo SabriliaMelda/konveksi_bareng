@@ -907,7 +907,7 @@ class _ChatItem {
   final String avatarUrl;
   final int unread;
   final bool isRead;
-  final bool selected;
+  final bool selected = false;
 
   _ChatItem({
     required this.name,
@@ -916,7 +916,6 @@ class _ChatItem {
     required this.avatarUrl,
     required this.unread,
     required this.isRead,
-    this.selected = false,
   });
 }
 

@@ -1213,6 +1213,7 @@ class _AppSidebar extends StatelessWidget {
   static const Color _main = Color(0xFF6B257F);
   static const Color _mainDark = Color(0xFF50047D);
   static const Color _bg = Color(0xFFF7F5F1);
+  static const Color _surface = Color(0xFFFFFFFF);
   static const Color _text = Color(0xFF111827);
   static const Color _muted = Color(0xFF6B7280);
 
@@ -1225,24 +1226,33 @@ class _AppSidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       elevation: 0,
-      backgroundColor: Theme.of(context).appColors.card,
+      backgroundColor: _bg,
       child: SafeArea(
         child: Column(
           children: [
             // ===== HEADER (GRADIENT + PROFIL) =====
             Container(
               width: double.infinity,
-              padding: EdgeInsets.fromLTRB(16, 18, 16, 16),
+              margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+              padding: EdgeInsets.fromLTRB(16, 18, 12, 16),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [_main, _mainDark],
+                  colors: [
+                    _main,
+                    _mainDark,
+                    Color(0xFF8E3BAA),
+                  ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(18),
-                  bottomRight: Radius.circular(18),
-                ),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: _main.withValues(alpha: 0.22),
+                    blurRadius: 24,
+                    offset: const Offset(0, 12),
+                  ),
+                ],
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -1252,20 +1262,15 @@ class _AppSidebar extends StatelessWidget {
                     width: 52,
                     height: 52,
                     decoration: BoxDecoration(
-                      color: Theme.of(context)
-                          .appColors
-                          .card
-                          .withValues(alpha: 0.18),
+                      color: Colors.white.withValues(alpha: 0.18),
                       borderRadius: BorderRadius.circular(18),
                       border: Border.all(
-                          color: Theme.of(context)
-                              .appColors
-                              .card
-                              .withValues(alpha: 0.25)),
+                        color: Colors.white.withValues(alpha: 0.32),
+                      ),
                     ),
                     child: Icon(
                       Icons.person,
-                      color: Theme.of(context).appColors.card,
+                      color: Colors.white,
                       size: 28,
                     ),
                   ),
@@ -1331,8 +1336,13 @@ class _AppSidebar extends StatelessWidget {
                   // close
                   IconButton(
                     onPressed: () => context.pop(),
-                    icon: Icon(Icons.close_rounded,
-                        color: Theme.of(context).appColors.card),
+                    style: IconButton.styleFrom(
+                      backgroundColor: Colors.white.withValues(alpha: 0.14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                    ),
+                    icon: Icon(Icons.close_rounded, color: Colors.white),
                   ),
                 ],
               ),
@@ -1341,9 +1351,9 @@ class _AppSidebar extends StatelessWidget {
             // ===== BODY =====
             Expanded(
               child: Container(
-                color: Theme.of(context).appColors.card,
+                color: _bg,
                 child: ListView(
-                  padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
+                  padding: const EdgeInsets.fromLTRB(14, 18, 14, 14),
                   children: [
                     _sectionLabel('UTAMA'),
 
@@ -1403,33 +1413,6 @@ class _AppSidebar extends StatelessWidget {
                       subtitle: 'Preferensi aplikasi',
                       onTap: () => _go(context, '/settings'),
                     ),
-
-                    const SizedBox(height: 14),
-
-                    // ===== CTA BAWAH (OPSIONAL) =====
-                    Container(
-                      padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                        color: _bg,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(Icons.lightbulb_outline, color: _main),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Text(
-                              'Tips: rapikan alur produksi di Kelola Proyek untuk hasil lebih cepat.',
-                              style: TextStyle(
-                                color: _muted,
-                                fontSize: 12,
-                                height: 1.3,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -1437,31 +1420,14 @@ class _AppSidebar extends StatelessWidget {
 
             // ===== FOOTER =====
             Padding(
-              padding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: _ghostButton(
-                      context,
-                      label: 'Logout',
-                      icon: Icons.logout_rounded,
-                      onTap: () {
-                        context.pop();
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: _primaryButton(
-                      context,
-                      label: 'Upgrade',
-                      icon: Icons.workspace_premium_rounded,
-                      onTap: () {
-                        context.pop();
-                      },
-                    ),
-                  ),
-                ],
+              padding: const EdgeInsets.fromLTRB(14, 8, 14, 14),
+              child: _ghostButton(
+                context,
+                label: 'Logout',
+                icon: Icons.logout_rounded,
+                onTap: () {
+                  context.pop();
+                },
               ),
             ),
           ],
@@ -1472,14 +1438,14 @@ class _AppSidebar extends StatelessWidget {
 
   Widget _sectionLabel(String text) {
     return Padding(
-      padding: EdgeInsets.only(left: 6, bottom: 10),
+      padding: EdgeInsets.only(left: 8, bottom: 10),
       child: Text(
         text,
         style: TextStyle(
           color: _muted,
-          fontWeight: FontWeight.w800,
+          fontWeight: FontWeight.w900,
           fontSize: 11,
-          letterSpacing: 0.8,
+          letterSpacing: 0.6,
         ),
       ),
     );
@@ -1509,10 +1475,18 @@ class _AppSidebar extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         onTap: onTap,
         child: Ink(
-          padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
+          padding: EdgeInsets.fromLTRB(12, 12, 10, 12),
           decoration: BoxDecoration(
-            color: _bg,
+            color: _surface,
             borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Color(0xFFEDEAF0)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.045),
+                blurRadius: 14,
+                offset: const Offset(0, 7),
+              ),
+            ],
           ),
           child: Row(
             children: [
@@ -1520,9 +1494,16 @@ class _AppSidebar extends StatelessWidget {
                 width: 42,
                 height: 42,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).appColors.card,
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Color(0xFFF7EAFB),
+                      Color(0xFFFFFFFF),
+                    ],
+                  ),
                   borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: Theme.of(context).appColors.border),
+                  border: Border.all(color: Color(0xFFE9D8EF)),
                 ),
                 child: Icon(icon, color: _main, size: 22),
               ),
@@ -1535,7 +1516,7 @@ class _AppSidebar extends StatelessWidget {
                       label,
                       style: TextStyle(
                         color: _text,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w900,
                         fontSize: 14,
                       ),
                     ),
@@ -1545,42 +1526,27 @@ class _AppSidebar extends StatelessWidget {
                       style: TextStyle(
                         color: _muted,
                         fontSize: 12,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ],
                 ),
               ),
-              Icon(Icons.chevron_right_rounded, color: _muted),
+              Container(
+                width: 30,
+                height: 30,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: _bg,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  Icons.chevron_right_rounded,
+                  color: _muted,
+                  size: 20,
+                ),
+              ),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _primaryButton(
-    BuildContext context, {
-    required String label,
-    required IconData icon,
-    required VoidCallback onTap,
-  }) {
-    return SizedBox(
-      height: 44,
-      child: ElevatedButton.icon(
-        onPressed: onTap,
-        icon: Icon(icon, size: 18),
-        label: Text(
-          label,
-          style: TextStyle(
-            fontWeight: FontWeight.w800,
-          ),
-        ),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: _main,
-          foregroundColor: Theme.of(context).appColors.card,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
           ),
         ),
       ),
@@ -1594,7 +1560,7 @@ class _AppSidebar extends StatelessWidget {
     required VoidCallback onTap,
   }) {
     return SizedBox(
-      height: 44,
+      height: 48,
       child: OutlinedButton.icon(
         onPressed: onTap,
         icon: Icon(icon, size: 18, color: _main),
@@ -1606,11 +1572,11 @@ class _AppSidebar extends StatelessWidget {
           ),
         ),
         style: OutlinedButton.styleFrom(
-          side: BorderSide(color: Color(0xFFE8ECF4)),
+          side: BorderSide(color: Color(0xFFE7DCEA)),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(16),
           ),
-          backgroundColor: Theme.of(context).appColors.card,
+          backgroundColor: _surface,
         ),
       ),
     );

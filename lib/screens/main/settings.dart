@@ -230,7 +230,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       _Pill(
                         text: 'Edit',
                         color: purple,
-                        onTap: () => _toast(context, 'Edit profil (dummy)'),
+                        onTap: () => context.push('/profile'),
                       ),
                     ],
                   ),
@@ -370,7 +370,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               icon: Icons.person_outline_rounded,
                               title: 'Profil',
                               subtitle: 'Nama, foto, kontak',
-                              onTap: () => _toast(context, 'Profil (dummy)'),
+                              onTap: () => context.push('/profile'),
                               ink: ink,
                               muted: muted,
                               tile: tile,
@@ -391,7 +391,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               icon: Icons.lock_outline_rounded,
                               title: 'Keamanan',
                               subtitle: 'PIN, perangkat',
-                              onTap: () => _toast(context, 'Keamanan (dummy)'),
+                              onTap: () => context.push('/security-settings'),
                               ink: ink,
                               muted: muted,
                               tile: tile,
@@ -411,7 +411,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               icon: Icons.language_rounded,
                               title: 'Bahasa',
                               subtitle: 'Indonesia',
-                              onTap: () => _toast(context, 'Bahasa (dummy)'),
+                              onTap: () => context.push('/language-settings'),
                               ink: ink,
                               muted: muted,
                               tile: tile,
@@ -430,7 +430,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               icon: Icons.palette_outlined,
                               title: 'Tema & Tampilan',
                               subtitle: 'Warna, font, layout',
-                              onTap: () => _toast(context, 'Tema (dummy)'),
+                              onTap: () => context.push('/appearance-settings'),
                               ink: ink,
                               muted: muted,
                               tile: tile,
@@ -468,8 +468,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               icon: Icons.help_outline_rounded,
                               title: 'Pusat Bantuan',
                               subtitle: 'FAQ & panduan',
-                              onTap: () =>
-                                  _toast(context, 'Pusat Bantuan (dummy)'),
+                              onTap: () => context.push('/help-center'),
                               ink: ink,
                               muted: muted,
                               tile: tile,
@@ -492,8 +491,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               icon: Icons.privacy_tip_outlined,
                               title: 'Kebijakan Privasi',
                               subtitle: 'Data & penggunaan',
-                              onTap: () =>
-                                  _toast(context, 'Kebijakan Privasi (dummy)'),
+                              onTap: () => context.push('/privacy-policy'),
                               ink: ink,
                               muted: muted,
                               tile: tile,
@@ -512,7 +510,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               icon: Icons.info_outline_rounded,
                               title: 'Tentang Aplikasi',
                               subtitle: 'Versi, build, lisensi',
-                              onTap: () => _toast(context, 'Tentang (dummy)'),
+                              onTap: () => context.push('/about-app'),
                               ink: ink,
                               muted: muted,
                               tile: tile,
@@ -578,6 +576,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _toast(BuildContext context, String msg) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
   }
+
 }
 
 // ===== Background gradient (ikut darkMode) =====

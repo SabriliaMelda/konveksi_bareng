@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:konveksi_bareng/services/payment_service.dart';
-import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
+import 'package:konveksi_bareng/widgets/marketplace_bottom_nav.dart';
 
 const Color kPurple = Color(0xFF6B257F);
 const Color kBg = Color(0xFFF7F7FB);
@@ -161,15 +161,25 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
     final parentRoute =
         (widget.prevRoute != null && widget.prevRoute!.isNotEmpty)
             ? widget.prevRoute!
-            : '/home';
+            : '/marketplace';
     return '/purchase?prev=${Uri.encodeComponent(parentRoute)}';
+  }
+
+  void _handleBack() {
+    if (widget.prevRoute != null && widget.prevRoute!.isNotEmpty) {
+      context.go(widget.prevRoute!);
+    } else if (context.canPop()) {
+      context.pop();
+    } else {
+      context.go('/marketplace');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).appColors.card,
-      bottomNavigationBar: AppBottomNav(activeIndex: -1),
+      bottomNavigationBar: MarketplaceBottomNav(activeIndex: 2),
       body: SafeArea(
         child: Column(
           children: [
@@ -183,16 +193,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                   _CircleIconButton(
                     icon: Icons.arrow_back_ios_new,
                     iconColor: Theme.of(context).appColors.ink,
-                    onTap: () {
-                      if (widget.prevRoute != null &&
-                          widget.prevRoute!.isNotEmpty) {
-                        context.go(widget.prevRoute!);
-                      } else if (context.canPop()) {
-                        context.pop();
-                      } else {
-                        context.go('/home');
-                      }
-                    },
+                    onTap: _handleBack,
                   ),
                   const SizedBox(width: 10),
                   Expanded(
@@ -356,7 +357,7 @@ class _PurchaseDetailScreenState extends State<PurchaseDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).appColors.card,
-      bottomNavigationBar: const AppBottomNav(activeIndex: -1),
+      bottomNavigationBar: const MarketplaceBottomNav(activeIndex: 2),
       body: SafeArea(
         child: Column(
           children: [
