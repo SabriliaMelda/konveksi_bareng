@@ -378,6 +378,7 @@ class _ShoppingScheduleScreenState extends State<ShoppingScheduleScreen> {
     final now = DateTime.now();
     return Scaffold(
       backgroundColor: Theme.of(context).appColors.card,
+      resizeToAvoidBottomInset: true,
       floatingActionButton: FloatingActionButton(
         backgroundColor: kPurple,
         foregroundColor: Theme.of(context).appColors.card,

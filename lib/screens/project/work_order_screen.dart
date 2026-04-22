@@ -58,6 +58,7 @@ class _WorkOrderScreenState extends State<WorkOrderScreen> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).appColors.card,
+      resizeToAvoidBottomInset: true,
       floatingActionButton: FloatingActionButton(
         backgroundColor: kPurple,
         onPressed: () => _openCreateSpkSheet(context),

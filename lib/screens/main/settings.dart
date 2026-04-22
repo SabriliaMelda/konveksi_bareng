@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:konveksi_bareng/providers/theme_provider.dart';
+import 'package:konveksi_bareng/services/biometric_service.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -18,12 +19,53 @@ class _SettingsScreenState extends State<SettingsScreen> {
   // ===== Dummy states =====
   bool _notif = true;
   bool _biometric = false;
+  bool _biometricAvailable = false;
   bool _autoBackup = true;
 
   // ===== Expand/Collapse sections =====
   bool _expPref = true;
   bool _expUmum = true;
   bool _expBantuan = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadBiometric();
+  }
+
+  Future<void> _loadBiometric() async {
+    final available = await BiometricService.isAvailable();
+    final enabled = await BiometricService.isEnabled();
+    if (!mounted) return;
+    setState(() {
+      _biometricAvailable = available;
+      _biometric = available && enabled;
+    });
+  }
+
+  Future<void> _toggleBiometric(bool value) async {
+    if (!_biometricAvailable) {
+      _toast(context, 'Biometrik tidak tersedia di perangkat ini.');
+      return;
+    }
+    if (value) {
+      final ok = await BiometricService.authenticate(
+        reason: 'Aktifkan login biometrik untuk Konveksi Bareng',
+      );
+      if (!mounted) return;
+      if (!ok) {
+        _toast(context, 'Autentikasi dibatalkan.');
+        return;
+      }
+      await BiometricService.setEnabled(true);
+      setState(() => _biometric = true);
+      if (mounted) _toast(context, 'Biometrik diaktifkan.');
+    } else {
+      await BiometricService.setEnabled(false);
+      setState(() => _biometric = false);
+      if (mounted) _toast(context, 'Biometrik dinonaktifkan.');
+    }
+  }
 
   @override
   void dispose() {
@@ -308,9 +350,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               accent: purple,
                               icon: Icons.fingerprint_rounded,
                               title: 'Biometrik',
-                              subtitle: 'Fingerprint / Face ID (dummy)',
+                              subtitle: _biometricAvailable
+                                  ? 'Fingerprint / Face ID'
+                                  : 'Tidak tersedia di perangkat ini',
                               value: _biometric,
-                              onChanged: (v) => setState(() => _biometric = v),
+                              onChanged: _biometricAvailable
+                                  ? _toggleBiometric
+                                  : null,
                               ink: ink,
                               muted: muted,
                               tile: tile,
@@ -861,7 +907,7 @@ class _SwitchRow extends StatelessWidget {
   final String title;
   final String subtitle;
   final bool value;
-  final ValueChanged<bool> onChanged;
+  final ValueChanged<bool>? onChanged;
 
   final Color ink;
   final Color muted;

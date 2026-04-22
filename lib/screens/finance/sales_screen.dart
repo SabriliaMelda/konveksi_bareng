@@ -91,8 +91,7 @@ class _SalesScreenState extends State<SalesScreen> {
   List<_SaleItem> get _filteredSales {
     final query = _searchC.text.trim().toLowerCase();
     return _sales.where((e) {
-      final matchesQuery =
-          query.isEmpty ||
+      final matchesQuery = query.isEmpty ||
           e.source.toLowerCase().contains(query) ||
           e.invoice.toLowerCase().contains(query) ||
           e.customer.toLowerCase().contains(query) ||
@@ -170,16 +169,19 @@ class _SalesScreenState extends State<SalesScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _BottomActionBar(
-            onTambahOffline: () => _showMessage('Tambah penjualan offline'),
-            onSinkronMarketplace: () =>
-                _showMessage('Sinkron penjualan dari marketplace'),
-          ),
-          const AppBottomNav(activeIndex: -1),
-        ],
+      bottomNavigationBar: SafeArea(
+        top: false,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _BottomActionBar(
+              onTambahOffline: () => _showMessage('Tambah penjualan offline'),
+              onSinkronMarketplace: () =>
+                  _showMessage('Sinkron penjualan dari marketplace'),
+            ),
+            const AppBottomNav(activeIndex: -1),
+          ],
+        ),
       ),
     );
   }
@@ -538,7 +540,8 @@ class _TotalSalesCard extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(999),
@@ -600,8 +603,9 @@ class _MiniLineChartState extends State<_MiniLineChart> {
     if (widget.values.isEmpty) return;
     const horizontalPadding = 4.0;
     final usableWidth = width - (horizontalPadding * 2);
-    final stepX =
-        widget.values.length == 1 ? 0.0 : usableWidth / (widget.values.length - 1);
+    final stepX = widget.values.length == 1
+        ? 0.0
+        : usableWidth / (widget.values.length - 1);
 
     var bestIndex = 0;
     var bestDistance = double.infinity;
@@ -754,8 +758,8 @@ class _MiniLineChartPainter extends CustomPainter {
           )..layout();
 
           final bubbleWidth = textPainter.width + 14;
-          final bubbleLeft =
-              (point.dx - (bubbleWidth / 2)).clamp(0.0, size.width - bubbleWidth);
+          final bubbleLeft = (point.dx - (bubbleWidth / 2))
+              .clamp(0.0, size.width - bubbleWidth);
           final bubbleRect = RRect.fromRectAndRadius(
             Rect.fromLTWH(bubbleLeft, 0, bubbleWidth, 20),
             const Radius.circular(999),

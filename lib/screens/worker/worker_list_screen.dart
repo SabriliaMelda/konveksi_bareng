@@ -4,6 +4,37 @@ import 'package:go_router/go_router.dart';
 import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
 
 const kPurple = Color(0xFF6B257F);
+const _kSoft = Color(0xFFF3E4FF);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MODEL
+// ─────────────────────────────────────────────────────────────────────────────
+
+class WorkerItem {
+  String nama;
+  String role;
+  String phone;
+  String address;
+  String notes;
+  String? avatarAsset;
+  List<String> projects;
+  bool isBookmark;
+
+  WorkerItem({
+    required this.nama,
+    required this.role,
+    this.phone = '',
+    this.address = '',
+    this.notes = '',
+    this.avatarAsset,
+    List<String>? projects,
+    this.isBookmark = false,
+  }) : projects = projects ?? [];
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SCREEN
+// ─────────────────────────────────────────────────────────────────────────────
 
 class WorkerListScreen extends StatefulWidget {
   const WorkerListScreen({super.key});
@@ -16,20 +47,26 @@ class _WorkerListScreenState extends State<WorkerListScreen> {
   final TextEditingController _searchC = TextEditingController();
   String _query = '';
 
-  final List<_PekerjaItem> _items = [
-    _PekerjaItem(
+  final List<WorkerItem> _items = [
+    WorkerItem(
       nama: 'Santy',
       role: 'Pekerja Jahit',
-      avatarAsset: 'assets/images/pekerja/santy.jpg', // opsional
+      phone: '081234567890',
+      address: 'Jl. Mawar No. 5, Bandung',
+      notes: 'Spesialis blouse & kemeja.',
+      avatarAsset: 'assets/images/pekerja/santy.jpg',
       projects: ['Project C', 'Project D', 'Project E'],
       isBookmark: false,
     ),
-    _PekerjaItem(
+    WorkerItem(
       nama: 'Pekerja 2',
       role: 'Pekerja Obras',
+      phone: '089876543210',
+      address: 'Jl. Melati No. 12, Bandung',
+      notes: '',
       avatarAsset: 'assets/images/pekerja/pekerja2.jpg',
       projects: ['Project A', 'Project B'],
-      isBookmark: true, // ★ contoh bookmark
+      isBookmark: true,
     ),
   ];
 
@@ -39,25 +76,269 @@ class _WorkerListScreenState extends State<WorkerListScreen> {
     super.dispose();
   }
 
+  List<WorkerItem> get _filtered {
+    if (_query.trim().isEmpty) return _items;
+    final q = _query.toLowerCase();
+    return _items
+        .where((e) =>
+            e.nama.toLowerCase().contains(q) ||
+            e.role.toLowerCase().contains(q))
+        .toList();
+  }
+
+  // ── Add / Edit sheet ──────────────────────────────────────────────────────
+
+  void _openAddSheet({WorkerItem? editing}) {
+    final namaC = TextEditingController(text: editing?.nama ?? '');
+    final roleC = TextEditingController(text: editing?.role ?? '');
+    final phoneC = TextEditingController(text: editing?.phone ?? '');
+    final addressC = TextEditingController(text: editing?.address ?? '');
+    final notesC = TextEditingController(text: editing?.notes ?? '');
+    bool bookmark = editing?.isBookmark ?? false;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Theme.of(context).appColors.card,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (sheetCtx) {
+        final inset = MediaQuery.of(sheetCtx).viewInsets.bottom;
+        return Padding(
+          padding: EdgeInsets.fromLTRB(18, 14, 18, 18 + inset),
+          child: StatefulBuilder(
+            builder: (ctx, setLocal) => SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // drag handle
+                  Center(
+                    child: Container(
+                      width: 44,
+                      height: 5,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFE6E7EE),
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  Text(
+                    editing == null ? 'Tambah Pekerja' : 'Edit Pekerja',
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w900,
+                      color: Color(0xFF111827),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  _Field(
+                      controller: namaC, label: 'Nama', hint: 'Nama lengkap'),
+                  const SizedBox(height: 12),
+                  _Field(
+                      controller: roleC,
+                      label: 'Peran / Keahlian',
+                      hint: 'Contoh: Pekerja Jahit'),
+                  const SizedBox(height: 12),
+                  _Field(
+                    controller: phoneC,
+                    label: 'No. Telepon',
+                    hint: '08xxxxxxxxxx',
+                    keyboardType: TextInputType.phone,
+                  ),
+                  const SizedBox(height: 12),
+                  _Field(
+                      controller: addressC,
+                      label: 'Alamat',
+                      hint: 'Alamat lengkap'),
+                  const SizedBox(height: 12),
+                  _Field(
+                    controller: notesC,
+                    label: 'Catatan',
+                    hint: 'Keahlian khusus, catatan lain...',
+                    maxLines: 3,
+                  ),
+                  const SizedBox(height: 14),
+
+                  // bookmark toggle
+                  InkWell(
+                    borderRadius: BorderRadius.circular(10),
+                    onTap: () => setLocal(() => bookmark = !bookmark),
+                    child: Row(
+                      children: [
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 180),
+                          width: 22,
+                          height: 22,
+                          decoration: BoxDecoration(
+                            color: bookmark ? kPurple : Colors.transparent,
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(
+                              color:
+                                  bookmark ? kPurple : const Color(0xFFD1D5DB),
+                              width: 1.5,
+                            ),
+                          ),
+                          child: bookmark
+                              ? const Icon(Icons.check,
+                                  size: 14, color: Colors.white)
+                              : null,
+                        ),
+                        const SizedBox(width: 10),
+                        const Text(
+                          'Tandai sebagai bookmark',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF374151),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () => Navigator.pop(sheetCtx),
+                          style: OutlinedButton.styleFrom(
+                            side: const BorderSide(color: Color(0xFFD1D5DB)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 13),
+                          ),
+                          child: const Text(
+                            'Batal',
+                            style: TextStyle(color: Color(0xFF374151)),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            final nama = namaC.text.trim();
+                            final role = roleC.text.trim();
+                            if (nama.isEmpty || role.isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Nama dan peran wajib diisi.'),
+                                ),
+                              );
+                              return;
+                            }
+                            setState(() {
+                              if (editing == null) {
+                                _items.add(WorkerItem(
+                                  nama: nama,
+                                  role: role,
+                                  phone: phoneC.text.trim(),
+                                  address: addressC.text.trim(),
+                                  notes: notesC.text.trim(),
+                                  isBookmark: bookmark,
+                                ));
+                              } else {
+                                editing.nama = nama;
+                                editing.role = role;
+                                editing.phone = phoneC.text.trim();
+                                editing.address = addressC.text.trim();
+                                editing.notes = notesC.text.trim();
+                                editing.isBookmark = bookmark;
+                              }
+                            });
+                            Navigator.pop(sheetCtx);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: kPurple,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 13),
+                          ),
+                          child: Text(editing == null ? 'Simpan' : 'Update'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  // ── Delete confirm ────────────────────────────────────────────────────────
+
+  void _confirmDelete(WorkerItem item) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text('Hapus pekerja?'),
+        content: Text('${item.nama} akan dihapus dari daftar.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Batal'),
+          ),
+          TextButton(
+            onPressed: () {
+              setState(() => _items.remove(item));
+              Navigator.pop(context);
+            },
+            child:
+                const Text('Hapus', style: TextStyle(color: Color(0xFFDC2626))),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ── Open detail ───────────────────────────────────────────────────────────
+
+  void _openDetail(WorkerItem p) {
+    context.push('/worker-detail', extra: {
+      'nama': p.nama,
+      'role': p.role,
+      'avatarAsset': p.avatarAsset,
+      'projects': p.projects,
+      'phone': p.phone,
+      'address': p.address,
+      'notes': p.notes,
+    });
+  }
+
+  // ── Build ─────────────────────────────────────────────────────────────────
+
   @override
   Widget build(BuildContext context) {
-    final filtered = _items.where((e) {
-      if (_query.trim().isEmpty) return true;
-      final q = _query.toLowerCase();
-      return e.nama.toLowerCase().contains(q) ||
-          e.role.toLowerCase().contains(q);
-    }).toList();
-
+    final filtered = _filtered;
     final normal = filtered.where((e) => !e.isBookmark).toList();
     final bookmarked = filtered.where((e) => e.isBookmark).toList();
 
     return Scaffold(
       backgroundColor: Theme.of(context).appColors.card,
       bottomNavigationBar: AppBottomNav(activeIndex: -1),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: kPurple,
+        foregroundColor: Colors.white,
+        onPressed: () => _openAddSheet(),
+        child: const Icon(Icons.person_add_alt_1_rounded),
+      ),
       body: SafeArea(
         child: Column(
           children: [
-            const _TopHeader(title: 'Daftar pekerja'),
+            const _TopHeader(title: 'Daftar Pekerja'),
             const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.fromLTRB(18, 0, 18, 12),
@@ -71,83 +352,254 @@ class _WorkerListScreenState extends State<WorkerListScreen> {
               ),
             ),
             Expanded(
-              child: ListView(
-                padding: const EdgeInsets.fromLTRB(18, 0, 18, 18),
-                children: [
-                  ...normal.map(
-                    (p) => Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: _PekerjaTile(
-                        nama: p.nama,
-                        role: p.role,
-                        projectsCount: p.projects.length,
-                        avatarAsset: p.avatarAsset,
-                        trailing: const Icon(
-                          Icons.chevron_right,
-                          color: Color(0xFF8F9BB3),
+              child: filtered.isEmpty
+                  ? Center(
+                      child: Text(
+                        'Belum ada pekerja.',
+                        style: TextStyle(
+                          color: Theme.of(context).appColors.muted,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
                         ),
-                        onTap: () => _openDetail(context, p),
                       ),
-                    ),
-                  ),
-                  if (bookmarked.isNotEmpty) ...[
-                    const SizedBox(height: 8),
-                    const _SectionLabel(text: '★ Bookmark'),
-                    const SizedBox(height: 10),
-                    ...bookmarked.map(
-                      (p) => Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: _PekerjaTile(
-                          nama: p.nama,
-                          role: p.role,
-                          projectsCount: p.projects.length,
-                          avatarAsset: p.avatarAsset,
-                          trailing: const Icon(
-                            Icons.star,
-                            size: 18,
-                            color: kPurple,
+                    )
+                  : ListView(
+                      padding: const EdgeInsets.fromLTRB(18, 0, 18, 90),
+                      children: [
+                        ...normal.map(
+                          (p) => Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: _PekerjaTile(
+                              item: p,
+                              onTap: () => _openDetail(p),
+                              onEdit: () => _openAddSheet(editing: p),
+                              onDelete: () => _confirmDelete(p),
+                              onBookmarkToggle: () =>
+                                  setState(() => p.isBookmark = !p.isBookmark),
+                            ),
                           ),
-                          onTap: () => _openDetail(context, p),
                         ),
-                      ),
+                        if (bookmarked.isNotEmpty) ...[
+                          const SizedBox(height: 8),
+                          const _SectionLabel(text: '★ Bookmark'),
+                          const SizedBox(height: 10),
+                          ...bookmarked.map(
+                            (p) => Padding(
+                              padding: const EdgeInsets.only(bottom: 10),
+                              child: _PekerjaTile(
+                                item: p,
+                                onTap: () => _openDetail(p),
+                                onEdit: () => _openAddSheet(editing: p),
+                                onDelete: () => _confirmDelete(p),
+                                onBookmarkToggle: () => setState(
+                                    () => p.isBookmark = !p.isBookmark),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
-                  ],
-                ],
-              ),
             ),
           ],
         ),
       ),
     );
   }
+}
 
-  void _openDetail(BuildContext context, _PekerjaItem p) {
-    context.push('/worker-detail', extra: {
-      'nama': p.nama,
-      'role': p.role,
-      'avatarAsset': p.avatarAsset,
-      'projects': p.projects,
-    });
+// ─────────────────────────────────────────────────────────────────────────────
+// TILE
+// ─────────────────────────────────────────────────────────────────────────────
+
+class _PekerjaTile extends StatelessWidget {
+  final WorkerItem item;
+  final VoidCallback onTap;
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
+  final VoidCallback onBookmarkToggle;
+
+  const _PekerjaTile({
+    required this.item,
+    required this.onTap,
+    required this.onEdit,
+    required this.onDelete,
+    required this.onBookmarkToggle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(14),
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF8F8FA),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: Theme.of(context).appColors.border),
+        ),
+        child: Row(
+          children: [
+            _Avatar(asset: item.avatarAsset, name: item.nama),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.nama,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: Theme.of(context).appColors.ink,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    '${item.role} • ${item.projects.length} proyek',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: Color(0xFF8F9BB3),
+                      fontSize: 12,
+                    ),
+                  ),
+                  if (item.phone.isNotEmpty) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      item.phone,
+                      style: const TextStyle(
+                        color: Color(0xFF8F9BB3),
+                        fontSize: 11,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+            if (item.isBookmark) ...[
+              const Icon(Icons.star, size: 18, color: kPurple),
+              const SizedBox(width: 4),
+            ],
+            // action menu
+            PopupMenuButton<String>(
+              icon: const Icon(Icons.more_vert,
+                  size: 20, color: Color(0xFF8F9BB3)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
+              onSelected: (v) {
+                if (v == 'edit') onEdit();
+                if (v == 'delete') onDelete();
+                if (v == 'bookmark') onBookmarkToggle();
+              },
+              itemBuilder: (_) => [
+                PopupMenuItem(
+                  value: 'edit',
+                  child: Row(children: [
+                    const Icon(Icons.edit_outlined, size: 18, color: kPurple),
+                    const SizedBox(width: 10),
+                    const Text('Edit'),
+                  ]),
+                ),
+                PopupMenuItem(
+                  value: 'bookmark',
+                  child: Row(children: [
+                    Icon(
+                      item.isBookmark ? Icons.star : Icons.star_border,
+                      size: 18,
+                      color: kPurple,
+                    ),
+                    const SizedBox(width: 10),
+                    Text(item.isBookmark ? 'Hapus bookmark' : 'Bookmark'),
+                  ]),
+                ),
+                PopupMenuItem(
+                  value: 'delete',
+                  child: Row(children: [
+                    const Icon(Icons.delete_outline,
+                        size: 18, color: Color(0xFFDC2626)),
+                    const SizedBox(width: 10),
+                    const Text('Hapus',
+                        style: TextStyle(color: Color(0xFFDC2626))),
+                  ]),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
-class _PekerjaItem {
-  final String nama;
-  final String role;
-  final String? avatarAsset;
-  final List<String> projects;
-  final bool isBookmark;
+// ─────────────────────────────────────────────────────────────────────────────
+// FORM FIELD
+// ─────────────────────────────────────────────────────────────────────────────
 
-  _PekerjaItem({
-    required this.nama,
-    required this.role,
-    required this.projects,
-    this.avatarAsset,
-    this.isBookmark = false,
+class _Field extends StatelessWidget {
+  final TextEditingController controller;
+  final String label;
+  final String hint;
+  final TextInputType keyboardType;
+  final int maxLines;
+
+  const _Field({
+    required this.controller,
+    required this.label,
+    required this.hint,
+    this.keyboardType = TextInputType.text,
+    this.maxLines = 1,
   });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w700,
+            color: Color(0xFF6B7280),
+          ),
+        ),
+        const SizedBox(height: 6),
+        TextField(
+          controller: controller,
+          keyboardType: keyboardType,
+          maxLines: maxLines,
+          decoration: InputDecoration(
+            hintText: hint,
+            hintStyle: const TextStyle(color: Color(0xFFB0B7C3), fontSize: 13),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Color(0xFFE8ECF4)),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Color(0xFFE8ECF4)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: kPurple, width: 1.5),
+            ),
+            filled: true,
+            fillColor: const Color(0xFFF9FAFB),
+          ),
+        ),
+      ],
+    );
+  }
 }
 
-// ================== UI KOMPONEN ==================
+// ─────────────────────────────────────────────────────────────────────────────
+// SHARED WIDGETS
+// ─────────────────────────────────────────────────────────────────────────────
 
 class _TopHeader extends StatelessWidget {
   final String title;
@@ -156,14 +608,11 @@ class _TopHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 18).copyWith(top: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 18).copyWith(top: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _CircleIcon(
-            icon: Icons.arrow_back,
-            onTap: () => context.pop(),
-          ),
+          _CircleIcon(icon: Icons.arrow_back, onTap: () => context.pop()),
           Text(
             title,
             style: TextStyle(
@@ -176,7 +625,7 @@ class _TopHeader extends StatelessWidget {
           _CircleIcon(
             icon: Icons.home_filled,
             iconColor: kPurple,
-            onTap: () => context.pop(),
+            onTap: () => context.go('/home'),
           ),
         ],
       ),
@@ -226,9 +675,9 @@ class _SearchBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 46,
-      padding: EdgeInsets.symmetric(horizontal: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: Color(0xFFF8F8FA),
+        color: const Color(0xFFF8F8FA),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: Theme.of(context).appColors.border),
       ),
@@ -243,10 +692,7 @@ class _SearchBox extends StatelessWidget {
               decoration: const InputDecoration(
                 border: InputBorder.none,
                 hintText: 'Cari pekerja...',
-                hintStyle: TextStyle(
-                  color: Color(0xFF8F9BB3),
-                  fontSize: 14,
-                ),
+                hintStyle: TextStyle(color: Color(0xFF8F9BB3), fontSize: 14),
               ),
             ),
           ),
@@ -254,7 +700,7 @@ class _SearchBox extends StatelessWidget {
             InkWell(
               borderRadius: BorderRadius.circular(20),
               onTap: onClear,
-              child: Padding(
+              child: const Padding(
                 padding: EdgeInsets.all(6),
                 child: Icon(Icons.close, size: 18, color: Color(0xFF8F9BB3)),
               ),
@@ -282,75 +728,6 @@ class _SectionLabel extends StatelessWidget {
   }
 }
 
-class _PekerjaTile extends StatelessWidget {
-  final String nama;
-  final String role;
-  final int projectsCount;
-  final String? avatarAsset;
-  final Widget trailing;
-  final VoidCallback onTap;
-
-  const _PekerjaTile({
-    required this.nama,
-    required this.role,
-    required this.projectsCount,
-    required this.trailing,
-    required this.onTap,
-    this.avatarAsset,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(14),
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-        decoration: BoxDecoration(
-          color: Color(0xFFF8F8FA),
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Theme.of(context).appColors.border),
-        ),
-        child: Row(
-          children: [
-            _Avatar(asset: avatarAsset, name: nama),
-            SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    nama,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: Theme.of(context).appColors.ink,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(height: 3),
-                  Text(
-                    '$role • $projectsCount proyek',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Color(0xFF8F9BB3),
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            trailing,
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class _Avatar extends StatelessWidget {
   final String? asset;
   final String name;
@@ -363,8 +740,8 @@ class _Avatar extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         child: Image.asset(
           asset!,
-          width: 40,
-          height: 40,
+          width: 44,
+          height: 44,
           fit: BoxFit.cover,
           errorBuilder: (_, __, ___) => _fallback(),
         ),
@@ -375,16 +752,20 @@ class _Avatar extends StatelessWidget {
 
   Widget _fallback() {
     return Container(
-      width: 40,
-      height: 40,
+      width: 44,
+      height: 44,
       decoration: BoxDecoration(
-        color: const Color(0xFFF3E4FF),
+        color: _kSoft,
         borderRadius: BorderRadius.circular(10),
       ),
       alignment: Alignment.center,
       child: Text(
         name.isNotEmpty ? name[0].toUpperCase() : 'P',
-        style: const TextStyle(color: kPurple, fontWeight: FontWeight.w900),
+        style: const TextStyle(
+          color: kPurple,
+          fontWeight: FontWeight.w900,
+          fontSize: 16,
+        ),
       ),
     );
   }

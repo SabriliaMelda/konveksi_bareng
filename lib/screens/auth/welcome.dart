@@ -10,9 +10,11 @@ class WelcomeApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: const Color.fromARGB(255, 18, 32, 47),
-      ).copyWith(textTheme: ThemeData(fontFamily: 'Poppins').textTheme),
+      theme: ThemeData.dark()
+          .copyWith(
+            scaffoldBackgroundColor: const Color.fromARGB(255, 18, 32, 47),
+          )
+          .copyWith(textTheme: ThemeData(fontFamily: 'Poppins').textTheme),
       home: const WelcomeScreen(),
     );
   }
@@ -59,65 +61,61 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
       body: Container(
-        width: screenWidth,
-        height: screenHeight,
+        width: double.infinity,
         color: Theme.of(context).appColors.card,
-        child: Stack(
+        child: Column(
           children: [
-            // Image slider
-            Positioned(
-              top: screenHeight * 0.10,
-              left: 0,
-              right: 0,
-              child: SizedBox(
-                height: screenHeight * 0.52,
-                child: PageView.builder(
-                  controller: _pageController,
-                  itemCount: _sliderImages.length,
-                  onPageChanged: (index) =>
-                      setState(() => _currentPage = index),
-                  itemBuilder: (_, index) {
-                    return Center(
-                      child: Image.asset(
-                        _sliderImages[index],
-                        fit: BoxFit.contain,
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
-
-            // Dot indicators
-            Positioned(
-              top: screenHeight * 0.65,
-              left: 0,
-              right: 0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  _sliderImages.length,
-                  (index) => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 3),
-                    child: _Dot(isActive: _currentPage == index),
+            // Image slider — takes up available space
+            Expanded(
+              child: Stack(
+                children: [
+                  // Image slider
+                  Positioned.fill(
+                    child: PageView.builder(
+                      controller: _pageController,
+                      itemCount: _sliderImages.length,
+                      onPageChanged: (index) =>
+                          setState(() => _currentPage = index),
+                      itemBuilder: (_, index) {
+                        return Center(
+                          child: Image.asset(
+                            _sliderImages[index],
+                            fit: BoxFit.contain,
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                ),
+
+                  // Dot indicators
+                  Positioned(
+                    bottom: 16,
+                    left: 0,
+                    right: 0,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(
+                        _sliderImages.length,
+                        (index) => Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 3),
+                          child: _Dot(isActive: _currentPage == index),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
 
-            // Login button
-            Positioned(
-              left: 22,
-              bottom: screenHeight * 0.22,
+            // Buttons section — fixed at bottom
+            Padding(
+              padding: EdgeInsets.fromLTRB(22, 16, 22, 0),
               child: GestureDetector(
                 onTap: () => context.push('/login'),
                 child: Container(
-                  width: screenWidth - 44,
+                  width: double.infinity,
                   height: 56,
                   decoration: BoxDecoration(
                     color: Color(0xFF6B257F),
@@ -135,15 +133,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ),
               ),
             ),
-
-            // Register button
-            Positioned(
-              left: 22,
-              bottom: screenHeight * 0.12,
+            const SizedBox(height: 12),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 22),
               child: GestureDetector(
                 onTap: () => context.push('/register'),
                 child: Container(
-                  width: screenWidth - 44,
+                  width: double.infinity,
                   height: 56,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
@@ -164,24 +160,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ),
               ),
             ),
-
-            // Continue as guest
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: screenHeight * 0.03,
-              child: const Center(
-                child: Text(
-                  'Continue as a guest',
-                  style: TextStyle(
-                    color: Color(0xFF6B257F),
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
+            const SizedBox(height: 16),
+            const Text(
+              'Continue as a guest',
+              style: TextStyle(
+                color: Color(0xFF6B257F),
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+                decoration: TextDecoration.underline,
               ),
             ),
+            const SizedBox(height: 24),
           ],
         ),
       ),
@@ -201,9 +190,7 @@ class _Dot extends StatelessWidget {
       width: isActive ? 16 : 8,
       height: 8,
       decoration: ShapeDecoration(
-        color: isActive
-            ? const Color(0xFF6B257F)
-            : const Color(0xFFD4DBE1),
+        color: isActive ? const Color(0xFF6B257F) : const Color(0xFFD4DBE1),
         shape: const OvalBorder(),
       ),
     );

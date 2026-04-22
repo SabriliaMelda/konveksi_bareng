@@ -41,6 +41,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF7FAFF),
+      resizeToAvoidBottomInset: true,
       body: Stack(
         children: [
           const _GradientBackdropPurple(),
