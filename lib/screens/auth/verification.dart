@@ -6,6 +6,7 @@ import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/services.dart';
 import '../../services/auth_service.dart';
+import '../../services/biometric_service.dart';
 import '../../services/storage_service.dart';
 import '../../widgets/auth_background.dart';
 
@@ -241,6 +242,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
         }
         if (result.token != null) {
           await StorageService.setItem('auth_token', result.token!);
+          await BiometricService.markUnlocked();
         }
         await StorageService.deleteItem('pending_email');
         await StorageService.deleteItem('pending_mode');

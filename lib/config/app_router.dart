@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ── Auth ──
 import '../screens/auth/welcome.dart';
@@ -11,6 +11,8 @@ import '../screens/auth/find_account.dart';
 import '../screens/auth/account_screen.dart';
 import '../screens/auth/security_screen.dart';
 import '../screens/auth/role_selection_screen.dart';
+import '../screens/auth/biometric_lock_screen.dart';
+import '../services/biometric_service.dart';
 
 // ── Main ──
 import '../screens/main/home.dart';
@@ -76,11 +78,6 @@ final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 final GlobalKey<NavigatorState> _shellNavigatorKey =
     GlobalKey<NavigatorState>();
 
-bool get _isAuthBypassed {
-  final bypass = dotenv.env['DEV_AUTH_BYPASS']?.toLowerCase();
-  return bypass == 'true' || bypass == '1';
-}
-
 Page<void> _fadePage(Widget child, GoRouterState state) {
   return CustomTransitionPage<void>(
     key: state.pageKey,
@@ -112,9 +109,46 @@ Page<void> _softFadePage(Widget child, GoRouterState state) {
   );
 }
 
+const _authOnlyPaths = <String>{
+  '/welcome',
+  '/login',
+  '/register',
+  '/verification',
+  '/find-account',
+  '/account',
+  '/security',
+  '/role-selection',
+};
+
+Future<String?> _authRedirect(
+    BuildContext context, GoRouterState state) async {
+  final prefs = await SharedPreferences.getInstance();
+  final token = prefs.getString('auth_token');
+  final hasToken = token != null && token.isNotEmpty;
+  final loc = state.matchedLocation;
+  final isAuthOnly = _authOnlyPaths.contains(loc);
+  final isLock = loc == '/biometric-lock';
+
+  // Belum login → lempar ke welcome (kecuali sudah di halaman auth).
+  if (!hasToken && !isAuthOnly && !isLock) return '/welcome';
+
+  // Sudah login tapi masih di halaman auth → ke home.
+  // (lock screen ditangani di bawah)
+  if (hasToken && isAuthOnly) return '/home';
+
+  // Sudah login, cek biometrik.
+  if (hasToken) {
+    final needsUnlock = await BiometricService.needsUnlock();
+    if (needsUnlock && !isLock) return '/biometric-lock';
+    if (!needsUnlock && isLock) return '/home';
+  }
+  return null;
+}
+
 final GoRouter appRouter = GoRouter(
   navigatorKey: rootNavigatorKey,
-  initialLocation: '/home',
+  initialLocation: '/welcome',
+  redirect: _authRedirect,
   routes: [
     // ── Auth routes ──
     GoRoute(
@@ -137,6 +171,9 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
         path: '/role-selection',
         pageBuilder: (_, s) => _fadePage(const RoleSelectionScreen(), s)),
+    GoRoute(
+        path: '/biometric-lock',
+        pageBuilder: (_, s) => _fadePage(const BiometricLockScreen(), s)),
 
     // ── Main routes (persistent shell with bottom nav) ──
     ShellRoute(
@@ -281,7 +318,7 @@ final GoRouter appRouter = GoRouter(
     // ── Schedule routes ──
     GoRoute(
         path: '/schedule',
-        pageBuilder: (_, s) => _fadePage(const UnifiedScheduleScreen(), s)),
+        pageBuilder: (_, s) => _fadePage(UnifiedScheduleScreen(), s)),
     GoRoute(
         path: '/production-schedule', redirect: (_, __) => '/unified-schedule'),
     GoRoute(

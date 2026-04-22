@@ -6,6 +6,7 @@ import 'package:konveksi_bareng/config/api_config.dart';
 import 'package:konveksi_bareng/config/app_router.dart';
 import 'package:konveksi_bareng/config/app_theme.dart';
 import 'package:konveksi_bareng/providers/theme_provider.dart';
+import 'package:konveksi_bareng/services/biometric_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,26 +30,42 @@ Future<void> main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final isDark = context.watch<ThemeProvider>().darkMode;
-
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      title: 'Konveksi Bareng',
-      theme: lightTheme,
-      darkTheme: darkTheme,
-      themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
-      routerConfig: appRouter,
-    );
-  }
+  State<MyApp> createState() => _MyAppState();
 }
 
-class MyAppHome extends StatelessWidget {
-  const MyAppHome({super.key});
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive) {
+      await BiometricService.markPaused();
+    } else if (state == AppLifecycleState.resumed) {
+      final shouldLock = await BiometricService.shouldLockOnResume();
+      if (shouldLock) {
+        await BiometricService.clearUnlock();
+        final ctx = rootNavigatorKey.currentContext;
+        if (ctx != null && ctx.mounted) {
+          appRouter.go('/biometric-lock');
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
