@@ -479,6 +479,10 @@ class _PekerjaTile extends StatelessWidget {
                 ],
               ),
             ),
+            if (item.isBookmark) ...[
+              const Icon(Icons.star, size: 18, color: kPurple),
+              const SizedBox(width: 4),
+            ],
             // action menu
             PopupMenuButton<String>(
               icon: const Icon(Icons.more_vert,

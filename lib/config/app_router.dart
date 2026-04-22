@@ -47,7 +47,6 @@ import '../screens/worker/wage_screen.dart';
 import '../screens/worker/wage_billing_status_screen.dart';
 
 // ── Schedule ──
-import '../screens/schedule/schedule_screen.dart';
 import '../screens/schedule/unified_schedule_screen.dart';
 
 // ── Inventory ──
@@ -276,7 +275,7 @@ final GoRouter appRouter = GoRouter(
     // ── Schedule routes ──
     GoRoute(
         path: '/schedule',
-        pageBuilder: (_, s) => _fadePage(ScheduleScreen(), s)),
+        pageBuilder: (_, s) => _fadePage(UnifiedScheduleScreen(), s)),
     GoRoute(
         path: '/production-schedule', redirect: (_, __) => '/unified-schedule'),
     GoRoute(
