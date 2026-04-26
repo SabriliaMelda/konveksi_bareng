@@ -47,3 +47,4 @@ app.*.map.json
 .env
 app_router.txt
 session_guard.txt
+/.kiro
