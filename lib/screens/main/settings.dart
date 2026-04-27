@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:konveksi_bareng/providers/theme_provider.dart';
+import 'package:konveksi_bareng/services/auth_service.dart';
 import 'package:konveksi_bareng/services/biometric_service.dart';
+import 'package:konveksi_bareng/services/storage_service.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -21,6 +23,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _biometric = false;
   bool _biometricAvailable = false;
   bool _autoBackup = true;
+  bool _loggingOut = false;
 
   // ===== Expand/Collapse sections =====
   bool _expPref = true;
@@ -65,6 +68,49 @@ class _SettingsScreenState extends State<SettingsScreen> {
       setState(() => _biometric = false);
       if (mounted) _toast(context, 'Biometrik dinonaktifkan.');
     }
+  }
+
+  Future<void> _handleLogout() async {
+    if (_loggingOut) return;
+
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Logout'),
+        content: const Text('Anda akan keluar dari akun ini. Lanjutkan?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('Batal'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            style: TextButton.styleFrom(
+              foregroundColor: const Color(0xFFEF4444),
+            ),
+            child: const Text('Logout'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm != true || !mounted) return;
+
+    setState(() => _loggingOut = true);
+
+    final token = await StorageService.getItem('auth_token');
+    if (token != null && token.isNotEmpty) {
+      try {
+        await AuthService.logout(token);
+      } catch (_) {
+        // Best-effort: kalau backend gagal, lanjut clear lokal.
+      }
+    }
+    await StorageService.deleteItem('auth_token');
+    await BiometricService.clearUnlock();
+
+    if (!mounted) return;
+    context.go('/welcome');
   }
 
   @override
@@ -576,7 +622,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   borderColor: border,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(22),
-                    onTap: () => _toast(context, 'Logout (dummy)'),
+                    onTap: _loggingOut ? null : _handleLogout,
                     child: Container(
                       height: 50,
                       alignment: Alignment.center,
@@ -589,25 +635,36 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           colors: [Color(0x0FFF6B6B), Color(0x00FFFFFF)],
                         ),
                       ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.logout_rounded,
-                            color: Color(0xFFEF4444),
-                            size: 18,
-                          ),
-                          SizedBox(width: 8),
-                          Text(
-                            'Logout',
-                            style: TextStyle(
-                              color: Color(0xFFEF4444),
-                              fontSize: 12.5,
-                              fontWeight: FontWeight.w900,
+                      child: _loggingOut
+                          ? const SizedBox(
+                              width: 18,
+                              height: 18,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Color(0xFFEF4444),
+                                ),
+                              ),
+                            )
+                          : const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.logout_rounded,
+                                  color: Color(0xFFEF4444),
+                                  size: 18,
+                                ),
+                                SizedBox(width: 8),
+                                Text(
+                                  'Logout',
+                                  style: TextStyle(
+                                    color: Color(0xFFEF4444),
+                                    fontSize: 12.5,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
                     ),
                   ),
                 ),
