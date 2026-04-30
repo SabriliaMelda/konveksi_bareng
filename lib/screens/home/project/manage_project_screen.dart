@@ -77,10 +77,12 @@ class _ManageProjectScreenState extends State<ManageProjectScreen> {
         ? _projects
         : _projects.where((p) => p.title.toLowerCase().contains(q)).toList();
     if (_filterIndex == 0) return base;
-    if (_filterIndex == 1)
+    if (_filterIndex == 1) {
       return base.where((p) => p.status == 'On Track').toList();
-    if (_filterIndex == 2)
+    }
+    if (_filterIndex == 2) {
       return base.where((p) => p.status == 'Revisi').toList();
+    }
     return base.where((p) => p.status == 'Urgent').toList();
   }
 

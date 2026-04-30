@@ -4,7 +4,7 @@ import 'package:konveksi_bareng/config/app_colors.dart';
 class SimplePlaceholderPage extends StatelessWidget {
   final String title;
 
-  SimplePlaceholderPage({super.key, required this.title});
+  const SimplePlaceholderPage({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {

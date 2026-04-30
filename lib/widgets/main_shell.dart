@@ -16,8 +16,9 @@ class MainShell extends StatelessWidget {
     if (location.startsWith('/settings')) return 2;
     if (location.startsWith('/chat')) return 3;
     if (location.startsWith('/profile')) return 4;
-    if (location.startsWith('/purchase'))
+    if (location.startsWith('/purchase')) {
       return -1; // No active icon for purchase
+    }
     return 0; // /home (default)
   }
 

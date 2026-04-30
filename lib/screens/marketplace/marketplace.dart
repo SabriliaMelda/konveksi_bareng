@@ -437,7 +437,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                       ),
                       SwitchListTile(
                         contentPadding: EdgeInsets.zero,
-                        activeColor: kPurple,
+                        activeThumbColor: kPurple,
                         title: Text(
                           'Promo saja',
                           style: TextStyle(

@@ -6,7 +6,7 @@ import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
 const kPurple = Color(0xFF6B257F);
 
 class WorkerScreen extends StatelessWidget {
-  WorkerScreen({super.key});
+  const WorkerScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

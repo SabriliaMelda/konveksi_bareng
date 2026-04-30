@@ -76,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
 // ================== HEADER (UNGU + SEARCH) ==================
 //
 class _HeaderSection extends StatelessWidget {
-  _HeaderSection();
+  const _HeaderSection();
 
   @override
   Widget build(BuildContext context) {
@@ -880,13 +880,13 @@ class _SeeAllCard extends StatelessWidget {
 // ================== SIDEBAR / DRAWER ==================
 //
 class _AppSidebar extends StatelessWidget {
-  _AppSidebar();
+  const _AppSidebar();
 
-  static Color _main = Color(0xFF6B257F);
-  static Color _mainDark = Color(0xFF50047D);
-  static Color _bg = Color(0xFFF7F5F1);
-  static Color _text = Color(0xFF111827);
-  static Color _muted = Color(0xFF6B7280);
+  static final Color _main = Color(0xFF6B257F);
+  static final Color _mainDark = Color(0xFF50047D);
+  static final Color _bg = Color(0xFFF7F5F1);
+  static final Color _text = Color(0xFF111827);
+  static final Color _muted = Color(0xFF6B7280);
 
   void _go(BuildContext context, String route) {
     context.pop(); // tutup drawer

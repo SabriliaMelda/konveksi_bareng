@@ -628,7 +628,7 @@ class ShipmentDetailScreen extends StatelessWidget {
     this.prevRoute,
   });
 
-  _ShipmentItem get item => itemData as _ShipmentItem;
+  _ShipmentItem get _item => itemData as _ShipmentItem;
 
   void _handleBack(BuildContext context) {
     if (prevRoute != null && prevRoute!.isNotEmpty) {
@@ -680,14 +680,14 @@ class ShipmentDetailScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _InfoTile(
-                      title: item.title,
+                      title: _item.title,
                       subtitle:
-                          '${item.courier} ${item.service} • ${item.resi}',
-                      statusText: item.statusText,
-                      statusColor: item.statusColor,
+                          '${_item.courier} ${_item.service} • ${_item.resi}',
+                      statusText: _item.statusText,
+                      statusColor: _item.statusColor,
                     ),
                     const SizedBox(height: 16),
-                    _ShipmentSummaryCard(item: item),
+                    _ShipmentSummaryCard(item: _item),
                     const SizedBox(height: 16),
                     Text(
                       'Riwayat Pengiriman',
@@ -698,7 +698,7 @@ class ShipmentDetailScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    _Timeline(events: item.timeline),
+                    _Timeline(events: _item.timeline),
                   ],
                 ),
               ),
@@ -790,94 +790,6 @@ class _ShipmentInfoRow extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _TrackingSheet extends StatelessWidget {
-  final _ShipmentItem item;
-  const _TrackingSheet({required this.item});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.transparent,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).appColors.card,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
-        ),
-        child: SafeArea(
-          top: false,
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(16, 10, 16, 18),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Container(
-                    width: 44,
-                    height: 5,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFE6E6E6),
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 14),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        'Tracking',
-                        style: TextStyle(
-                          color: Theme.of(context).appColors.ink,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                    ),
-                    InkWell(
-                      borderRadius: BorderRadius.circular(12),
-                      onTap: () => context.pop(),
-                      child: Container(
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Theme.of(context).appColors.border),
-                        ),
-                        child: Icon(Icons.close, size: 18),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 12),
-
-                _InfoTile(
-                  title: item.title,
-                  subtitle: '${item.courier} ${item.service} • ${item.resi}',
-                  statusText: item.statusText,
-                  statusColor: item.statusColor,
-                ),
-
-                SizedBox(height: 14),
-
-                Text(
-                  'Riwayat Pengiriman',
-                  style: TextStyle(
-                    color: Theme.of(context).appColors.ink,
-                    fontSize: 13.5,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-                const SizedBox(height: 10),
-
-                _Timeline(events: item.timeline),
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }

@@ -282,14 +282,18 @@ class _ProfitLossScreenState extends State<ProfitLossScreen> {
 
                             setState(() {
                               // masukkan ke list sesuai tab yang sedang dibuka
-                              if (_tab == _RlTab.proyek1)
+                              if (_tab == _RlTab.proyek1) {
                                 _p1.insert(0, newItem);
-                              if (_tab == _RlTab.proyek2)
+                              }
+                              if (_tab == _RlTab.proyek2) {
                                 _p2.insert(0, newItem);
-                              if (_tab == _RlTab.proyek3)
+                              }
+                              if (_tab == _RlTab.proyek3) {
                                 _p3.insert(0, newItem);
-                              if (_tab == _RlTab.total)
+                              }
+                              if (_tab == _RlTab.total) {
                                 _p1.insert(0, newItem); // default
+                              }
                             });
 
                             Navigator.pop(context);

@@ -7,7 +7,7 @@ import 'package:konveksi_bareng/screens/main/home.dart';
 const kPurple = Color(0xFF6B257F);
 
 class PatternScreen extends StatefulWidget {
-  PatternScreen({super.key});
+  const PatternScreen({super.key});
 
   @override
   State<PatternScreen> createState() => _PatternScreenState();

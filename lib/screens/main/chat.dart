@@ -907,7 +907,6 @@ class _ChatItem {
   final String avatarUrl;
   final int unread;
   final bool isRead;
-  final bool selected;
 
   _ChatItem({
     required this.name,
@@ -916,7 +915,6 @@ class _ChatItem {
     required this.avatarUrl,
     required this.unread,
     required this.isRead,
-    this.selected = false,
   });
 }
 
@@ -985,9 +983,7 @@ class _SwipeChatRow extends StatelessWidget {
             color: Theme.of(context).appColors.card,
             borderRadius: BorderRadius.circular(18),
             border: Border.all(
-              color: item.selected
-                  ? const Color(0xFFB58BC8)
-                  : const Color(0xFFE8ECF4),
+              color: const Color(0xFFE8ECF4),
             ),
             boxShadow: const [
               BoxShadow(

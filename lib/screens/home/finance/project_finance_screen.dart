@@ -6,7 +6,7 @@ import 'package:konveksi_bareng/screens/main/home.dart';
 const kPurple = Color(0xFF6B257F);
 
 class ProjectFinanceScreen extends StatefulWidget {
-  ProjectFinanceScreen({super.key});
+  const ProjectFinanceScreen({super.key});
 
   @override
   State<ProjectFinanceScreen> createState() => _ProjectFinanceScreenState();

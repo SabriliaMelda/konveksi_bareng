@@ -12,7 +12,7 @@ class AuthBackground extends StatelessWidget {
   final Widget child;
   final bool showBackButton;
 
-  AuthBackground({
+  const AuthBackground({
     super.key,
     required this.child,
     this.showBackButton = true,

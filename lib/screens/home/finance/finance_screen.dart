@@ -9,7 +9,7 @@ import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
 const kPurple = Color(0xFF6B257F);
 
 class FinanceScreen extends StatelessWidget {
-  FinanceScreen({super.key});
+  const FinanceScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

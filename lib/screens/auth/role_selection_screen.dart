@@ -268,11 +268,27 @@ class _RoleCard extends StatelessWidget {
                 ],
               ),
             ),
-            Radio<bool>(
-              value: true,
-              groupValue: selected ? true : null,
-              onChanged: (_) => onTap(),
-              activeColor: kPurpleButton,
+            Container(
+              width: 22,
+              height: 22,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: selected ? kPurpleButton : kPurpleLight,
+                  width: 2,
+                ),
+              ),
+              alignment: Alignment.center,
+              child: selected
+                  ? Container(
+                      width: 12,
+                      height: 12,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: kPurpleButton,
+                      ),
+                    )
+                  : null,
             ),
           ],
         ),

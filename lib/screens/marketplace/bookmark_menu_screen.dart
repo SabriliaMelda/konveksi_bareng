@@ -70,7 +70,7 @@ class BookmarkMenuScreen extends StatelessWidget {
   final String? subtitle;
   final List<BookmarkItem> items;
 
-  BookmarkMenuScreen({
+  const BookmarkMenuScreen({
     super.key,
     required this.title,
     required this.items,
