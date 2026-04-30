@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:konveksi_bareng/config/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:konveksi_bareng/widgets/app_bottom_nav.dart';
-import 'package:konveksi_bareng/screens/schedule/unified_schedule_screen.dart';
-import 'package:konveksi_bareng/screens/worker/worker_list_screen.dart';
-import 'package:konveksi_bareng/screens/project/work_order_screen.dart';
+import 'package:konveksi_bareng/screens/home/schedule/unified_schedule_screen.dart';
+import 'package:konveksi_bareng/screens/home/worker/worker_list_screen.dart';
+import 'package:konveksi_bareng/screens/home/project/work_order_screen.dart';
 
 const kPurple = Color(0xFF6B257F);
 const _kSoft = Color(0xFFF7E1FF);

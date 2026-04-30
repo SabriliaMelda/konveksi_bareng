@@ -22,7 +22,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _notif = true;
   bool _biometric = false;
   bool _biometricAvailable = false;
-  bool _autoBackup = true;
   bool _loggingOut = false;
 
   // ===== Expand/Collapse sections =====
@@ -144,14 +143,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     // === Auto open section kalau ada hasil search ===
     final prefHas = _match('notifikasi reminder update status', q) ||
-        _match('dark mode tema gelap', q) ||
-        _match('biometrik fingerprint face id', q) ||
-        _match('auto backup simpan otomatis', q);
+        _match('biometrik fingerprint face id', q);
 
-    final umumHas = _match('profil nama foto kontak', q) ||
-        _match('keamanan pin perangkat', q) ||
-        _match('bahasa indonesia', q) ||
-        _match('tema tampilan warna font layout', q);
+    final umumHas = _match('dark mode tema gelap', q) ||
+        _match('bahasa indonesia', q);
 
     final bantuanHas = _match('pusat bantuan faq panduan', q) ||
         _match('kebijakan privasi data penggunaan', q) ||
@@ -361,31 +356,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               isDark: isDark,
                             ),
                           if (_match('notifikasi reminder update status', q) &&
-                              (_match('dark mode tema gelap', q) ||
-                                  _match('biometrik fingerprint face id', q) ||
-                                  _match('auto backup simpan otomatis', q)))
-                            _DividerSoft(
-                              color: isDark
-                                  ? const Color(0x14FFFFFF)
-                                  : const Color(0x110F172A),
-                            ),
-                          if (_match('dark mode tema gelap', q))
-                            _SwitchRow(
-                              accent: purple,
-                              icon: Icons.dark_mode_outlined,
-                              title: 'Dark Mode',
-                              subtitle: 'Tema gelap',
-                              value: isDark,
-                              onChanged: (v) => tp.setDarkMode(v),
-                              ink: ink,
-                              muted: muted,
-                              tile: tile,
-                              tileBorder: tileBorder,
-                              isDark: isDark,
-                            ),
-                          if (_match('dark mode tema gelap', q) &&
-                              (_match('biometrik fingerprint face id', q) ||
-                                  _match('auto backup simpan otomatis', q)))
+                              _match('biometrik fingerprint face id', q))
                             _DividerSoft(
                               color: isDark
                                   ? const Color(0x14FFFFFF)
@@ -403,27 +374,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               onChanged: _biometricAvailable
                                   ? _toggleBiometric
                                   : null,
-                              ink: ink,
-                              muted: muted,
-                              tile: tile,
-                              tileBorder: tileBorder,
-                              isDark: isDark,
-                            ),
-                          if (_match('biometrik fingerprint face id', q) &&
-                              _match('auto backup simpan otomatis', q))
-                            _DividerSoft(
-                              color: isDark
-                                  ? const Color(0x14FFFFFF)
-                                  : const Color(0x110F172A),
-                            ),
-                          if (_match('auto backup simpan otomatis', q))
-                            _SwitchRow(
-                              accent: purple,
-                              icon: Icons.cloud_sync_outlined,
-                              title: 'Auto Backup',
-                              subtitle: 'Simpan otomatis (dummy)',
-                              value: _autoBackup,
-                              onChanged: (v) => setState(() => _autoBackup = v),
                               ink: ink,
                               muted: muted,
                               tile: tile,
@@ -456,42 +406,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       borderColor: border,
                       child: Column(
                         children: [
-                          if (_match('profil nama foto kontak', q))
-                            _MenuRow(
+                          if (_match('dark mode tema gelap', q))
+                            _SwitchRow(
                               accent: purple,
-                              icon: Icons.person_outline_rounded,
-                              title: 'Profil',
-                              subtitle: 'Nama, foto, kontak',
-                              onTap: () => _toast(context, 'Profil (dummy)'),
+                              icon: Icons.dark_mode_outlined,
+                              title: 'Dark Mode',
+                              subtitle: 'Tema gelap',
+                              value: isDark,
+                              onChanged: (v) => tp.setDarkMode(v),
                               ink: ink,
                               muted: muted,
                               tile: tile,
                               tileBorder: tileBorder,
+                              isDark: isDark,
                             ),
-                          if (_match('profil nama foto kontak', q) &&
-                              (_match('keamanan pin perangkat', q) ||
-                                  _match('bahasa indonesia', q) ||
-                                  _match('tema tampilan warna font layout', q)))
-                            _DividerSoft(
-                              color: isDark
-                                  ? const Color(0x14FFFFFF)
-                                  : const Color(0x110F172A),
-                            ),
-                          if (_match('keamanan pin perangkat', q))
-                            _MenuRow(
-                              accent: purple,
-                              icon: Icons.lock_outline_rounded,
-                              title: 'Keamanan',
-                              subtitle: 'PIN, perangkat',
-                              onTap: () => _toast(context, 'Keamanan (dummy)'),
-                              ink: ink,
-                              muted: muted,
-                              tile: tile,
-                              tileBorder: tileBorder,
-                            ),
-                          if (_match('keamanan pin perangkat', q) &&
-                              (_match('bahasa indonesia', q) ||
-                                  _match('tema tampilan warna font layout', q)))
+                          if (_match('dark mode tema gelap', q) &&
+                              _match('bahasa indonesia', q))
                             _DividerSoft(
                               color: isDark
                                   ? const Color(0x14FFFFFF)
@@ -504,25 +434,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               title: 'Bahasa',
                               subtitle: 'Indonesia',
                               onTap: () => _toast(context, 'Bahasa (dummy)'),
-                              ink: ink,
-                              muted: muted,
-                              tile: tile,
-                              tileBorder: tileBorder,
-                            ),
-                          if (_match('bahasa indonesia', q) &&
-                              _match('tema tampilan warna font layout', q))
-                            _DividerSoft(
-                              color: isDark
-                                  ? const Color(0x14FFFFFF)
-                                  : const Color(0x110F172A),
-                            ),
-                          if (_match('tema tampilan warna font layout', q))
-                            _MenuRow(
-                              accent: purple,
-                              icon: Icons.palette_outlined,
-                              title: 'Tema & Tampilan',
-                              subtitle: 'Warna, font, layout',
-                              onTap: () => _toast(context, 'Tema (dummy)'),
                               ink: ink,
                               muted: muted,
                               tile: tile,

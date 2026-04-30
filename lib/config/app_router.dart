@@ -22,43 +22,43 @@ import '../screens/main/wishlist.dart';
 import '../screens/main/chat.dart';
 
 // ── Finance ──
-import '../screens/finance/finance_screen.dart';
-import '../screens/finance/profit_loss_screen.dart';
-import '../screens/finance/purchase_screen.dart';
-import '../screens/finance/sales_screen.dart';
-import '../screens/finance/payment_screen.dart';
-import '../screens/finance/income_screen.dart';
-import '../screens/finance/expense_screen.dart';
-import '../screens/finance/operational_screen.dart';
-import '../screens/finance/electricity_screen.dart';
-import '../screens/finance/project_finance_screen.dart';
+import '../screens/home/finance/finance_screen.dart';
+import '../screens/home/finance/profit_loss_screen.dart';
+import '../screens/home/finance/purchase_screen.dart';
+import '../screens/home/finance/sales_screen.dart';
+import '../screens/home/finance/payment_screen.dart';
+import '../screens/home/finance/income_screen.dart';
+import '../screens/home/finance/expense_screen.dart';
+import '../screens/home/finance/operational_screen.dart';
+import '../screens/home/finance/electricity_screen.dart';
+import '../screens/home/finance/project_finance_screen.dart';
 import '../services/payment_service.dart';
 
 // ── Project ──
-import '../screens/project/manage_project_screen.dart';
-import '../screens/project/project_list_screen.dart';
-import '../screens/project/project_detail_screen.dart';
-import '../screens/project/work_order_screen.dart';
-import '../screens/project/meeting.dart';
-import '../screens/project/create_meeting_screen.dart';
+import '../screens/home/project/manage_project_screen.dart';
+import '../screens/home/project/project_list_screen.dart';
+import '../screens/home/project/project_detail_screen.dart';
+import '../screens/home/project/work_order_screen.dart';
+import '../screens/home/project/meeting.dart';
+import '../screens/home/project/create_meeting_screen.dart';
 
 // ── Worker ──
-import '../screens/worker/worker_screen.dart';
-import '../screens/worker/worker_list_screen.dart';
-import '../screens/worker/worker_detail_screen.dart';
-import '../screens/worker/wage_screen.dart';
-import '../screens/worker/wage_billing_status_screen.dart';
+import '../screens/home/worker/worker_screen.dart';
+import '../screens/home/worker/worker_list_screen.dart';
+import '../screens/home/worker/worker_detail_screen.dart';
+import '../screens/home/worker/wage_screen.dart';
+import '../screens/home/worker/wage_billing_status_screen.dart';
 
 // ── Schedule ──
-import '../screens/schedule/unified_schedule_screen.dart';
+import '../screens/home/schedule/unified_schedule_screen.dart';
 
 // ── Inventory ──
-import '../screens/inventory/raw_material_screen.dart';
-import '../screens/inventory/shipment_screen.dart';
-import '../screens/inventory/shopping_plan_screen.dart';
+import '../screens/home/inventory/raw_material_screen.dart';
+import '../screens/home/inventory/shipment_screen.dart';
+import '../screens/home/inventory/shopping_plan_screen.dart';
 
 // ── Production ──
-import '../screens/production/pattern_screen.dart';
+import '../screens/home/production/pattern_screen.dart';
 
 // ── Marketplace ──
 import '../screens/marketplace/marketplace.dart';
@@ -66,7 +66,7 @@ import '../screens/marketplace/checkout.dart';
 import '../screens/marketplace/bookmark_menu_screen.dart';
 
 // ── Promotion ──
-import '../screens/promotion/promotion_screen.dart';
+import '../screens/home/promotion/promotion_screen.dart';
 
 // ── Common ──
 import '../screens/common/simple_placeholder_page.dart';
